@@ -10,6 +10,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <hibernate.version>4.1.9.Final</hibernate.version>
         <spring.version>3.2.0.RELEASE</spring.version>
         <hystrix.version>1.2.2</hystrix.version>
         <junit.version>4.11</junit.version>
@@ -17,6 +18,32 @@
     </properties>
 
     <dependencies>
+
+        <!--data base-->
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901.jdbc4</version>
+        </dependency>
+
+        <!--hibernate-->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 
         <!-- Spring 3 dependencies -->
         <dependency>
@@ -78,6 +105,13 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- json -->
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.2</version>
+        </dependency>
 
         <!-- Hystrix -->
         <dependency>
