@@ -24,11 +24,11 @@
             <!--<property name="hibernate.c3p0.idle_test_period" value="3000"/>-->
 
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
-            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/awplanet"/>
-            <property name="hibernate.connection.username" value="a-polyakov"/>
-            <property name="hibernate.connection.password" value="FecUnRec"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:5432/awrank"/>
+            <property name="hibernate.connection.username" value="awrank"/>
+            <property name="hibernate.connection.password" value="aUUTiXnt"/>
         </properties>
     </persistence-unit>
 </persistence>
