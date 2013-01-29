@@ -4,7 +4,7 @@ package com.awrank.web.data.constant;
  *
  */
 public interface UserHistoryConst extends AbstractObjectConst {
-    public static final String TABLE_NAME = "users";
+    public static final String TABLE_NAME = "user_history";
 
     public static final String S_CREATED_HISTORY = "created_history_at";
     public static final String H_CREATED_HISTORY = "createdHistory";
