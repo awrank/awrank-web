@@ -129,6 +129,22 @@
             <scope>test</scope>
         </dependency>
 
+		<!--  Java Mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.6-rc1</version>
+		</dependency>
+
+		<!-- Servlet API -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+		</dependency>
+        
+        <!-- added by Olga in WEB-INF/lib jstl-1.2 jar for mail sending page- probably clean up later! -->
+        
     </dependencies>
 
     <build>
