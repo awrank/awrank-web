@@ -13,11 +13,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name = EntryPointConst.TABLE_NAME)
-public class EntryPoint extends AbstractObject implements EntryPointConst {
-    /**
-     * пользователь
-     */
-    private User user;
+public class EntryPoint extends AbstractUserItem implements EntryPointConst {
+
     /**
      * Логин или email или идентификатор в социальной сети
      */
@@ -38,16 +35,6 @@ public class EntryPoint extends AbstractObject implements EntryPointConst {
     private EAuthenticationMethod authenticationMethod;
 
     public EntryPoint() {
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_USER, nullable = false)
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Column(name = S_UID, nullable = false)
@@ -96,7 +83,6 @@ public class EntryPoint extends AbstractObject implements EntryPointConst {
 
     public EntryPoint(final JsonObject jsonObject) {
         super(jsonObject);
-        // user
         this.uid = JsonUtils.getString(jsonObject, S_UID);
         this.password = JsonUtils.getString(jsonObject, S_PASSWORD);
         this.verified = JsonUtils.getDate(jsonObject, S_VERIFIED);
@@ -106,7 +92,6 @@ public class EntryPoint extends AbstractObject implements EntryPointConst {
     @Override
     public JsonObject toJsonObject() {
         final JsonObject jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_USER, user);
         JsonUtils.set(jsonObject, S_UID, uid);
         JsonUtils.set(jsonObject, S_PASSWORD, password);
         JsonUtils.set(jsonObject, S_VERIFIED, verified);

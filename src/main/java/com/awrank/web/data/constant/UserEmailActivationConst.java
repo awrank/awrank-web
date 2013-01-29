@@ -3,11 +3,8 @@ package com.awrank.web.data.constant;
 /**
  *
  */
-public interface UserEmailActivationConst extends AbstractObjectConst {
+public interface UserEmailActivationConst extends AbstractUserItemConst {
     public static final String TABLE_NAME = "user_email_activation ";
-
-    public static final String S_USER = "user_id";
-    public static final String H_USER = "user";
 
     public static final String S_CODE = "code";
     public static final String H_CODE = "code";

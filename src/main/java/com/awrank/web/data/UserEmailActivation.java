@@ -12,11 +12,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name = UserEmailActivationConst.TABLE_NAME)
-public class UserEmailActivation extends AbstractObject implements UserEmailActivationConst {
-    /**
-     * пользователь
-     */
-    private User user;
+public class UserEmailActivation extends AbstractUserItem implements UserEmailActivationConst {
+
     /**
      * код для подтверждения
      */
@@ -35,16 +32,6 @@ public class UserEmailActivation extends AbstractObject implements UserEmailActi
     private Date emailVerified;
 
     public UserEmailActivation() {
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_USER, nullable = false)
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Column(name = S_CODE, nullable = false)
@@ -88,7 +75,6 @@ public class UserEmailActivation extends AbstractObject implements UserEmailActi
 
     public UserEmailActivation(final JsonObject jsonObject) {
         super(jsonObject);
-        // user
         this.code = JsonUtils.getString(jsonObject, S_CODE);
         this.ipAddress = JsonUtils.getString(jsonObject, S_IP_ADDRESS);
         this.email = JsonUtils.getString(jsonObject, S_EMAIL);
@@ -98,7 +84,6 @@ public class UserEmailActivation extends AbstractObject implements UserEmailActi
     @Override
     public JsonObject toJsonObject() {
         final JsonObject jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_USER, user);
         JsonUtils.set(jsonObject, S_CODE, code);
         JsonUtils.set(jsonObject, S_IP_ADDRESS, ipAddress);
         JsonUtils.set(jsonObject, S_EMAIL, email);

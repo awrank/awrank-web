@@ -3,12 +3,9 @@ package com.awrank.web.data.constant;
 /**
  *
  */
-public interface EntryPointConst extends AbstractObjectConst {
+public interface EntryPointConst extends AbstractUserItemConst {
 
     public static final String TABLE_NAME = "entry_point";
-
-    public static final String S_USER = "user_id";
-    public static final String H_USER = "user";
 
     public static final String S_UID = "uid";
     public static final String H_UID = "uid";

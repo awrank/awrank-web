@@ -12,28 +12,14 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = UserRoleConst.TABLE_NAME)
-public class UserRole extends AbstractObject implements UserRoleConst {
+public class UserRole extends AbstractUserItem implements UserRoleConst {
 
-    /**
-     * пользователь
-     */
-    private User user;
     /**
      * доступ
      */
     private ERole role;
 
     public UserRole() {
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_USER, nullable = false)
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Column(name = S_ROLE, nullable = false)
@@ -54,14 +40,12 @@ public class UserRole extends AbstractObject implements UserRoleConst {
 
     public UserRole(final JsonObject jsonObject) {
         super(jsonObject);
-        // user
         setRole(JsonUtils.getString(jsonObject, S_ROLE));
     }
 
     @Override
     public JsonObject toJsonObject() {
         final JsonObject jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_USER, user);
         JsonUtils.set(jsonObject, S_ROLE, role);
         return jsonObject;
     }

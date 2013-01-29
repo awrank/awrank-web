@@ -52,6 +52,10 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
         this.objectType = objectType;
     }
 
+    public final void setObjectType(String objectType) {
+        this.objectType = (objectType != null) ? EObjectType.valueOf(objectType) : null;
+    }
+
     @Id
     @Column(name = S_ID, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -96,7 +100,7 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
     // ------------------------------- JSON ---------------------------------------
 
     public AbstractObject(final JsonObject jsonObject) {
-        this.objectType = EObjectType.valueOf(JsonUtils.getString(jsonObject, S_OBJECT_TYPE));
+        setObjectType(JsonUtils.getString(jsonObject, S_OBJECT_TYPE));
         this.id = JsonUtils.getLong(jsonObject, S_ID);
         this.created = JsonUtils.getDate(jsonObject, S_CREATED);
         this.updated = JsonUtils.getDate(jsonObject, S_UPDATED);
