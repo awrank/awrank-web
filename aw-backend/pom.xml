@@ -33,12 +33,12 @@
             <artifactId>aw-model</artifactId>
         </dependency>
 
- 				<dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <!-- version>6.0</version>
-                <scope>provided</scope -->
-            </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <!-- version>6.0</version>
+            <scope>provided</scope -->
+        </dependency>
         <!--data base-->
         <dependency>
             <groupId>mysql</groupId>
@@ -111,6 +111,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+
 
         <!-- logging -->
         <dependency>

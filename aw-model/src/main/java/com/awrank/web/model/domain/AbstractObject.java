@@ -44,15 +44,15 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
 
     @Column(name = S_OBJECT_TYPE, nullable = false)
     @Enumerated(EnumType.STRING)
-    public final EObjectType getObjectType() {
+    public EObjectType getObjectType() {
         return objectType;
     }
 
-    private final void setObjectType(EObjectType objectType) {
+    private void setObjectType(EObjectType objectType) {
         this.objectType = objectType;
     }
 
-    private final void setObjectType(String objectType) {
+    private void setObjectType(String objectType) {
         this.objectType = (objectType != null) ? EObjectType.valueOf(objectType) : null;
     }
 
