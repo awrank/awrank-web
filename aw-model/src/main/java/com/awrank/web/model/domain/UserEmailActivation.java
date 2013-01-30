@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserEmailActivationConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -29,7 +30,11 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
     /**
      * дата подтверждения email
      */
-    private Date emailVerified;
+    private Date emailVerifiedDate;
+
+    {
+        objectType = EObjectType.USER_EMAIL_ACTIVATION;
+    }
 
     public UserEmailActivation() {
     }
@@ -61,14 +66,14 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         this.email = email;
     }
 
-    @Column(name = S_EMAIL_VERIFIED, nullable = true)
+    @Column(name = S_EMAIL_VERIFIED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getEmailVerified() {
-        return emailVerified;
+    public Date getEmailVerifiedDate() {
+        return emailVerifiedDate;
     }
 
-    public void setEmailVerified(Date emailVerified) {
-        this.emailVerified = emailVerified;
+    public void setEmailVerifiedDate(Date emailVerifiedDate) {
+        this.emailVerifiedDate = emailVerifiedDate;
     }
 
     // --------------------------- JSON ------------------------------------------
@@ -78,7 +83,7 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         this.code = JsonUtils.getString(jsonObject, S_CODE);
         this.ipAddress = JsonUtils.getString(jsonObject, S_IP_ADDRESS);
         this.email = JsonUtils.getString(jsonObject, S_EMAIL);
-        this.emailVerified = JsonUtils.getDate(jsonObject, S_EMAIL_VERIFIED);
+        this.emailVerifiedDate = JsonUtils.getDate(jsonObject, S_EMAIL_VERIFIED_DATE);
     }
 
     @Override
@@ -87,7 +92,7 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         JsonUtils.set(jsonObject, S_CODE, code);
         JsonUtils.set(jsonObject, S_IP_ADDRESS, ipAddress);
         JsonUtils.set(jsonObject, S_EMAIL, email);
-        JsonUtils.set(jsonObject, S_EMAIL_VERIFIED, emailVerified);
+        JsonUtils.set(jsonObject, S_EMAIL_VERIFIED_DATE, emailVerifiedDate);
         return jsonObject;
     }
 }

@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserOrderConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -34,7 +35,11 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
     /**
      * дата оплата
      */
-    private Date payed;
+    private Date payedDate;
+
+    {
+        objectType = EObjectType.USER_ORDER;
+    }
 
     public UserOrder() {
     }
@@ -77,14 +82,14 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
         this.gracePeriod = gracePeriod;
     }
 
-    @Column(name = S_PAYED, nullable = true)
+    @Column(name = S_PAYED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getPayed() {
-        return payed;
+    public Date getPayedDate() {
+        return payedDate;
     }
 
-    public void setPayed(Date payed) {
-        this.payed = payed;
+    public void setPayedDate(Date payedDate) {
+        this.payedDate = payedDate;
     }
 
     // ------------------------------- JSON ---------------------------------------
@@ -94,7 +99,7 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
         this.complete = JsonUtils.getBoolean(jsonObject, S_COMPLETE);
         // refUser
         this.gracePeriod = JsonUtils.getInteger(jsonObject, S_GRACE_PERIOD);
-        this.payed = JsonUtils.getDate(jsonObject, S_PAYED);
+        this.payedDate = JsonUtils.getDate(jsonObject, S_PAYED_DATE);
     }
 
     public JsonObject toJsonObject() {
@@ -102,7 +107,7 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
         JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
         JsonUtils.set(jsonObject, S_COMPLETE, complete);
         JsonUtils.set(jsonObject, S_GRACE_PERIOD, gracePeriod);
-        JsonUtils.set(jsonObject, S_PAYED, payed);
+        JsonUtils.set(jsonObject, S_PAYED_DATE, payedDate);
         return jsonObject;
     }
 }

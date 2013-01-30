@@ -38,6 +38,28 @@
             <artifactId>servlet-api</artifactId>
         </dependency>
 
+        <!--data base-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--hibernate-->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+
         <!-- Spring 3 dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -95,8 +117,8 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
+        <!--<groupId>log4j</groupId>-->
+        <!--<artifactId>log4j</artifactId>-->
         <!--</dependency>-->
 
         <!-- jstl -->

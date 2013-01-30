@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.TariffSettingsConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -30,7 +31,11 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
     /**
      * дата начала действия тарифа
      */
-    private Date started;
+    private Date startedDate;
+
+    {
+        objectType = EObjectType.TARIFF_SETTINGS;
+    }
 
     public TariffSettings() {
     }
@@ -63,14 +68,14 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
         this.discount = discount;
     }
 
-    @Column(name = S_STARTED, nullable = false)
+    @Column(name = S_STARTED_DATE, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getStarted() {
-        return started;
+    public Date getStartedDate() {
+        return startedDate;
     }
 
-    public void setStarted(Date started) {
-        this.started = started;
+    public void setStartedDate(Date startedDate) {
+        this.startedDate = startedDate;
     }
 
     // --------------------------- JSON ------------------------------------------
@@ -80,7 +85,7 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
         // tariff
         this.price = JsonUtils.getBigDecimal(jsonObject, S_PRICE);
         this.discount = JsonUtils.getBigDecimal(jsonObject, S_DISCOUNT);
-        this.started = JsonUtils.getDate(jsonObject, S_STARTED);
+        this.startedDate = JsonUtils.getDate(jsonObject, S_STARTED_DATE);
     }
 
     @Override
@@ -89,7 +94,7 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
         JsonUtils.set(jsonObject, S_TARIFF, tariff);
         JsonUtils.set(jsonObject, S_PRICE, price);
         JsonUtils.set(jsonObject, S_DISCOUNT, discount);
-        JsonUtils.set(jsonObject, S_STARTED, started);
+        JsonUtils.set(jsonObject, S_STARTED_DATE, startedDate);
         return jsonObject;
     }
 }

@@ -42,9 +42,9 @@ public interface UserHistoryConst extends AbstractObjectConst {
     public static final String S_AUTHORIZATION_FAILS_COUNT = "authorization_fails_count";
     public static final String H_AUTHORIZATION_FAILS_COUNT = "authorizationFailsCount";
 
-    public static final String S_AUTHORIZATION_FAILS_LAST = "authorization_fails_last";
-    public static final String H_AUTHORIZATION_FAILS_LAST = "authorization_fails_last";
+    public static final String S_AUTHORIZATION_FAILS_LAST_DATE = "authorization_fails_last";
+    public static final String H_AUTHORIZATION_FAILS_LAST_DATE = "authorizationFailsLastDate";
 
-    public static final String S_BAN_STARTED = "ban_started_at";
-    public static final String H_BAN_STARTED = "banStarted";
+    public static final String S_BAN_STARTED_DATE = "ban_started_at";
+    public static final String H_BAN_STARTED_DATE = "banStartedDate";
 }

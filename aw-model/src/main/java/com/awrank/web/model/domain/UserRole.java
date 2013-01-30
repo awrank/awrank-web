@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ERole;
 import com.awrank.web.model.domain.constant.UserRoleConst;
 import com.awrank.web.model.utils.JsonUtils;
@@ -18,6 +19,10 @@ public class UserRole extends AbstractUserItem implements UserRoleConst {
      * доступ
      */
     private ERole role;
+
+    {
+        objectType = EObjectType.USER_ROLE;
+    }
 
     public UserRole() {
     }

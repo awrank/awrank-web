@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ETariffType;
 import com.awrank.web.model.domain.constant.TariffConst;
 import com.awrank.web.model.utils.JsonUtils;
@@ -45,6 +46,10 @@ public class Tariff extends AbstractObject implements TariffConst {
      * тариф является служебным (не отображать пользователю)
      */
     private Boolean service;
+
+    {
+        objectType = EObjectType.TARIFF;
+    }
 
     public Tariff() {
     }

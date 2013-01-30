@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EPaymentType;
 import com.awrank.web.model.domain.constant.PaymentConst;
 import com.awrank.web.model.utils.JsonUtils;
@@ -41,6 +42,10 @@ public class Payment extends AbstractObject implements PaymentConst {
      * сумма
      */
     private BigDecimal amount;
+
+    {
+        objectType = EObjectType.PAYMENT;
+    }
 
     public Payment() {
     }

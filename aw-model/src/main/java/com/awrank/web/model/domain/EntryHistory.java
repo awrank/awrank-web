@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryHistoryConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -32,6 +33,10 @@ public class EntryHistory extends AbstractObject implements EntryHistoryConst {
      * количество запросов за сессию
      */
     private Integer countRequest;
+
+    {
+        objectType = EObjectType.ENTRY_HISTORY;
+    }
 
     public EntryHistory() {
     }

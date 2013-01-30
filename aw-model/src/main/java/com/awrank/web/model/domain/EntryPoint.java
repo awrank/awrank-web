@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.EAuthenticationMethod;
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryPointConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -28,11 +29,15 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
     /**
      * дата подтверждения
      */
-    private Date verified;
+    private Date verifiedDate;
     /**
      * способ аутентификации (email, google, facebook...)
      */
     private EAuthenticationMethod authenticationMethod;
+
+    {
+        objectType = EObjectType.ENTRY_POINT;
+    }
 
     public EntryPoint() {
     }
@@ -55,14 +60,14 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
         this.password = password;
     }
 
-    @Column(name = S_VERIFIED, nullable = true)
+    @Column(name = S_VERIFIED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getVerified() {
-        return verified;
+    public Date getVerifiedDate() {
+        return verifiedDate;
     }
 
-    public void setVerified(Date verified) {
-        this.verified = verified;
+    public void setVerifiedDate(Date verifiedDate) {
+        this.verifiedDate = verifiedDate;
     }
 
     @Column(name = S_AUTHENTICATION_METHOD, nullable = false)
@@ -85,7 +90,7 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
         super(jsonObject);
         this.uid = JsonUtils.getString(jsonObject, S_UID);
         this.password = JsonUtils.getString(jsonObject, S_PASSWORD);
-        this.verified = JsonUtils.getDate(jsonObject, S_VERIFIED);
+        this.verifiedDate = JsonUtils.getDate(jsonObject, S_VERIFIED_DATE);
         setAuthenticationMethod(JsonUtils.getString(jsonObject, S_AUTHENTICATION_METHOD));
     }
 
@@ -94,7 +99,7 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
         final JsonObject jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_UID, uid);
         JsonUtils.set(jsonObject, S_PASSWORD, password);
-        JsonUtils.set(jsonObject, S_VERIFIED, verified);
+        JsonUtils.set(jsonObject, S_VERIFIED_DATE, verifiedDate);
         JsonUtils.set(jsonObject, S_AUTHENTICATION_METHOD, authenticationMethod);
         return jsonObject;
     }

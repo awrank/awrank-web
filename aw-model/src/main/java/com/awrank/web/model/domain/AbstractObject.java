@@ -17,7 +17,7 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
     /**
      * тип объекта
      */
-    private EObjectType objectType;
+    protected EObjectType objectType;
     /**
      * идентификатор
      */
@@ -25,15 +25,15 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
     /**
      * дата создания
      */
-    private Date created;
+    private Date createdDate;
     /**
      * дата изменения
      */
-    private Date updated;
+    private Date lastModifiedDate;
     /**
      * дата деактивации
      */
-    private Date ended;
+    private Date endedDate;
 
     protected AbstractObject() {
     }
@@ -48,11 +48,11 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
         return objectType;
     }
 
-    public final void setObjectType(EObjectType objectType) {
+    private final void setObjectType(EObjectType objectType) {
         this.objectType = objectType;
     }
 
-    public final void setObjectType(String objectType) {
+    private final void setObjectType(String objectType) {
         this.objectType = (objectType != null) ? EObjectType.valueOf(objectType) : null;
     }
 
@@ -67,34 +67,45 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
         this.id = id;
     }
 
-    @Column(name = S_CREATED, nullable = false)
+    @Column(name = S_CREATED_DATE, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getCreated() {
-        return created;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    @Column(name = S_UPDATED, nullable = false)
+    @Column(name = S_LAST_MODIFIED_DATE, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getUpdated() {
-        return updated;
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
-    @Column(name = S_ENDED, nullable = true)
+    @Column(name = S_ENDED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getEnded() {
-        return ended;
+    public Date getEndedDate() {
+        return endedDate;
     }
 
-    public void setEnded(Date ended) {
-        this.ended = ended;
+    public void setEndedDate(Date endedDate) {
+        this.endedDate = endedDate;
+    }
+
+    @PrePersist
+    public void prePersist() throws Exception {
+        createdDate = new Date();
+        lastModifiedDate = createdDate;
+    }
+
+    @PreUpdate
+    public void preUpdate() throws Exception {
+        lastModifiedDate = new Date();
     }
 
     // ------------------------------- JSON ---------------------------------------
@@ -102,18 +113,18 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
     public AbstractObject(final JsonObject jsonObject) {
         setObjectType(JsonUtils.getString(jsonObject, S_OBJECT_TYPE));
         this.id = JsonUtils.getLong(jsonObject, S_ID);
-        this.created = JsonUtils.getDate(jsonObject, S_CREATED);
-        this.updated = JsonUtils.getDate(jsonObject, S_UPDATED);
-        this.ended = JsonUtils.getDate(jsonObject, S_ENDED);
+        this.createdDate = JsonUtils.getDate(jsonObject, S_CREATED_DATE);
+        this.lastModifiedDate = JsonUtils.getDate(jsonObject, S_LAST_MODIFIED_DATE);
+        this.endedDate = JsonUtils.getDate(jsonObject, S_ENDED_DATE);
     }
 
     public JsonObject toJsonObject() {
         final JsonObject jsonObject = new JsonObject();
         JsonUtils.set(jsonObject, S_OBJECT_TYPE, objectType.name());
         JsonUtils.set(jsonObject, S_ID, id);
-        JsonUtils.set(jsonObject, S_CREATED, created);
-        JsonUtils.set(jsonObject, S_UPDATED, updated);
-        JsonUtils.set(jsonObject, S_ENDED, ended);
+        JsonUtils.set(jsonObject, S_CREATED_DATE, createdDate);
+        JsonUtils.set(jsonObject, S_LAST_MODIFIED_DATE, lastModifiedDate);
+        JsonUtils.set(jsonObject, S_ENDED_DATE, endedDate);
         return jsonObject;
     }
 

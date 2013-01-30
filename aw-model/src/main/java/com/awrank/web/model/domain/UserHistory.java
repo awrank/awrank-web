@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.ELanguage;
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserHistoryConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -68,11 +69,15 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
     /**
      * последняя неудачная попытка
      */
-    private Date authorizationFailsLast;
+    private Date authorizationFailsLastDate;
     /**
      * дата блокирокви
      */
-    private Date banStarted;
+    private Date banStartedDate;
+
+    {
+        objectType = EObjectType.USER_HISTORY;
+    }
 
     public UserHistory() {
     }
@@ -192,24 +197,24 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
         this.authorizationFailsCount = authorizationFailsCount;
     }
 
-    @Column(name = S_AUTHORIZATION_FAILS_LAST, nullable = true)
+    @Column(name = S_AUTHORIZATION_FAILS_LAST_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getAuthorizationFailsLast() {
-        return authorizationFailsLast;
+    public Date getAuthorizationFailsLastDate() {
+        return authorizationFailsLastDate;
     }
 
-    public void setAuthorizationFailsLast(Date authorizationFailsLast) {
-        this.authorizationFailsLast = authorizationFailsLast;
+    public void setAuthorizationFailsLastDate(Date authorizationFailsLastDate) {
+        this.authorizationFailsLastDate = authorizationFailsLastDate;
     }
 
-    @Column(name = S_BAN_STARTED, nullable = true)
+    @Column(name = S_BAN_STARTED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getBanStarted() {
-        return banStarted;
+    public Date getBanStartedDate() {
+        return banStartedDate;
     }
 
-    public void setBanStarted(Date banStarted) {
-        this.banStarted = banStarted;
+    public void setBanStartedDate(Date banStartedDate) {
+        this.banStartedDate = banStartedDate;
     }
 
     // --------------------------- JSON ------------------------------------------
@@ -228,8 +233,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
         this.secretAnswer = JsonUtils.getString(jsonObject, S_SECRET_ANSWER);
         setLanguage(JsonUtils.getString(jsonObject, S_LANGUAGE));
         this.authorizationFailsCount = JsonUtils.getInteger(jsonObject, S_AUTHORIZATION_FAILS_COUNT);
-        this.authorizationFailsLast = JsonUtils.getDate(jsonObject, S_AUTHORIZATION_FAILS_LAST);
-        this.banStarted = JsonUtils.getDate(jsonObject, S_BAN_STARTED);
+        this.authorizationFailsLastDate = JsonUtils.getDate(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE);
+        this.banStartedDate = JsonUtils.getDate(jsonObject, S_BAN_STARTED_DATE);
     }
 
     @Override
@@ -247,8 +252,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
         JsonUtils.set(jsonObject, S_SECRET_ANSWER, secretAnswer);
         JsonUtils.set(jsonObject, S_LANGUAGE, language);
         JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_COUNT, authorizationFailsCount);
-        JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_LAST, authorizationFailsLast);
-        JsonUtils.set(jsonObject, S_BAN_STARTED, banStarted);
+        JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE, authorizationFailsLastDate);
+        JsonUtils.set(jsonObject, S_BAN_STARTED_DATE, banStartedDate);
         return jsonObject;
     }
 }

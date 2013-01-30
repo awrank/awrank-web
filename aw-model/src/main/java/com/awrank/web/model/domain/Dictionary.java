@@ -2,6 +2,7 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.DictionaryConst;
 import com.awrank.web.model.domain.constant.ELanguage;
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
 
@@ -27,6 +28,10 @@ public class Dictionary extends AbstractObject implements DictionaryConst {
      * текст
      */
     private String text;
+
+    {
+        objectType = EObjectType.DICTIONARY;
+    }
 
     public Dictionary() {
     }

@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserLimitConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -22,7 +23,11 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
     /**
      * день на который произведен расчет доступного количества
      */
-    private Date started;
+    private Date startedDate;
+
+    {
+        objectType = EObjectType.USER_LIMIT;
+    }
 
     public UserLimit() {
     }
@@ -36,14 +41,14 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
         this.availableRequests = availableRequests;
     }
 
-    @Column(name = S_STARTED, nullable = false)
+    @Column(name = S_STARTED_DATE, nullable = false)
     @Temporal(TemporalType.DATE)
-    public Date getStarted() {
-        return started;
+    public Date getStartedDate() {
+        return startedDate;
     }
 
-    public void setStarted(Date started) {
-        this.started = started;
+    public void setStartedDate(Date startedDate) {
+        this.startedDate = startedDate;
     }
 
     // --------------------------- JSON ------------------------------------------
@@ -51,14 +56,14 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
     public UserLimit(final JsonObject jsonObject) {
         super(jsonObject);
         this.availableRequests = JsonUtils.getInteger(jsonObject, S_AVAILABLE_REQUESTS);
-        this.started = JsonUtils.getDate(jsonObject, S_STARTED);
+        this.startedDate = JsonUtils.getDate(jsonObject, S_STARTED_DATE);
     }
 
     @Override
     public JsonObject toJsonObject() {
         final JsonObject jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_AVAILABLE_REQUESTS, availableRequests);
-        JsonUtils.set(jsonObject, S_STARTED, started);
+        JsonUtils.set(jsonObject, S_STARTED_DATE, startedDate);
         return jsonObject;
     }
 }

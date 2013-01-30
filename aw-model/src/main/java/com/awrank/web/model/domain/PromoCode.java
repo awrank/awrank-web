@@ -1,5 +1,6 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.PromoCodeConst;
 import com.awrank.web.model.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -34,6 +35,10 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
      * пользователь кто создал
      */
     private User creator;
+
+    {
+        objectType = EObjectType.PROMO_CODE;
+    }
 
     public PromoCode() {
     }
