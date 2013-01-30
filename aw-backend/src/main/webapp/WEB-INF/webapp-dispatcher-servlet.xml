@@ -15,7 +15,10 @@
     <!-- Configures the @Controller programming model -->
     <mvc:annotation-driven/>
     
-    <context:component-scan base-package="com.awrank.web.backend"/>
+    <context:component-scan base-package="com.awrank.web.backend.controller"/>
+    
+     <!-- Maps '/' requests to the 'home' view -->
+    <mvc:view-controller path="/" view-name="home"/>
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
     <mvc:resources mapping="/resources/**" location="/resources/"/>

@@ -33,11 +33,12 @@
             <artifactId>aw-model</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-        </dependency>
-
+ 				<dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <!-- version>6.0</version>
+                <scope>provided</scope -->
+            </dependency>
         <!--data base-->
         <dependency>
             <groupId>mysql</groupId>
@@ -122,10 +123,10 @@
         <!--</dependency>-->
 
         <!-- jstl -->
-        <dependency>
+        <!-- dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-        </dependency>
+        </dependency -->
 
         <!-- JUnit -->
         <dependency>
