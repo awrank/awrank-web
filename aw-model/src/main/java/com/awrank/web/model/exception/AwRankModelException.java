@@ -1,4 +1,4 @@
-package com.awrank.webapp.model.exception;
+package com.awrank.web.model.exception;
 
 /**
  * Base exception to be used in AwRank Web project.
