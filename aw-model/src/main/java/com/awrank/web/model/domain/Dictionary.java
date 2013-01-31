@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.DictionaryConst;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -34,6 +34,13 @@ public class Dictionary extends AbstractObject implements DictionaryConst {
     }
 
     public Dictionary() {
+    }
+
+    public Dictionary(Long id, ELanguage language, String code, String text) {
+        super(id);
+        this.language = language;
+        this.code = code;
+        this.text = text;
     }
 
     @Column(name = S_LANGUAGE, nullable = false)
@@ -72,7 +79,7 @@ public class Dictionary extends AbstractObject implements DictionaryConst {
 
     public Dictionary(final JsonObject jsonObject) {
         super(jsonObject);
-        setLanguage(JsonUtils.getString(jsonObject, S_LANGUAGE));
+        this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
         this.code = JsonUtils.getString(jsonObject, S_CODE);
         this.text = JsonUtils.getString(jsonObject, S_TEXT);
     }

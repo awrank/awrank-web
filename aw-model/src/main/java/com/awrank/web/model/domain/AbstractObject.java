@@ -2,7 +2,7 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.AbstractObjectConst;
 import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -50,10 +50,6 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
 
     private void setObjectType(EObjectType objectType) {
         this.objectType = objectType;
-    }
-
-    private void setObjectType(String objectType) {
-        this.objectType = (objectType != null) ? EObjectType.valueOf(objectType) : null;
     }
 
     @Id
@@ -111,7 +107,7 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
     // ------------------------------- JSON ---------------------------------------
 
     public AbstractObject(final JsonObject jsonObject) {
-        setObjectType(JsonUtils.getString(jsonObject, S_OBJECT_TYPE));
+        this.objectType = JsonUtils.getEnum(jsonObject, S_OBJECT_TYPE, EObjectType.class);
         this.id = JsonUtils.getLong(jsonObject, S_ID);
         this.createdDate = JsonUtils.getDate(jsonObject, S_CREATED_DATE);
         this.lastModifiedDate = JsonUtils.getDate(jsonObject, S_LAST_MODIFIED_DATE);

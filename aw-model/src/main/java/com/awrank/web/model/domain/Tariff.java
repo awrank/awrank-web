@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ETariffType;
 import com.awrank.web.model.domain.constant.TariffConst;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -109,10 +109,6 @@ public class Tariff extends AbstractObject implements TariffConst {
         this.tariffType = tariffType;
     }
 
-    public void setTariffType(String tariffType) {
-        this.tariffType = (tariffType != null) ? ETariffType.valueOf(tariffType) : null;
-    }
-
     @Column(name = S_SERVICE, nullable = false)
     public Boolean getService() {
         return service;
@@ -131,7 +127,7 @@ public class Tariff extends AbstractObject implements TariffConst {
         this.lengthInDays = JsonUtils.getInteger(jsonObject, S_LENGTH_IN_DAYS);
         this.countDailyRequest = JsonUtils.getInteger(jsonObject, S_COUNT_DAILY_REQUEST);
         this.countMonthlyRequest = JsonUtils.getInteger(jsonObject, S_COUNT_MONTHLY_REQUEST);
-        setTariffType(JsonUtils.getString(jsonObject, S_TARIFF_TYPE));
+        this.tariffType = JsonUtils.getEnum(jsonObject, S_TARIFF_TYPE, ETariffType.class);
         this.service = JsonUtils.getBoolean(jsonObject, S_SERVICE);
     }
 

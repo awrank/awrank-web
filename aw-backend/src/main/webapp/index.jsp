@@ -10,11 +10,15 @@
 <h1>Welcome to the Awrank web application!</h1>
 
 <p>
-    <a id="testMailPage" href="mailtest">Main sending test page</a>
+    <a id="testMailPage" href="api/mailtest">Main sending test page</a>
 </p>
 
 <p>
-    <a id="testTransaction" href="testTransaction">Test transaction</a>
+    <a href="api/testTransaction">Test transaction</a>
+</p>
+
+<p>
+    <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a>
 </p>
 
 <p><a href="http://awrank.com">Awrank</a>, January 2013</p>

@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EAuthenticationMethod;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryPointConst;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -80,10 +80,6 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
         this.authenticationMethod = authenticationMethod;
     }
 
-    public void setAuthenticationMethod(String authenticationMethod) {
-        this.authenticationMethod = (authenticationMethod != null) ? EAuthenticationMethod.valueOf(authenticationMethod) : null;
-    }
-
     // --------------------------- JSON ------------------------------------------
 
     public EntryPoint(final JsonObject jsonObject) {
@@ -91,7 +87,7 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
         this.uid = JsonUtils.getString(jsonObject, S_UID);
         this.password = JsonUtils.getString(jsonObject, S_PASSWORD);
         this.verifiedDate = JsonUtils.getDate(jsonObject, S_VERIFIED_DATE);
-        setAuthenticationMethod(JsonUtils.getString(jsonObject, S_AUTHENTICATION_METHOD));
+        this.authenticationMethod = JsonUtils.getEnum(jsonObject, S_AUTHENTICATION_METHOD, EAuthenticationMethod.class);
     }
 
     @Override
