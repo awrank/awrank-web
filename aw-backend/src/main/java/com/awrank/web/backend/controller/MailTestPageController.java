@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.mail.BodyPart;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.awrank.web.model.service.sharing.ShareToServiceEmailImpl;
+import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -44,6 +46,15 @@ public class MailTestPageController {
 	@Value("${mail.from.email}")
 	private String smpt_from_email;
 	
+	@Value("${mail.testactivation.email}")
+	private String testactivation_email;
+	
+	@Value("${mail.testactivation.password}")
+	private String testactivation_password;
+	
+	@Value("${mail.testactivation.verifyurl}")
+	private String testactivation_url;
+	
 	@Autowired
 	ShareToServiceEmailImpl emailService;
 	
@@ -63,10 +74,20 @@ public class MailTestPageController {
 		return mav;
 	}
 	
+	
+	@RequestMapping(method=RequestMethod.GET, value="/verifyemail")
+	public 
+	@ResponseBody
+	String verifyTestEmail(HttpServletRequest request) {
+	
+		
+		return "verified ok";
+	}
+	
 	@RequestMapping("/sendemail")
 	public 
 	@ResponseBody
-	String sendTestEmail() {
+	String sendTestEmail(HttpServletRequest request) {
 	
 		Properties properties = new Properties();
 	    properties.put("mail.transport.protocol", "smtp");
@@ -81,18 +102,30 @@ public class MailTestPageController {
 		Multipart multipart = new MimeMultipart("alternative");
 		BodyPart part1 = new MimeBodyPart();
 		try {
-			part1.setText("Hello, Your Contoso order has shipped. Thank you, John");
+			part1.setText("Thank you for registration at AWranking. Please click on the activation link below");
 			BodyPart part2 = new MimeBodyPart();
-			part2.setContent(
-			    "<p>Hello,</p><p>Your Contoso order has <b>shipped</b>.</p><p>Thank you,<br>John</br></p>",
-			    "text/html");
+			
+			String key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());//Base64(Hash256(testactivation_email+"."+testactivation_password));
+			StringBuilder bldr = new StringBuilder("<a href=");
+			bldr.append( "\"");
+			bldr.append(testactivation_url);
+			bldr.append(key);
+			bldr.append( "\"");
+			bldr.append(">");
+			bldr.append(testactivation_url);
+			bldr.append(key);
+			bldr.append("</a>");
+			String mess =  bldr.toString();
+			part2.setContent(mess, "text/html");
 			multipart.addBodyPart(part1);
 			multipart.addBodyPart(part2);
 			message.setFrom(new InternetAddress("smpt_from_email"));
 			message.addRecipient(Message.RecipientType.TO,
 			   new InternetAddress("okorokhina@gmail.com"));
-			message.setSubject("Your recent order");
+			message.setSubject("Your need to verify email");
 			message.setContent(multipart);
+			
+			emailService.share(smtpSession, message);
 			
 			return "was sent ok";
 			
@@ -100,7 +133,7 @@ public class MailTestPageController {
 			
 			e.printStackTrace();
 			
-			return e.getMessage();
+			return "en error during sending "+e.getMessage();
 		}
 		
 

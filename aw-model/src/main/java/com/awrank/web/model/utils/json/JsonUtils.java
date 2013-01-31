@@ -1,4 +1,4 @@
-package com.awrank.web.model.utils;
+package com.awrank.web.model.utils.json;
 
 import com.awrank.web.model.domain.AbstractObject;
 import com.google.gson.JsonElement;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- *
+ * User: a_polyakov
  */
 public class JsonUtils {
 
@@ -76,6 +76,13 @@ public class JsonUtils {
         if (jsonElement == null || jsonElement.isJsonNull())
             return null;
         return new Date(jsonElement.getAsLong());
+    }
+
+    public static <T extends Enum<T>> T getEnum(final JsonObject jsonObject, final String key, Class<T> enumClass) {
+        final JsonElement jsonElement = jsonObject.get(key);
+        if (jsonElement == null || jsonElement.isJsonNull())
+            return null;
+        return Enum.valueOf(enumClass, jsonElement.getAsString());
     }
 
     public static void set(final JsonObject jsonObject, final String key, final Boolean value) {

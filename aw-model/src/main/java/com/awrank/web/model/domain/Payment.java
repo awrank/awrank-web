@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EPaymentType;
 import com.awrank.web.model.domain.constant.PaymentConst;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -114,7 +114,7 @@ public class Payment extends AbstractObject implements PaymentConst {
 
     public Payment(final JsonObject jsonObject) {
         // userOrder
-        setPaymentType(JsonUtils.getString(jsonObject, S_PAYMENT_TYPE));
+        this.paymentType = JsonUtils.getEnum(jsonObject, S_PAYMENT_TYPE, EPaymentType.class);
         this.transactionId = JsonUtils.getString(jsonObject, S_TRANSACTION_ID);
         this.reference = JsonUtils.getString(jsonObject, S_REFERENCE);
         this.authorizationCode = JsonUtils.getString(jsonObject, S_AUTHORIZATION_CODE);

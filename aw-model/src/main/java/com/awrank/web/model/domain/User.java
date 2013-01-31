@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserConst;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;
@@ -155,10 +155,6 @@ public class User extends AbstractObject implements UserConst {
         this.language = language;
     }
 
-    public void setLanguage(String language) {
-        this.language = (language != null) ? ELanguage.valueOf(language) : null;
-    }
-
     @Column(name = S_AUTHORIZATION_FAILS_COUNT, nullable = false)
     public Integer getAuthorizationFailsCount() {
         return authorizationFailsCount;
@@ -200,7 +196,7 @@ public class User extends AbstractObject implements UserConst {
         this.lastName = JsonUtils.getString(jsonObject, S_LAST_NAME);
         this.birthday = JsonUtils.getDate(jsonObject, S_BIRTHDAY);
         this.secretAnswer = JsonUtils.getString(jsonObject, S_SECRET_ANSWER);
-        setLanguage(JsonUtils.getString(jsonObject, S_LANGUAGE));
+        this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
         this.authorizationFailsCount = JsonUtils.getInteger(jsonObject, S_AUTHORIZATION_FAILS_COUNT);
         this.authorizationFailsLastDate = JsonUtils.getDate(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE);
         this.banStartedDate = JsonUtils.getDate(jsonObject, S_BAN_STARTED_DATE);

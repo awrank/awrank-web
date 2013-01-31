@@ -2,7 +2,7 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryHistoryConst;
-import com.awrank.web.model.utils.JsonUtils;
+import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
 
 import javax.persistence.*;

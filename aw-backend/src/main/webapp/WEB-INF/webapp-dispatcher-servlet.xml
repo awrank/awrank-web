@@ -22,10 +22,12 @@
     <context:component-scan base-package="com.awrank"/>
 
     <!-- Maps '/' requests to the 'home' view -->
-    <mvc:view-controller path="/" view-name="home"/>
+    <!--<mvc:view-controller path="/" view-name="home"/>-->
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <!--<mvc:resources mapping="/resources/**" location="/resources/"/>-->
+    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
+    <!--<mvc:resources mapping="/pages/**" location="/pages/"/>-->
 
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -52,7 +54,5 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />
-	<bean id="testTransactionService" class="com.awrank.web.model.service.testTransaction.TestTransactionServiceImpl" />
-	<bean id="testTransactionDao" class="com.awrank.web.model.dao.testTransaction.TestTransactionDaoImpl" />
+	<!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
 </beans>
