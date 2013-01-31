@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  */
-@Service
+@Service("testTransactionService")
 public class TestTransactionServiceImpl implements TestTransactionService {
 
     @Autowired

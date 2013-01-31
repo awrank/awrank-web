@@ -45,6 +45,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+		<!-- mail -->
+		<dependency>
+			      <groupId>javax.mail</groupId>
+			      <artifactId>mail</artifactId>
+			      <version>1.4.1</version>
+		</dependency>
+		
         <!--hibernate-->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

@@ -16,7 +16,7 @@
     <mvc:annotation-driven/>
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.awrank"/>
+    <context:component-scan base-package="com.awrank."/>
 
     <!-- Maps '/' requests to the 'home' view -->
     <mvc:view-controller path="/" view-name="home"/>
@@ -49,4 +49,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+	<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />
+	<bean id="testTransactionService" class="com.awrank.web.model.service.testTransaction.TestTransactionServiceImpl" />
+	<bean id="testTransactionDao" class="com.awrank.web.model.dao.testTransaction.TestTransactionDaoImpl" />
 </beans>

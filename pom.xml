@@ -47,6 +47,13 @@
                 <scope>provided</scope>
             </dependency>
 
+			<!-- email  -->
+			<dependency>
+			      <groupId>javax.mail</groupId>
+			      <artifactId>mail</artifactId>
+			      <version>1.4.1</version>
+		    </dependency>
+    
             <!--data base-->
             <dependency>
                 <groupId>mysql</groupId>
