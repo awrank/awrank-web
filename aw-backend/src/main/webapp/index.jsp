@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -20,6 +21,10 @@
 <p>
     <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a>
 </p>
+
+    <p>
+        <a href="<c:url value="/login.jsp"/>">Login</a>
+    </p>
 
 <p><a href="http://awrank.com">Awrank</a>, January 2013</p>
 <br/>

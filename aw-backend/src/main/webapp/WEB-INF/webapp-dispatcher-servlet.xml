@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
         http://www.springframework.org/schema/beans
@@ -42,6 +43,11 @@
     <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
 
+    <!--<bean id="messageSource"-->
+          <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
+        <!--<property name="basenames" value="resources/messages"/>-->
+    <!--</bean>-->
+
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="AwrankEMF"/>
@@ -54,5 +60,5 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
+    <!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
 </beans>
