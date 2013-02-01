@@ -23,7 +23,7 @@ public abstract class AbstractUserItem extends AbstractObject implements Abstrac
     }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_USER, nullable = false)
+    @JoinColumn(name = S_USER, nullable = false, updatable = false)
     public User getUser() {
         return user;
     }

@@ -2,6 +2,7 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
+import com.awrank.web.model.domain.constant.ESecretQuestion;
 import com.awrank.web.model.domain.constant.UserHistoryConst;
 import com.awrank.web.model.utils.json.JsonUtils;
 import com.google.gson.JsonObject;
@@ -55,6 +56,11 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
      */
     private Date birthday;
     /**
+     * code in dictionary for secret question
+     * код текст из словаря для секретного вопроса
+     */
+    private ESecretQuestion secretQuestionDicCode;
+    /**
      * ответ на секретный вопрос
      */
     private String secretAnswer;
@@ -84,6 +90,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
 
     @Column(name = S_CREATED_HISTORY, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getCreatedHistory() {
         return createdHistory;
     }
@@ -157,12 +165,24 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
 
     @Column(name = S_BIRTHDAY, nullable = true)
     @Temporal(TemporalType.DATE)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getBirthday() {
         return birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    @Column(name = S_SECRET_QUESTION_DIC_CODE, nullable = true)
+    @Enumerated(EnumType.STRING)
+    public ESecretQuestion getSecretQuestionDicCode() {
+        return secretQuestionDicCode;
+    }
+
+    public void setSecretQuestionDicCode(ESecretQuestion secretQuestionDicCode) {
+        this.secretQuestionDicCode = secretQuestionDicCode;
     }
 
     @Column(name = S_SECRET_ANSWER, nullable = true)
@@ -195,6 +215,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
 
     @Column(name = S_AUTHORIZATION_FAILS_LAST_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getAuthorizationFailsLastDate() {
         return authorizationFailsLastDate;
     }
@@ -205,6 +227,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
 
     @Column(name = S_BAN_STARTED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getBanStartedDate() {
         return banStartedDate;
     }
@@ -226,6 +250,7 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
         this.firstName = JsonUtils.getString(jsonObject, S_FIRST_NAME);
         this.lastName = JsonUtils.getString(jsonObject, S_LAST_NAME);
         this.birthday = JsonUtils.getDate(jsonObject, S_BIRTHDAY);
+        this.secretQuestionDicCode = JsonUtils.getEnum(jsonObject, S_SECRET_QUESTION_DIC_CODE, ESecretQuestion.class);
         this.secretAnswer = JsonUtils.getString(jsonObject, S_SECRET_ANSWER);
         this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
         this.authorizationFailsCount = JsonUtils.getInteger(jsonObject, S_AUTHORIZATION_FAILS_COUNT);
@@ -245,6 +270,7 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
         JsonUtils.set(jsonObject, S_FIRST_NAME, firstName);
         JsonUtils.set(jsonObject, S_LAST_NAME, lastName);
         JsonUtils.set(jsonObject, S_BIRTHDAY, birthday);
+        JsonUtils.set(jsonObject, S_SECRET_QUESTION_DIC_CODE, secretQuestionDicCode);
         JsonUtils.set(jsonObject, S_SECRET_ANSWER, secretAnswer);
         JsonUtils.set(jsonObject, S_LANGUAGE, language);
         JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_COUNT, authorizationFailsCount);

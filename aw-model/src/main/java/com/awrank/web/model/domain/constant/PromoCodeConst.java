@@ -19,7 +19,4 @@ public interface PromoCodeConst extends AbstractObjectConst {
     public static final String S_USER_ORDER = "user_order_id";
     public static final String H_USER_ORDER = "userOrder";
 
-    public static final String S_CREATOR = "creator_id";
-    public static final String H_CREATOR = "creator";
-
 }

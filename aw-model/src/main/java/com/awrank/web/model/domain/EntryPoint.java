@@ -62,6 +62,8 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
 
     @Column(name = S_VERIFIED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getVerifiedDate() {
         return verifiedDate;
     }

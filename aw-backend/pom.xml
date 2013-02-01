@@ -23,6 +23,8 @@
 
     <dependencies>
 
+        <!-- AwRank -->
+
         <dependency>
             <groupId>com.awrank.webapp</groupId>
             <artifactId>aw-common</artifactId>
@@ -33,12 +35,13 @@
             <artifactId>aw-model</artifactId>
         </dependency>
 
+        <!-- JEE -->
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <!-- version>6.0</version>
-            <scope>provided</scope -->
         </dependency>
+
         <!--data base-->
         <dependency>
             <groupId>mysql</groupId>
@@ -154,8 +157,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

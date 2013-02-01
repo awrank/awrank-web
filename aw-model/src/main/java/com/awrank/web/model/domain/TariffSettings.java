@@ -70,6 +70,8 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
 
     @Column(name = S_STARTED_DATE, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getStartedDate() {
         return startedDate;
     }

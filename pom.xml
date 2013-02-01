@@ -14,12 +14,13 @@
         <module>aw-backend</module>
         <module>aw-common</module>
         <module>aw-model</module>
+        <module>aw-tools</module>
     </modules>
 
     <properties>
         <hibernate.version>4.1.9.Final</hibernate.version>
-        <spring.version.3.2.0>3.2.0.RELEASE</spring.version.3.2.0>
-        <spring.version.3.1.3>3.1.3.RELEASE</spring.version.3.1.3>
+        <spring.version>3.2.0.RELEASE</spring.version>
+        <spring.security.version>3.1.3.RELEASE</spring.security.version>
         <hystrix.version>1.2.2</hystrix.version>
         <junit.version>4.11</junit.version>
         <jdk.version>1.6</jdk.version>
@@ -27,6 +28,8 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- AwRank -->
 
             <dependency>
                 <groupId>com.awrank.webapp</groupId>
@@ -40,6 +43,18 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.awrank.webapp</groupId>
+                <artifactId>aw-backend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.awrank.webapp</groupId>
+                <artifactId>aw-tools</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- java ee extension-->
             <dependency>
                 <groupId>javax</groupId>
@@ -48,13 +63,13 @@
                 <scope>provided</scope>
             </dependency>
 
-			<!-- email  -->
-			<dependency>
-			      <groupId>javax.mail</groupId>
-			      <artifactId>mail</artifactId>
-			      <version>1.4.1</version>
-		    </dependency>
-    
+            <!-- email  -->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4.1</version>
+            </dependency>
+
             <!--data base-->
             <dependency>
                 <groupId>mysql</groupId>
@@ -85,28 +100,22 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>${spring.version.3.2.0}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>commons-logging</artifactId>
-                        <groupId>commons-logging</groupId>
-                    </exclusion>
-                </exclusions>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>spring-expression</artifactId>
@@ -117,49 +126,81 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aspects</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
-                <version>${spring.version.3.2.0}</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
-                <version>${spring.version.3.1.3}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
-                <version>${spring.version.3.1.3}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
-                <version>${spring.version.3.1.3}</version>
+                <version>${spring.security.version}</version>
             </dependency>
+            <!--
+            попытка использовать org.springframework.data.domain.Auditable
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons-core</artifactId>
+                <version>1.4.0.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time-hibernate</artifactId>
+                <version>1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jadira.usertype</groupId>
+                <artifactId>usertype.jsr310</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.time</groupId>
+                <artifactId>jsr-310-ri</artifactId>
+                <version>20100212</version>
+            </dependency>
+            -->
 
             <!-- logging -->
             <dependency>
@@ -203,13 +244,13 @@
                 <scope>test</scope>
             </dependency>
 
-		<!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
-			 <dependency>
-			        <groupId>org.codehaus.jackson</groupId>
-			        <artifactId>jackson-mapper-asl</artifactId>
-			        <version>1.8.5</version>
-			  </dependency>
-		  
+            <!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>1.8.5</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>

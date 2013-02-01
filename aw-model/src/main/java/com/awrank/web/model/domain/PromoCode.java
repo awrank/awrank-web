@@ -31,10 +31,6 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
      * заказ
      */
     private UserOrder userOrder;
-    /**
-     * пользователь кто создал
-     */
-    private User creator;
 
     {
         objectType = EObjectType.PROMO_CODE;
@@ -81,16 +77,6 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         this.userOrder = userOrder;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_CREATOR, nullable = false)
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
     // --------------------------- JSON ------------------------------------------
 
     public PromoCode(final JsonObject jsonObject) {
@@ -99,7 +85,6 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         this.code = JsonUtils.getString(jsonObject, S_CODE);
         // tariffSettings
         // userOrder
-        // creator
     }
 
     @Override
@@ -109,7 +94,6 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         JsonUtils.set(jsonObject, S_CODE, code);
         JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
         JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
-        JsonUtils.set(jsonObject, S_CREATOR, creator);
         return jsonObject;
     }
 

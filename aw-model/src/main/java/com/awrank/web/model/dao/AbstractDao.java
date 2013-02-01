@@ -2,37 +2,15 @@ package com.awrank.web.model.dao;
 
 import com.awrank.web.model.domain.AbstractObject;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 /**
  * User: a_polyakov
  */
-public abstract class AbstractDao<T extends AbstractObject> implements IAbstractDao<T> {
-    @PersistenceContext
-    protected EntityManager em;
+public interface AbstractDao<T extends AbstractObject> {
+    public void persist(T object);
 
-    public void setEntityManager(EntityManager em) {
-        this.em = em;
-    }
+    public void merge(T object);
 
-    @Override
-    public void persist(T object) {
-        em.persist(object);
-    }
+    public void remove(T object);
 
-    @Override
-    public void merge(T object) {
-        em.merge(object);
-    }
-
-    @Override
-    public void remove(T object) {
-        em.remove(object);
-    }
-
-    @Override
-    public T find(Class<T> entityClass, Long id) {
-        return em.find(entityClass, id);
-    }
+    public T find(Class<T> entityClass, Long id);
 }

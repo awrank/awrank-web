@@ -43,6 +43,8 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
 
     @Column(name = S_STARTED_DATE, nullable = false)
     @Temporal(TemporalType.DATE)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getStartedDate() {
         return startedDate;
     }

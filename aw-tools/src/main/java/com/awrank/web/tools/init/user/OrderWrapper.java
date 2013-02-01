@@ -1,4 +1,4 @@
-package com.awrank.web.testWillDel;
+package com.awrank.web.tools.init.user;
 
 import com.awrank.web.model.domain.UserOrder;
 import com.awrank.web.model.utils.select.annotation.SelectField;

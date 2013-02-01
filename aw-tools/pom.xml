@@ -10,11 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.awrank.webapp</groupId>
-    <artifactId>aw-model</artifactId>
+    <artifactId>aw-tools</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>aw-model</name>
+    <name>aw-tools</name>
     <url>http://awrank.com</url>
 
     <properties>
@@ -24,19 +24,27 @@
 
     <dependencies>
 
-        <!-- JEE -->
+        <!-- AwRank -->
+
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>com.awrank.webapp</groupId>
+            <artifactId>aw-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.awrank.webapp</groupId>
+            <artifactId>aw-model</artifactId>
         </dependency>
 
         <!--data base-->
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
         <!--hibernate-->
+
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -53,6 +61,7 @@
         </dependency>
 
         <!-- Spring 3 dependencies -->
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -67,48 +76,45 @@
         </dependency>
 
         <!--
-        попытка использовать org.springframework.data.domain.Auditable
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons-core</artifactId>
-        </dependency>
+         попытка использовать org.springframework.data.domain.Auditable
+         <dependency>
+              <groupId>org.springframework.data</groupId>
+              <artifactId>spring-data-commons-core</artifactId>
+          </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
+          <dependency>
+              <groupId>joda-time</groupId>
+              <artifactId>joda-time</artifactId>
+          </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time-hibernate</artifactId>
-        </dependency>
+          <dependency>
+              <groupId>joda-time</groupId>
+              <artifactId>joda-time-hibernate</artifactId>
+          </dependency>
 
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.jsr310</artifactId>
-        </dependency>
+          <dependency>
+              <groupId>org.jadira.usertype</groupId>
+              <artifactId>usertype.jsr310</artifactId>
+          </dependency>
 
-        <dependency>
-            <groupId>javax.time</groupId>
-            <artifactId>jsr-310-ri</artifactId>
-        </dependency>
-        -->
+          <dependency>
+              <groupId>javax.time</groupId>
+              <artifactId>jsr-310-ri</artifactId>
+          </dependency>-->
 
         <!-- json -->
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
 
-        <!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-        </dependency>
+        <!-- JUnit -->
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
     </dependencies>
 </project>

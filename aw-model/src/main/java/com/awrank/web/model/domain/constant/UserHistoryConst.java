@@ -33,6 +33,9 @@ public interface UserHistoryConst extends AbstractObjectConst {
     public static final String S_BIRTHDAY = "birthday";
     public static final String H_BIRTHDAY = "birthday";
 
+    public static final String S_SECRET_QUESTION_DIC_CODE = "secret_question_dic_code";
+    public static final String H_SECRET_QUESTION_DIC_CODE = "secretQuestionDicCode";
+
     public static final String S_SECRET_ANSWER = "secret_answer";
     public static final String H_SECRET_ANSWER = "secretAnswer";
 

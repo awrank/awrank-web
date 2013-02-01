@@ -68,6 +68,8 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
 
     @Column(name = S_EMAIL_VERIFIED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getEmailVerifiedDate() {
         return emailVerifiedDate;
     }

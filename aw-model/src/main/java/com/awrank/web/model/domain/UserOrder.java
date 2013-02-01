@@ -84,6 +84,8 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
 
     @Column(name = S_PAYED_DATE, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getPayedDate() {
         return payedDate;
     }
