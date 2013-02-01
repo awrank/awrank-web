@@ -11,7 +11,7 @@
 <h1>Welcome to the Awrank web application!</h1>
 
 <p>
-    <a id="testMailPage" href="api/mailtest">Main sending test page</a>
+    <a id="testMailPage" href="api/mailtest">Main sending test pages</a>
 </p>
 
 <p>

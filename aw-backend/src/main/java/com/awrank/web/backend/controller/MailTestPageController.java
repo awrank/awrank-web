@@ -69,7 +69,11 @@ public class MailTestPageController {
 		modelMap.put("smpt_port", smpt_port);
 		modelMap.put("smpt_user_name", smpt_user_name);
 		modelMap.put("smpt_password", smpt_password);
-
+		modelMap.put("smpt_from_email", smpt_from_email);
+		
+		modelMap.put("testactivation_email", testactivation_email);
+		modelMap.put("testactivation_password", testactivation_password);
+		
 		mav.addAllObjects(modelMap);
 		return mav;
 	}
@@ -84,7 +88,7 @@ public class MailTestPageController {
 		return "verified ok";
 	}
 	
-	@RequestMapping("/sendemail")
+	@RequestMapping("/sendtestsmtp")
 	public 
 	@ResponseBody
 	String sendTestEmail(HttpServletRequest request) {
@@ -119,7 +123,7 @@ public class MailTestPageController {
 			part2.setContent(mess, "text/html");
 			multipart.addBodyPart(part1);
 			multipart.addBodyPart(part2);
-			message.setFrom(new InternetAddress("smpt_from_email"));
+			message.setFrom(new InternetAddress(smpt_from_email));
 			message.addRecipient(Message.RecipientType.TO,
 			   new InternetAddress("okorokhina@gmail.com"));
 			message.setSubject("Your need to verify email");
