@@ -203,6 +203,13 @@
                 <scope>test</scope>
             </dependency>
 
+		<!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
+			 <dependency>
+			        <groupId>org.codehaus.jackson</groupId>
+			        <artifactId>jackson-mapper-asl</artifactId>
+			        <version>1.8.5</version>
+			  </dependency>
+		  
         </dependencies>
 
     </dependencyManagement>

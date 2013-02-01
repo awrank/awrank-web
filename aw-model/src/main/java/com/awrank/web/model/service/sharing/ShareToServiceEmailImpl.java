@@ -37,20 +37,28 @@ public class ShareToServiceEmailImpl implements ShareToService {
 	public void share(Object session, Object message) throws Exception {
 	
 		Transport transport = ((Session) session).getTransport();
-		// Connect the transport object.
-		transport.connect();
-		// Send the message.
-		transport.sendMessage((MimeMessage) message, ((MimeMessage) message).getRecipients(Message.RecipientType.TO));
-		// Close the connection.
-		transport.close();
+		try{
+			// Connect the transport object.
+			transport.connect();
+			// Send the message.
+			transport.sendMessage((MimeMessage) message, ((MimeMessage) message).getRecipients(Message.RecipientType.TO));
+		}catch(javax.mail.AuthenticationFailedException e){
+			
+			System.out.println(e.getMessage());
+		}
+		finally{
+			// Close the connection.
+			transport.close();
+		}
 	}
 
 	@Override
 	public Object getAuthenticatedSession(Properties properties, String username, String password) {
 		
 		Authenticator auth = new SMTPAuthenticator(username, password);
-		Session mailSession = Session.getDefaultInstance(properties, auth);
-		
+		Session mailSession = Session.getDefaultInstance(properties, auth); // bad solution - session was shared, 
+		//first selected SMPT service settings were applied to all further attempts - even with different credentials
+		//Session mailSession = Session.getInstance(properties, auth);
 		return mailSession;
 	}
 

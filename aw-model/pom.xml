@@ -77,6 +77,12 @@
             <artifactId>gson</artifactId>
         </dependency>
 
+		<!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
+			 <dependency>
+			        <groupId>org.codehaus.jackson</groupId>
+			        <artifactId>jackson-mapper-asl</artifactId>
+			 </dependency>
+			  
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

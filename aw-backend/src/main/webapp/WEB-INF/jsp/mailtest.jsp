@@ -14,10 +14,10 @@
 <h2> Mail test via SMTP: </h2>
 
 <p>
-    <b>SMTP host:</b> ${smpt_host_name} <br/>
-    <b>SMTP port:</b> ${smpt_port} <br/>
-    <b>SMTP username:</b> ${smpt_user_name} <br/>
-    <b>SMTP password:</b> ${smpt_password}<br/>
+    <b>SMTP host:</b> ${jsmpt_host_name} <br/>
+    <b>SMTP port:</b> ${jsmpt_port} <br/>
+    <b>SMTP username:</b> ${jsmpt_user_name} <br/>
+    <b>SMTP password:</b> ${jsmpt_password}<br/>
     <br/>
     <b>Mail from address:</b> ${smpt_from_email}<br/>
     
@@ -25,26 +25,26 @@
     <b>Mail test activation password:</b> ${testactivation_password}<br/>
 </p>
 <p>
-    <a id="testSMTP" href=sendtestsmtp>Send test activation email</a>
+    <a id="testSMTP" href=sendtestjungosmtp>Send test activation email via Jango SMTP</a>
 </p>
 
 <hr />
 
 <h2> Mail test via Send Grid: </h2>
 
-<!-- p>
-    <b>SMTP host:</b> ${smpt_host_name} <br/>
-    <b>SMTP port:</b> ${smpt_port} <br/>
-    <b>Mail username:</b> ${smpt_user_name} <br/>
-    <b>Mail password:</b> ${smpt_password}<br/>
+<p>
+    <b>SMTP host:</b> ${sgsmpt_host_name} <br/>
+    <b>SMTP port:</b> ${sgsmpt_port} <br/>
+    <b>Mail username:</b> ${sgsmpt_user_name} <br/>
+    <b>Mail password:</b> ${sgsmpt_password}<br/>
     <b>Mail from address:</b> ${smpt_from_email}<br/>
     
     <b>Mail test activation email:</b> ${testactivation_email}<br/>
     <b>Mail test activation password:</b> ${testactivation_password}<br/>
 </p>
 <p>
-    <a id="testSMTP" href="sendtestsmtp">Send test activation email</a>
-</p -->
+    <a id="testSMTP" href="sendtestsendgrid">Send test activation email via Send Grid</a>
+</p>
 
 </body>
 </html>
