@@ -16,7 +16,7 @@
 <%--</a><br/>--%>
 
 <div style="text-align: center;">
-    <c:if test="${not empty param.error}">
+    <c:if test="${not empty error}">
     <span style="color: red; ">
         <b>We did not recognize the username or password you entered.<br/>
             Please try again.</b><br/>

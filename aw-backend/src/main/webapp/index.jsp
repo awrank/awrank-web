@@ -5,28 +5,48 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title>awrank.com</title>
     <link href="main.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        h3 {
+            background-color: #492248;
+            color: #ffffff;
+            padding: 3pt;
+        }
+    </style>
 </head>
 <body>
 
 <h1>Welcome to the Awrank web application!</h1>
 
+<%-- twitter bootstrap color--%>
+<h3>EMAIL</h3>
+
 <p>
     <a id="testMailPage" href="api/mailtest">Main sending test pages</a>
 </p>
 
+<h3>API</h3>
 <p>
-    <a href="api/testTransaction">Test transaction</a>
+    <a href="api/testTransaction">Test transaction</a> <br/>
+    <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/>
+    <a href="rest/search?query=1">TestRestController</a><br/>
 </p>
 
+<h3>LOGIN</h3>
 <p>
-    <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a>
+    <a href="<c:url value="/login"/>">Login</a> | <a href="<c:url value="/logout"/>">Logout</a> <br/>
 </p>
 
-    <p>
-        <a href="<c:url value="/login.jsp"/>">Login</a>
-    </p>
+<br/>
+<h3>Session scope</h3>
+${sessionScope}
+<br/>
 
-<p><a href="http://awrank.com">Awrank</a>, January 2013</p>
+<br/>
+<br/>
+
+<p align="center" style="color: gray">
+    <a href="http://awrank.com">Awrank</a>, January 2013
+</p>
 <br/>
 
 <br/>
