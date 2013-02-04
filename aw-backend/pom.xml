@@ -153,6 +153,11 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- Joda Time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
 
         <!-- jstl -->
         <dependency>

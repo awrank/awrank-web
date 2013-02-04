@@ -25,18 +25,48 @@
 </p>
 
 <h3>API</h3>
+
 <p>
     <a href="api/testTransaction">Test transaction</a> <br/>
     <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/>
-    <a href="rest/search?query=1">TestRestController</a><br/>
+
+    <p>
+        <h5>TestRestController</h5>
+        <ul>
+            <li>
+                <a href="rest/search?query=1">rest/search?query=1</a><br/>
+            </li>
+            <li>
+                <form action="rest/postjson" method="POST" accept="application/json" enctype="application/json">
+                    Fill user data: <br/>
+                    <label for="firstname">First name</label>
+                    <input id="firstname" name="firstName" type="text"/><br/>
+
+                    <label for="lastname">Last name</label>
+                    <input id="lastname" name="lastName" type="text"/><br/>
+
+                    <br/>
+                    <input type="submit" value="Post">
+                </form>
+            </li>
+            <li>
+                <a href="rest/user/2">rest/user/2</a><br/>
+            </li>
+        </ul>
+
+
+    </p>
+
 </p>
 
 <h3>LOGIN</h3>
+
 <p>
     <a href="<c:url value="/login"/>">Login</a> | <a href="<c:url value="/logout"/>">Logout</a> <br/>
 </p>
 
 <br/>
+
 <h3>Session scope</h3>
 ${sessionScope}
 <br/>

@@ -44,8 +44,8 @@
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
 
     <!--<bean id="messageSource"-->
-          <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
-        <!--<property name="basenames" value="resources/messages"/>-->
+    <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
+    <!--<property name="basenames" value="resources/messages"/>-->
     <!--</bean>-->
 
     <bean id="entityManagerFactory"
@@ -61,4 +61,20 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
+
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonConverter"/>
+                <!--<ref bean="marshallingConverter"/>-->
+                <!--<ref bean="atomConverter"/>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes" value="application/json"/>
+    </bean>
+
 </beans>
