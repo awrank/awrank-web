@@ -2,7 +2,8 @@ package com.awrank.web.model.exception;
 
 import com.awrank.web.model.constant.EMessageConst;
 import com.awrank.web.model.domain.constant.EObjectType;
-import com.google.gson.JsonObject;
+import com.awrank.web.model.utils.json.JsonUtils;
+import org.codehaus.jackson.node.ObjectNode;
 
 /**
  *
@@ -23,12 +24,12 @@ public class ObjectFieldException extends AwRankModelException {
 
 // --------------------------- JSON ------------------------------------------
 
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
-        jsonObject.addProperty("objectType", objectType.name());
-        jsonObject.addProperty("objectIndex", objectIndex);
-        jsonObject.addProperty("objectId", objectId);
-        jsonObject.addProperty("fieldName", fieldName);
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
+        JsonUtils.set(jsonObject, "objectType", objectType.name());
+        JsonUtils.set(jsonObject, "objectIndex", objectIndex);
+        JsonUtils.set(jsonObject, "objectId", objectId);
+        JsonUtils.set(jsonObject, "fieldName", fieldName);
         return jsonObject;
     }
 }

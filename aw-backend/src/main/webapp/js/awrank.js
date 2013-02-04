@@ -74,9 +74,12 @@ function postJson(url, data, success, disableElementId) {
                     case 500:
                         var text = errorData.responseText
                         if (text != null) {
-                            var o1 = $.evalJSON(text);
-                            if (o1 != null && o1.error != null && o1.error.message != null) {
-                                text = getMessage(o1.error.message);
+                            try {
+                                var o1 = $.evalJSON(text);
+                                if (o1 != null && o1.error != null && o1.error.message != null) {
+                                    text = getMessage(o1.error.message);
+                                }
+                            } catch (e) {
                             }
                         }
                         alert(getMessage('ERROR') + ': ' + text);

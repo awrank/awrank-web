@@ -4,7 +4,7 @@ import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ERole;
 import com.awrank.web.model.domain.constant.UserRoleConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 
@@ -40,14 +40,14 @@ public class UserRole extends AbstractUserItem implements UserRoleConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public UserRole(final JsonObject jsonObject) {
+    public UserRole(final ObjectNode jsonObject) {
         super(jsonObject);
         this.role = JsonUtils.getEnum(jsonObject, S_ROLE, ERole.class);
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_ROLE, role);
         return jsonObject;
     }

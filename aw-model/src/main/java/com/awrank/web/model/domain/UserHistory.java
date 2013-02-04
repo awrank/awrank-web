@@ -5,7 +5,7 @@ import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ESecretQuestion;
 import com.awrank.web.model.domain.constant.UserHistoryConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -239,7 +239,7 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public UserHistory(final JsonObject jsonObject) {
+    public UserHistory(final ObjectNode jsonObject) {
         super(jsonObject);
         this.createdHistory = JsonUtils.getDate(jsonObject, S_CREATED_HISTORY);
         this.userId = JsonUtils.getLong(jsonObject, S_USER_ID);
@@ -259,8 +259,8 @@ public class UserHistory extends AbstractObject implements UserHistoryConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_CREATED_HISTORY, createdHistory);
         JsonUtils.set(jsonObject, S_USER_ID, userId);
         JsonUtils.set(jsonObject, S_API_KEY, apiKey);

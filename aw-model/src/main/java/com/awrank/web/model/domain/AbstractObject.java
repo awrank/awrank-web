@@ -4,7 +4,8 @@ import com.awrank.web.model.domain.constant.AbstractObjectConst;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.utils.json.JsonUtils;
 import com.awrank.web.model.utils.user.CurrentUserUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -176,7 +177,7 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
 
     // ------------------------------- JSON ---------------------------------------
 
-    public AbstractObject(final JsonObject jsonObject) {
+    public AbstractObject(final ObjectNode jsonObject) {
         this.objectType = JsonUtils.getEnum(jsonObject, S_OBJECT_TYPE, EObjectType.class);
         this.id = JsonUtils.getLong(jsonObject, S_ID);
         this.createdDate = JsonUtils.getDate(jsonObject, S_CREATED_DATE);
@@ -184,8 +185,8 @@ public abstract class AbstractObject implements AbstractObjectConst, Serializabl
         this.endedDate = JsonUtils.getDate(jsonObject, S_ENDED_DATE);
     }
 
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = new JsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
         JsonUtils.set(jsonObject, S_OBJECT_TYPE, objectType.name());
         JsonUtils.set(jsonObject, S_ID, id);
         JsonUtils.set(jsonObject, S_CREATED_DATE, createdDate);

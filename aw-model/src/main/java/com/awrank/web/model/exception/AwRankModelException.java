@@ -1,7 +1,9 @@
 package com.awrank.web.model.exception;
 
 import com.awrank.web.model.utils.json.IJsonObject;
-import com.google.gson.JsonObject;
+import com.awrank.web.model.utils.json.JsonUtils;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 /**
  * Base exception to be used in AwRank Web project.
@@ -29,10 +31,10 @@ public class AwRankModelException extends Exception implements IJsonObject {
 // --------------------------- JSON ------------------------------------------
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("exception", getClass().getCanonicalName());
-        jsonObject.addProperty("message", getMessage());
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
+        JsonUtils.set(jsonObject, "exception", getClass().getCanonicalName());
+        JsonUtils.set(jsonObject, "message", getMessage());
         return jsonObject;
     }
 

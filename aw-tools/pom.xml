@@ -102,13 +102,6 @@
               <artifactId>jsr-310-ri</artifactId>
           </dependency>-->
 
-        <!-- json -->
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-
         <!-- JUnit -->
 
         <dependency>

@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryHistoryConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 
@@ -89,7 +89,7 @@ public class EntryHistory extends AbstractObject implements EntryHistoryConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public EntryHistory(final JsonObject jsonObject) {
+    public EntryHistory(final ObjectNode jsonObject) {
         super(jsonObject);
         // entryPoint
         this.ipAddress = JsonUtils.getString(jsonObject, S_IP_ADDRESS);
@@ -99,8 +99,8 @@ public class EntryHistory extends AbstractObject implements EntryHistoryConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_ENTRY_POINT, entryPoint);
         JsonUtils.set(jsonObject, S_IP_ADDRESS, ipAddress);
         JsonUtils.set(jsonObject, S_SUCCESS, success);

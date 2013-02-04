@@ -4,7 +4,7 @@ import com.awrank.web.model.domain.constant.EAuthenticationMethod;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EntryPointConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -84,7 +84,7 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public EntryPoint(final JsonObject jsonObject) {
+    public EntryPoint(final ObjectNode jsonObject) {
         super(jsonObject);
         this.uid = JsonUtils.getString(jsonObject, S_UID);
         this.password = JsonUtils.getString(jsonObject, S_PASSWORD);
@@ -93,8 +93,8 @@ public class EntryPoint extends AbstractUserItem implements EntryPointConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_UID, uid);
         JsonUtils.set(jsonObject, S_PASSWORD, password);
         JsonUtils.set(jsonObject, S_VERIFIED_DATE, verifiedDate);

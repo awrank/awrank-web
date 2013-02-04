@@ -4,7 +4,7 @@ import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.EPaymentType;
 import com.awrank.web.model.domain.constant.PaymentConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -111,8 +111,8 @@ public class Payment extends AbstractObject implements PaymentConst {
     }
 
     // ------------------------------- JSON ---------------------------------------
-
-    public Payment(final JsonObject jsonObject) {
+//
+    public Payment(final ObjectNode jsonObject) {
         // userOrder
         this.paymentType = JsonUtils.getEnum(jsonObject, S_PAYMENT_TYPE, EPaymentType.class);
         this.transactionId = JsonUtils.getString(jsonObject, S_TRANSACTION_ID);
@@ -121,8 +121,8 @@ public class Payment extends AbstractObject implements PaymentConst {
         this.amount = JsonUtils.getBigDecimal(jsonObject, S_AMOUNT);
     }
 
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
         JsonUtils.set(jsonObject, S_PAYMENT_TYPE, paymentType);
         JsonUtils.set(jsonObject, S_TRANSACTION_ID, transactionId);

@@ -5,7 +5,7 @@ import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ESecretQuestion;
 import com.awrank.web.model.domain.constant.UserConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -208,7 +208,7 @@ public class User extends AbstractObject implements UserConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public User(final JsonObject jsonObject) {
+    public User(final ObjectNode jsonObject) {
         super(jsonObject);
         this.apiKey = JsonUtils.getString(jsonObject, S_API_KEY);
         // refUser
@@ -226,8 +226,8 @@ public class User extends AbstractObject implements UserConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_API_KEY, apiKey);
         JsonUtils.set(jsonObject, S_REF_USER, refUser);
         JsonUtils.set(jsonObject, S_EMAIL, email);

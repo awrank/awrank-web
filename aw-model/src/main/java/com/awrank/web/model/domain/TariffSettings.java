@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.TariffSettingsConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -82,7 +82,7 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
 
     // --------------------------- JSON ------------------------------------------
 
-    public TariffSettings(final JsonObject jsonObject) {
+    public TariffSettings(final ObjectNode jsonObject) {
         super(jsonObject);
         // tariff
         this.price = JsonUtils.getBigDecimal(jsonObject, S_PRICE);
@@ -91,8 +91,8 @@ public class TariffSettings extends AbstractObject implements TariffSettingsCons
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_TARIFF, tariff);
         JsonUtils.set(jsonObject, S_PRICE, price);
         JsonUtils.set(jsonObject, S_DISCOUNT, discount);

@@ -2,7 +2,7 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.constant.AbstractUserItemConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -34,13 +34,13 @@ public abstract class AbstractUserItem extends AbstractObject implements Abstrac
 
     // --------------------------- JSON ------------------------------------------
 
-    public AbstractUserItem(final JsonObject jsonObject) {
+    public AbstractUserItem(final ObjectNode jsonObject) {
         super(jsonObject);
         // user
     }
 
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_USER, user);
         return jsonObject;
     }

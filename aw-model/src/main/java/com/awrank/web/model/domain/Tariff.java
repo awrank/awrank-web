@@ -4,7 +4,7 @@ import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ETariffType;
 import com.awrank.web.model.domain.constant.TariffConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 
@@ -120,7 +120,7 @@ public class Tariff extends AbstractObject implements TariffConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public Tariff(final JsonObject jsonObject) {
+    public Tariff(final ObjectNode jsonObject) {
         super(jsonObject);
         this.nameDicCode = JsonUtils.getString(jsonObject, S_NAME_DIC_CODE);
         this.descriptionDicCode = JsonUtils.getString(jsonObject, S_DESCRIPTION_DIC_CODE);
@@ -132,8 +132,8 @@ public class Tariff extends AbstractObject implements TariffConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_NAME_DIC_CODE, nameDicCode);
         JsonUtils.set(jsonObject, S_DESCRIPTION_DIC_CODE, descriptionDicCode);
         JsonUtils.set(jsonObject, S_LENGTH_IN_DAYS, lengthInDays);
