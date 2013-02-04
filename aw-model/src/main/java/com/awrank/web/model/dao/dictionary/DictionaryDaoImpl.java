@@ -1,7 +1,7 @@
 package com.awrank.web.model.dao.dictionary;
 
 import com.awrank.web.model.dao.AbstractDaoImpl;
-import com.awrank.web.model.dao.dictionary.wrapper.DictionaryWrapper;
+import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.utils.select.SelectUtils;
@@ -17,8 +17,8 @@ import java.util.List;
 @Repository
 public class DictionaryDaoImpl extends AbstractDaoImpl<Dictionary> implements DictionaryDao {
     @Override
-    public List<DictionaryWrapper> getWrapperList() {
-        final List list = SelectUtils.getWrapperList(em, DictionaryWrapper.class, " order by o." + Dictionary.H_LANGUAGE + ", o." + Dictionary.H_CODE, 0, 0);
+    public List<DictionaryResource> getWrapperList() {
+        final List list = SelectUtils.getWrapperList(em, DictionaryResource.class, " order by o." + Dictionary.H_LANGUAGE + ", o." + Dictionary.H_CODE, 0, 0);
         return list;
     }
 

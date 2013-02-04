@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.PromoCodeConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 
@@ -79,7 +79,7 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public PromoCode(final JsonObject jsonObject) {
+    public PromoCode(final ObjectNode jsonObject) {
         super(jsonObject);
         this.reference = JsonUtils.getString(jsonObject, S_REFERENCE);
         this.code = JsonUtils.getString(jsonObject, S_CODE);
@@ -88,8 +88,8 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_REFERENCE, reference);
         JsonUtils.set(jsonObject, S_CODE, code);
         JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);

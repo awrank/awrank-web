@@ -1,10 +1,12 @@
 package com.awrank.web.model.utils.json;
 
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
+
+import java.io.Serializable;
 
 /**
  * User: a_polyakov
  */
-public interface IJsonObject {
-    public JsonObject toJsonObject();
+public interface IJsonObject extends Serializable {
+    public ObjectNode toJsonObject();
 }

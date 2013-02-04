@@ -94,12 +94,6 @@
         </dependency>
         -->
 
-        <!-- json -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-
         <!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

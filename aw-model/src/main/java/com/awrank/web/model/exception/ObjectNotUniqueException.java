@@ -2,7 +2,8 @@ package com.awrank.web.model.exception;
 
 import com.awrank.web.model.constant.EMessageConst;
 import com.awrank.web.model.domain.constant.EObjectType;
-import com.google.gson.JsonObject;
+import com.awrank.web.model.utils.json.JsonUtils;
+import org.codehaus.jackson.node.ObjectNode;
 
 /**
  *
@@ -26,13 +27,13 @@ public class ObjectNotUniqueException extends AwRankModelException {
 // --------------------------- JSON ------------------------------------------
 
     @Override
-    public JsonObject toJsonObject() {
-        JsonObject jsonObject = super.toJsonObject();
-        jsonObject.addProperty("objectType", objectType.name());
-        jsonObject.addProperty("objectAIndex", objectAIndex);
-        jsonObject.addProperty("objectAId", objectAId);
-        jsonObject.addProperty("objectBIndex", objectBIndex);
-        jsonObject.addProperty("objectBId", objectBId);
+    public ObjectNode toJsonObject() {
+        ObjectNode jsonObject = super.toJsonObject();
+        JsonUtils.set(jsonObject, "objectType", objectType.name());
+        JsonUtils.set(jsonObject, "objectAIndex", objectAIndex);
+        JsonUtils.set(jsonObject, "objectAId", objectAId);
+        JsonUtils.set(jsonObject, "objectBIndex", objectBIndex);
+        JsonUtils.set(jsonObject, "objectBId", objectBId);
         return jsonObject;
     }
 }

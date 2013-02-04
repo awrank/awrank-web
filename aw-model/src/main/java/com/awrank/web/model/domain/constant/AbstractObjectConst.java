@@ -1,9 +1,11 @@
 package com.awrank.web.model.domain.constant;
 
+import com.awrank.web.model.utils.json.IJsonObject;
+
 /**
  *
  */
-public interface AbstractObjectConst {//extends Auditable<User, Long> {
+public interface AbstractObjectConst extends IJsonObject {//extends Auditable<User, Long> {
 
     public static final String S_ID = "id";
     public static final String H_ID = "id";

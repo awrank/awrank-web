@@ -1,6 +1,5 @@
 package com.awrank.web.model.utils.user;
 
-import com.awrank.web.model.dao.user.UserDao;
 import com.awrank.web.model.domain.User;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -14,19 +13,24 @@ import org.springframework.stereotype.Component;
 public class CurrentUserUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
     private static final ThreadLocal<User> CURRENT_USER = new ThreadLocal<User>();
+    private static User anonymous = null;
 
     /**
-     * get user linked thread or ANONIMOUS
+     * get user linked thread or ANONYMOUS
      *
      * @return
      */
     public static User getCurrentUser() {
         User user = CURRENT_USER.get();
         if (user == null && applicationContext != null) {
-            UserDao userDao = applicationContext.getBean(UserDao.class);
-            if (userDao != null) {
-                user = userDao.select("anonymous@awrank.com");
+            if (anonymous == null) {
+                // TODO
+//                UserDao userDao = applicationContext.getBean(UserDao.class);
+//                if (userDao != null) {
+//                    anonymous = userDao.select("anonymous@awrank.com");
+//                }
             }
+            user = anonymous;
         }
         return user;
     }

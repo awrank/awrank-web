@@ -2,7 +2,7 @@ package com.awrank.web.model.service.dictionary;
 
 import com.awrank.web.model.constant.EMessageConst;
 import com.awrank.web.model.dao.dictionary.DictionaryDao;
-import com.awrank.web.model.dao.dictionary.wrapper.DictionaryWrapper;
+import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.domain.constant.DictionaryConst;
 import com.awrank.web.model.domain.constant.EObjectType;
@@ -26,13 +26,13 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<DictionaryWrapper> getList() {
+    public List<DictionaryResource> getList() {
         return dictionaryDao.getWrapperList();
     }
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public DictionaryWrapper insert(DictionaryWrapper wrapper) throws ObjectNotUniqueException, ObjectFieldException {
+    public DictionaryResource insert(DictionaryResource wrapper) throws ObjectNotUniqueException, ObjectFieldException {
         if (wrapper.getLanguage() == null)
             throw new ObjectFieldException(EMessageConst.MISSING_DICTIONARY_LANGUAGE, EObjectType.DICTIONARY, null, wrapper.getId(), DictionaryConst.S_LANGUAGE);
         if (wrapper.getCode() == null || wrapper.getCode().isEmpty())
@@ -47,13 +47,13 @@ public class DictionaryServiceImpl implements DictionaryService {
         Dictionary dictionary = new Dictionary(wrapper.toJsonObject());
         dictionaryDao.persist(dictionary);
 
-        wrapper = new DictionaryWrapper(dictionary.toJsonObject());
+        wrapper = new DictionaryResource(dictionary.toJsonObject());
         return wrapper;
     }
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public void update(DictionaryWrapper wrapper) throws ObjectFieldException, ObjectNotUniqueException {
+    public void update(DictionaryResource wrapper) throws ObjectFieldException, ObjectNotUniqueException {
         if (wrapper.getId() == null)
             throw new ObjectFieldException(EMessageConst.MISSING_OBJECT_ID, EObjectType.DICTIONARY, null, null, DictionaryConst.S_ID);
         if (wrapper.getLanguage() == null)
@@ -71,12 +71,14 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
         Dictionary dictionary = new Dictionary(wrapper.toJsonObject());
         dictionary.setCreatedDate(oldDic.getCreatedDate());
+        dictionary.setCreatedBy(oldDic.getCreatedBy());
+        dictionary.setVersion(oldDic.getVersion());
         dictionaryDao.merge(dictionary);
     }
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public void delete(DictionaryWrapper wrapper) throws ObjectFieldException {
+    public void delete(DictionaryResource wrapper) throws ObjectFieldException {
         if (wrapper.getId() == null)
             throw new ObjectFieldException(EMessageConst.MISSING_OBJECT_ID, EObjectType.DICTIONARY, null, null, DictionaryConst.S_ID);
 

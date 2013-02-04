@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserOrderConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -96,7 +96,7 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
 
     // ------------------------------- JSON ---------------------------------------
 
-    public UserOrder(final JsonObject jsonObject) {
+    public UserOrder(final ObjectNode jsonObject) {
         // tariffSettings
         this.complete = JsonUtils.getBoolean(jsonObject, S_COMPLETE);
         // refUser
@@ -104,8 +104,8 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
         this.payedDate = JsonUtils.getDate(jsonObject, S_PAYED_DATE);
     }
 
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
         JsonUtils.set(jsonObject, S_COMPLETE, complete);
         JsonUtils.set(jsonObject, S_GRACE_PERIOD, gracePeriod);

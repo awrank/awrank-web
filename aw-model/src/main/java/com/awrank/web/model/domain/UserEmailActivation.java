@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserEmailActivationConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -80,7 +80,7 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
 
     // --------------------------- JSON ------------------------------------------
 
-    public UserEmailActivation(final JsonObject jsonObject) {
+    public UserEmailActivation(final ObjectNode jsonObject) {
         super(jsonObject);
         this.code = JsonUtils.getString(jsonObject, S_CODE);
         this.ipAddress = JsonUtils.getString(jsonObject, S_IP_ADDRESS);
@@ -89,8 +89,8 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_CODE, code);
         JsonUtils.set(jsonObject, S_IP_ADDRESS, ipAddress);
         JsonUtils.set(jsonObject, S_EMAIL, email);

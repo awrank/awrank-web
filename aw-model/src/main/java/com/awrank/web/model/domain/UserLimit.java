@@ -3,7 +3,7 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.UserLimitConst;
 import com.awrank.web.model.utils.json.JsonUtils;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -55,15 +55,15 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
 
     // --------------------------- JSON ------------------------------------------
 
-    public UserLimit(final JsonObject jsonObject) {
+    public UserLimit(final ObjectNode jsonObject) {
         super(jsonObject);
         this.availableRequests = JsonUtils.getInteger(jsonObject, S_AVAILABLE_REQUESTS);
         this.startedDate = JsonUtils.getDate(jsonObject, S_STARTED_DATE);
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = super.toJsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_AVAILABLE_REQUESTS, availableRequests);
         JsonUtils.set(jsonObject, S_STARTED_DATE, startedDate);
         return jsonObject;

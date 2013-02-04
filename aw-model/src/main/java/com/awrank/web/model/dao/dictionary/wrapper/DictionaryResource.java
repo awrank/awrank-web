@@ -6,19 +6,23 @@ import com.awrank.web.model.utils.json.IJsonObject;
 import com.awrank.web.model.utils.json.JsonUtils;
 import com.awrank.web.model.utils.select.annotation.SelectField;
 import com.awrank.web.model.utils.select.annotation.SelectFrom;
-import com.google.gson.JsonObject;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 /**
  * User: a_polyakov
  */
-public class DictionaryWrapper implements IJsonObject {
-    private final Long id;
-    private final ELanguage language;
-    private final String code;
-    private final String text;
+public class DictionaryResource implements IJsonObject {
+    private Long id;
+    private ELanguage language;
+    private String code;
+    private String text;
+
+    public DictionaryResource() {
+    }
 
     @SelectFrom(Dictionary.class)
-    public DictionaryWrapper(
+    public DictionaryResource(
             @SelectField(Dictionary.H_ID) Long id,
             @SelectField(Dictionary.H_LANGUAGE) ELanguage language,
             @SelectField(Dictionary.H_CODE) String code,
@@ -33,21 +37,37 @@ public class DictionaryWrapper implements IJsonObject {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public ELanguage getLanguage() {
         return language;
+    }
+
+    public void setLanguage(ELanguage language) {
+        this.language = language;
     }
 
     public String getCode() {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getText() {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     // --------------------------- JSON ------------------------------------------
 
-    public DictionaryWrapper(final JsonObject jsonObject) {
+    public DictionaryResource(final ObjectNode jsonObject) {
         this.id = JsonUtils.getLong(jsonObject, Dictionary.S_ID);
         this.language = JsonUtils.getEnum(jsonObject, Dictionary.S_LANGUAGE, ELanguage.class);
         this.code = JsonUtils.getString(jsonObject, Dictionary.S_CODE);
@@ -55,12 +75,17 @@ public class DictionaryWrapper implements IJsonObject {
     }
 
     @Override
-    public JsonObject toJsonObject() {
-        final JsonObject jsonObject = new JsonObject();
+    public ObjectNode toJsonObject() {
+        final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
         JsonUtils.set(jsonObject, Dictionary.S_ID, id);
         JsonUtils.set(jsonObject, Dictionary.S_LANGUAGE, language);
         JsonUtils.set(jsonObject, Dictionary.S_CODE, code);
         JsonUtils.set(jsonObject, Dictionary.S_TEXT, text);
         return jsonObject;
+    }
+
+    @Override
+    public String toString() {
+        return toJsonObject().toString();
     }
 }
