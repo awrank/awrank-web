@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.mail.BodyPart;
@@ -126,10 +127,12 @@ public class MailTestPageController {
 		else return "key " +key+ " not verified";
 	}
 	
-	@RequestMapping("/sendtestjungosmtp")
+	@RequestMapping(value="/sendtestjungosmtp", method = RequestMethod.POST)
 	public 
 	@ResponseBody
-	String sendTestEmailJSMPT(HttpServletRequest request) {
+	String sendTestEmailJSMPT(@RequestParam("jsmpt_host_name") String jsmpt_host_name, @RequestParam("jsmpt_port") String jsmpt_port, 
+			@RequestParam("jsmpt_user_name") String jsmpt_user_name, @RequestParam("jsmpt_password") String jsmpt_password,
+			HttpServletRequest request) {
 	
 		Properties properties = new Properties();
 	    properties.put("mail.transport.protocol", "smtp");
@@ -145,10 +148,12 @@ public class MailTestPageController {
 	}
 	
 	
-	@RequestMapping("/sendtestsendgrid")
+	@RequestMapping(value="/sendtestsendgrid", method = RequestMethod.POST)
 	public 
 	@ResponseBody
-	String sendTestEmailSG(HttpServletRequest request) throws Exception {
+	String sendTestEmailSG(@RequestParam("sgsmpt_host_name") String sgsmpt_host_name, @RequestParam("sgsmpt_port") String sgsmpt_port, 
+			@RequestParam("sgsmpt_user_name") String sgsmpt_user_name, @RequestParam("sgsmpt_password") String sgsmpt_password, 
+			HttpServletRequest request) throws Exception {
 	
 		Properties properties = new Properties();
 	    properties.put("mail.transport.protocol", "smtp");
