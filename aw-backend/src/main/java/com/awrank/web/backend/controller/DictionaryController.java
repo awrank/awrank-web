@@ -2,9 +2,9 @@ package com.awrank.web.backend.controller;
 
 import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.constant.ELanguage;
-import com.awrank.web.model.exception.AwRankModelException;
+import com.awrank.web.model.exception.ObjectFieldException;
+import com.awrank.web.model.exception.ObjectNotUniqueException;
 import com.awrank.web.model.service.dictionary.DictionaryService;
-import com.awrank.web.model.utils.json.JsonUtils;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
@@ -53,67 +53,35 @@ public class DictionaryController extends AbstractController {
     }
 
     @RequestMapping(value = "/" + UrlConst.URL_DICTIONARY_INSERT, method = RequestMethod.POST)
-    public void getDictionaryInsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getDictionaryInsert(HttpServletRequest request, HttpServletResponse response) throws IOException, ObjectFieldException, ObjectNotUniqueException {
         ObjectNode jsonObject = readJsonObject(request);
         DictionaryResource dictionary = new DictionaryResource((ObjectNode) jsonObject.get("dictionary"));
 
         jsonObject = new ObjectNode(JsonNodeFactory.instance);
-        try {
-            dictionary = dictionaryService.insert(dictionary);
-            jsonObject.put("dictionary", dictionary.toJsonObject());
-        } catch (AwRankModelException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            jsonObject.put("error", e.toJsonObject());
-        } catch (Exception e) {
-            ObjectNode errorJson = new ObjectNode(JsonNodeFactory.instance);
-            JsonUtils.set(jsonObject, "exception", e.getClass().getCanonicalName());
-            JsonUtils.set(jsonObject, "message", e.getMessage());
-            jsonObject.put("error", errorJson);
-        }
+        dictionary = dictionaryService.insert(dictionary);
+        jsonObject.put("dictionary", dictionary.toJsonObject());
 
         writeJsonObject(response, jsonObject);
     }
 
     @RequestMapping(value = "/" + UrlConst.URL_DICTIONARY_UPDATE, method = RequestMethod.POST)
-    public void getDictionaryUpdate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getDictionaryUpdate(HttpServletRequest request, HttpServletResponse response) throws IOException, ObjectNotUniqueException, ObjectFieldException {
         ObjectNode jsonObject = readJsonObject(request);
         jsonObject = (ObjectNode) jsonObject.get("dictionary");
         DictionaryResource dictionary = new DictionaryResource(jsonObject);
 
         jsonObject = new ObjectNode(JsonNodeFactory.instance);
-        try {
-            dictionaryService.update(dictionary);
-        } catch (AwRankModelException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            jsonObject.put("error", e.toJsonObject());
-        } catch (Exception e) {
-            ObjectNode errorJson = new ObjectNode(JsonNodeFactory.instance);
-            JsonUtils.set(jsonObject, "exception", e.getClass().getCanonicalName());
-            JsonUtils.set(jsonObject, "message", e.getMessage());
-            jsonObject.put("error", errorJson);
-        }
-
+        dictionaryService.update(dictionary);
         writeJsonObject(response, jsonObject);
     }
 
     @RequestMapping(value = "/" + UrlConst.URL_DICTIONARY_DELETE, method = RequestMethod.POST)
-    public void getDictionaryDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getDictionaryDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ObjectFieldException {
         ObjectNode jsonObject = readJsonObject(request);
         DictionaryResource dictionary = new DictionaryResource((ObjectNode) jsonObject.get("dictionary"));
 
         jsonObject = new ObjectNode(JsonNodeFactory.instance);
-        try {
-            dictionaryService.delete(dictionary);
-        } catch (AwRankModelException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            jsonObject.put("error", e.toJsonObject());
-        } catch (Exception e) {
-            ObjectNode errorJson = new ObjectNode(JsonNodeFactory.instance);
-            JsonUtils.set(jsonObject, "exception", e.getClass().getCanonicalName());
-            JsonUtils.set(jsonObject, "message", e.getMessage());
-            jsonObject.put("error", errorJson);
-        }
-
+        dictionaryService.delete(dictionary);
         writeJsonObject(response, jsonObject);
     }
 
