@@ -13,7 +13,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/webapp-dispatcher-servlet.xml,
-            /WEB-INF/webapp-security-context.xml
+            /WEB-INF/webapp-security-context.xml,
+            /WEB-INF/webapp-datasource-context.xml
         </param-value>
     </context-param>
 

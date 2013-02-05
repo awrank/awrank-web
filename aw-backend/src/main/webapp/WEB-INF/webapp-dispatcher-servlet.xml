@@ -42,6 +42,7 @@
     <!-- Property placeholder configurer -->
     <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
+    <context:property-placeholder location="/WEB-INF/properties/jdbc.properties"/>
 
     <!--<bean id="messageSource"-->
     <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
@@ -76,5 +77,11 @@
     <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <property name="supportedMediaTypes" value="application/json"/>
     </bean>
+
+
+    <!-- social integration -->
+    <!--<bean id="facebookWebArgResolver" class="org.springframework.social.facebook.api.FacebookWebArgumentResolver">-->
+        <!--<constructor-arg name="apiKey" value="${facebook.appId}"/>-->
+    <!--</bean>-->
 
 </beans>
