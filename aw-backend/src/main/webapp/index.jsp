@@ -31,7 +31,9 @@
 <h3>API</h3>
 
 <p>
-    <a href="#" onclick="fTestJson()">Test json</a> <br/>
+    <a href="#" onclick="fTestJson()">Test json with TestJsonInput</a> <br/>
+    <a href="#" onclick="fTestJson1()">Test json with TestJsonInput without nested "data" object</a> <br/>
+    <a href="#" onclick="fTestJson2()">Test json with String</a> <br/>
     <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/>
 
     <p>
@@ -92,6 +94,19 @@ ${sessionScope}
 
     function fTestJson() {
         postJson('testJson', {dictionary: {id: 15, language: "RU", code: "qwerty", text: "asdfg"}}, function (data) {
+            console.log(data);
+            alert(data);
+        })
+    }
+    
+     function fTestJson1() {
+        postJson2('testJson', {dictionary: {id: 15, language: "RU", code: "qwerty", text: "asdfg"}}, function (data) {
+            console.log(data);
+            alert(data);
+        })
+    }
+      function fTestJson2() {
+        postJson('testJson2', {dictionary: {id: 15, language: "RU", code: "qwerty", text: "asdfg"}}, function (data) {
             console.log(data);
             alert(data);
         })

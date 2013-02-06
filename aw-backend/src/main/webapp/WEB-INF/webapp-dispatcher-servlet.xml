@@ -44,8 +44,8 @@
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
 
     <!--<bean id="messageSource"-->
-    <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
-    <!--<property name="basenames" value="resources/messages"/>-->
+          <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
+        <!--<property name="basenames" value="resources/messages"/>-->
     <!--</bean>-->
 
     <bean id="entityManagerFactory"
@@ -57,6 +57,51 @@
           class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+
+<!-- REST -->
+
+    <!-- bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+        <property name="contentType" value="text/plain"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+   
+  <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+    	<property name="prefixJson" value="true" />
+    	<property name="supportedMediaTypes" value="application/json" />
+    	<property name="objectMapper" ref="jacksonObjectMapper" />
+	</bean>
+
+ <bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+ 	
+<bean id="jacksonSerializationConfig" class="org.codehaus.jackson.map.SerializationConfig"
+    factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig" />
+    
+<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="jacksonSerializationConfig" />
+        <property name="targetMethod" value="setSerializationInclusion" />
+        <property name="arguments">
+            <list>
+                <value type="org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion">NON_DEFAULT</value>
+            </list>
+        </property>
+    </bean>
+
+
+<bean
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="order" value="2" />
+    <property name="prefix" value="/WEB-INF/jsp/" />
+    <property name="suffix" value=".jsp" />
+</bean -->
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 

@@ -3,12 +3,15 @@ package com.awrank.web.backend.controller;
 import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.constant.ELanguage;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.ws.rs.Consumes;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,26 +32,32 @@ public class TestJsonController {
 //        return dictionary;
 //    }
 
-    private class TestJsonInput {
-        private DictionaryResource dictionary;
+    @SuppressWarnings("serial")
+	private class TestJsonInput implements Serializable {
+        private Object dictionary;//DictionaryResource
 
+        /*
         private TestJsonInput() {
+        	
+        	dictionary = new Object();//DictionaryResource
         }
-
-        public DictionaryResource getDictionary() {
+*/
+        public Object getDictionary() {
             return dictionary;
         }
 
-        public void setDictionary(DictionaryResource dictionary) {
+        public void setDictionary(Object dictionary) {
             this.dictionary = dictionary;
         }
     }
 
 
-    private class TestJsonResult {
+    @SuppressWarnings("serial")
+	private class TestJsonResult implements Serializable {
         private List<ELanguage> languageList;
 
         public TestJsonResult() {
+        	languageList = new ArrayList<ELanguage>();
         }
 
         public List<ELanguage> getLanguageList() {
@@ -60,13 +69,27 @@ public class TestJsonController {
         }
     }
 
-    @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
     @Consumes("application/json")
     public
     @ResponseBody()
-    TestJsonResult testJson(@RequestParam(value = "data") TestJsonInput data) {
+    TestJsonResult testJson(@RequestBody TestJsonInput data) {
         data.getDictionary();
-        final TestJsonResult jsonObject = new TestJsonResult();
+        TestJsonResult jsonObject = new TestJsonResult();
+        jsonObject.setLanguageList(new ArrayList<ELanguage>(ELanguage.values().length));
+        for (ELanguage item : ELanguage.values()) {
+            jsonObject.getLanguageList().add(item);
+        }
+        return jsonObject;
+    }
+    
+    @RequestMapping(value = "/testJson2", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/json", headers = "Accept=application/json")
+    @Consumes("application/json")
+    public
+    @ResponseBody()
+    TestJsonResult testJson(@RequestBody String data) {
+        //data.getDictionary();
+        TestJsonResult jsonObject = new TestJsonResult();
         jsonObject.setLanguageList(new ArrayList<ELanguage>(ELanguage.values().length));
         for (ELanguage item : ELanguage.values()) {
             jsonObject.getLanguageList().add(item);
