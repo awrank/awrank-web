@@ -41,7 +41,8 @@ function getMessage(text) {
                 }
             });
     }
-    var m = l_dic[text];
+    var m = undefined;
+    if(l_dic && l_dic != undefined) m = l_dic[text];
     if (m == undefined) {
         m = text;
     }
@@ -53,11 +54,15 @@ function postJson(url, data, success, disableElementId) {
     var dataJson = null;
     if (data != null)
         dataJson = $.toJSON(data);
-    $.ajax(
-        contextPath + url, {
-            type: 'post',
-            data: {data: dataJson},
-            dataType: 'json',
+    	var fullData = {data: dataJson};
+ //contentType: 'application/json; charset=utf-8',
+ // data: JSON.stringify({data: dataJson}),
+    $.ajax({
+    		url: contextPath + url,
+            type: "POST",
+            data: fullData,
+            dataType: "json",
+            contentType: "application/json",
             success: success,
             error: function (errorData, textStatus) {
                 switch (errorData.status) {
@@ -85,7 +90,55 @@ function postJson(url, data, success, disableElementId) {
                         alert(getMessage('ERROR') + ': ' + text);
                         break;
                     default:
-                        alert(getMessage('ERROR') + ': ' + getMessage('ERROR_NETWORK'));
+                        alert(getMessage('ERROR') + ': ' + errorData.status + " : "+getMessage('ERROR_NETWORK'));
+                        break;
+                }
+            },
+            complete: function () {
+                loadingHide();
+            }
+        });
+}
+
+function postJson2(url, data, success, disableElementId) {
+    loadingShow(disableElementId);
+    var dataJson = null;
+    if (data != null)
+        dataJson = $.toJSON(data);
+    $.ajax({
+    		url: contextPath + url,
+            type: "POST",
+            data: dataJson,
+            dataType: "json",
+            contentType: "application/json",
+            success: success,
+            error: function (errorData, textStatus) {
+                switch (errorData.status) {
+                    case 401:
+                        oldPost.push({url: url, data: data, success: success, disableElementId: disableElementId});
+                        //TODO
+                        alert(getMessage('ERROR') + '401');
+//                        loginShow();
+
+                        break;
+                    case 403:
+                        alert(getMessage('ERROR') + ': ' + getMessage('ERROR_ACCESS'));
+                        break;
+                    case 500:
+                        var text = errorData.responseText
+                        if (text != null) {
+                            try {
+                                var o1 = $.evalJSON(text);
+                                if (o1 != null && o1.error != null && o1.error.message != null) {
+                                    text = getMessage(o1.error.message);
+                                }
+                            } catch (e) {
+                            }
+                        }
+                        alert(getMessage('ERROR') + ': ' + text);
+                        break;
+                    default:
+                        alert(getMessage('ERROR') + ': ' + errorData.status + " : "+getMessage('ERROR_NETWORK'));
                         break;
                 }
             },

@@ -132,6 +132,7 @@ public class MailTestPageController {
 	@ResponseBody
 	String sendTestEmailJSMPT(@RequestParam("jsmpt_host_name") String jsmpt_host_name, @RequestParam("jsmpt_port") String jsmpt_port, 
 			@RequestParam("jsmpt_user_name") String jsmpt_user_name, @RequestParam("jsmpt_password") String jsmpt_password,
+			@RequestParam("testactivation_email") String testactivation_email, @RequestParam("testactivation_password") String testactivation_password, 
 			HttpServletRequest request) {
 	
 		Properties properties = new Properties();
@@ -144,7 +145,7 @@ public class MailTestPageController {
 		
 		smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
 		
-		return sendTestSMPTMailToSession(smtpSession, request, properties, null);
+		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, null);
 	}
 	
 	
@@ -153,6 +154,7 @@ public class MailTestPageController {
 	@ResponseBody
 	String sendTestEmailSG(@RequestParam("sgsmpt_host_name") String sgsmpt_host_name, @RequestParam("sgsmpt_port") String sgsmpt_port, 
 			@RequestParam("sgsmpt_user_name") String sgsmpt_user_name, @RequestParam("sgsmpt_password") String sgsmpt_password, 
+			@RequestParam("testactivation_email") String testactivation_email, @RequestParam("testactivation_password") String testactivation_password, 
 			HttpServletRequest request) throws Exception {
 	
 		Properties properties = new Properties();
@@ -168,7 +170,7 @@ public class MailTestPageController {
 		SMTPAPIHeader header=  new SMTPAPIHeader();
 		
 		LinkedList<String> recipients = new LinkedList<String>();
-		recipients.add("okorokhina@gmail.com");
+		recipients.add(testactivation_email);
 		header.addTo(recipients);
 		
 		String key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
@@ -182,10 +184,10 @@ public class MailTestPageController {
 		
 		header.setCategory("email activation");
 		
-		return sendTestSMPTMailToSession(smtpSession, request, properties, header);
+		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, header);
 	}
 	
-	private String sendTestSMPTMailToSession(Session smtpSession, HttpServletRequest request, Properties properties, SMTPAPIHeader header) {
+	private String sendTestSMPTMailToSession(Session smtpSession, HttpServletRequest request, Properties properties, String testactivation_email, String testactivation_password, SMTPAPIHeader header) {
 		
 		MimeMessage message = new MimeMessage(smtpSession);
 		
@@ -218,7 +220,7 @@ public class MailTestPageController {
 			multipart.addBodyPart(part2);
 			message.setFrom(new InternetAddress(smpt_from_email));
 			message.addRecipient(Message.RecipientType.TO,
-			   new InternetAddress("okorokhina@gmail.com"));
+			   new InternetAddress(testactivation_email));
 			message.setSubject("Your need to verify email");
 			message.setContent(multipart);
 			
@@ -238,7 +240,8 @@ public class MailTestPageController {
 		}
 		finally{
 			
-			//properties.clear();
+			properties.clear();
+			//smtpSession.flush();
 		}
 
 	}

@@ -1,5 +1,7 @@
 package com.awrank.web.model.dao.dictionary.wrapper;
 
+import java.io.Serializable;
+
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.utils.json.IJsonObject;
@@ -12,7 +14,8 @@ import org.codehaus.jackson.node.ObjectNode;
 /**
  * User: a_polyakov
  */
-public class DictionaryResource implements IJsonObject {
+@SuppressWarnings("serial")
+public class DictionaryResource implements Serializable, IJsonObject {
     private Long id;
     private ELanguage language;
     private String code;
