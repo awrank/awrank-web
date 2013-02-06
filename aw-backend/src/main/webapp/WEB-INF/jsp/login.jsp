@@ -3,7 +3,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/spring-social/social/tags" prefix="social" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -11,7 +10,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <title>Title</title>
     <!-- jQuery required for Facebook connect form -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+    <%--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>--%>
+    <%-- Twiter bootstrap --%>
+    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap.js"></script>
+    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap-button.js"></script>
 </head>
 <body>
 
@@ -36,27 +39,27 @@
         <table align="center" frame="hsides">
             <tr>
                 <td>
-                    <button>Sign in with Google</button>
+                    <button class="btn btn-primary">Sign in with Google</button>
                 </td>
                 <td>
                     <!--  FACEBOOK -->
-                    <c:if test="${connectedToFacebook}">
-                        Connected to Facebook as ${facebookProfile.firstName } ${facebookProfile.lastName }
-                    </c:if>
-                    <c:if test="${!connectedToFacebook}">
-                        <%/* Connect to Facebook */ %>
-                        <form id="fb_signin" action="<c:url value="/callback/fb" />" method="post">
-                            <div class="formInfo">
-                            </div>
-                            <div id="fb-root"></div>
-                            <p><fb:login-button perms="email,publish_stream,offline_access"
-                                                onlogin="$('#fb_signin').submit();"
-                                                v="2"
-                                                length="long">Connect to Facebook</fb:login-button></p>
-                        </form>
+                    <%--<c:if test="${connectedToFacebook}">--%>
+                        <%--Connected to Facebook as ${facebookProfile.firstName } ${facebookProfile.lastName }--%>
+                    <%--</c:if>--%>
+                    <%--<c:if test="${!connectedToFacebook}">--%>
+                        <%--<%/* Connect to Facebook */ %>--%>
+                        <%--<form id="fb_signin" action="<c:url value="/callback/fb" />" method="post">--%>
+                            <%--<div class="formInfo">--%>
+                            <%--</div>--%>
+                            <%--<div id="fb-root"></div>--%>
+                            <%--<p><fb:login-button perms="email,publish_stream,offline_access"--%>
+                                                <%--onlogin="$('#fb_signin').submit();"--%>
+                                                <%--v="2"--%>
+                                                <%--length="long">Connect to Facebook</fb:login-button></p>--%>
+                        <%--</form>--%>
 
-                        <social:connected provider="facebookProvider"/>
-                    </c:if>
+                        <%--<social:connected provider="facebookProvider"/>--%>
+                    <%--</c:if>--%>
                 </td>
             </tr>
             <tr>

@@ -18,7 +18,7 @@
     </http>
 
     <!-- Additional filter chain for normal users, matching all other requests -->
-    <http access-denied-page="/403.jsp" use-expressions="true">
+    <http pattern="/**" access-denied-page="/403.jsp" use-expressions="true">
         <intercept-url pattern="/index*" access="permitAll"/>
         <intercept-url pattern="/user/*" access="ROLE_USER"/>
         <intercept-url pattern="/admin/*" access="ROLE_ADMIN"/>

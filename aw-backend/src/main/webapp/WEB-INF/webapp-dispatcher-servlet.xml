@@ -42,7 +42,6 @@
     <!-- Property placeholder configurer -->
     <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
-    <context:property-placeholder location="/WEB-INF/properties/jdbc.properties"/>
 
     <!--<bean id="messageSource"-->
     <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
@@ -63,25 +62,21 @@
 
     <!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
 
-
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="jsonConverter"/>
-                <!--<ref bean="marshallingConverter"/>-->
-                <!--<ref bean="atomConverter"/>-->
-            </list>
-        </property>
-    </bean>
-
     <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <property name="supportedMediaTypes" value="application/json"/>
     </bean>
 
-
-    <!-- social integration -->
-    <!--<bean id="facebookWebArgResolver" class="org.springframework.social.facebook.api.FacebookWebArgumentResolver">-->
-        <!--<constructor-arg name="apiKey" value="${facebook.appId}"/>-->
+    <!-- social -->
+    <!-- Google -->
+    <!--<bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">-->
+        <!--<property name="connectionFactories">-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.social.google.connect.GoogleConnectionFactory">-->
+                    <!--<constructor-arg value="${google.clientId}" />-->
+                    <!--<constructor-arg value="${google.clientSecret}" />-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</property>-->
     <!--</bean>-->
 
 </beans>

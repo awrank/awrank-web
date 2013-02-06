@@ -78,6 +78,11 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.22</version>
             </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.168</version>
+            </dependency>
 
             <!--hibernate-->
             <dependency>
@@ -188,6 +193,13 @@
                 <artifactId>spring-social-facebook</artifactId>
                 <version>${spring.social.facebook.version}</version>
             </dependency>
+            <!-- Google -->
+            <dependency>
+                <groupId>org.springframework.social</groupId>
+                <artifactId>spring-social-google</artifactId>
+                <version>1.0.0.M2</version>
+            </dependency>
+
 
             <!--
             попытка использовать org.springframework.data.domain.Auditable
@@ -231,11 +243,19 @@
                 <artifactId>commons-logging</artifactId>
                 <version>1.1.1</version>
             </dependency>
+
             <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
                 <version>1.4</version>
             </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.7</version>
+            </dependency>
+
+
             <!--<dependency>-->
             <!--<groupId>log4j</groupId>-->
             <!--<artifactId>log4j</artifactId>-->
@@ -305,6 +325,13 @@
             <id>springsource-repo</id>
             <name>SpringSource Repository</name>
             <url>http://repo.springsource.org/release</url>
+        </repository>
+
+        <!-- Spring Social Google project -->
+        <repository>
+            <id>spring.social.google</id>
+            <name>Spring Social Google</name>
+            <url>https://github.com/GabiAxel/maven/raw/master/</url>
         </repository>
     </repositories>
 
