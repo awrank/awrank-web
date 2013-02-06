@@ -25,7 +25,7 @@
 <h3>EMAIL</h3>
 
 <p>
-    <a id="testMailPage" href="mailtest">Main sending test pages</a>
+    <a id="testMailPage" href="api/mailtest">Main sending test pages</a>
 </p>
 
 <h3>API</h3>
@@ -68,7 +68,7 @@
 <h3>LOGIN</h3>
 
 <p>
-    <a href="<c:url value="/api/login"/>">Login</a> | <a href="<c:url value="/logout"/>">Logout</a> <br/>
+    <a href="<c:url value="/api/login"/>">Login</a> | <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
 </p>
 
 <br/>
