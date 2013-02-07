@@ -8,6 +8,4 @@ import com.awrank.web.model.domain.User;
  */
 public interface UserDao extends AbstractDao<User> {
     public User select(String email);
-    
-    public User create(User user);
 }
