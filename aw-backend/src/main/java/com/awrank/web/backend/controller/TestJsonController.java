@@ -1,19 +1,15 @@
 package com.awrank.web.backend.controller;
 
-import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
-import com.awrank.web.model.domain.constant.ELanguage;
+import javax.ws.rs.Consumes;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.ws.rs.Consumes;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.awrank.web.backend.controller.pojos.TestJsonInputPOJO;
+import com.awrank.web.backend.controller.pojos.TestJsonResultPOJO;
 
 /**
  * User: a_polyakov
@@ -32,71 +28,18 @@ public class TestJsonController {
 //        return dictionary;
 //    }
 
-    @SuppressWarnings("serial")
-	private class TestJsonInput implements Serializable {
-        private Object dictionary;//DictionaryResource
-
-        /*
-        private TestJsonInput() {
-        	
-        	dictionary = new Object();//DictionaryResource
-        }
-*/
-        public Object getDictionary() {
-            return dictionary;
-        }
-
-        public void setDictionary(Object dictionary) {
-            this.dictionary = dictionary;
-        }
-    }
-
-
-    @SuppressWarnings("serial")
-	private class TestJsonResult implements Serializable {
-        private List<ELanguage> languageList;
-
-        public TestJsonResult() {
-        	languageList = new ArrayList<ELanguage>();
-        }
-
-        public List<ELanguage> getLanguageList() {
-            return languageList;
-        }
-
-        public void setLanguageList(List<ELanguage> languageList) {
-            this.languageList = languageList;
-        }
-    }
-
     @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
     @Consumes("application/json")
     public
     @ResponseBody()
-    TestJsonResult testJson(@RequestBody TestJsonInput data) {
-        data.getDictionary();
-        TestJsonResult jsonObject = new TestJsonResult();
-        jsonObject.setLanguageList(new ArrayList<ELanguage>(ELanguage.values().length));
-        for (ELanguage item : ELanguage.values()) {
-            jsonObject.getLanguageList().add(item);
-        }
-        return jsonObject;
-    }
+    TestJsonResultPOJO testJson(@RequestBody TestJsonInputPOJO data) {
+        
+    	System.out.println(data.getDictionary());
+    	
+    	return data.getDictionary();
     
-    @RequestMapping(value = "/testJson2", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/json", headers = "Accept=application/json")
-    @Consumes("application/json")
-    public
-    @ResponseBody()
-    TestJsonResult testJson(@RequestBody String data) {
-        //data.getDictionary();
-        TestJsonResult jsonObject = new TestJsonResult();
-        jsonObject.setLanguageList(new ArrayList<ELanguage>(ELanguage.values().length));
-        for (ELanguage item : ELanguage.values()) {
-            jsonObject.getLanguageList().add(item);
-        }
-        return jsonObject;
     }
-
+ 
 //    @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json")
 //    @Consumes("application/json")
 //    public @ResponseBody() ObjectNode showPlayersGrid(HttpServletRequest request, HttpServletResponse response) {
