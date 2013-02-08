@@ -1,166 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>AwRank</title>
+	<meta charset="utf-8">
+	<title>AwRank</title>
 
-    <!-- Fav and touch icons -->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">-->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">-->
-    <!--<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
-    <link rel="shortcut icon" href="resources/img/favicon.ico">
+	<!-- Fav and touch icons -->
+	<!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">-->
+	<!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">-->
+	<!--<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
+	<link rel="shortcut icon" href="resources/img/favicon.ico">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- JS -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
-    <script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
-    <script type="text/javascript" src="resources/js/awrank.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap//bootstrap-scrollspy.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-tab.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-tooltip.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-popover.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-button.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-collapse.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-carousel.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-typeahead.js"></script>
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<!-- JS -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+	<script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
+	<script type="text/javascript" src="resources/js/awrank.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap//bootstrap-scrollspy.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tab.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tooltip.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-popover.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-button.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-collapse.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-carousel.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-typeahead.js"></script>
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
-    <!-- Le styles -->
-    <link href="resources/css/bootstrap.css" rel="stylesheet">
-    <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+	<!-- Le styles -->
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
 
-    <style type="text/css">
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
 
-        .sidebar-nav {
-            padding: 9px 0;
-        }
-    </style>
+		.sidebar-nav {
+			padding: 9px 0;
+		}
+	</style>
 </head>
 
 <body onload="fIndexBodyOnload()">
 
 <div class="container-fluid">
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand" href="#">AwRank</a>
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My account <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Log out</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="#">AwRank</a>
+				<ul class="nav pull-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> My account <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="fIndexLogout()">Log out</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="nav-header">SITE</li>
-                    <li class="active"><a href="#">Home</a></li>
-                    <li class="nav-header">ACCOUNT</li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Application</a></li>
-                    <li class="nav-header">ACTIVITY</li>
-                    <li><a href="#">Request history</a></li>
-                    <li><a href="#" onclick="fIndexMenuSessionOnclick()">Session history</a></li>
-                    <li><a href="#">Application</a></li>
-                    <li class="nav-header">Administration</li>
-                    <li><a href="#" onclick="fIndexMenuDictionaryOnclick()">Dictionary</a></li>
-                </ul>
-            </div>
-            <!--/.well -->
-        </div>
-        <!--/span-->
-        <div id="rightContent" class="span9">
-            <div id="pricing" class="row-fluid">
-                <div class="span4 well">
-                    <h2>Started</h2>
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="well sidebar-nav">
+				<ul id="menu" class="nav nav-list">
+					<li class="nav-header">SITE</li>
+					<li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i class="icon-home"></i>Home</a></li>
+					<li class="nav-header">ACCOUNT</li>
+					<li><a href="#">Profile</a></li>
+					<li><a href="#">Application</a></li>
+					<li class="nav-header">ACTIVITY</li>
+					<li><a href="#">Request history</a></li>
+					<li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()">Session history</a></li>
+					<li><a href="#">Application</a></li>
+					<li class="nav-header">Administration</li>
+					<li id="menuItemDictionary"><a href="#" onclick="fIndexMenuDictionaryOnclick()">Dictionary</a></li>
+				</ul>
+			</div>
+			<!--/.well -->
+		</div>
+		<!--/span-->
+		<div id="rightContent" class="span9">
+		</div>
+		<!--/span-->
+	</div>
+	<!--/row-->
 
-                    <p>Great for web master to get started</p>
-                    <h4>$9.99
-                        <small>per month</small>
-                    </h4>
-                    <p><a class="btn" href="#">Choose plan &raquo;</a></p>
-                </div>
-                <!--/span-->
-                <div class="span4 well">
-                    <h2>Basic</h2>
-
-                    <p>Great for web master to get started</p>
-                    <h4>$14.99
-                        <small>per month</small>
-                    </h4>
-                    <p><a class="btn" href="#">Choose plan &raquo;</a></p>
-                </div>
-                <!--/span-->
-                <div class="span4 well">
-                    <h2>Pro</h2>
-
-                    <p>Great for web master to get started</p>
-                    <h4>$24.99
-                        <small>per month</small>
-                    </h4>
-                    <p><a class="btn" href="#">Choose plan &raquo;</a></p>
-                </div>
-                <!--/span-->
-            </div>
-            <!--/row-->
-        </div>
-        <!--/span-->
-    </div>
-    <!--/row-->
-
-    <footer>
-        <p>&copy; AwRank 2013</p>
-    </footer>
+	<footer>
+		<p>&copy; AwRank 2013</p>
+	</footer>
 
 </div>
 
 
 <script type="text/javascript" language="JavaScript">
-    function fIndexBodyOnload() {
-        setContextPath('http://localhost:8080/aw-backend');
-//         $('body').load('divLogin.html');
-    }
+	function fIndexBodyOnload() {
+		setContextPath('http://localhost:8080/aw-backend');
+//		fIndexMenuPricingOnclick();
+		fIndexLogout();
+	}
 
-    function fIndexMenuSessionOnclick() {
-        $('#rightContent :not(.hidden)').addClass('hidden');
-        var divSession = $('#divSession');
-        if (divSession[0] == null) {
-            divSession = $('<div id="divSession"/>');
-            divSession.load('divSession.html');
-            $('#rightContent').append(divSession);
-        }
-    }
+	function fIndexMenuActive(menuItemId) {
+		$('#menu li.active').removeClass('active');
+		$('#' + menuItemId).addClass('active');
+	}
 
-    function fIndexMenuDictionaryOnclick() {
-        var divLogin = $('#divLogin');
-        if (divLogin[0] == null) {
-            divLogin = $('<div id="divLogin"/>');
-            divLogin.load('divLogin.html');
-            $('body').append(divLogin);
-        }
-    }
+	function fIndexLoad(targetSelector, divId) {
+		var div = $('#' + divId);
+		if (div[0] == null) {
+			div = $('<div id="' + divId + '"/>');
+			div.load(divId + '.html');
+			$(targetSelector).append(div);
+		}
+		return div;
+	}
+
+	function fIndexRightContentSelectDiv(divId) {
+		$('#rightContent>:not(.hidden)').addClass('hidden');
+		var div=fIndexLoad('#rightContent', divId);
+		div.removeClass('hidden');
+		return div;
+	}
+
+	function fIndexMenuPricingOnclick() {
+		fIndexMenuActive('menuItemPricing');
+		fIndexRightContentSelectDiv('divPricing');
+	}
+
+	function fIndexMenuSessionOnclick() {
+		fIndexMenuActive('menuItemSession');
+		fIndexRightContentSelectDiv('divSession');
+	}
+
+	function fIndexMenuDictionaryOnclick() {
+		fIndexMenuActive('menuItemDictionary');
+		// TODO
+	}
+
+	function fIndexLogout() {
+		fIndexLoad('body', 'divLogin');
+	}
 
 </script>
 </body>
