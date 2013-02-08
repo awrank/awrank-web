@@ -13,6 +13,9 @@
             <!--<property name="hibernate.hbm2ddl.auto" value="validate" />-->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
+            <!-- seek find JPA static metamodel-->
+            <property name="hibernate.ejb.metamodel.population" value="disabled"/>
+
             <!--<property name="hibernate.show_sql" value="true"/>-->
             <!--<property name="hibernate.format_sql" value="true"/>-->
             <!--<property name="hibernate.use_sql_comments" value="true"/>-->
