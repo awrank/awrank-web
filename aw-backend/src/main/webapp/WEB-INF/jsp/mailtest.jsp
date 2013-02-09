@@ -113,9 +113,21 @@
     <td><input type="text" name="testactivation_password" value=${testactivation_password}></td>
   </tr>
   <tr>
+    <td> <b>category:</b> <br/> </td>
+    <td><input type="text" name="xsmtp_header_category" value=${xsmtp_header_category}></td>
+  </tr>
+  <tr>
+    <td> <b>var name:</b> <br/> </td>
+    <td><input type="text" name="xsmtp_header_var_name" value=${xsmtp_header_var_name}></td>
+  </tr>
+  <tr>
+    <td> <b>var value:</b> <br/> </td>
+    <td><input type="text" name="xsmtp_header_var_value" value=${xsmtp_header_var_value}></td>
+  </tr>
+  <tr>
     <td>&nbsp;</td>
     <td><input type="submit" name="submit" value="Send test activation email via SendGrid"></td>
-    </tr>
+  </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>

@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title>Title</title>
+    <title>Login page</title>
     <!-- jQuery required for Facebook connect form -->
     <%--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>--%>
     <%-- Twiter bootstrap --%>
@@ -77,6 +77,7 @@
             </tr>
         </table>
     </form>
+   <a href="<c:url value="register"/>">Register</a>
 </div>
 </body>
 </html>

@@ -65,6 +65,17 @@ public class MailTestPageController {
 	@Value("${mail.sg.smtp.password}")
 	private String sgsmpt_password;
 	
+	@Value("${mail.xsmtp.header.category}")
+	private String xsmtp_header_category;
+
+	@Value("${mail.xsmtp.header.var.name}")
+	private String xsmtp_header_var_name;
+
+	@Value("${mail.xsmtp.header.var.value}")
+	private String xsmtp_header_var_value;
+	
+	
+	
 //------------ other settings -----------------
 	
 	@Value("${mail.from.email}")
@@ -82,8 +93,8 @@ public class MailTestPageController {
 	@Autowired
 	ShareToServiceEmailImpl emailService;
 	
-	@RequestMapping("/mailtest")
-	public ModelAndView showPlayersGrid(HttpServletRequest request,
+	@RequestMapping("/mail")
+	public ModelAndView showMailTestPage(HttpServletRequest request,
 										HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("mailtest");
@@ -102,6 +113,10 @@ public class MailTestPageController {
 		modelMap.put("smpt_from_email", smpt_from_email);
 		modelMap.put("testactivation_email", testactivation_email);
 		modelMap.put("testactivation_password", testactivation_password);
+		
+		modelMap.put("xsmtp_header_category", xsmtp_header_category);
+		modelMap.put("xsmtp_header_var_name", xsmtp_header_var_name);
+		modelMap.put("xsmtp_header_var_value", xsmtp_header_var_value);
 		
 		mav.addAllObjects(modelMap);
 		return mav;
@@ -145,7 +160,7 @@ public class MailTestPageController {
 		
 		smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
 		
-		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, null);
+		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, null, null);
 	}
 	
 	
@@ -155,6 +170,8 @@ public class MailTestPageController {
 	String sendTestEmailSG(@RequestParam("sgsmpt_host_name") String sgsmpt_host_name, @RequestParam("sgsmpt_port") String sgsmpt_port, 
 			@RequestParam("sgsmpt_user_name") String sgsmpt_user_name, @RequestParam("sgsmpt_password") String sgsmpt_password, 
 			@RequestParam("testactivation_email") String testactivation_email, @RequestParam("testactivation_password") String testactivation_password, 
+			@RequestParam("xsmtp_header_category") String xsmtp_header_category, @RequestParam("xsmtp_header_var_name") String xsmtp_header_var_name, 
+			@RequestParam("xsmtp_header_var_value") String xsmtp_header_var_value,
 			HttpServletRequest request) throws Exception {
 	
 		Properties properties = new Properties();
@@ -174,20 +191,25 @@ public class MailTestPageController {
 		header.addTo(recipients);
 		
 		String key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
+		if((xsmtp_header_var_value != null) && String.valueOf(xsmtp_header_var_value).length() > 0 ) key = xsmtp_header_var_value;
 		
 		System.out.println("local"+request.getLocalAddr());
 		System.out.println("remote: "+request.getRemoteAddr());
 		
 		LinkedList<String> activation_keys = new LinkedList<String>();
 		activation_keys.add(key);
-		header.addSubVal("%activation_key%",activation_keys);
 		
-		header.setCategory("email activation");
+		if(xsmtp_header_var_name == null || String.valueOf(xsmtp_header_var_name).length() == 0 ) header.addSubVal("%activation_key%",activation_keys);
+		else header.addSubVal(xsmtp_header_var_name,activation_keys);
 		
-		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, header);
+		if(xsmtp_header_category == null) header.setCategory("email activation");
+		else header.setCategory(xsmtp_header_category);
+		
+		
+		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, header, key);
 	}
 	
-	private String sendTestSMPTMailToSession(Session smtpSession, HttpServletRequest request, Properties properties, String testactivation_email, String testactivation_password, SMTPAPIHeader header) {
+	private String sendTestSMPTMailToSession(Session smtpSession, HttpServletRequest request, Properties properties, String testactivation_email, String testactivation_password, SMTPAPIHeader header, String key) {
 		
 		MimeMessage message = new MimeMessage(smtpSession);
 		
@@ -201,10 +223,10 @@ public class MailTestPageController {
 			/**
 			 * The idea with hash building is to use user's email, password and IP to build the key. This key is stored in db. Once on verification we find
 			 * such a key exists we get the user associated with this key. We fetch his email and password from db and take from request his current IP. On these values 
-			 * we build a second key and if these 2 keys are equal - we verify the email. Otehrwise not.
+			 * we build a second key and if these 2 keys are equal - we verify the email. Otherwise not.
 			 */
 			
-			String key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());//Base64(Hash256(testactivation_email+"."+testactivation_password));
+			if(key == null) key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());//Base64(Hash256(testactivation_email+"."+testactivation_password));
 			StringBuilder bldr = new StringBuilder("<a href=");
 			bldr.append( "\"");
 			bldr.append(testactivation_url);
