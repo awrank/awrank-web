@@ -69,7 +69,7 @@
 <h3>LOGIN</h3>
 
 <p>
-    <a href="<c:url value="/api/login"/>">Login</a> | <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
+    <a href="<c:url value="/api/register"/>">Register</a> | <a href="<c:url value="/api/login"/>">Login</a> | <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
 </p>
 
 <br/>

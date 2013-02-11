@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title>Title</title>
+    <title>Login page</title>
     <jsp:directive.include file="header.jspf"/>
 </head>
 <body>
@@ -56,6 +56,7 @@
             </tr>
         </table>
     </form>
+   <a href="<c:url value="register"/>">Register</a>
 </div>
 </body>
 </html>

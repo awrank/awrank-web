@@ -1,11 +1,17 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.dao.entrypoint.EntryPointDao;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ESecretQuestion;
 import com.awrank.web.model.domain.constant.UserConst;
 import com.awrank.web.model.utils.json.JsonUtils;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,8 +20,36 @@ import java.util.Date;
  * пользователь
  */
 @Entity
+@JsonAutoDetect
 @Table(name = UserConst.TABLE_NAME)
 public class User extends AbstractObject implements UserConst {
+	
+	@Value("${user.default.languageCode}")
+	private String user_default_languageCode;
+	
+	@Transient 
+	@Autowired 
+	EntryPointDao entryPointDao;
+
+/**
+ *  Added by Olga, password comes to User from registration form - we need to process it
+ * @param password
+ */
+	
+	@JsonProperty("password")
+	public void setPassword(String password) {
+		//TODO: implement this right
+		//entryPointDao.find(EntryPoint.class, this.getId()).setPassword(password);		
+	}
+  
+	@JsonProperty("password") 
+	public String getPassword() {
+		
+		//TODO: implement this right
+		//return entryPointDao.find(EntryPoint.class, this.getId()).getPassword();
+		return "test";
+	}
+	
     /**
      * уникальный код, который будет использоваться для запросов к API
      */
@@ -27,19 +61,19 @@ public class User extends AbstractObject implements UserConst {
     /**
      * email пользователя
      */
-    private String email;
+    private String email = "";
     /**
      * скайп
      */
-    private String skype;
+    private String skype = "";
     /**
      * имя
      */
-    private String firstName;
+    private String firstName = "";
     /**
      * фамилия
      */
-    private String lastName;
+    private String lastName = "";
     /**
      * день рождения
      */
@@ -69,12 +103,16 @@ public class User extends AbstractObject implements UserConst {
      * дата блокирокви
      */
     private Date banStartedDate;
-
     {
         objectType = EObjectType.USER;
     }
 
     public User() {
+    	
+    	this.authorizationFailsCount = 0;
+    	this.language = ELanguage.valueOf("EN");
+    	//this.language = ELanguage.valueOf(user_default_languageCode);//doesn't work for some reason
+    	
     }
 
     @Column(name = S_API_KEY, nullable = false, unique = true)
@@ -207,7 +245,7 @@ public class User extends AbstractObject implements UserConst {
     }
 
     // --------------------------- JSON ------------------------------------------
-
+   
     public User(final ObjectNode jsonObject) {
         super(jsonObject);
         this.apiKey = JsonUtils.getString(jsonObject, S_API_KEY);
@@ -243,4 +281,18 @@ public class User extends AbstractObject implements UserConst {
         JsonUtils.set(jsonObject, S_BAN_STARTED_DATE, banStartedDate);
         return jsonObject;
     }
+    
+    //----------- accessors for autowired, probably refactor this out ------
+    
+    @Transient
+	public EntryPointDao getEntryPointDao() {
+		
+		return entryPointDao;
+	}
+	
+    @Transient
+	public void setEntryPointDao(EntryPointDao value) {
+		entryPointDao = value;
+		
+	}
 }
