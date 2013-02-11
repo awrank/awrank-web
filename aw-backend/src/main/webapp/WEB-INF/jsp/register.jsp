@@ -28,22 +28,31 @@
         <br/>
     </span -->
     </c:if>
-    <form method="POST" action="<c:url value="user/add" />">
+    <form method="POST" action="<c:url value="user/add" />" accept="application/json" enctype="application/json">
         <table align="center" frame="hsides">
             <tr>
-             
+                <td align="right">First Name</td>
+                <td><input type="text" name="firstName"/></td>
             </tr>
-            <tr>
-                <td align="right">Login</td>
-                <td><input type="text" name="j_username"/></td>
+             <tr>
+                <td align="right">Last Name</td>
+                <td><input type="text" name="lastName"/></td>
             </tr>
             <tr>
                 <td align="right">Email*</td>
-                <td><input type="text" name="j_email"/></td>
+                <td><input type="text" name="email"/></td>
             </tr>
             <tr>
                 <td align="right">Password*</td>
-                <td><input type="password" name="j_password"/></td>
+                <td><input type="password" name="password"/></td>
+            </tr>
+             <tr>
+                <td align="right">API Key*</td>
+                <td><input type="apiKey" name="apiKey"/></td>
+            </tr>
+             <tr>
+                <td align="right">Language(EN, RU)</td>
+                <td><input type="language" name="language"/></td>
             </tr>
             <tr>
                 <td colspan="2" align="right"><input type="submit" value="Register"/>

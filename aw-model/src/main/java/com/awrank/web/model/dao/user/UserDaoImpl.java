@@ -1,7 +1,11 @@
 package com.awrank.web.model.dao.user;
 
 import com.awrank.web.model.dao.AbstractDaoImpl;
+import com.awrank.web.model.dao.entrypoint.EntryPointDao;
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -13,7 +17,7 @@ import javax.persistence.Query;
 @Repository
 public class UserDaoImpl extends AbstractDaoImpl<User> implements UserDao {
 
-    private static final String HQ_SELECT = "select o from " + User.class.getSimpleName() + " o " +
+	private static final String HQ_SELECT = "select o from " + User.class.getSimpleName() + " o " +
             "where o." + User.H_EMAIL + "=?1";
 
     //private static final String HQ_INSERT = "insert into " + User.class.getSimpleName() + "({1}) values ({2}) on duplicate key update {3}";// updating "date_modified";
@@ -29,5 +33,6 @@ public class UserDaoImpl extends AbstractDaoImpl<User> implements UserDao {
         }
         return user;
     }
+	
 
 }
