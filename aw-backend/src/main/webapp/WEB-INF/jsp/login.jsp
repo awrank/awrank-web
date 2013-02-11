@@ -9,7 +9,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <title>Login page</title>
-    <jsp:directive.include file="header.jspf"/>
+    <%--<jsp:directive.include file="header.jspf"/>--%>
 </head>
 <body>
 
@@ -56,7 +56,35 @@
             </tr>
         </table>
     </form>
-   <a href="<c:url value="register"/>">Register</a>
+    <a href="<c:url value="register"/>">Register</a>
 </div>
+
+<div>
+    <table cellpadding="10" cellspacing="10" align="center">
+        <tr>
+            <td colspan="8"><h3 align="center">Welcome to Social Auth Demo</h3></td>
+        </tr>
+        <tr>
+            <td colspan="8"><p align="center">Please click on any icon.</p></td>
+        </tr>
+        <tr>
+            <td>
+                <a href="socialauth?id=facebook">Facebook</a>
+            </td>
+            <td>
+                <a href="socialauth?id=google">Google</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8" align="center">
+                <form action="socialauth" <%--onsubmit="return validate(this);--%>">
+                    or enter OpenID url: <input type="text" value="" name="id"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
 </body>
 </html>

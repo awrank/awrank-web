@@ -34,42 +34,44 @@
 
 <p>
     <a href="#" onclick="fTestJson()">Test json <> Object mapping </a> <br/>
-  
+
     <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/>
 
-    <p>
-        <h5>TestRestController</h5>
-        <ul>
-            <li>
-                <a href="api/rest/search?query=1">api/rest/search?query=1</a><br/>
-            </li>
-            <li>
-                <form action="api/rest/postjson" method="POST" accept="application/json" enctype="application/json">
-                    Fill user data: <br/>
-                    <label for="firstname">First name</label>
-                    <input id="firstname" name="firstName" type="text"/><br/>
+<p>
+<h5>TestRestController</h5>
+<ul>
+    <li>
+        <a href="api/rest/search?query=1">api/rest/search?query=1</a><br/>
+    </li>
+    <li>
+        <form action="api/rest/postjson" method="POST" accept="application/json" enctype="application/json">
+            Fill user data: <br/>
+            <label for="firstname">First name</label>
+            <input id="firstname" name="firstName" type="text"/><br/>
 
-                    <label for="lastname">Last name</label>
-                    <input id="lastname" name="lastName" type="text"/><br/>
+            <label for="lastname">Last name</label>
+            <input id="lastname" name="lastName" type="text"/><br/>
 
-                    <br/>
-                    <input type="submit" value="Post">
-                </form>
-            </li>
-            <li>
-                <a href="api/rest/user/2">api/rest/user/2</a><br/>
-            </li>
-        </ul>
+            <br/>
+            <input type="submit" value="Post">
+        </form>
+    </li>
+    <li>
+        <a href="api/rest/user/2">api/rest/user/2</a><br/>
+    </li>
+</ul>
 
 
-    </p>
+</p>
 
 </p>
 
 <h3>LOGIN</h3>
 
 <p>
-    <a href="<c:url value="/api/register"/>">Register</a> | <a href="<c:url value="/api/login"/>">Login</a> | <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
+    <a href="<c:url value="/api/register"/>">Register</a> |
+    <a href="<c:url value="/api/login"/>">Login</a> |
+    <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
 </p>
 
 <br/>
@@ -92,9 +94,9 @@ ${sessionScope}
     function fIndexOnload() {
         setContextPath('<%=request.getContextPath()%>');
     }
-   
-     function fTestJson() {
-        postJson('testJson', {dictionary: {id: 15, language: "RU", code: "qwerty", text: "asdfg"}}, function (data) {
+
+    function fTestJson() {
+        postJson('testJson', {dictionary:{id:15, language:"RU", code:"qwerty", text:"asdfg"}}, function (data) {
             console.log(data);
             alert(data);
         })
