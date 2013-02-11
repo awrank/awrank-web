@@ -16,6 +16,8 @@
             padding: 3pt;
         }
     </style>
+
+    <jsp:directive.include file="/WEB-INF/jsp/header.jspf"/>
 </head>
 <body onload="fIndexOnload();">
 

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * User: a_polyakov
  */
-@Service()
+@Service
 public class DictionaryServiceImpl implements DictionaryService {
 
     @Autowired

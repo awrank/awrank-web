@@ -25,30 +25,37 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Before a request is handled:
- * 1. sets the current User in the {@link SecurityContext} from a cookie, if present and the user is still connected to Facebook.
+ * 1. sets the current User in the {@link SecurityContext} from a cookie, if present and the user is still connected to Facebook/Google (other social network).
  * 2. requires that the user sign-in if he or she hasn't already.
+ *
  * @author Keith Donald
  */
 public final class UserInterceptor extends HandlerInterceptorAdapter {
 
+	public static final String API = "/api";
+	public static final String SIGNIN = "/signin";
+	public static final String SIGNOUT = "/signout";
+
 	private final UsersConnectionRepository connectionRepository;
-	
+
 	private final UserCookieGenerator userCookieGenerator = new UserCookieGenerator();
 
 	public UserInterceptor(UsersConnectionRepository connectionRepository) {
 		this.connectionRepository = connectionRepository;
 	}
-	
+
+	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		rememberUser(request, response);
-		handleSignOut(request, response);			
+		handleSignOut(request, response);
 		if (SecurityContext.userSignedIn() || requestForSignIn(request)) {
 			return true;
 		} else {
 			return requireSignIn(request, response);
 		}
 	}
-	
+
+	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 		SecurityContext.remove();
 	}
@@ -68,19 +75,19 @@ public final class UserInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	private void handleSignOut(HttpServletRequest request, HttpServletResponse response) {
-		if (SecurityContext.userSignedIn() && request.getServletPath().startsWith("/signout")) {
+		if (SecurityContext.userSignedIn() && request.getServletPath().startsWith(SIGNOUT)) {
 			connectionRepository.createConnectionRepository(SecurityContext.getCurrentUser().getId()).removeConnections("facebook");
 			userCookieGenerator.removeCookie(response);
-			SecurityContext.remove();			
+			SecurityContext.remove();
 		}
 	}
-		
+
 	private boolean requestForSignIn(HttpServletRequest request) {
-		return request.getServletPath().startsWith("/signin");
+		return request.getServletPath().startsWith(SIGNIN);
 	}
-	
+
 	private boolean requireSignIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		new RedirectView("/signin", true).render(null, request, response);
+		new RedirectView(SIGNIN, true).render(null, request, response);
 		return false;
 	}
 
@@ -88,5 +95,5 @@ public final class UserInterceptor extends HandlerInterceptorAdapter {
 		// doesn't bother checking a local user database: simply checks if the userId is connected to Facebook
 		return connectionRepository.createConnectionRepository(userId).findPrimaryConnection(Google.class) != null;
 	}
-	
+
 }

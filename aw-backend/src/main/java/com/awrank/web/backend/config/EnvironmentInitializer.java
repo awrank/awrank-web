@@ -9,7 +9,6 @@ public class EnvironmentInitializer implements ApplicationContextInitializer<Con
 	public void initialize(ConfigurableApplicationContext ctx) {
 		ConfigurableEnvironment environment = ctx.getEnvironment();
 		environment.setActiveProfiles("localhost");
-
 	}
 
 }

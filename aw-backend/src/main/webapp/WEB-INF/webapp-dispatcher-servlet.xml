@@ -13,41 +13,33 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Configures the @Controller programming model -->
-    <mvc:annotation-driven/>
-
-    <!-- todo: what does it do? -->
+    <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
     <context:annotation-config/>
 
-    <!-- Scan a package for controllers -->
-    <context:component-scan base-package="com.awrank"/>
+    <!-- Indicates that transaction configuration is defined by Java 5 annotations on bean classes -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- Maps '/' requests to the 'home' view -->
-    <!--<mvc:view-controller path="/" view-name="home"/>-->
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
+    <context:component-scan base-package="com.awrank">
+        <context:include-filter type="annotation" expression="org.springframework.context.annotation.Configuration"/>
+    </context:component-scan>
 
-    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
-    <!--<mvc:resources mapping="/resources/**" location="/resources/"/>-->
-    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
-    <!--<mvc:resources mapping="/pages/**" location="/pages/"/>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <ref bean="userInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
-    <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
+    <mvc:view-controller path="/signin"/>
+    <mvc:view-controller path="/signout"/>
 
-    <!-- properties on the same level as resources - shall not be accessible via /root in any case-->
-    <!--<util:properties id="emailProps" location="/WEB-INF/properties/email.properties" />-->
 
     <!-- Property placeholder configurer -->
     <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
 
-    <!--<bean id="messageSource"-->
-          <!--class="org.springframework.context.support.ResourceBundleMessageSource">-->
-        <!--<property name="basenames" value="resources/messages"/>-->
-    <!--</bean>-->
-
+    <!-- Database -->
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="AwrankEMF"/>
@@ -57,71 +49,5 @@
           class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
-
-<!-- REST -->
-
-    <!-- bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-
-    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
-        <property name="contentType" value="text/plain"/>
-    </bean>
-
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="jsonMessageConverter"/>
-            </list>
-        </property>
-    </bean>
-   
-  <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-    	<property name="prefixJson" value="true" />
-    	<property name="supportedMediaTypes" value="application/json" />
-    	<property name="objectMapper" ref="jacksonObjectMapper" />
-	</bean>
-
- <bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
- 	
-<bean id="jacksonSerializationConfig" class="org.codehaus.jackson.map.SerializationConfig"
-    factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig" />
-    
-<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetObject" ref="jacksonSerializationConfig" />
-        <property name="targetMethod" value="setSerializationInclusion" />
-        <property name="arguments">
-            <list>
-                <value type="org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion">NON_DEFAULT</value>
-            </list>
-        </property>
-    </bean>
-
-
-<bean
-    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="order" value="2" />
-    <property name="prefix" value="/WEB-INF/jsp/" />
-    <property name="suffix" value=".jsp" />
-</bean -->
-
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!--<bean id="emailService" class="com.awrank.web.model.service.sharing.ShareToServiceEmailImpl" />-->
-
-    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <property name="supportedMediaTypes" value="application/json"/>
-    </bean>
-
-    <!-- social -->
-    <!-- Google -->
-    <!--<bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">-->
-        <!--<property name="connectionFactories">-->
-            <!--<list>-->
-                <!--<bean class="org.springframework.social.google.connect.GoogleConnectionFactory">-->
-                    <!--<constructor-arg value="${google.clientId}" />-->
-                    <!--<constructor-arg value="${google.clientSecret}" />-->
-                <!--</bean>-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
 
 </beans>

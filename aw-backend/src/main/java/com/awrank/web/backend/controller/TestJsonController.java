@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.awrank.web.backend.controller.pojos.TestJsonInputPOJO;
-import com.awrank.web.backend.controller.pojos.TestJsonResultPOJO;
+//import com.awrank.web.backend.controller.pojos.TestJsonInputPOJO;
+//import com.awrank.web.backend.controller.pojos.TestJsonResultPOJO;
 
 /**
  * User: a_polyakov
@@ -28,6 +28,7 @@ public class TestJsonController {
 //        return dictionary;
 //    }
 
+	/*
     @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
     @Consumes("application/json")
     public
@@ -39,6 +40,7 @@ public class TestJsonController {
     	return data.getDictionary();
     
     }
+    */
  
 //    @RequestMapping(value = "/testJson", method = RequestMethod.POST, produces = "application/json")
 //    @Consumes("application/json")

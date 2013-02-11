@@ -9,12 +9,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <title>Title</title>
-    <!-- jQuery required for Facebook connect form -->
-    <%--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>--%>
-    <%-- Twiter bootstrap --%>
-    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap.js"></script>
-    <script type="text/javascript" src="../../resources/js/bootstrap/bootstrap-button.js"></script>
+    <jsp:directive.include file="header.jspf"/>
 </head>
 <body>
 
@@ -35,33 +30,17 @@
         <br/>
     </span>
     </c:if>
+
+    <div>
+        <form action="signin/google" method="POST">
+            <button type="submit" class="btn btn-large btn-primary">Sign in with Google</button>
+            <input type="hidden" name="scope"
+                   value="https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo#email https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/tasks https://www-opensocial.googleusercontent.com/api/people https://www.googleapis.com/auth/drive"/>
+        </form>
+    </div>
+
     <form method="POST" action="<c:url value="/j_spring_security_check" />">
         <table align="center" frame="hsides">
-            <tr>
-                <td>
-                    <button class="btn btn-primary">Sign in with Google</button>
-                </td>
-                <td>
-                    <!--  FACEBOOK -->
-                    <%--<c:if test="${connectedToFacebook}">--%>
-                        <%--Connected to Facebook as ${facebookProfile.firstName } ${facebookProfile.lastName }--%>
-                    <%--</c:if>--%>
-                    <%--<c:if test="${!connectedToFacebook}">--%>
-                        <%--<%/* Connect to Facebook */ %>--%>
-                        <%--<form id="fb_signin" action="<c:url value="/callback/fb" />" method="post">--%>
-                            <%--<div class="formInfo">--%>
-                            <%--</div>--%>
-                            <%--<div id="fb-root"></div>--%>
-                            <%--<p><fb:login-button perms="email,publish_stream,offline_access"--%>
-                                                <%--onlogin="$('#fb_signin').submit();"--%>
-                                                <%--v="2"--%>
-                                                <%--length="long">Connect to Facebook</fb:login-button></p>--%>
-                        <%--</form>--%>
-
-                        <%--<social:connected provider="facebookProvider"/>--%>
-                    <%--</c:if>--%>
-                </td>
-            </tr>
             <tr>
                 <td align="right">Login</td>
                 <td><input type="text" name="j_username"/></td>
