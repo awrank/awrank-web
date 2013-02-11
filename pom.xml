@@ -9,7 +9,6 @@
     <name>awrank-web</name>
     <url>http://awrank.com</url>
 
-    <!-- Modules -->
     <modules>
         <module>aw-backend</module>
         <module>aw-common</module>
@@ -30,9 +29,7 @@
 
     <dependencyManagement>
         <dependencies>
-
             <!-- AwRank -->
-
             <dependency>
                 <groupId>com.awrank.webapp</groupId>
                 <artifactId>aw-common</artifactId>
@@ -57,7 +54,7 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- java ee extension-->
+            <!-- Java ee extension -->
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
@@ -65,26 +62,22 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- email  -->
+            <!-- Email  -->
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
                 <version>1.4.1</version>
             </dependency>
 
-            <!--data base-->
+            <!-- Database support -->
+            <!-- MySQL -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.22</version>
             </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>1.3.168</version>
-            </dependency>
 
-            <!--hibernate-->
+            <!-- Hibernate -->
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -103,7 +96,7 @@
                 <version>${hibernate.version}</version>
             </dependency>
 
-            <!-- Spring 3 dependencies -->
+            <!-- Spring framework 3 -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
@@ -176,43 +169,19 @@
                 <artifactId>spring-security-web</artifactId>
                 <version>${spring.security.version}</version>
             </dependency>
-            <!-- Spring Social-->
-            <dependency>
-                <groupId>org.springframework.social</groupId>
-                <artifactId>spring-social-core</artifactId>
-                <version>${spring.social.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.social</groupId>
-                <artifactId>spring-social-web</artifactId>
-                <version>${spring.social.version}</version>
-            </dependency>
-            <!-- Facebook -->
-            <dependency>
-                <groupId>org.springframework.social</groupId>
-                <artifactId>spring-social-facebook</artifactId>
-                <version>${spring.social.facebook.version}</version>
-            </dependency>
-            <!-- Google -->
-            <dependency>
-                <groupId>org.springframework.social</groupId>
-                <artifactId>spring-social-google</artifactId>
-                <version>1.0.0.M2</version>
-            </dependency>
 
             <!-- Social Auth-->
-            <!--<dependency>-->
-                <!--<groupId>org.brickred</groupId>-->
-                <!--<artifactId>socialauth</artifactId>-->
-                <!--<version>3.0</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>org.brickred</groupId>
+                <artifactId>socialauth</artifactId>
+                <version>3.0</version>
+            </dependency>
 
-            <!--<dependency>-->
-                <!--<groupId>org.brickred</groupId>-->
-                <!--<artifactId>socialauth-spring</artifactId>-->
-                <!--<version>2.0-beta2</version>-->
-            <!--</dependency>-->
-
+            <dependency>
+                <groupId>org.brickred</groupId>
+                <artifactId>socialauth-spring</artifactId>
+                <version>2.0-beta2</version>
+            </dependency>
 
 
             <!--
@@ -269,14 +238,7 @@
                 <version>1.7</version>
             </dependency>
 
-
-            <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.17</version>-->
-            <!--</dependency>-->
-
-            <!-- jstl -->
+            <!-- JSTL -->
             <dependency>
                 <groupId>jstl</groupId>
                 <artifactId>jstl</artifactId>
@@ -290,16 +252,7 @@
                 <version>${hystrix.version}</version>
             </dependency>
 
-
-            <!-- junit -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!--  Jackson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
+            <!--  Jackson used for object mapping in X-SMTP JSON headers creation for Send Grid -->
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-mapper-asl</artifactId>
@@ -310,6 +263,14 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>2.1.3</version>
+            </dependency>
+
+            <!-- JUnit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
 
         </dependencies>
@@ -335,28 +296,21 @@
 
     <!-- Repositories -->
     <repositories>
+        <!-- Spring Source -->
         <repository>
             <id>springsource-repo</id>
             <name>SpringSource Repository</name>
             <url>http://repo.springsource.org/release</url>
         </repository>
 
-        <!-- Spring Social Google project -->
+        <!-- Social Auth -->
         <repository>
-            <id>spring.social.google</id>
-            <name>Spring Social Google</name>
-            <url>https://github.com/GabiAxel/maven/raw/master/</url>
+            <id>sonatype-oss-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
-
-        <!-- For Social Auth lib usage -->
-        <!--<repository>-->
-            <!--<id>sonatype-oss-public</id>-->
-            <!--<url>https://oss.sonatype.org/content/groups/public/</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-            <!--</releases>-->
-        <!--</repository>-->
     </repositories>
-
 
 </project>

@@ -24,7 +24,6 @@
     <dependencies>
 
         <!-- AwRank -->
-
         <dependency>
             <groupId>com.awrank.webapp</groupId>
             <artifactId>aw-common</artifactId>
@@ -35,30 +34,25 @@
             <artifactId>aw-model</artifactId>
         </dependency>
 
-        <!-- JEE -->
-
+        <!-- Java EE -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
         </dependency>
 
-        <!--data base-->
+        <!-- Database -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
 
-        <!-- mail -->
+        <!-- Email -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
         </dependency>
 
-        <!--hibernate-->
+        <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -74,7 +68,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
 
-        <!-- Spring 3 dependencies -->
+        <!-- Spring Framework 3 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -140,24 +134,19 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
         </dependency>
-        <!-- Spring Social-->
+
+        <!-- Social Auth-->
         <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-web</artifactId>
-        </dependency>
-        <!-- Facebook -->
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-facebook</artifactId>
-        </dependency>
-        <!-- Google -->
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-google</artifactId>
+            <groupId>org.brickred</groupId>
+            <artifactId>socialauth</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.brickred</groupId>
+            <artifactId>socialauth-spring</artifactId>
+        </dependency>
 
-        <!-- logging -->
+        <!-- Logging -->
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -172,11 +161,6 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>log4j</groupId>-->
-        <!--<artifactId>log4j</artifactId>-->
-        <!--</dependency>-->
-
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -189,7 +173,7 @@
             <artifactId>joda-time</artifactId>
         </dependency>
 
-        <!-- jstl -->
+        <!-- JSTL -->
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>

@@ -21,21 +21,9 @@
 
     <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
     <context:component-scan base-package="com.awrank">
-        <context:include-filter type="annotation" expression="org.springframework.context.annotation.Configuration"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.context.annotation.Configuration"/>
     </context:component-scan>
-
-    <!--
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/*"/>
-            <ref bean="userInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
-
-    <mvc:view-controller path="/signin"/>
-    <mvc:view-controller path="/signout"/>
-    -->
-
 
     <!-- Property placeholder configurer -->
     <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
@@ -59,7 +47,6 @@
                 <prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>
                 <prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>
             </props>
-            <!--<ref bean="socialAuthProperties"/>-->
         </property>
     </bean>
 

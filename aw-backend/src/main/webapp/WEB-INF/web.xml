@@ -23,10 +23,8 @@
     </context-param>
 
     <!--/WEB-INF/webapp-security-context.xml,-->
-    <!--/WEB-INF/webapp-datasource-context.xml-->
 
-    <!-- commented as in spring-social-quickstart demo project -->
-    <!-- coz lead to exception -->
+    <!-- Probably leads to conflicts if use Java classes configurations -->
     <!--<listener>-->
         <!--<listener-class>-->
             <!--org.springframework.web.context.ContextLoaderListener-->
@@ -49,9 +47,7 @@
 
     <servlet-mapping>
         <servlet-name>webapp-dispatcher</servlet-name>
-        <!-- todo: need to discuss which patterns will be used -->
         <url-pattern>/api/*</url-pattern>
-        <!--<url-pattern>/</url-pattern>-->
     </servlet-mapping>
 
     <welcome-file-list>
