@@ -70,7 +70,8 @@
 
 <p>
     <a href="<c:url value="/api/register"/>">Register</a> |
-    <a href="<c:url value="/api/login"/>">Login</a> |
+    <a href="<c:url value="/api/login"/>">API Login</a> |
+    <a href="<c:url value="/login"/>">Login</a> |
     <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
 </p>
 

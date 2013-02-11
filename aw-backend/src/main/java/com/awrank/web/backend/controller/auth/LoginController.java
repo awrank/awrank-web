@@ -71,16 +71,20 @@ public class LoginController {
 		List<Contact> contactsList = new ArrayList<Contact>();
 		SocialAuthManager manager = socialAuthTemplate.getSocialAuthManager();
 		AuthProvider provider = manager.getCurrentAuthProvider();
-		contactsList = provider.getContactList();
-		if (contactsList != null && contactsList.size() > 0) {
-			for (Contact p : contactsList) {
-				if (!StringUtils.hasLength(p.getFirstName())
-						&& !StringUtils.hasLength(p.getLastName())) {
-					p.setFirstName(p.getDisplayName());
+		if (provider != null) {
+			contactsList = provider.getContactList();
+			if (contactsList != null && contactsList.size() > 0) {
+				for (Contact p : contactsList) {
+					if (!StringUtils.hasLength(p.getFirstName())
+							&& !StringUtils.hasLength(p.getLastName())) {
+						p.setFirstName(p.getDisplayName());
+					}
 				}
 			}
+			mv.addObject("profile", provider.getUserProfile());
 		}
-		mv.addObject("profile", provider.getUserProfile());
+
+
 		mv.addObject("contacts", contactsList);
 		mv.setViewName("authSuccess");
 
@@ -104,6 +108,16 @@ public class LoginController {
 		mv.setViewName("statusSuccess");
 
 		return mv;
+	}
+
+	@RequestMapping(value = "/socialauth")
+	public void socialAuthCallback() {
+		System.out.println("socialauth-callback");
+	}
+
+	@RequestMapping(value = "/accessDenied")
+	public String accessDenied() {
+		return "accessDenied";
 	}
 
 }
