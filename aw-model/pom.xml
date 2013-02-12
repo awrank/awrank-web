@@ -66,35 +66,18 @@
             <artifactId>spring-tx</artifactId>
         </dependency>
 
-        <!--
-        попытка использовать org.springframework.data.domain.Auditable
+        <!-- Spring JPA & Data dependencies -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time-hibernate</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.jsr310</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.time</groupId>
-            <artifactId>jsr-310-ri</artifactId>
-        </dependency>
-        -->
-
-        <!--  Jacson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
+        <!--  Jackson used for object mapping in X-SMTP JSON headers creation for Send Grid-->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
