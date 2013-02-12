@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -23,6 +24,7 @@ import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.user.UserService;
 import com.awrank.web.model.service.user.UserServiceImpl;
+import com.awrank.web.model.service.user.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.json.JsonUtils;
 
 /**
@@ -55,17 +57,19 @@ public class UserController {
 
 //@Consumes("application/json")
 	@RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-	public  @ResponseBody() Map addUser(@ModelAttribute User user) {
+	public  @ResponseBody() Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request) {
 		
-		if(userService.findByEmail(user.getEmail()).size() > 0) return getNegativeResponceMap("this email already registered in system");
-		if(userService.findByAPIKey(user.getApiKey()).size() > 0) return getNegativeResponceMap("this apikey already registered in system");
-			
+		if(userService.findByEmail(form.getEmail()).size() > 0) return getNegativeResponceMap("this email already registered in system");
+		if(userService.findByAPIKey(form.getApiKey()).size() > 0) return getNegativeResponceMap("this apikey already registered in system");
+		
+		form.setUserLocalAddr(request.getLocalAddr());
+		form.setUserRemoteAddr(request.getRemoteAddr());
+		
 		try {
 			
-			userService.add(user);
+			userService.register(form);
 			
 			return getPositiveResponceMap();
-			
 		
 		} catch (UserNotCreatedException e) {
 			
