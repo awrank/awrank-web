@@ -10,8 +10,8 @@ import javax.persistence.*;
 /**
  * промо код
  */
-@Entity
-@Table(name = PromoCodeConst.TABLE_NAME)
+//@Entity
+//@Table(name = PromoCodeConst.TABLE_NAME)
 public class PromoCode extends AbstractObject implements PromoCodeConst {
 
     /**
@@ -67,15 +67,15 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
 //        this.tariffSettings = tariffSettings;
 //    }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = S_USER_ORDER, nullable = true)
-    public UserOrder getUserOrder() {
-        return userOrder;
-    }
-
-    public void setUserOrder(UserOrder userOrder) {
-        this.userOrder = userOrder;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+//    @JoinColumn(name = S_USER_ORDER, nullable = true)
+//    public UserOrder getUserOrder() {
+//        return userOrder;
+//    }
+//
+//    public void setUserOrder(UserOrder userOrder) {
+//        this.userOrder = userOrder;
+//    }
 
     // --------------------------- JSON ------------------------------------------
 
@@ -93,7 +93,7 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         JsonUtils.set(jsonObject, S_REFERENCE, reference);
         JsonUtils.set(jsonObject, S_CODE, code);
         //JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
-        JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
+        //JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
         return jsonObject;
     }
 
