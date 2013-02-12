@@ -37,6 +37,7 @@
     <!-- Le styles -->
     <link href="resources/css/bootstrap.css" rel="stylesheet">
     <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
 
     <style type="text/css">
         body {
@@ -65,10 +66,17 @@
                         <ul class="dropdown-menu">
                             <li><a href="#">Action</a></li>
                             <li class="divider"></li>
-                            <li><a href="#" onclick="setLanguage('EN')">EN</a></li>
-                            <li><a href="#" onclick="setLanguage('RU')">RU</a></li>
-                            <li class="divider"></li>
                             <li><a href="#" onclick="fIndexLogout()" lngt="LOGOUT">Log out</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" style="z-index: 10000">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i>
+                            <span id="languageLabel">RU</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" onclick="$('#languageLabel').text('EN');setLanguage('EN')"><i
+                                    class="icon-flag-GB"></i>EN</a></li>
+                            <li><a href="#" onclick="$('#languageLabel').text('RU');setLanguage('RU')"><i
+                                    class="icon-flag-RU"></i>RU</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -80,19 +88,22 @@
         <div class="span3">
             <div class="well sidebar-nav">
                 <ul id="menu" class="nav nav-list">
-                    <li class="nav-header">SITE</li>
-                    <li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i class="icon-home"></i>Home</a>
+                    <li class="nav-header" lngt="SITE">SITE</li>
+                    <li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i
+                            class="icon-home"></i><span lngt="HOME">Home</span></a>
                     </li>
-                    <li class="nav-header">ACCOUNT</li>
-                    <li><a href="#"><i class="icon-user"></i>Profile</a></li>
+                    <li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
+                    <li><a href="#"><i class="icon-user"></i><span lngt="PROFILE">Profile</span></a></li>
                     <li><a href="#"><i class="icon-folder-open"></i>Application</a></li>
-                    <li class="nav-header">ACTIVITY</li>
-                    <li><a href="#"><i class="icon-eye-open"></i>Request history</a></li>
-                    <li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()"><i class="icon-time"></i>Session
-                        history</a></li>
-                    <li class="nav-header">Administration</li>
+                    <li class="nav-header" lngt="ACTIVITY">ACTIVITY</li>
+                    <li><a href="#"><i class="icon-eye-open"></i><span lngt="REQUEST_HISTORY">Request history</span></a>
+                    </li>
+                    <li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()"><i
+                            class="icon-time"></i><span lngt="SESSION_HISTORY">Session
+                        history</span></a></li>
+                    <li class="nav-header" lngt="ADMINISTRATION">Administration</li>
                     <li id="menuItemDictionary"><a href="#" onclick="fIndexMenuDictionaryOnclick()"><i
-                            class="icon-book"></i>Dictionary</a></li>
+                            class="icon-book"></i><span lngt="DICTIONARY">Dictionary</span></a></li>
                 </ul>
             </div>
             <!--/.well -->
