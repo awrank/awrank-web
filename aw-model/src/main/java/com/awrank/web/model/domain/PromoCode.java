@@ -26,7 +26,7 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
     /**
      * свойства тарифа
      */
-    private TariffSettings tariffSettings;
+    //private TariffSettings tariffSettings;
     /**
      * заказ
      */
@@ -57,15 +57,15 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         this.code = code;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
-    public TariffSettings getTariffSettings() {
-        return tariffSettings;
-    }
-
-    public void setTariffSettings(TariffSettings tariffSettings) {
-        this.tariffSettings = tariffSettings;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
+//    public TariffSettings getTariffSettings() {
+//        return tariffSettings;
+//    }
+//
+//    public void setTariffSettings(TariffSettings tariffSettings) {
+//        this.tariffSettings = tariffSettings;
+//    }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = S_USER_ORDER, nullable = true)
@@ -92,7 +92,7 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
         final ObjectNode jsonObject = super.toJsonObject();
         JsonUtils.set(jsonObject, S_REFERENCE, reference);
         JsonUtils.set(jsonObject, S_CODE, code);
-        JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
+        //JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
         JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
         return jsonObject;
     }

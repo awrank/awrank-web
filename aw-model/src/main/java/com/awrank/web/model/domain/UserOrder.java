@@ -18,7 +18,7 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
     /**
      * свойства тарифа
      */
-    private TariffSettings tariffSettings;
+    //private TariffSettings tariffSettings;
     /**
      * заказ был оплачен и действует
      */
@@ -44,15 +44,15 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
     public UserOrder() {
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
-    public TariffSettings getTariffSettings() {
-        return tariffSettings;
-    }
-
-    public void setTariffSettings(TariffSettings tariffSettings) {
-        this.tariffSettings = tariffSettings;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
+//    public TariffSettings getTariffSettings() {
+//        return tariffSettings;
+//    }
+//
+//    public void setTariffSettings(TariffSettings tariffSettings) {
+//        this.tariffSettings = tariffSettings;
+//    }
 
     @Column(name = S_COMPLETE, nullable = false)
     public Boolean getComplete() {
@@ -106,7 +106,7 @@ public class UserOrder extends AbstractUserItem implements UserOrderConst {
 
     public ObjectNode toJsonObject() {
         final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
+        //JsonUtils.set(jsonObject, S_TARIFF_SETTINGS, tariffSettings);
         JsonUtils.set(jsonObject, S_COMPLETE, complete);
         JsonUtils.set(jsonObject, S_GRACE_PERIOD, gracePeriod);
         JsonUtils.set(jsonObject, S_PAYED_DATE, payedDate);
