@@ -27,29 +27,6 @@ public class User extends AbstractObject implements UserConst {
 	@Value("${user.default.languageCode}")
 	private String user_default_languageCode;
 	
-	@Transient 
-	@Autowired 
-	EntryPointDao entryPointDao;
-
-/**
- *  Added by Olga, password comes to User from registration form - we need to process it
- * @param password
- */
-	
-	@JsonProperty("password")
-	public void setPassword(String password) {
-		//TODO: implement this right
-		//entryPointDao.find(EntryPoint.class, this.getId()).setPassword(password);		
-	}
-  
-	@JsonProperty("password") 
-	public String getPassword() {
-		
-		//TODO: implement this right
-		//return entryPointDao.find(EntryPoint.class, this.getId()).getPassword();
-		return "test";
-	}
-	
     /**
      * уникальный код, который будет использоваться для запросов к API
      */
@@ -281,18 +258,4 @@ public class User extends AbstractObject implements UserConst {
         JsonUtils.set(jsonObject, S_BAN_STARTED_DATE, banStartedDate);
         return jsonObject;
     }
-    
-    //----------- accessors for autowired, probably refactor this out ------
-    
-    @Transient
-	public EntryPointDao getEntryPointDao() {
-		
-		return entryPointDao;
-	}
-	
-    @Transient
-	public void setEntryPointDao(EntryPointDao value) {
-		entryPointDao = value;
-		
-	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
+import com.awrank.web.model.service.user.pojos.UserRegistrationFormPojo;
 
 /**
  * @author Olga Korokhina
@@ -64,4 +65,12 @@ public interface UserService {
 	 */
 	public List<User> findByAPIKey(String key);
 
+	/**
+	 *  On user registration via web form we have to create entry point etc. Password field, coming from form is a 
+	 *  part of EntryPoint, not User
+	 * 
+	 * @param form
+	 * @throws UserNotCreatedException 
+	 */
+	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException; 
 }
