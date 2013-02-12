@@ -15,6 +15,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.awrank.web.model.domain.EntryPointType;
 import org.joda.time.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,7 +185,7 @@ public class UserServiceImpl implements UserService {
 		
 		entryPoint.setUid(user.getEmail());
 		entryPoint.setPassword(form.getPassword());
-		entryPoint.setAuthenticationMethod(EAuthenticationMethod.EMAIL);//on registration we demand User to have email
+		entryPoint.setType(EntryPointType.EMAIL.EMAIL);//on registration we demand User to have email
 		
 		entryPointDao.save(entryPoint);
 		
