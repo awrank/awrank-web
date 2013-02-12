@@ -123,25 +123,6 @@ public class MailTestPageController {
 	}
 	
 	
-	@RequestMapping(method=RequestMethod.GET, value="/verifyemail/{key}")
-	public 
-	@ResponseBody
-	String verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
-	
-		//Here we check if such a key exists in db, if yes - fetch user's email and password and build the key with same hasher but with current user IP.
-		
-		String new_key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
-		
-		System.out.println("remote host"+request.getRemoteHost());
-		System.out.println("remote adr: "+request.getRemoteAddr());
-		System.out.println("X-Forwarded-For: "+request.getHeader("X-Forwarded-For"));
-		 
-		System.out.println("new_key: "+new_key);
-	
-		if( new_key.compareToIgnoreCase(key) == 0) return "key " +key+ " verified ok";
-		else return "key " +key+ " not verified";
-	}
-	
 	@RequestMapping(value="/sendtestjungosmtp", method = RequestMethod.POST)
 	public 
 	@ResponseBody

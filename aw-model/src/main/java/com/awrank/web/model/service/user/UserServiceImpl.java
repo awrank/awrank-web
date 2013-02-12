@@ -15,7 +15,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-//import org.joda.time.DateTime;
+import org.joda.time.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 	@Value("${mail.testactivation.verifyurl}")
 	private String testactivation_url;
 	
-//----- email verification code lifetime duration --
+//-- email verification code lifetime duration, milliseconds --
 	
 	@Value("${mail.verificationcode.lifetime.duration}")
 	private Integer mail_verificationcode_lifetime_duration;
@@ -157,33 +157,12 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return new ArrayList<User>();
 	}
-	//--------------- check if we need these accessors and refactor them out if not -------
-	/*
-	public void setUserDao(UserDaoImpl value){
-		
-		userDao = value;
-	}
 	
-	public UserDao getUserDao(){
-		
-		return userDao;
-	}
-	
-	public void setEntryPointDao(EntryPointDao value){
-		
-		entryPointDao = value;
-	}
-	
-	public EntryPointDao getEntryPointDao(){
-		
-		return entryPointDao;
-	}
-*/
 	@Transactional
 	@Override
 	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException{
 	
-		//DateTime creationDate = DateTime.now();
+		DateTime creationDate = DateTime.now();
 		
 		//--------------------- create user ---------------------------
 		
@@ -302,10 +281,16 @@ public class UserServiceImpl implements UserService {
 		userEmailActivation.setCode(key);
 		userEmailActivation.setUser(user);
 		userEmailActivation.setEmail(user.getEmail());
-		/*
+		
 		Date today = new Date(creationDate.getMillis());
+		Date endedDate = new Date(mail_verificationcode_lifetime_duration + creationDate.getMillis());
 		
 		userEmailActivation.setCreatedDate(today);
-		*/
+		userEmailActivation.setEndedDate(endedDate);
+		
+		userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
+		
+		userEmailActivationDao.persist(userEmailActivation);
+		
 	}	
 }
