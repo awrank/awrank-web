@@ -1,107 +1,71 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.domain.constant.EPaymentType;
-import com.awrank.web.model.domain.constant.PaymentConst;
-import com.awrank.web.model.utils.json.JsonUtils;
-import org.codehaus.jackson.node.ObjectNode;
+import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- * оплата
+ * The <b>Payment</b> class is the primary for the entire payments.
  */
 @Entity
-@Table(name = PaymentConst.TABLE_NAME)
-public class Payment extends AbstractObject implements PaymentConst {
-
+@Table(name = "payments")
+public class Payment extends ExtendedAbstractAuditable<Long> {
     /**
-     * заказ
+     * Returns payable amount.
      */
-    private UserOrder userOrder;
-    /**
-     * система оплаты
-     */
-    private EPaymentType paymentType;
-    /**
-     * код операции
-     */
-    private String transactionId;
-    /**
-     * TODO
-     * ?
-     */
-    private String reference;
-    /**
-     * TODO
-     * ?
-     */
-    private String authorizationCode;
-    /**
-     * сумма
-     */
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    {
-        objectType = EObjectType.PAYMENT;
-    }
+    /**
+     * Returns payable amount in local currency.
+     */
+    @Column(name = "amount_currency", nullable = false)
+    private BigDecimal amountCurrency;
+
+    /**
+     * Status of the payment.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private PaymentStatus status = PaymentStatus.UNALLOCATED;
+
+    /**
+     * Transaction reference of the payment.
+     */
+    @Column(name = "transaction_ref", nullable = true, length = 128)
+    private String transactionRef;
+
+    /**
+     * Reference of the payment.
+     */
+    @Column(name = "payment_ref", nullable = true, length = 128)
+    private String paymentRef;
+
+    /**
+     * Payer reference of the payment.
+     */
+    @Column(name = "payer_ref", nullable = true, length = 128)
+    private String payerRef;
+
+    /**
+     * Description of the payment.
+     */
+    @Column(name = "description", nullable = true, length = 255)
+    private String description;
+
+    /**
+     * User that payment belongs to.
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
     public Payment() {
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = S_USER_ORDER, nullable = false)
-    public UserOrder getUserOrder() {
-        return userOrder;
-    }
 
-    public void setUserOrder(UserOrder userOrder) {
-        this.userOrder = userOrder;
-    }
-
-    @Column(name = S_PAYMENT_TYPE, nullable = false)
-    @Enumerated(EnumType.STRING)
-    public EPaymentType getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(EPaymentType paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = (paymentType != null) ? EPaymentType.valueOf(paymentType) : null;
-    }
-
-    @Column(name = S_TRANSACTION_ID, nullable = false)
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    @Column(name = S_REFERENCE, nullable = false)
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
-    @Column(name = S_AUTHORIZATION_CODE, nullable = false)
-    public String getAuthorizationCode() {
-        return authorizationCode;
-    }
-
-    public void setAuthorizationCode(String authorizationCode) {
-        this.authorizationCode = authorizationCode;
-    }
-
-    @Column(name = S_AMOUNT, columnDefinition = SQL_PRICE_COLUMN_DEFINITION, nullable = false)
     public BigDecimal getAmount() {
         return amount;
     }
@@ -110,25 +74,59 @@ public class Payment extends AbstractObject implements PaymentConst {
         this.amount = amount;
     }
 
-    // ------------------------------- JSON ---------------------------------------
-//
-    public Payment(final ObjectNode jsonObject) {
-        // userOrder
-        this.paymentType = JsonUtils.getEnum(jsonObject, S_PAYMENT_TYPE, EPaymentType.class);
-        this.transactionId = JsonUtils.getString(jsonObject, S_TRANSACTION_ID);
-        this.reference = JsonUtils.getString(jsonObject, S_REFERENCE);
-        this.authorizationCode = JsonUtils.getString(jsonObject, S_AUTHORIZATION_CODE);
-        this.amount = JsonUtils.getBigDecimal(jsonObject, S_AMOUNT);
+    public BigDecimal getAmountCurrency() {
+        return amountCurrency;
     }
 
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_USER_ORDER, userOrder);
-        JsonUtils.set(jsonObject, S_PAYMENT_TYPE, paymentType);
-        JsonUtils.set(jsonObject, S_TRANSACTION_ID, transactionId);
-        JsonUtils.set(jsonObject, S_REFERENCE, reference);
-        JsonUtils.set(jsonObject, S_AUTHORIZATION_CODE, authorizationCode);
-        JsonUtils.set(jsonObject, S_AMOUNT, amount);
-        return jsonObject;
+    public void setAmountCurrency(BigDecimal amountCurrency) {
+        this.amountCurrency = amountCurrency;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
+    }
+
+    public String getTransactionRef() {
+        return transactionRef;
+    }
+
+    public void setTransactionRef(String transactionRef) {
+        this.transactionRef = transactionRef;
+    }
+
+    public String getPaymentRef() {
+        return paymentRef;
+    }
+
+    public void setPaymentRef(String paymentRef) {
+        this.paymentRef = paymentRef;
+    }
+
+    public String getPayerRef() {
+        return payerRef;
+    }
+
+    public void setPayerRef(String payerRef) {
+        this.payerRef = payerRef;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

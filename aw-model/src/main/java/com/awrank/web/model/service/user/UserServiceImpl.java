@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.awrank.web.model.dao.entrypoint.EntryPointDao;
+import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.dao.user.UserDao;
 import com.awrank.web.model.dao.user.UserDaoImpl;
 import com.awrank.web.model.domain.EntryPoint;
@@ -39,38 +39,38 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 @Service
 public class UserServiceImpl implements UserService {
 
-	//----------------  Send Grip SMTP ------------
-	
-	@Value("${mail.sg.smtp.server.host}")
-	private String sgsmpt_host_name;
-
-	@Value("${mail.sg.smtp.server.port}")
-	private String sgsmpt_port;
-
-	@Value("${mail.sg.smtp.username}")
-	private String sgsmpt_user_name;
-
-	@Value("${mail.sg.smtp.password}")
-	private String sgsmpt_password;
-	
-	@Value("${mail.xsmtp.header.category}")
-	private String xsmtp_header_category;
-
-	@Value("${mail.xsmtp.header.var.name}")
-	private String xsmtp_header_var_name;
-
-	@Value("${mail.xsmtp.header.var.value}")
-	private String xsmtp_header_var_value;
-
-//------------ other email settings -----------------
-	
-	@Value("${mail.from.email}")
-	private String smpt_from_email;	
-
-	@Value("${mail.testactivation.verifyurl}")
-	private String testactivation_url;
-	
-//--------------------------------------------------
+//	//----------------  Send Grip SMTP ------------
+//
+//	@Value("${mail.sg.smtp.server.host}")
+//	private String sgsmpt_host_name;
+//
+//	@Value("${mail.sg.smtp.server.port}")
+//	private String sgsmpt_port;
+//
+//	@Value("${mail.sg.smtp.username}")
+//	private String sgsmpt_user_name;
+//
+//	@Value("${mail.sg.smtp.password}")
+//	private String sgsmpt_password;
+//
+//	@Value("${mail.xsmtp.header.category}")
+//	private String xsmtp_header_category;
+//
+//	@Value("${mail.xsmtp.header.var.name}")
+//	private String xsmtp_header_var_name;
+//
+//	@Value("${mail.xsmtp.header.var.value}")
+//	private String xsmtp_header_var_value;
+//
+////------------ other email settings -----------------
+//
+//	@Value("${mail.from.email}")
+//	private String smpt_from_email;
+//
+//	@Value("${mail.testactivation.verifyurl}")
+//	private String testactivation_url;
+//
+////--------------------------------------------------
 	
 	@Autowired
 	private UserDao userDao;
@@ -195,93 +195,93 @@ public class UserServiceImpl implements UserService {
 		entryPoint.setPassword(form.getPassword());
 		entryPoint.setAuthenticationMethod(EAuthenticationMethod.EMAIL);//on registration we demand User to have email
 		
-		entryPointDao.persist(entryPoint);
+		entryPointDao.save(entryPoint);
 		
 		
-		//---------------- sending verification email --------------------
-		
-		Properties properties = new Properties();
-	    properties.put("mail.transport.protocol", "smtp");
-	    properties.put("mail.smtp.host", sgsmpt_host_name);
-	    properties.put("mail.smtp.port", sgsmpt_port);
-	    properties.put("mail.smtp.auth", "true");
-	      
-		Session smtpSession = (Session) emailService.getAuthenticatedSession(properties, sgsmpt_user_name, sgsmpt_password);
-		smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
-		
-		SMTPAPIHeader header=  new SMTPAPIHeader();
-		
-		LinkedList<String> recipients = new LinkedList<String>();
-		recipients.add(form.getEmail());
-		header.addTo(recipients);
-		
-		String key;
-		try {
-			
-			key = SMTPAuthenticator.getHashed256(form.getEmail()+"."+form.getPassword()+"."+form.getUserLocalAddr() +"."+form.getUserLocalAddr());
-			
-		} catch (Exception e1) {
-			
-			e1.printStackTrace();
-			throw new UserNotCreatedException();
-		}
-		
-		key = xsmtp_header_var_value;
-		
-		LinkedList<String> activation_keys = new LinkedList<String>();
-		activation_keys.add(key);
-		
-		if(xsmtp_header_var_name == null || String.valueOf(xsmtp_header_var_name).length() == 0 ) header.addSubVal("%activation_key%",activation_keys);
-		else header.addSubVal(xsmtp_header_var_name,activation_keys);
-		
-		if(xsmtp_header_category == null) header.setCategory("email activation");
-		else header.setCategory(xsmtp_header_category);
-	
-		MimeMessage message = new MimeMessage(smtpSession);
-		
-		Multipart multipart = new MimeMultipart("alternative");
-		BodyPart part1 = new MimeBodyPart();
-		try {
-			//TODO: here replace with String from dictionary
-			part1.setText("Thank you for registration at AWranking. Please click on the activation link below");
-			BodyPart part2 = new MimeBodyPart();
-			
-			StringBuilder bldr = new StringBuilder("<a href=");
-			bldr.append( "\"");
-			bldr.append(testactivation_url);
-			bldr.append(key);
-			bldr.append( "\"");
-			bldr.append(">");
-			bldr.append(testactivation_url);
-			bldr.append(key);
-			bldr.append("</a>");
-			String mess =  bldr.toString();
-			part2.setContent(mess, "text/html");
-			multipart.addBodyPart(part1);
-			multipart.addBodyPart(part2);
-			message.setFrom(new InternetAddress(smpt_from_email));
-			message.addRecipient(Message.RecipientType.TO,
-			   new InternetAddress(form.getEmail()));
-			message.setSubject("Your need to verify email");
-			message.setContent(multipart);
-			
-			if(header != null){
-				System.out.println(header.asJSON());	
-				message.addHeader("X-SMTPAPI", header.asJSON());
-			}
-			
-			emailService.share(smtpSession, message);
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			throw new UserNotCreatedException();
-		}
-		finally{
-			
-			properties.clear();
-			//smtpSession.flush();
-		}
+//		//---------------- sending verification email --------------------
+//
+//		Properties properties = new Properties();
+//	    properties.put("mail.transport.protocol", "smtp");
+//	    properties.put("mail.smtp.host", sgsmpt_host_name);
+//	    properties.put("mail.smtp.port", sgsmpt_port);
+//	    properties.put("mail.smtp.auth", "true");
+//
+//		Session smtpSession = (Session) emailService.getAuthenticatedSession(properties, sgsmpt_user_name, sgsmpt_password);
+//		smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
+//
+//		SMTPAPIHeader header=  new SMTPAPIHeader();
+//
+//		LinkedList<String> recipients = new LinkedList<String>();
+//		recipients.add(form.getEmail());
+//		header.addTo(recipients);
+//
+//		String key;
+//		try {
+//
+//			key = SMTPAuthenticator.getHashed256(form.getEmail()+"."+form.getPassword()+"."+form.getUserLocalAddr() +"."+form.getUserLocalAddr());
+//
+//		} catch (Exception e1) {
+//
+//			e1.printStackTrace();
+//			throw new UserNotCreatedException();
+//		}
+//
+//		key = xsmtp_header_var_value;
+//
+//		LinkedList<String> activation_keys = new LinkedList<String>();
+//		activation_keys.add(key);
+//
+//		if(xsmtp_header_var_name == null || String.valueOf(xsmtp_header_var_name).length() == 0 ) header.addSubVal("%activation_key%",activation_keys);
+//		else header.addSubVal(xsmtp_header_var_name,activation_keys);
+//
+//		if(xsmtp_header_category == null) header.setCategory("email activation");
+//		else header.setCategory(xsmtp_header_category);
+//
+//		MimeMessage message = new MimeMessage(smtpSession);
+//
+//		Multipart multipart = new MimeMultipart("alternative");
+//		BodyPart part1 = new MimeBodyPart();
+//		try {
+//			//TODO: here replace with String from dictionary
+//			part1.setText("Thank you for registration at AWranking. Please click on the activation link below");
+//			BodyPart part2 = new MimeBodyPart();
+//
+//			StringBuilder bldr = new StringBuilder("<a href=");
+//			bldr.append( "\"");
+//			bldr.append(testactivation_url);
+//			bldr.append(key);
+//			bldr.append( "\"");
+//			bldr.append(">");
+//			bldr.append(testactivation_url);
+//			bldr.append(key);
+//			bldr.append("</a>");
+//			String mess =  bldr.toString();
+//			part2.setContent(mess, "text/html");
+//			multipart.addBodyPart(part1);
+//			multipart.addBodyPart(part2);
+//			message.setFrom(new InternetAddress(smpt_from_email));
+//			message.addRecipient(Message.RecipientType.TO,
+//			   new InternetAddress(form.getEmail()));
+//			message.setSubject("Your need to verify email");
+//			message.setContent(multipart);
+//
+//			if(header != null){
+//				System.out.println(header.asJSON());
+//				message.addHeader("X-SMTPAPI", header.asJSON());
+//			}
+//
+//			emailService.share(smtpSession, message);
+//
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//			throw new UserNotCreatedException();
+//		}
+//		finally{
+//
+//			properties.clear();
+//			//smtpSession.flush();
+//		}
 
 		
 	}

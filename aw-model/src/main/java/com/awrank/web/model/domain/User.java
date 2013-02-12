@@ -1,6 +1,6 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.dao.entrypoint.EntryPointDao;
+import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ESecretQuestion;

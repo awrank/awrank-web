@@ -1,7 +1,7 @@
 package com.awrank.web.model.dao.user;
 
 import com.awrank.web.model.dao.AbstractDaoImpl;
-import com.awrank.web.model.dao.entrypoint.EntryPointDao;
+import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 
