@@ -1,5 +1,6 @@
 package com.awrank.web.model.service.user;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+//import org.joda.time.DateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.awrank.web.model.dao.entrypoint.EntryPointDao;
 import com.awrank.web.model.dao.user.UserDao;
 import com.awrank.web.model.dao.user.UserDaoImpl;
+import com.awrank.web.model.dao.useremailactivation.UserEmailActivationDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserEmailActivation;
 import com.awrank.web.model.domain.constant.EAuthenticationMethod;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
@@ -70,6 +75,11 @@ public class UserServiceImpl implements UserService {
 	@Value("${mail.testactivation.verifyurl}")
 	private String testactivation_url;
 	
+//----- email verification code lifetime duration --
+	
+	@Value("${mail.verificationcode.lifetime.duration}")
+	private Integer mail_verificationcode_lifetime_duration;
+	
 //--------------------------------------------------
 	
 	@Autowired
@@ -77,6 +87,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private EntryPointDao entryPointDao;
+	
+	@Autowired
+	private UserEmailActivationDao userEmailActivationDao;
 	
 	@Autowired
 	ShareToServiceEmailImpl emailService;
@@ -145,7 +158,7 @@ public class UserServiceImpl implements UserService {
 		return new ArrayList<User>();
 	}
 	//--------------- check if we need these accessors and refactor them out if not -------
-	
+	/*
 	public void setUserDao(UserDaoImpl value){
 		
 		userDao = value;
@@ -161,15 +174,17 @@ public class UserServiceImpl implements UserService {
 		entryPointDao = value;
 	}
 	
-	public EntryPointDao getsetEntryPointDao(){
+	public EntryPointDao getEntryPointDao(){
 		
 		return entryPointDao;
 	}
-
+*/
 	@Transactional
 	@Override
 	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException{
 	
+		//DateTime creationDate = DateTime.now();
+		
 		//--------------------- create user ---------------------------
 		
 		User user = new User();
@@ -186,10 +201,7 @@ public class UserServiceImpl implements UserService {
 		
 		EntryPoint entryPoint = new EntryPoint();
 		
-		/**
-		 * and only after both is saved we can bind them o_O ?!
-		 */
-		entryPoint.setUser(user);//check if we need set another user-related fields if we do this
+		entryPoint.setUser(user);
 		
 		entryPoint.setUid(user.getEmail());
 		entryPoint.setPassword(form.getPassword());
@@ -283,8 +295,17 @@ public class UserServiceImpl implements UserService {
 			//smtpSession.flush();
 		}
 
+//-------------- store to db information about verification email was sent -------------------------------------------
 		
-	}
-
-	
+		UserEmailActivation userEmailActivation = new UserEmailActivation();
+		
+		userEmailActivation.setCode(key);
+		userEmailActivation.setUser(user);
+		userEmailActivation.setEmail(user.getEmail());
+		/*
+		Date today = new Date(creationDate.getMillis());
+		
+		userEmailActivation.setCreatedDate(today);
+		*/
+	}	
 }
