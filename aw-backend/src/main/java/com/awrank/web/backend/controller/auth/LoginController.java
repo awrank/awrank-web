@@ -70,24 +70,28 @@ public class LoginController {
 		ModelAndView mv = new ModelAndView();
 		List<Contact> contactsList = new ArrayList<Contact>();
 		SocialAuthManager manager = socialAuthTemplate.getSocialAuthManager();
-		AuthProvider provider = manager.getCurrentAuthProvider();
-		if (provider != null) {
-			contactsList = provider.getContactList();
-			if (contactsList != null && contactsList.size() > 0) {
-				for (Contact p : contactsList) {
-					if (!StringUtils.hasLength(p.getFirstName())
-							&& !StringUtils.hasLength(p.getLastName())) {
-						p.setFirstName(p.getDisplayName());
+		if (manager != null) {
+			AuthProvider provider = manager.getCurrentAuthProvider();
+			if (provider != null) {
+				contactsList = provider.getContactList();
+				if (contactsList != null && contactsList.size() > 0) {
+					for (Contact p : contactsList) {
+						if (!StringUtils.hasLength(p.getFirstName())
+								&& !StringUtils.hasLength(p.getLastName())) {
+							p.setFirstName(p.getDisplayName());
+						}
 					}
 				}
+				mv.addObject("profile", provider.getUserProfile());
+				mv.addObject("contacts", contactsList);
+			} else {
+				System.out.println("Provider is null!");
 			}
-			mv.addObject("profile", provider.getUserProfile());
+		} else {
+			System.out.println("Manager is null!");
 		}
 
-
-		mv.addObject("contacts", contactsList);
 		mv.setViewName("authSuccess");
-
 		return mv;
 	}
 
@@ -96,17 +100,26 @@ public class LoginController {
 			throws Exception {
 		ModelAndView mv = new ModelAndView();
 		SocialAuthManager manager = socialAuthTemplate.getSocialAuthManager();
-		AuthProvider provider = manager.getCurrentAuthProvider();
-		String statusMsg = request.getParameter("statusMessage");
-		try {
-			provider.updateStatus(statusMsg);
-			mv.addObject("Message", "Status Updated successfully");
-		} catch (SocialAuthException e) {
-			mv.addObject("Message", e.getMessage());
-			e.printStackTrace();
-		}
-		mv.setViewName("statusSuccess");
+		if (manager != null) {
+			AuthProvider provider = manager.getCurrentAuthProvider();
+			if (provider != null) {
+				String statusMsg = request.getParameter("statusMessage");
+				try {
+					provider.updateStatus(statusMsg);
+					mv.addObject("Message", "Status Updated successfully");
+				} catch (SocialAuthException e) {
+					mv.addObject("Message", e.getMessage());
+					e.printStackTrace();
+				}
+			} else {
+				mv.addObject("Message", "AuthProvider is null. Configuration has problems!");
+			}
 
+		} else {
+			mv.addObject("Message", "SocialAuthManager is null. Configuration has problems!");
+		}
+
+		mv.setViewName("statusSuccess");
 		return mv;
 	}
 
