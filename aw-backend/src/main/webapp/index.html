@@ -13,7 +13,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- JS -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
+    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore.js"></script>
+    <script type="text/javascript" src="http://backbonejs.org/backbone.js"></script>
     <script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
     <script type="text/javascript" src="resources/js/awrank.js"></script>
     <script type="text/javascript" src="resources/js/awrank_lng.js"></script>
@@ -125,11 +128,11 @@
 
 <script type="text/javascript" language="JavaScript">
     function fIndexBodyOnload() {
-        setContextPath('http://localhost:8080/aw-backend');
+        setContextPath('http://localhost:8080/awrank');
         setLanguage('RU');
 
-//        fIndexMenuSessionOnclick();
-        fIndexMenuPricingOnclick();
+        fIndexMenuSessionOnclick();
+//        fIndexMenuPricingOnclick();
         fIndexLogout();
 
 //        var div=fIndexLoad('body', 'divRegister');
@@ -174,7 +177,7 @@
 
     function fIndexMenuDictionaryOnclick() {
         fIndexMenuActive('menuItemDictionary');
-        // TODO
+        fIndexRightContentSelectDiv('divDictionary');
     }
 
     function fIndexLogout() {

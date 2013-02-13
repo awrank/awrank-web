@@ -34,6 +34,7 @@ public class InitDictionary {
         CurrentUserUtils.setCurrentUser(user);
 
         final List<Dictionary> list = new ArrayList<Dictionary>();
+//        ERROR
         list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR.name(), "Ошибка: "));
         list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
         list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
@@ -45,16 +46,42 @@ public class InitDictionary {
         list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
         list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
 
-        list.add(new Dictionary(null, ELanguage.RU, "MY_ACCOUNT", " Учетная запись"));
-        list.add(new Dictionary(null, ELanguage.EN, "MY_ACCOUNT", "My account"));
+//        simple words
+        list.add(new Dictionary(null, ELanguage.RU, "COUNTRY", "Страна"));
+        list.add(new Dictionary(null, ELanguage.EN, "COUNTRY", "Country"));
+        list.add(new Dictionary(null, ELanguage.RU, "DELETE", "Удалить"));
+        list.add(new Dictionary(null, ELanguage.EN, "DELETE", "Delete"));
+        list.add(new Dictionary(null, ELanguage.RU, "DICTIONARY", "Словарь"));
+        list.add(new Dictionary(null, ELanguage.EN, "DICTIONARY", "Dictionary"));
+        list.add(new Dictionary(null, ELanguage.RU, "INSERT", "Добавить"));
+        list.add(new Dictionary(null, ELanguage.EN, "INSERT", "Insert"));
+        list.add(new Dictionary(null, ELanguage.RU, "IP_ADDRESS", "IP адрес"));
+        list.add(new Dictionary(null, ELanguage.EN, "IP_ADDRESS", "IP-address"));
+        list.add(new Dictionary(null, ELanguage.RU, "LANGUAGE", "Язык"));
+        list.add(new Dictionary(null, ELanguage.EN, "LANGUAGE", "Language"));
         list.add(new Dictionary(null, ELanguage.RU, "LOGIN", "Вход"));
         list.add(new Dictionary(null, ELanguage.EN, "LOGIN", "Login"));
         list.add(new Dictionary(null, ELanguage.RU, "LOGOUT", "Выход"));
         list.add(new Dictionary(null, ELanguage.EN, "LOGOUT", "Logout"));
-        list.add(new Dictionary(null, ELanguage.RU, "FORGET_PASSWORD", "Забыли пароль?"));
-        list.add(new Dictionary(null, ELanguage.EN, "FORGET_PASSWORD", "Forgotten your password?"));
         list.add(new Dictionary(null, ELanguage.RU, "PASSWORD", "Пароль"));
         list.add(new Dictionary(null, ELanguage.EN, "PASSWORD", "Password"));
+        list.add(new Dictionary(null, ELanguage.RU, "SITE", "САЙТ"));
+        list.add(new Dictionary(null, ELanguage.EN, "SITE", "SITE"));
+        list.add(new Dictionary(null, ELanguage.RU, "UPDATE", "Обновить"));
+        list.add(new Dictionary(null, ELanguage.EN, "UPDATE", "Update"));
+//      ENTITY
+        list.add(new Dictionary(null, ELanguage.RU, "DICTIONARY_CODE", "Код"));
+        list.add(new Dictionary(null, ELanguage.EN, "DICTIONARY_CODE", "Code"));
+        list.add(new Dictionary(null, ELanguage.RU, "DICTIONARY_TEXT", "Текст"));
+        list.add(new Dictionary(null, ELanguage.EN, "DICTIONARY_TEXT", "Text"));
+
+//      UI
+        list.add(new Dictionary(null, ELanguage.RU, "MY_ACCOUNT", " Учетная запись"));
+        list.add(new Dictionary(null, ELanguage.EN, "MY_ACCOUNT", "My account"));
+
+        list.add(new Dictionary(null, ELanguage.RU, "FORGET_PASSWORD", "Забыли пароль?"));
+        list.add(new Dictionary(null, ELanguage.EN, "FORGET_PASSWORD", "Forgotten your password?"));
+
         list.add(new Dictionary(null, ELanguage.RU, "REGISTRATION", "Регистрация"));
         list.add(new Dictionary(null, ELanguage.EN, "REGISTRATION", "Registration"));
         list.add(new Dictionary(null, ELanguage.RU, "PER_MONTH", "в месяц"));
@@ -65,12 +92,7 @@ public class InitDictionary {
         list.add(new Dictionary(null, ELanguage.EN, "LOGIN_IN_WITH_GOOGLE", "Log in with Google"));
         list.add(new Dictionary(null, ELanguage.RU, "LOGIN_IN_WITH_FACEBOOK", "Вход через Facebook"));
         list.add(new Dictionary(null, ELanguage.EN, "LOGIN_IN_WITH_FACEBOOK", "Log in with Facebook"));
-        list.add(new Dictionary(null, ELanguage.RU, "COUNTRY", "Страна"));
-        list.add(new Dictionary(null, ELanguage.EN, "COUNTRY", "Country"));
-        list.add(new Dictionary(null, ELanguage.RU, "IP_ADDRESS", "IP адрес"));
-        list.add(new Dictionary(null, ELanguage.EN, "IP_ADDRESS", "IP-address"));
-        list.add(new Dictionary(null, ELanguage.RU, "SITE", "САЙТ"));
-        list.add(new Dictionary(null, ELanguage.EN, "SITE", "SITE"));
+
         list.add(new Dictionary(null, ELanguage.RU, "HOME", "Главная"));
         list.add(new Dictionary(null, ELanguage.EN, "HOME", "Home"));
         list.add(new Dictionary(null, ELanguage.RU, "ACCOUNT", "Учетная запись"));
@@ -83,8 +105,6 @@ public class InitDictionary {
         list.add(new Dictionary(null, ELanguage.EN, "REQUEST_HISTORY", "Request history"));
         list.add(new Dictionary(null, ELanguage.RU, "ADMINISTRATION", "Администрирование"));
         list.add(new Dictionary(null, ELanguage.EN, "ADMINISTRATION", "Administration"));
-        list.add(new Dictionary(null, ELanguage.RU, "DICTIONARY", "Словарь"));
-        list.add(new Dictionary(null, ELanguage.EN, "DICTIONARY", "Dictionary"));
 
         list.add(new Dictionary(null, ELanguage.RU, "REGISTER_DESCRIPTION", "или введите email:"));
         list.add(new Dictionary(null, ELanguage.EN, "REGISTER_DESCRIPTION", "or with email:"));
