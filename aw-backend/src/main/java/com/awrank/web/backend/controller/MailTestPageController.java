@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.service.sharing.ShareToServiceEmailImpl;
 import com.awrank.web.model.utils.emailauthentication.SMTPAPIHeader;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
@@ -105,6 +106,9 @@ public class MailTestPageController {
 	@Autowired
 	ShareToServiceEmailImpl emailService;
 	
+	@Autowired
+	EmailSenderSendGridImpl sendGridEmailSender;
+	
 	@RequestMapping("/mail")
 	public ModelAndView showMailTestPage(HttpServletRequest request,
 										HttpServletResponse response) {
@@ -167,39 +171,21 @@ public class MailTestPageController {
 			@RequestParam("xsmtp_header_var_value") String xsmtp_header_var_value,
 			HttpServletRequest request) throws Exception {
 	
-		Properties properties = new Properties();
-	    properties.put("mail.transport.protocol", "smtp");
-	    properties.put("mail.smtp.host", sgsmpt_host_name);
-	    properties.put("mail.smtp.port", sgsmpt_port);
-	    properties.put("mail.smtp.auth", "true");
-	      
-		Session smtpSession = (Session) emailService.getAuthenticatedSession(properties, sgsmpt_user_name, sgsmpt_password);
 		
-		smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
+		Map<String, Object> params = new HashMap<String, Object>();
 		
-		SMTPAPIHeader header=  new SMTPAPIHeader();
+		params.put("sgsmpt_host_name", sgsmpt_host_name);
+		params.put("sgsmpt_port", sgsmpt_port);
+		params.put("sgsmpt_user_name", sgsmpt_user_name);
+		params.put("sgsmpt_password", sgsmpt_password);
+		params.put("xsmtp_header_category", xsmtp_header_category);
+		params.put("xsmtp_header_var_name", xsmtp_header_var_name);
+		params.put("xsmtp_header_var_value", xsmtp_header_var_value);
 		
-		LinkedList<String> recipients = new LinkedList<String>();
-		recipients.add(testactivation_email);
-		header.addTo(recipients);
+		sendGridEmailSender.send(xsmtp_header_category, params);
 		
-		String key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
-		if((xsmtp_header_var_value != null) && String.valueOf(xsmtp_header_var_value).length() > 0 ) key = xsmtp_header_var_value;
+		return "sent ok";
 		
-		System.out.println("local"+request.getLocalAddr());
-		System.out.println("remote: "+request.getRemoteAddr());
-		
-		LinkedList<String> activation_keys = new LinkedList<String>();
-		activation_keys.add(key);
-		
-		if(xsmtp_header_var_name == null || String.valueOf(xsmtp_header_var_name).length() == 0 ) header.addSubVal("%activation_key%",activation_keys);
-		else header.addSubVal(xsmtp_header_var_name,activation_keys);
-		
-		if(xsmtp_header_category == null) header.setCategory("email activation");
-		else header.setCategory(xsmtp_header_category);
-		
-		
-		return sendTestSMPTMailToSession(smtpSession, request, properties, testactivation_email, testactivation_password, header, key);
 	}
 	
 	private String sendTestSMPTMailToSession(Session smtpSession, HttpServletRequest request, Properties properties, String testactivation_email, String testactivation_password, SMTPAPIHeader header, String key) {

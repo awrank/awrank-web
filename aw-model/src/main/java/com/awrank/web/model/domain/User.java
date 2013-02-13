@@ -23,10 +23,10 @@ import java.util.Date;
 @JsonAutoDetect
 @Table(name = UserConst.TABLE_NAME)
 public class User extends AbstractObject implements UserConst {
-	
-	@Value("${user.default.languageCode}")
-	private String user_default_languageCode;
-	
+	/*
+	@Value("#{appProps[user_default_language_code]}")
+	private String user_default_language_code;
+	*/
     /**
      * уникальный код, который будет использоваться для запросов к API
      */
@@ -88,7 +88,7 @@ public class User extends AbstractObject implements UserConst {
     	
     	this.authorizationFailsCount = 0;
     	this.language = ELanguage.valueOf("EN");
-    	//this.language = ELanguage.valueOf(user_default_languageCode);//doesn't work for some reason
+    	//this.language = ELanguage.valueOf(user_default_language_code);//doesn't work for some reason
     	
     }
 

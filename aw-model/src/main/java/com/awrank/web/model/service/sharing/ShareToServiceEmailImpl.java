@@ -20,15 +20,7 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
  */
 @Service("emailService")
 public class ShareToServiceEmailImpl implements ShareToService {
-
-	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.sharing.ShareToService#create()
-	 */
-	@Override
-	public void create() {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.awrank.web.model.service.sharing.ShareToService#share()

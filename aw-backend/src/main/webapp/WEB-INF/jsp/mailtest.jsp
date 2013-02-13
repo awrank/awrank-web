@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<h2> Mail test via Jango SMTP: </h2>
+<!-- h2> Mail test via Jango SMTP: </h2>
 
 <form name="frm1" method="post" action="sendtestjungosmtp">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -56,7 +56,7 @@
     <td>&nbsp;</td>
     </tr>
 </table>
-</form>
+</form -->
 
 <!-- p>
     <b>SMTP host:</b> ${jsmpt_host_name} <br/>

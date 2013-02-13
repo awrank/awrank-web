@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ShareToService {
-	
-	  public void create();
-
+	 
 	  public void share(Object session, Object message)  throws Exception;
 	  
 	  public Object getAuthenticatedSession(Properties properties, String username, String password);

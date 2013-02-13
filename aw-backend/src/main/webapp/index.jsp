@@ -27,7 +27,7 @@
 <h3>EMAIL</h3>
 
 <p>
-    <a id="testMailPage" href="api/mailtest">Main sending test pages</a>
+    <a id="testMailPage" href="mailtest">Main sending test pages</a>
 </p>
 
 <h3>API</h3>
