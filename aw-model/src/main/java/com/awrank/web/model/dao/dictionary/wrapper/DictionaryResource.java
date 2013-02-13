@@ -15,7 +15,7 @@ import org.codehaus.jackson.node.ObjectNode;
  * User: a_polyakov
  */
 @SuppressWarnings("serial")
-public class DictionaryResource implements Serializable, IJsonObject {
+public class DictionaryResource implements Serializable  {
     private Long id;
     private ELanguage language;
     private String code;
@@ -24,17 +24,17 @@ public class DictionaryResource implements Serializable, IJsonObject {
     public DictionaryResource() {
     }
 
-    @SelectFrom(Dictionary.class)
-    public DictionaryResource(
-            @SelectField(Dictionary.H_ID) Long id,
-            @SelectField(Dictionary.H_LANGUAGE) ELanguage language,
-            @SelectField(Dictionary.H_CODE) String code,
-            @SelectField(Dictionary.H_TEXT) String text) {
-        this.id = id;
-        this.language = language;
-        this.code = code;
-        this.text = text;
-    }
+//    @SelectFrom(Dictionary.class)
+//    public DictionaryResource(
+//            @SelectField(Dictionary.H_ID) Long id,
+//            @SelectField(Dictionary.H_LANGUAGE) ELanguage language,
+//            @SelectField(Dictionary.H_CODE) String code,
+//            @SelectField(Dictionary.H_TEXT) String text) {
+//        this.id = id;
+//        this.language = language;
+//        this.code = code;
+//        this.text = text;
+//    }
 
     public Long getId() {
         return id;
@@ -68,27 +68,27 @@ public class DictionaryResource implements Serializable, IJsonObject {
         this.text = text;
     }
 
-    // --------------------------- JSON ------------------------------------------
-
-    public DictionaryResource(final ObjectNode jsonObject) {
-        this.id = JsonUtils.getLong(jsonObject, Dictionary.S_ID);
-        this.language = JsonUtils.getEnum(jsonObject, Dictionary.S_LANGUAGE, ELanguage.class);
-        this.code = JsonUtils.getString(jsonObject, Dictionary.S_CODE);
-        this.text = JsonUtils.getString(jsonObject, Dictionary.S_TEXT);
-    }
-
-    @Override
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
-        JsonUtils.set(jsonObject, Dictionary.S_ID, id);
-        JsonUtils.set(jsonObject, Dictionary.S_LANGUAGE, language);
-        JsonUtils.set(jsonObject, Dictionary.S_CODE, code);
-        JsonUtils.set(jsonObject, Dictionary.S_TEXT, text);
-        return jsonObject;
-    }
-
-    @Override
-    public String toString() {
-        return toJsonObject().toString();
-    }
+//    // --------------------------- JSON ------------------------------------------
+//
+//    public DictionaryResource(final ObjectNode jsonObject) {
+//        this.id = JsonUtils.getLong(jsonObject, Dictionary.S_ID);
+//        this.language = JsonUtils.getEnum(jsonObject, Dictionary.S_LANGUAGE, ELanguage.class);
+//        this.code = JsonUtils.getString(jsonObject, Dictionary.S_CODE);
+//        this.text = JsonUtils.getString(jsonObject, Dictionary.S_TEXT);
+//    }
+//
+//    @Override
+//    public ObjectNode toJsonObject() {
+//        final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
+//        JsonUtils.set(jsonObject, Dictionary.S_ID, id);
+//        JsonUtils.set(jsonObject, Dictionary.S_LANGUAGE, language);
+//        JsonUtils.set(jsonObject, Dictionary.S_CODE, code);
+//        JsonUtils.set(jsonObject, Dictionary.S_TEXT, text);
+//        return jsonObject;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return toJsonObject().toString();
+//    }
 }
