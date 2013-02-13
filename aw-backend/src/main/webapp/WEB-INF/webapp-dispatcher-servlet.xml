@@ -34,7 +34,8 @@
     <!-- Property placeholder configurer -->
     <!-- context:property-placeholder location="/WEB-INF/properties/email.properties"/ -->
     <util:properties id="emailProps" location="/WEB-INF/properties/email.properties" />
-    <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
+    <!-- context:property-placeholder location="/WEB-INF/properties/application.properties"/ -->
+    <util:properties id="appProps" location="/WEB-INF/properties/application.properties" />
 
     <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
     <context:annotation-config/>
