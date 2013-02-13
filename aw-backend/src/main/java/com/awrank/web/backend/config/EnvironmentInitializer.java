@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 
-@PropertySource("/WEB-INF/properties/application.properties")
+//@PropertySource("/WEB-INF/properties/application.properties")
 public class EnvironmentInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
 	private static final String PROFILE_LOCALHOST = "localhost";

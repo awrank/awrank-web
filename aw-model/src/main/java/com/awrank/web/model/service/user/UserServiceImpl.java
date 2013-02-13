@@ -44,7 +44,7 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
  *
  */
 @Service
-@PropertySource("/WEB-INF/properties/application.properties")
+//@PropertySource("/WEB-INF/properties/application.properties")
 public class UserServiceImpl implements UserService {
 
 	//----------------  Send Grip SMTP ------------
