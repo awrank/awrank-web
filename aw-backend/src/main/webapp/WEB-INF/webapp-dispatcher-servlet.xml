@@ -8,7 +8,7 @@
         xmlns:mvc="http://www.springframework.org/schema/mvc"
         xmlns:jdbc="http://www.springframework.org/schema/jdbc"
         xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/context"
         xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -57,13 +57,10 @@
     </bean>
 
     <bean id="socialAuthTemplate" class="org.brickred.socialauth.spring.bean.SocialAuthTemplate" scope="session">
-        <!--<property name="socialAuthManager" ref="socialAuthManager"/>-->
         <aop:scoped-proxy/>
     </bean>
 
     <bean id="socialAuthWebController" class="org.brickred.socialauth.spring.controller.SocialAuthWebController">
-        <!--<constructor-arg value="http://opensource.brickred.com:8070/socialauth-spring-demo"/>-->
-        <!--<constructor-arg value="http://195.225.158.50:8000/aw"/>-->
         <constructor-arg value="http://awrank.com:8070/aw"/>
         <constructor-arg value="/authSuccess"/>
         <constructor-arg value="/accessDenied"/>

@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,7 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
  *
  */
 @Service
+@PropertySource("/WEB-INF/properties/application.properties")
 public class UserServiceImpl implements UserService {
 
 	//----------------  Send Grip SMTP ------------
