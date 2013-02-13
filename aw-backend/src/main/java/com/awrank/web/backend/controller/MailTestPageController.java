@@ -38,56 +38,68 @@ public class MailTestPageController {
 
 //----------------  Jango SMTP ------------
 	
-	@Value("${mail.j.smtp.server.host}")
+	@Value("#{emailProps[mail_j_smtp_server_host]}")
+	//@Value("${mail.j.smtp.server.host}")
 	private String jsmpt_host_name;
 
-	@Value("${mail.j.smtp.server.port}")
+	@Value("#{emailProps[mail_j_smtp_server_port]}")
+	//@Value("${mail.j.smtp.server.port}")
 	private String jsmpt_port;
 
-	@Value("${mail.j.smtp.username}")
+	@Value("#{emailProps[mail_j_smtp_username]}")
+	//@Value("${mail.j.smtp.username}")
 	private String jsmpt_user_name;
 
-	@Value("${mail.j.smtp.password}")
+	@Value("#{emailProps[mail_j_smtp_password]}")
+	//@Value("${mail.j.smtp.password}")
 	private String jsmpt_password;
 	
 //----------------  Send Grip SMTP ------------
 	
-	
-	@Value("${mail.sg.smtp.server.host}")
+	@Value("#{emailProps[mail_sg_smtp_server_host]}")
+	//@Value("${mail.sg.smtp.server.host}")
 	private String sgsmpt_host_name;
 
-	@Value("${mail.sg.smtp.server.port}")
+	@Value("#{emailProps[mail_sg_smtp_server_port]}")
+	//@Value("${mail.sg.smtp.server.port}")
 	private String sgsmpt_port;
 
-	@Value("${mail.sg.smtp.username}")
+	@Value("#{emailProps[mail_sg_smtp_username]}")
+	//@Value("${mail.sg.smtp.username}")
 	private String sgsmpt_user_name;
 
-	@Value("${mail.sg.smtp.password}")
+	@Value("#{emailProps[mail_sg_smtp_password]}")
+	//@Value("${mail.sg.smtp.password}")
 	private String sgsmpt_password;
 	
-	@Value("${mail.xsmtp.header.category}")
+	@Value("#{emailProps[mail_xsmtp_header_category]}")
+	//@Value("${mail.xsmtp.header.category}")
 	private String xsmtp_header_category;
 
-	@Value("${mail.xsmtp.header.var.name}")
+	@Value("#{emailProps[mail_xsmtp_header_var_name]}")
+	//@Value("${mail.xsmtp.header.var.name}")
 	private String xsmtp_header_var_name;
 
-	@Value("${mail.xsmtp.header.var.value}")
+	@Value("#{emailProps[mail_xsmtp_header_var_value]}")
+	//@Value("${mail.xsmtp.header.var.value}")
 	private String xsmtp_header_var_value;
-	
-	
 	
 //------------ other settings -----------------
 	
-	@Value("${mail.from.email}")
+	@Value("#{emailProps[mail_from_email]}")
+	//@Value("${mail.from.email}")
 	private String smpt_from_email;
 	
-	@Value("${mail.testactivation.email}")
+	@Value("#{emailProps[mail_testactivation_email]}")
+	//@Value("${mail.testactivation.email}")
 	private String testactivation_email;
 	
-	@Value("${mail.testactivation.password}")
+	@Value("#{emailProps[mail_testactivation_password]}")
+	//@Value("${mail.testactivation.password}")
 	private String testactivation_password;
 	
-	@Value("${mail.testactivation.verifyurl}")
+	@Value("#{emailProps[mail_testactivation_verifyurl]}")
+	//@Value("${mail.testactivation.verifyurl}")
 	private String testactivation_url;
 	
 	@Autowired

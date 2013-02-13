@@ -9,6 +9,7 @@
         xmlns:jdbc="http://www.springframework.org/schema/jdbc"
         xmlns:jpa="http://www.springframework.org/schema/data/jpa"
         xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:util="http://www.springframework.org/schema/util" 
         xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -23,13 +24,16 @@
             http://www.springframework.org/schema/data/jpa
             http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
             http://www.springframework.org/schema/tx
-            http://www.springframework.org/schema/tx/spring-tx.xsd">
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/util
+	        http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 
     <import resource="data-access-context.xml"/>
 
     <!-- Property placeholder configurer -->
-    <context:property-placeholder location="/WEB-INF/properties/email.properties"/>
+    <!-- context:property-placeholder location="/WEB-INF/properties/email.properties"/ -->
+    <util:properties id="emailProps" location="/WEB-INF/properties/email.properties" />
     <context:property-placeholder location="/WEB-INF/properties/application.properties"/>
 
     <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
