@@ -68,12 +68,13 @@ public class TestOrderWrapper {
 //        em.persist(userOrder2);
 //
 //        em.getTransaction().commit();
+/*
 
-
-//        List<OrderWrapper> list = SelectUtils.getWrapperList(em, OrderWrapper.class, " order by o." + UserOrder.H_ID, 0, 0);
-//        for (OrderWrapper item : list) {
-//            System.out.println(item);
-//        }
+        List<OrderWrapper> list = SelectUtils.getWrapperList(em, OrderWrapper.class, " order by o." + UserOrder.H_ID, 0, 0);
+        for (OrderWrapper item : list) {
+            System.out.println(item);
+        }
+        */
         em.close();
     }
 }
