@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserEmailActivation;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.UserServiceImpl;
@@ -98,12 +99,17 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.GET, value="/verifyemail/{key}")
 	public 
 	@ResponseBody
-	String verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+	Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
 		
 		//Here we check if such a key exists in db, if yes - fetch user's email and password and build the key with same hasher but with current user IP.
 	
-		/*
-		String new_key = SMTPAuthenticator.getHashed256(testactivation_email+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
+		UserEmailActivation record = userService.findEmailVerificationByCode(key);
+		
+		if(record == null) return getNegativeResponceMap("key not found");
+		
+		User user = record.getUser();
+		
+		String new_key = SMTPAuthenticator.getHashed256(user.getEmail()+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
 		
 		System.out.println("remote host"+request.getRemoteHost());
 		System.out.println("remote adr: "+request.getRemoteAddr());
@@ -115,6 +121,8 @@ public class UserController {
 		else return "key " +key+ " not verified";
 		*/
 		return "not implemented in UserController well";
+		
+		
 	}
 	
 	//------------------- refactor out it not needed ---------------
