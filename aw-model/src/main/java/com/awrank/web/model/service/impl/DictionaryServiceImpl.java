@@ -1,13 +1,10 @@
-package com.awrank.web.model.service.dictionary;
+package com.awrank.web.model.service.impl;
 
-import com.awrank.web.model.constant.EMessageConst;
 import com.awrank.web.model.dao.DictionaryDao;
-import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.Dictionary;
-import com.awrank.web.model.domain.constant.DictionaryConst;
-import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.exception.ObjectFieldException;
 import com.awrank.web.model.exception.ObjectNotUniqueException;
+import com.awrank.web.model.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,26 +25,11 @@ public class DictionaryServiceImpl implements DictionaryService {
         return dictionaryDao.findAll(pageable);
     }
 
-//    @Override
-//    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-//    public DictionaryResource insert(DictionaryResource wrapper) throws ObjectNotUniqueException, ObjectFieldException {
-//        if (wrapper.getLanguage() == null)
-//            throw new ObjectFieldException(EMessageConst.MISSING_DICTIONARY_LANGUAGE, EObjectType.DICTIONARY, null, wrapper.getId(), DictionaryConst.S_LANGUAGE);
-//        if (wrapper.getCode() == null || wrapper.getCode().isEmpty())
-//            throw new ObjectFieldException(EMessageConst.MISSING_DICTIONARY_CODE, EObjectType.DICTIONARY, null, wrapper.getId(), DictionaryConst.S_CODE);
-//        if (wrapper.getText() == null || wrapper.getText().isEmpty())
-//            throw new ObjectFieldException(EMessageConst.MISSING_DICTIONARY_TEXT, EObjectType.DICTIONARY, null, wrapper.getId(), DictionaryConst.S_TEXT);
-//
-//        Dictionary oldDic = dictionaryDao.select(wrapper.getLanguage(), wrapper.getCode());
-//        if (oldDic != null && !oldDic.getId().equals(wrapper.getId()))
-//            throw new ObjectNotUniqueException(EObjectType.DICTIONARY, null, wrapper.getId(), null, oldDic.getId());
-//
-//        Dictionary dictionary = new Dictionary(wrapper.toJsonObject());
-//        dictionaryDao.persist(dictionary);
-//
-//        wrapper = new DictionaryResource(dictionary.toJsonObject());
-//        return wrapper;
-//    }
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public Dictionary create(Dictionary dictionary) throws ObjectNotUniqueException, ObjectFieldException {
+        return dictionaryDao.save(dictionary);
+    }
+
 //
 //    @Override
 //    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)

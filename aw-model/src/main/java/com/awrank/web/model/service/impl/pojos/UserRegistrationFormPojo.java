@@ -1,7 +1,7 @@
-package com.awrank.web.model.service.user.pojos;
+package com.awrank.web.model.service.impl.pojos;
 
 import java.io.Serializable;
-import com.awrank.web.model.domain.constant.ELanguage;
+
 /**
  * POJO(well, actually a bean :) ) for user registration via "our" webform;  
  * @author Olga Korokhina
@@ -45,13 +45,13 @@ public class UserRegistrationFormPojo  implements Serializable{
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
-	private ELanguage language;
-	public ELanguage getLanguage() {
-		return language;
-	}
-	public void setLanguage(ELanguage language) {
-		this.language = language;
-	}
+//	private ELanguage language;
+//	public ELanguage getLanguage() {
+//		return language;
+//	}
+//	public void setLanguage(ELanguage language) {
+//		this.language = language;
+//	}
 	
 	/**
 	 *  local and remote addresses needed for email verification: email shall be verified from the same IP 

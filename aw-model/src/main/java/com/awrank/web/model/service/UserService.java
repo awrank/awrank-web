@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.awrank.web.model.service.user;
+package com.awrank.web.model.service;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
-import com.awrank.web.model.service.user.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 
 /**
  * @author Olga Korokhina

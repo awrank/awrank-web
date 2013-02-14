@@ -1,4 +1,4 @@
-package com.awrank.web.model.service.dictionary;
+package com.awrank.web.model.service;
 
 import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.Dictionary;
@@ -13,7 +13,15 @@ import java.util.List;
  * User: a_polyakov
  */
 public interface DictionaryService {
+    /**
+     * Returns paginated list of dictionary entries
+     */
     Page<Dictionary> findAll(Pageable pageable);
+
+    /**
+     * Creates new dictionary entry
+     */
+    Dictionary create(Dictionary dictionary) throws ObjectNotUniqueException, ObjectFieldException;
 
 //    public DictionaryResource insert(DictionaryResource wrapper) throws ObjectNotUniqueException, ObjectFieldException;
 //
