@@ -1,6 +1,6 @@
 package com.awrank.web.backend.controller.rest;
 
-//import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping(value = "/rest/dictionary")
-public class DictionaryController{// extends AbstractController {
+public class DictionaryController extends AbstractController {
     @Autowired
     private DictionaryService dictionaryService;
 
