@@ -13,5 +13,6 @@ import com.awrank.web.model.domain.UserEmailActivation;
 public interface UserEmailActivationDao extends AbstractDao<UserEmailActivation> {
 	
 	public UserEmailActivation select(String code);
+	
 
 }
