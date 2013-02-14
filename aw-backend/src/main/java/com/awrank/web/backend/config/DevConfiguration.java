@@ -11,17 +11,18 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 /**
- * Configuration for production environment.
+ * Configuration for local environment.
  *
  * @author Andrew Stoyaltsev
  */
 
 @Configuration
-@Profile("production")
-@PropertySource("classpath:com/awrank/web/backend/config/production.properties")
-public class ProductionConfiguration extends LocalhostConfiguration {
+@Profile("dev")
+@PropertySource("classpath:props/dev/app.properties")
+public class DevConfiguration {
 
-	/* inherited from localhost configuration
+	public static final String PROFILE_DEV = "dev";
+
 	@Inject
 	Environment env;
 
@@ -34,6 +35,6 @@ public class ProductionConfiguration extends LocalhostConfiguration {
 		((BasicDataSource) dataSource).setPassword(env.getProperty("jdbc.password"));
 		return dataSource;
 	}
-	*/
+
 
 }

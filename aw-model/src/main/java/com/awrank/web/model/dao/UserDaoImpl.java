@@ -1,11 +1,9 @@
-package com.awrank.web.model.dao.user;
+package com.awrank.web.model.dao;
 
 import com.awrank.web.model.dao.AbstractDaoImpl;
-import com.awrank.web.model.dao.EntryPointDao;
-import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.domain.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;

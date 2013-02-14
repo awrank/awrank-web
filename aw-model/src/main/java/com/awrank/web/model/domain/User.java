@@ -1,17 +1,12 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.dao.EntryPointDao;
-import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ESecretQuestion;
 import com.awrank.web.model.domain.constant.UserConst;
 import com.awrank.web.model.utils.json.JsonUtils;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -67,7 +62,7 @@ public class User extends AbstractObject implements UserConst {
     /**
      * язык пользователя
      */
-    private ELanguage language;
+    //private ELanguage language;
     /**
      * количество неудачных аутентификации
      */
@@ -87,7 +82,7 @@ public class User extends AbstractObject implements UserConst {
     public User() {
     	
     	this.authorizationFailsCount = 0;
-    	this.language = ELanguage.valueOf("EN");
+    	//this.language = ELanguage.valueOf("EN");
     	//this.language = ELanguage.valueOf(user_default_language_code);//doesn't work for some reason
     	
     }
@@ -178,15 +173,15 @@ public class User extends AbstractObject implements UserConst {
         this.secretAnswer = secretAnswer;
     }
 
-    @Column(name = S_LANGUAGE, nullable = false)
-    @Enumerated(EnumType.STRING)
-    public ELanguage getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(ELanguage language) {
-        this.language = language;
-    }
+//    @Column(name = S_LANGUAGE, nullable = false)
+//    @Enumerated(EnumType.STRING)
+//    public ELanguage getLanguage() {
+//        return language;
+//    }
+//
+//    public void setLanguage(ELanguage language) {
+//        this.language = language;
+//    }
 
     @Column(name = S_AUTHORIZATION_FAILS_COUNT, nullable = false)
     public Integer getAuthorizationFailsCount() {
@@ -234,7 +229,7 @@ public class User extends AbstractObject implements UserConst {
         this.birthday = JsonUtils.getDate(jsonObject, S_BIRTHDAY);
         this.secretQuestionDicCode = JsonUtils.getEnum(jsonObject, S_SECRET_QUESTION_DIC_CODE, ESecretQuestion.class);
         this.secretAnswer = JsonUtils.getString(jsonObject, S_SECRET_ANSWER);
-        this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
+        //this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
         this.authorizationFailsCount = JsonUtils.getInteger(jsonObject, S_AUTHORIZATION_FAILS_COUNT);
         this.authorizationFailsLastDate = JsonUtils.getDate(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE);
         this.banStartedDate = JsonUtils.getDate(jsonObject, S_BAN_STARTED_DATE);
@@ -252,7 +247,7 @@ public class User extends AbstractObject implements UserConst {
         JsonUtils.set(jsonObject, S_BIRTHDAY, birthday);
         JsonUtils.set(jsonObject, S_SECRET_QUESTION_DIC_CODE, secretQuestionDicCode);
         JsonUtils.set(jsonObject, S_SECRET_ANSWER, secretAnswer);
-        JsonUtils.set(jsonObject, S_LANGUAGE, language);
+        //JsonUtils.set(jsonObject, S_LANGUAGE, language);
         JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_COUNT, authorizationFailsCount);
         JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE, authorizationFailsLastDate);
         JsonUtils.set(jsonObject, S_BAN_STARTED_DATE, banStartedDate);

@@ -1,4 +1,4 @@
-package com.awrank.web.model.dao.useremailactivation;
+package com.awrank.web.model.dao;
 
 import org.springframework.stereotype.Repository;
 

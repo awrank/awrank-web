@@ -13,7 +13,7 @@ function setLanguage(language_code) {
     // replace tag contents
     $('[lngt]').each(function () {
         var o = $(this);
-        var s = l_dic[ o.attr('lngt') ];
+        var s = getMessage(o.attr('lngt'));
         o.text(s);
     });
     // set input value

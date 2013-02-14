@@ -1,18 +1,13 @@
 package com.awrank.web.backend.controller.user;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
 
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
+import com.awrank.web.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,11 +19,8 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
-import com.awrank.web.model.service.user.UserService;
-import com.awrank.web.model.service.user.UserServiceImpl;
-import com.awrank.web.model.service.user.pojos.UserRegistrationFormPojo;
-import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
-import com.awrank.web.model.utils.json.JsonUtils;
+import com.awrank.web.model.service.impl.UserServiceImpl;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 
 /**
  * @author Olga Korokhina
@@ -39,7 +31,7 @@ import com.awrank.web.model.utils.json.JsonUtils;
 public class UserController {
 	
 	@Autowired
-	UserService userService;
+    UserService userService;
 	
 	private Map getPositiveResponceMap(){
 		
