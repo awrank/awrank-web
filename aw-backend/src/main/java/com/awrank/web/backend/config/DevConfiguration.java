@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 /**
- * Configuration for local environment.
+ * Configuration for dev environment.
  *
  * @author Andrew Stoyaltsev
  */
