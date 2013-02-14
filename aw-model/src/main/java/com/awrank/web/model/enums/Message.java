@@ -1,9 +1,11 @@
-package com.awrank.web.model.constant;
+package com.awrank.web.model.enums;
 
 /**
- * User: a_polyakov
+ * Constants which define messages keys.
+ *
+ * @author Alex Polyakov
  */
-public enum EMessageConst {
+public enum Message {
     ERROR,
     ERROR_ACCESS,
     ERROR_NETWORK,
@@ -17,5 +19,5 @@ public enum EMessageConst {
     MISSING_DICTIONARY_TEXT,
 
     SECRET_QUESTION_FAVORITE_NUMBER,
-    SECRET_QUESTION_OTHER;
+    SECRET_QUESTION_OTHER
 }

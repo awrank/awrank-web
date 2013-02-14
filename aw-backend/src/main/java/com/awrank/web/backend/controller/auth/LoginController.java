@@ -123,10 +123,10 @@ public class LoginController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/socialauth")
-	public void socialAuthCallback() {
-		System.out.println("socialauth-callback");
-	}
+//	@RequestMapping(value = "/socialauth")
+//	public void socialAuthCallback() {
+//		System.out.println("socialauth-callback");
+//	}
 
 	@RequestMapping(value = "/accessDenied")
 	public String accessDenied() {

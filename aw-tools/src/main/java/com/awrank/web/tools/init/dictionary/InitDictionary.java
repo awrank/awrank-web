@@ -21,16 +21,16 @@ public class InitDictionary {
 //
 //        final List<Dictionary> list = new ArrayList<Dictionary>();
 ////        ERROR
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR.name(), "Ошибка: "));
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.ERROR.name(), "Ошибка: "));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
 //
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.OBJECT_NOT_UNIQUE.name(), "Обект должен быть уникален"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.OBJECT_NOT_UNIQUE.name(), "Обект должен быть уникален"));
 //
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык"));
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
-//        list.add(new Dictionary(null, ELanguage.RU, EMessageConst.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
+//        list.add(new Dictionary(null, ELanguage.RU, Message.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
 //
 ////        simple words
 //        list.add(new Dictionary(null, ELanguage.RU, "COUNTRY", "Страна"));

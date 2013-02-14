@@ -4,7 +4,7 @@ import com.awrank.web.model.domain.Product;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * The ProductDao is a data-centric service for the {@link Product} entity.
+ * The {@code ProductDao} is a data-centric service for the {@link Product} entity.
  *
  * It provides the basic methods to get/delete a {@link Product} instance
  * plus some methods to perform searches (extends {@link CrudRepository}).

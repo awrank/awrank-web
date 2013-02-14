@@ -6,7 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The OrderDao is a data-centric service for the {@link User} entity.
+ * The {@code UserDao} is a data-centric service for the {@link User} entity.
  *
  * It provides the basic methods to get/delete a {@link User} instance
  * plus some methods to perform searches (extends {@link PagingAndSortingRepository}).
@@ -18,6 +18,6 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
      * Finds user by email address
      */
     @Query("select u from User u where u.email = :email")
-    public User findByEmail(@Param("email") String email);
+    User findByEmail(@Param("email") String email);
 
 }

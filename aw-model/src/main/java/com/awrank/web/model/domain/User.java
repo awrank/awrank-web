@@ -1,10 +1,9 @@
 package com.awrank.web.model.domain;
 
 
-import com.awrank.web.model.domain.constant.ESecretQuestion;
+import com.awrank.web.model.enums.SecretQuestion;
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -75,7 +74,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
      */
 	@Column(name = "secret_question_dic_code", nullable = true)
 	@Enumerated(EnumType.STRING)
-    private ESecretQuestion secretQuestionDicCode;
+    private SecretQuestion secretQuestionDicCode;
     /**
      * ответ на секретный вопрос
      */
@@ -169,11 +168,11 @@ public class User extends ExtendedAbstractAuditable<Long> {
         this.birthday = birthday;
     }
    
-    public ESecretQuestion getSecretQuestionDicCode() {
+    public SecretQuestion getSecretQuestionDicCode() {
         return secretQuestionDicCode;
     }
 
-    public void setSecretQuestionDicCode(ESecretQuestion secretQuestionDicCode) {
+    public void setSecretQuestionDicCode(SecretQuestion secretQuestionDicCode) {
         this.secretQuestionDicCode = secretQuestionDicCode;
     }
    

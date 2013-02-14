@@ -17,27 +17,30 @@ import java.io.IOException;
  */
 public class EnvironmentInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-	private static Logger LOG = LoggerFactory.getLogger(EnvironmentInitializer.class);
+    private static Logger LOG = LoggerFactory.getLogger(EnvironmentInitializer.class);
 
-	public void initialize(ConfigurableApplicationContext ctx) {
-		ConfigurableEnvironment environment = ctx.getEnvironment();
-		try {
-			environment.getPropertySources()
-					.addFirst(new ResourcePropertySource("classpath:props/boot.properties"));
-			LOG.info("props/boot.properties loaded");
-		} catch (IOException e) {
-			// it's ok if the file is not there. we will just log that info.
-			LOG.info("didn't find props/boot.properties in classpath so not loading it in the AppContextInitialized");
-		}
+    public void initialize(ConfigurableApplicationContext ctx) {
+        ConfigurableEnvironment environment = ctx.getEnvironment();
+        try {
+            environment.getPropertySources().addFirst(new ResourcePropertySource("classpath:props/boot.properties"));
+            LOG.info("Project properties props/boot.properties has been successfully loaded");
+        } catch (IOException e) {
+            // it's ok if the file is not there. we will just log that info.
+            LOG.warn("Project properties props/boot.properties was not find in classpath and was not loaded. " +
+                    "Your project will be built with default profile: DEV");
+        }
 
-		String property = environment.getProperty("build.production.profile");
-		Boolean isProduction = Boolean.parseBoolean(property);
-		System.out.println("build.production.profile=" + property);
-		if (isProduction) {
-			environment.setActiveProfiles(ProdConfiguration.PROFILE_PROD);
-		} else {
-			environment.setActiveProfiles(DevConfiguration.PROFILE_DEV);
-		}
-	}
+        String property = environment.getProperty("build.production.profile");
+        Boolean isProduction = Boolean.parseBoolean(property);
+        String profileName;
+        if (isProduction) {
+            environment.setActiveProfiles(ProdConfiguration.PROFILE_PROD);
+            profileName = ProdConfiguration.PROFILE_PROD;
+        } else {
+            environment.setActiveProfiles(DevConfiguration.PROFILE_DEV);
+            profileName = ProdConfiguration.PROFILE_DEV;
+        }
+        LOG.debug("The project is building with " + profileName.toUpperCase() + " profile.");
+    }
 
 }

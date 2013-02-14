@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
- * The DiaryDao is a data-centric service for the {@link Diary} entity.
+ * The {@code DiaryDao} is a data-centric service for the {@link Diary} entity.
  * <p/>
  * It provides the basic methods to get/delete a {@link Diary} instance
  * plus some methods to perform searches (extends {@link PagingAndSortingRepository}).

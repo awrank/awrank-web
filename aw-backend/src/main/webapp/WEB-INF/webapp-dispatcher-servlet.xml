@@ -65,12 +65,18 @@
     <bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
         <property name="applicationProperties">
             <props>
-                <prop key="www.google.com.consumer_key">${google.clientId}</prop>
-                <prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>
-                <prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>
-                <prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>
-                <prop key="www.google.com.consumer_key">${google.clientId}</prop>
-                <prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>
+                <!-- todo: properties are not resolvable. fix it -->
+                <!--<prop key="www.google.com.consumer_key">${google.clientId}</prop>-->
+                <!--<prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>-->
+                <!--<prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>-->
+                <!--<prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>-->
+
+                <prop key="www.google.com.consumer_key">
+                    567712796156-lh9rc61kk5qsllng54sk314sui0tls09.apps.googleusercontent.com
+                </prop>
+                <prop key="www.google.com.consumer_secret">IML_o6lOCHm6ysnbQi_VQsL9</prop>
+                <prop key="graph.facebook.com.consumer_key">124759354366792</prop>
+                <prop key="graph.facebook.com.consumer_secret">a19dff99272c3eb06501619ea4e775a9</prop>
             </props>
 
         </property>

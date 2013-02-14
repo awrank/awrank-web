@@ -1,6 +1,6 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.ERole;
+import com.awrank.web.model.enums.Role;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class UserRole extends AbstractPersistable<Long>{
 
   
-    private ERole role;
+    private Role role;
 
   
     public UserRole() {
@@ -21,11 +21,11 @@ public class UserRole extends AbstractPersistable<Long>{
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    public ERole getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(ERole role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

@@ -17,6 +17,7 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <!-- todo: removed later and replace all beans to JavaConfig files -->
     <!--<context:property-placeholder location="/WEB-INF/properties/jdbc.properties"/>-->
 
     <!-- moved out to Configuration classes
