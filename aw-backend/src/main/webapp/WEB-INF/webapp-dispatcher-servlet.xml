@@ -67,7 +67,10 @@
             <props>
                 <prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>
                 <prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>
+                <prop key="www.google.com.consumer_key">${google.clientId}</prop>
+                <prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>
             </props>
+
         </property>
     </bean>
 
