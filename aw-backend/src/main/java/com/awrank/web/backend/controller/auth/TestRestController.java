@@ -58,7 +58,7 @@ public class TestRestController {
 	@ResponseBody
 	User getUser(@PathVariable String id) {
 		User user = new User();
-		user.setId(Long.valueOf(id));
+		//user.setId(Long.valueOf(id));
 		user.setFirstName("Andrew_" + id);
 		user.setLastName("Stoyaltsev_" + id);
 		user.setEmail("andrew.v.stoyaltsev@gmail.com");

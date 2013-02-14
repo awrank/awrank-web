@@ -8,6 +8,7 @@ import javax.persistence.*;
 /**
  * The <b>Dictionary</b> class represents an dictionary entry.
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "dictionary", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"language", "code"})

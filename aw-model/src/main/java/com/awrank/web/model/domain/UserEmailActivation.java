@@ -1,45 +1,48 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.domain.constant.UserEmailActivationConst;
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
 import com.awrank.web.model.utils.json.JsonUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.codehaus.jackson.node.ObjectNode;
 
 import javax.persistence.*;
+
 import java.util.Date;
 
 /**
  * подтверждение email пользователя
+ * 
+ * refactored by Olga
  */
+@SuppressWarnings("serial")
 @Entity
-@Table(name = UserEmailActivationConst.TABLE_NAME)
-public class UserEmailActivation extends AbstractUserItem implements UserEmailActivationConst {
-
-    /**
-     * код для подтверждения
-     */
+@Table(name = "user_email_activation")
+//@JsonIgnoreProperties({"createdDate", "lastModifiedDate", "createdBy", "lastModifiedBy"})
+public class UserEmailActivation extends AbstractUserRelatedEntityAuditable<Long> {
+   
+	@Column(name = "code", nullable = false)
     private String code;
-    /**
-     * ip адресс с которого начата процедура смены или добавления email
-     */
+   
+    @Column(name = "ip_address", nullable = false)
     private String ipAddress;
-    /**
-     * новый email
-     */
+
+    @Column(name = "email", nullable = false)
     private String email;
-    /**
-     * дата подтверждения email
-     */
+    
+    @Column(name = "email_verified_at", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date emailVerifiedDate;
-
-    {
-        objectType = EObjectType.USER_EMAIL_ACTIVATION;
-    }
-
+    
+    @Column(name = "ended_at", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endedDate; 
+   
     public UserEmailActivation() {
     }
 
-    @Column(name = S_CODE, nullable = false)
+   
     public String getCode() {
         return code;
     }
@@ -48,7 +51,7 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         this.code = code;
     }
 
-    @Column(name = S_IP_ADDRESS, nullable = false)
+   
     public String getIpAddress() {
         return ipAddress;
     }
@@ -56,8 +59,7 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
-
-    @Column(name = S_EMAIL, nullable = false)
+    
     public String getEmail() {
         return email;
     }
@@ -66,11 +68,8 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         this.email = email;
     }
 
-    @Column(name = S_EMAIL_VERIFIED_DATE, nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
-    public Date getEmailVerifiedDate() {
+  
+      public Date getEmailVerifiedDate() {
         return emailVerifiedDate;
     }
 
@@ -78,23 +77,12 @@ public class UserEmailActivation extends AbstractUserItem implements UserEmailAc
         this.emailVerifiedDate = emailVerifiedDate;
     }
 
-    // --------------------------- JSON ------------------------------------------
-
-    public UserEmailActivation(final ObjectNode jsonObject) {
-        super(jsonObject);
-        this.code = JsonUtils.getString(jsonObject, S_CODE);
-        this.ipAddress = JsonUtils.getString(jsonObject, S_IP_ADDRESS);
-        this.email = JsonUtils.getString(jsonObject, S_EMAIL);
-        this.emailVerifiedDate = JsonUtils.getDate(jsonObject, S_EMAIL_VERIFIED_DATE);
+    public Date getEndedDate() {
+      return endedDate;
     }
 
-    @Override
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_CODE, code);
-        JsonUtils.set(jsonObject, S_IP_ADDRESS, ipAddress);
-        JsonUtils.set(jsonObject, S_EMAIL, email);
-        JsonUtils.set(jsonObject, S_EMAIL_VERIFIED_DATE, emailVerifiedDate);
-        return jsonObject;
-    }
+	  public void setEndedDate(Date endedDate) {
+	      this.endedDate = endedDate;
+	  }
+   
 }

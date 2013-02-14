@@ -32,6 +32,7 @@ public abstract class AbstractUserItem extends AbstractObject implements Abstrac
         this.user = user;
     }
 
+    /*
     // --------------------------- JSON ------------------------------------------
 
     public AbstractUserItem(final ObjectNode jsonObject) {
@@ -44,4 +45,5 @@ public abstract class AbstractUserItem extends AbstractObject implements Abstrac
         JsonUtils.set(jsonObject, S_USER, user);
         return jsonObject;
     }
+    */
 }
