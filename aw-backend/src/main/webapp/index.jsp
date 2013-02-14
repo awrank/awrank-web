@@ -21,7 +21,7 @@
 </head>
 <body onload="fIndexOnload();">
 
-<h1>Welcome to the Awrank web application!</h1>
+<h1>Welcome to the Awrank web application! <a href="index.html">[index.html]</a></h1>
 
 <%-- twitter bootstrap color--%>
 <h3>EMAIL</h3>

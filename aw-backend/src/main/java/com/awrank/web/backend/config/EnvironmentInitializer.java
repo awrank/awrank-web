@@ -10,7 +10,10 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import java.io.IOException;
 
 /**
+ * Class provides loading of boot properties and selection of active profile based on
+ * loaded properties.
  *
+ * @author Andrew Stoyaltsev
  */
 public class EnvironmentInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -35,7 +38,6 @@ public class EnvironmentInitializer implements ApplicationContextInitializer<Con
 		} else {
 			environment.setActiveProfiles(DevConfiguration.PROFILE_DEV);
 		}
-		//ctx.refresh();
 	}
 
 }

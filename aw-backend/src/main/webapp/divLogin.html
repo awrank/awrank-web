@@ -31,10 +31,10 @@
                 <fieldset>
                     <legend lngt="LOGIN_TITLE">Log in to your account</legend>
                     <label lngt="WITH_SOCIAL_NETWORK">with social network:</label>
-                    <button type="button" class="btn btn-large btn-primary" lngt="LOGIN_IN_WITH_GOOGLE">Log in
+                    <button id="loginGoogleButton" type="button" class="btn btn-large btn-primary" lngt="LOGIN_IN_WITH_GOOGLE">Log in
                         with Google
                     </button>
-                    <button type="button" class="btn btn-large btn-primary pull-right"
+                    <button id="loginFacebookButton" type="button" class="btn btn-large btn-primary pull-right"
                             lngt="LOGIN_IN_WITH_FACEBOOK">Log in with Facebook
                     </button>
                     <br>
@@ -68,5 +68,11 @@
 <script type="text/javascript" language="JavaScript">
     function fLoginSubmit() {
         $('#divLogin').addClass('hidden');
+        $("loginGoogleButton").click(function() {
+            alert("Google");
+        });
+        $("loginFacebookButton").click(function() {
+            alert("Facebook");
+        });
     }
 </script>
