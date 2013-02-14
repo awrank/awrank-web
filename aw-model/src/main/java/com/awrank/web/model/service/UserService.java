@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserEmailActivation;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
@@ -73,4 +74,11 @@ public interface UserService {
 	 * @throws UserNotCreatedException 
 	 */
 	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException; 
+	
+	/**
+	 *  Here we find in user_email_activation record by given code
+	 * @param code
+	 * @return
+	 */
+	public UserEmailActivation findEmailVerificationByCode(String code); 
 }

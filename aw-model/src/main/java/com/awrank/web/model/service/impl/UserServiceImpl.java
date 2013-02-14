@@ -235,5 +235,19 @@ public class UserServiceImpl implements UserService {
 		
 		userEmailActivationDao.persist(userEmailActivation);
 		
+	}
+
+	@Override
+	public UserEmailActivation findEmailVerificationByCode(String code) {
+		
+		return userEmailActivationDao.select(code);
+		
+	}	
+	
+	@Override
+	public EntryPoint findEntryPointForUser(String code) {
+		
+		return entryPointDao.select(code);
+		
 	}	
 }
