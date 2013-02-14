@@ -32,12 +32,12 @@ public class PromoCode extends AbstractPersistable<Long> {
 //  @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
     //private TariffSettings tariffSettings;
     
-    /**
-     * order
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "user_order_id", nullable = true)
-    private UserOrder userOrder;
+//    /**
+//     * order
+//     */
+//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+//    @JoinColumn(name = "user_order_id", nullable = true)
+//    private UserOrder userOrder;
 
     public PromoCode() {
     }
@@ -65,12 +65,12 @@ public class PromoCode extends AbstractPersistable<Long> {
 //    public void setTariffSettings(TariffSettings tariffSettings) {
 //        this.tariffSettings = tariffSettings;
 //    }
-    
-    public UserOrder getUserOrder() {
-        return userOrder;
-    }
-
-    public void setUserOrder(UserOrder userOrder) {
-        this.userOrder = userOrder;
-    }
+//
+//    public UserOrder getUserOrder() {
+//        return userOrder;
+//    }
+//
+//    public void setUserOrder(UserOrder userOrder) {
+//        this.userOrder = userOrder;
+//    }
 }
