@@ -247,7 +247,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public EntryPoint findEntryPointForUser(String code) {
 		
-		return entryPointDao.select(code);
+		return null; //entryPointDao.select(code);
 		
 	}	
 }

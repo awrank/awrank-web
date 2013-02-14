@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
@@ -80,5 +81,7 @@ public interface UserService {
 	 * @param code
 	 * @return
 	 */
-	public UserEmailActivation findEmailVerificationByCode(String code); 
+	public UserEmailActivation findEmailVerificationByCode(String code);
+
+	public EntryPoint findEntryPointForUser(String code); 
 }

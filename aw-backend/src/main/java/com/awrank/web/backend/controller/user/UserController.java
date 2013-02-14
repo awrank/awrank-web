@@ -105,6 +105,7 @@ public class UserController {
 	
 		UserEmailActivation record = userService.findEmailVerificationByCode(key);
 		
+		/*
 		if(record == null) return getNegativeResponceMap("key not found");
 		
 		User user = record.getUser();
@@ -120,7 +121,7 @@ public class UserController {
 		if( new_key.compareToIgnoreCase(key) == 0) return "key " +key+ " verified ok";
 		else return "key " +key+ " not verified";
 		*/
-		return "not implemented in UserController well";
+		return getNegativeResponceMap("not implemented in UserController well");
 		
 		
 	}
