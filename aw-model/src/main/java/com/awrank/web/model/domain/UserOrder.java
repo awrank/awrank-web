@@ -1,13 +1,5 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.domain.constant.UserOrderConst;
-import com.awrank.web.model.utils.json.JsonUtils;
-import org.codehaus.jackson.node.ObjectNode;
-
-import javax.persistence.*;
-import java.util.Date;
-
 /**
  * заказ
  */

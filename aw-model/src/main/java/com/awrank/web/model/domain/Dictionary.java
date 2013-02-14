@@ -1,8 +1,7 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.ELanguage;
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -13,14 +12,14 @@ import javax.persistence.*;
 @Table(name = "dictionary", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"language", "code"})
 })
-@JsonIgnoreProperties(value = {"id", "createdDate", "lastModifiedDate", "createdBy", "lastModifiedBy"})
+@JsonIgnoreProperties({"new", "createdDate", "lastModifiedDate", "createdBy", "lastModifiedBy"})
 public class Dictionary extends ExtendedAbstractAuditable<Long> {
     /**
      * Language
      */
     @Column(name = "language", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ELanguage language;
+    private Language language;
 
     /**
      * Message code in dictionary
@@ -39,11 +38,11 @@ public class Dictionary extends ExtendedAbstractAuditable<Long> {
     }
 
 
-    public ELanguage getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(ELanguage language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 

@@ -1,6 +1,7 @@
 package com.awrank.web.model.dao;
 
 import com.awrank.web.model.domain.Dictionary;
+import com.awrank.web.model.domain.Language;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,5 +17,5 @@ import org.springframework.data.repository.query.Param;
  */
 public interface DictionaryDao extends PagingAndSortingRepository<Dictionary, Long> {
     @Query("select d from Dictionary d where d.code = :code and d.language = :language")
-    public Dictionary findByCodeAndLanguage(@Param("code") String code, @Param("language") String language);
+    public Dictionary findByCodeAndLanguage(@Param("code") String code, @Param("language") Language language);
 }

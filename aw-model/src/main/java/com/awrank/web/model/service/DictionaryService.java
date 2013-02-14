@@ -1,16 +1,13 @@
 package com.awrank.web.model.service;
 
-import com.awrank.web.model.dao.dictionary.wrapper.DictionaryResource;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.exception.ObjectFieldException;
 import com.awrank.web.model.exception.ObjectNotUniqueException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 /**
- * User: a_polyakov
+ * Dictionary Service
  */
 public interface DictionaryService {
     /**
@@ -23,9 +20,14 @@ public interface DictionaryService {
      */
     Dictionary create(Dictionary dictionary) throws ObjectNotUniqueException, ObjectFieldException;
 
-//    public DictionaryResource insert(DictionaryResource wrapper) throws ObjectNotUniqueException, ObjectFieldException;
-//
-//    public void update(DictionaryResource wrapper) throws ObjectFieldException, ObjectNotUniqueException;
-//
-//    public void delete(DictionaryResource wrapper) throws ObjectFieldException;
+    /**
+     * Updates dictionary entry
+     */
+    Dictionary update(Dictionary dictionary) throws ObjectFieldException;
+
+    /**
+     * Deletes dictionary entry
+     */
+    void delete(Long id);
+
 }

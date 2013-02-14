@@ -14,6 +14,9 @@ public class ObjectFieldException extends AwRankModelException {
     private Long objectId;
     private String fieldName;
 
+    public ObjectFieldException() {
+    }
+
     public ObjectFieldException(EMessageConst message, EObjectType objectType, Integer objectIndex, Long objectId, String fieldName) {
         super(message.name());
         this.objectType = objectType;

@@ -1,20 +1,5 @@
 package com.awrank.web.tools.init.user;
 
-import com.awrank.web.model.constant.DateConst;
-import com.awrank.web.model.dao.EntryPointDao;
-import com.awrank.web.model.dao.user.UserDaoImpl;
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.User;
-import com.awrank.web.model.domain.constant.EAuthenticationMethod;
-import com.awrank.web.model.domain.constant.ELanguage;
-import com.awrank.web.model.utils.user.CurrentUserUtils;
-import com.awrank.web.model.utils.user.PasswordUtils;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.Date;
-
 /**
  * User: a_polyakov
  */
