@@ -35,16 +35,16 @@
 <p>
     <a href="#" onclick="fTestJson()">Test json <> Object mapping </a> <br/>
 
-    <a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/>
+    <!--a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/ -->
 
 <p>
 <h5>TestRestController</h5>
 <ul>
     <li>
-        <a href="api/rest/search?query=1">api/rest/search?query=1</a><br/>
+        <a href="rest/search?query=1">rest/search?query=1</a><br/>
     </li>
     <li>
-        <form action="api/rest/postjson" method="POST" accept="application/json" enctype="application/json">
+        <form action="rest/postjson" method="POST" accept="application/json" enctype="application/json">
             Fill user data: <br/>
             <label for="firstname">First name</label>
             <input id="firstname" name="firstName" type="text"/><br/>
@@ -57,7 +57,7 @@
         </form>
     </li>
     <li>
-        <a href="api/rest/user/2">api/rest/user/2</a><br/>
+        <a href="rest/user/2">rest/user/2</a><br/>
     </li>
 </ul>
 

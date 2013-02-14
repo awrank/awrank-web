@@ -1,18 +1,13 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
-import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
-import com.awrank.web.model.utils.json.JsonUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import org.codehaus.jackson.node.ObjectNode;
-
 import javax.persistence.*;
-
 import java.util.Date;
 
 /**
- * подтверждение email пользователя
+ * verification of email entered by user during registration
  * 
  * refactored by Olga
  */
@@ -41,7 +36,6 @@ public class UserEmailActivation extends AbstractUserRelatedEntityAuditable<Long
    
     public UserEmailActivation() {
     }
-
    
     public String getCode() {
         return code;

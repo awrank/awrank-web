@@ -3,15 +3,20 @@ package com.awrank.web.model.domain;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 
 /**
  * The <b>EntryPoint</b> class represents an entry point.
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "entry_point")
-public class EntryPoint extends AbstractPersistable<Long> {
+public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRelatedEntityAuditable<Long> {
     /**
      * User identifier for sign in (could be email or identifier in social network)
      */
@@ -38,13 +43,6 @@ public class EntryPoint extends AbstractPersistable<Long> {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private EntryPointType type;
-
-    /**
-     * User that entry history belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
 
     public EntryPoint() {
@@ -82,7 +80,19 @@ public class EntryPoint extends AbstractPersistable<Long> {
     public void setType(EntryPointType type) {
         this.type = type;
     }
-
+    
+    //----------- getting 
+    //org.hibernate.QueryException: could not resolve property: user_id of: com.awrank.web.model.domain.EntryPoint [select e from com.awrank.web.model.domain.EntryPoint e where e.user_id = :user_id]
+    //---without this, query can't see parent classes fields? o_O
+   
+    
+    /**
+     * User associated with record.
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+	
     public User getUser() {
         return user;
     }
@@ -90,4 +100,5 @@ public class EntryPoint extends AbstractPersistable<Long> {
     public void setUser(User user) {
         this.user = user;
     }
+
 }
