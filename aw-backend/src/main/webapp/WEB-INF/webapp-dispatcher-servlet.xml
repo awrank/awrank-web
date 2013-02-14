@@ -65,6 +65,8 @@
     <bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
         <property name="applicationProperties">
             <props>
+                <prop key="www.google.com.consumer_key">${google.clientId}</prop>
+                <prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>
                 <prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>
                 <prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>
             </props>
@@ -81,7 +83,7 @@
     </bean>
 
     <bean id="socialAuthWebController" class="org.brickred.socialauth.spring.controller.SocialAuthWebController">
-        <constructor-arg value="http://awrank.com:8070/aw"/>
+        <constructor-arg value="http://awrank.com:8080/awrank"/>
         <constructor-arg value="/authSuccess"/>
         <constructor-arg value="/accessDenied"/>
     </bean>
