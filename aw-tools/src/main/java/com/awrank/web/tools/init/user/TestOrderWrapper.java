@@ -1,12 +1,8 @@
 package com.awrank.web.tools.init.user;
 
-import com.awrank.web.model.domain.UserOrder;
-import com.awrank.web.model.utils.select.SelectUtils;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
 
 /**
  *

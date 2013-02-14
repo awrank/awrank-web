@@ -30,7 +30,7 @@ public class PromoCode extends AbstractObject implements PromoCodeConst {
     /**
      * заказ
      */
-    private UserOrder userOrder;
+    //private UserOrder userOrder;
 
     {
         objectType = EObjectType.PROMO_CODE;
