@@ -1,93 +1,118 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
+
 import com.awrank.web.model.domain.constant.ESecretQuestion;
-import com.awrank.web.model.domain.constant.UserConst;
-import com.awrank.web.model.utils.json.JsonUtils;
-
+import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.node.ObjectNode;
-
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * пользователь
+ * User, refactored by Olga following Dictionary way 
  */
 @Entity
-@JsonAutoDetect
-@Table(name = UserConst.TABLE_NAME)
-public class User extends AbstractObject implements UserConst {
+@Table(name = "users")
+//@JsonIgnoreProperties({"createdDate", "lastModifiedDate", "createdBy", "lastModifiedBy"})
+public class User extends ExtendedAbstractAuditable<Long> {
 	/*
 	@Value("#{appProps[user_default_language_code]}")
 	private String user_default_language_code;
 	*/
-    /**
+	/*
+	@Column(name = "id", nullable = false, unique = true)
+    private Long id;
+	
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+*/
+	/**
      * уникальный код, который будет использоваться для запросов к API
      */
+	@Column(name = "api_key", nullable = false, unique = true)
     private String apiKey;
     /**
      * пользователь, пригласивший в систему
      */
+	//@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	//@JoinColumn(name = "ref_user_id", nullable = true)
+	@Column(name = "ref_user_id", nullable = true)
     private User refUser;
     /**
      * email пользователя
      */
-    private String email = "";
+	@Column(name = "email", nullable = false, unique = true)
+    private String email;
     /**
      * скайп
      */
-    private String skype = "";
+	@Column(name = "skype", nullable = true)
+    private String skype;
     /**
      * имя
      */
-    private String firstName = "";
+	@Column(name = "first_name", nullable = true)
+    private String firstName;
     /**
      * фамилия
      */
-    private String lastName = "";
+	@Column(name = "last_name", nullable = true)
+    private String lastName;
     /**
      * день рождения
      */
+	@Column(name = "birthday", nullable = true)
+	@Temporal(TemporalType.DATE)
     private Date birthday;
     /**
      * code in dictionary for secret question
      * код текст из словаря для секретного вопроса
      */
+	@Column(name = "secret_question_dic_code", nullable = true)
+	@Enumerated(EnumType.STRING)
     private ESecretQuestion secretQuestionDicCode;
     /**
      * ответ на секретный вопрос
      */
+	@Column(name = "secret_answer", nullable = true)
     private String secretAnswer;
-    /**
-     * язык пользователя
-     */
-    //private ELanguage language;
+    
     /**
      * количество неудачных аутентификации
      */
+	@Column(name = "autorization_fails_count", nullable = false)
     private Integer authorizationFailsCount;
     /**
      * последняя неудачная попытка
      */
+	@Column(name = "autorization_fails_last", nullable = true)
     private Date authorizationFailsLastDate;
     /**
      * дата блокирокви
      */
+	@Column(name = "ban_started_at", nullable = true)
     private Date banStartedDate;
-    {
-        objectType = EObjectType.USER;
-    }
-
+	
+	/**
+	 *  language code in "EN", "RU" format
+	 */
+	@Column(name = "language_code", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Language language;
+   
     public User() {
     	
     	this.authorizationFailsCount = 0;
-    	//this.language = ELanguage.valueOf("EN");
-    	//this.language = ELanguage.valueOf(user_default_language_code);//doesn't work for some reason
+    	this.language = Language.valueOf("EN");
+    	//this.language = Language.valueOf(user_default_language_code);//doesn't work for some reason
     	
     }
-
-    @Column(name = S_API_KEY, nullable = false, unique = true)
+  
     public String getApiKey() {
         return apiKey;
     }
@@ -95,9 +120,7 @@ public class User extends AbstractObject implements UserConst {
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = S_REF_USER, nullable = true)
+  
     public User getRefUser() {
         return refUser;
     }
@@ -105,8 +128,7 @@ public class User extends AbstractObject implements UserConst {
     public void setRefUser(User refUser) {
         this.refUser = refUser;
     }
-
-    @Column(name = S_EMAIL, nullable = false, unique = true)
+   
     public String getEmail() {
         return email;
     }
@@ -114,8 +136,7 @@ public class User extends AbstractObject implements UserConst {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Column(name = S_SKYPE, nullable = true)
+   
     public String getSkype() {
         return skype;
     }
@@ -123,8 +144,7 @@ public class User extends AbstractObject implements UserConst {
     public void setSkype(String skype) {
         this.skype = skype;
     }
-
-    @Column(name = S_FIRST_NAME, nullable = true)
+   
     public String getFirstName() {
         return firstName;
     }
@@ -132,8 +152,7 @@ public class User extends AbstractObject implements UserConst {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
-    @Column(name = S_LAST_NAME, nullable = true)
+   
     public String getLastName() {
         return lastName;
     }
@@ -142,10 +161,6 @@ public class User extends AbstractObject implements UserConst {
         this.lastName = lastName;
     }
 
-    @Column(name = S_BIRTHDAY, nullable = true)
-    @Temporal(TemporalType.DATE)
-    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getBirthday() {
         return birthday;
     }
@@ -153,9 +168,7 @@ public class User extends AbstractObject implements UserConst {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-
-    @Column(name = S_SECRET_QUESTION_DIC_CODE, nullable = true)
-    @Enumerated(EnumType.STRING)
+   
     public ESecretQuestion getSecretQuestionDicCode() {
         return secretQuestionDicCode;
     }
@@ -163,8 +176,7 @@ public class User extends AbstractObject implements UserConst {
     public void setSecretQuestionDicCode(ESecretQuestion secretQuestionDicCode) {
         this.secretQuestionDicCode = secretQuestionDicCode;
     }
-
-    @Column(name = S_SECRET_ANSWER, nullable = true)
+   
     public String getSecretAnswer() {
         return secretAnswer;
     }
@@ -172,18 +184,15 @@ public class User extends AbstractObject implements UserConst {
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
     }
-
-//    @Column(name = S_LANGUAGE, nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    public ELanguage getLanguage() {
+   
+//    public Language getLanguage() {
 //        return language;
 //    }
 //
-//    public void setLanguage(ELanguage language) {
+//    public void setLanguage(Language language) {
 //        this.language = language;
 //    }
-
-    @Column(name = S_AUTHORIZATION_FAILS_COUNT, nullable = false)
+//   
     public Integer getAuthorizationFailsCount() {
         return authorizationFailsCount;
     }
@@ -191,11 +200,8 @@ public class User extends AbstractObject implements UserConst {
     public void setAuthorizationFailsCount(Integer authorizationFailsCount) {
         this.authorizationFailsCount = authorizationFailsCount;
     }
-
-    @Column(name = S_AUTHORIZATION_FAILS_LAST_DATE, nullable = true)
+    
     @Temporal(TemporalType.TIMESTAMP)
-    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getAuthorizationFailsLastDate() {
         return authorizationFailsLastDate;
     }
@@ -203,54 +209,13 @@ public class User extends AbstractObject implements UserConst {
     public void setAuthorizationFailsLastDate(Date authorizationFailsLastDate) {
         this.authorizationFailsLastDate = authorizationFailsLastDate;
     }
-
-    @Column(name = S_BAN_STARTED_DATE, nullable = true)
+   
     @Temporal(TemporalType.TIMESTAMP)
-    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
     public Date getBanStartedDate() {
         return banStartedDate;
     }
 
     public void setBanStartedDate(Date banStartedDate) {
         this.banStartedDate = banStartedDate;
-    }
-
-    // --------------------------- JSON ------------------------------------------
-   
-    public User(final ObjectNode jsonObject) {
-        super(jsonObject);
-        this.apiKey = JsonUtils.getString(jsonObject, S_API_KEY);
-        // refUser
-        this.email = JsonUtils.getString(jsonObject, S_EMAIL);
-        this.skype = JsonUtils.getString(jsonObject, S_SKYPE);
-        this.firstName = JsonUtils.getString(jsonObject, S_FIRST_NAME);
-        this.lastName = JsonUtils.getString(jsonObject, S_LAST_NAME);
-        this.birthday = JsonUtils.getDate(jsonObject, S_BIRTHDAY);
-        this.secretQuestionDicCode = JsonUtils.getEnum(jsonObject, S_SECRET_QUESTION_DIC_CODE, ESecretQuestion.class);
-        this.secretAnswer = JsonUtils.getString(jsonObject, S_SECRET_ANSWER);
-        //this.language = JsonUtils.getEnum(jsonObject, S_LANGUAGE, ELanguage.class);
-        this.authorizationFailsCount = JsonUtils.getInteger(jsonObject, S_AUTHORIZATION_FAILS_COUNT);
-        this.authorizationFailsLastDate = JsonUtils.getDate(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE);
-        this.banStartedDate = JsonUtils.getDate(jsonObject, S_BAN_STARTED_DATE);
-    }
-
-    @Override
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_API_KEY, apiKey);
-        JsonUtils.set(jsonObject, S_REF_USER, refUser);
-        JsonUtils.set(jsonObject, S_EMAIL, email);
-        JsonUtils.set(jsonObject, S_SKYPE, skype);
-        JsonUtils.set(jsonObject, S_FIRST_NAME, firstName);
-        JsonUtils.set(jsonObject, S_LAST_NAME, lastName);
-        JsonUtils.set(jsonObject, S_BIRTHDAY, birthday);
-        JsonUtils.set(jsonObject, S_SECRET_QUESTION_DIC_CODE, secretQuestionDicCode);
-        JsonUtils.set(jsonObject, S_SECRET_ANSWER, secretAnswer);
-        //JsonUtils.set(jsonObject, S_LANGUAGE, language);
-        JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_COUNT, authorizationFailsCount);
-        JsonUtils.set(jsonObject, S_AUTHORIZATION_FAILS_LAST_DATE, authorizationFailsLastDate);
-        JsonUtils.set(jsonObject, S_BAN_STARTED_DATE, banStartedDate);
-        return jsonObject;
     }
 }

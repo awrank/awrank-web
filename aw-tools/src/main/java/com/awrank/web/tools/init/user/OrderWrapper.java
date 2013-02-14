@@ -2,7 +2,7 @@ package com.awrank.web.tools.init.user;
 
 import com.awrank.web.model.domain.UserOrder;
 import com.awrank.web.model.utils.select.annotation.SelectField;
-import com.awrank.web.model.utils.select.annotation.SelectFrom;
+
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  *
  */
+//TODO: Refactor this class out!!!!
 public class OrderWrapper {
 //
 //    private final Date payedDate;

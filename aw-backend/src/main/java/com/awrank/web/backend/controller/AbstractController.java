@@ -3,7 +3,6 @@ package com.awrank.web.backend.controller;
 import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.AwRankModelException;
-import com.awrank.web.model.utils.json.JsonUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
@@ -19,6 +18,7 @@ import java.io.Writer;
 /**
  * User: a_polyakov
  */
+// DOTO: refactor this out!
 public abstract class AbstractController {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -33,12 +33,13 @@ public abstract class AbstractController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         Writer writer = response.getWriter();
-        writer.write(jsonObject.toString());
+       // writer.write(jsonObject.toString());
         writer.close();
     }
 
     @ExceptionHandler(Exception.class)
     public void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	/*
         final ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
         if (e instanceof UnauthorizedException) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -64,6 +65,8 @@ public abstract class AbstractController {
             JsonUtils.set(jsonObject, "stackTrace", writer.toString());
             jsonObject.put("error", errorJson);
         }
-        writeJsonObject(response, jsonObject);
+        */
+        //writeJsonObject(response, jsonObject);
+    	writeJsonObject(response, null);
     }
 }

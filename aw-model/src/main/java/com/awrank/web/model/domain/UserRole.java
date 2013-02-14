@@ -1,10 +1,7 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
 import com.awrank.web.model.domain.constant.ERole;
-import com.awrank.web.model.domain.constant.UserRoleConst;
-import com.awrank.web.model.utils.json.JsonUtils;
-import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 
@@ -12,22 +9,17 @@ import javax.persistence.*;
  * права пользователя
  */
 @Entity
-@Table(name = UserRoleConst.TABLE_NAME)
-public class UserRole extends AbstractUserItem implements UserRoleConst {
+@Table(name = "user_roles")
+public class UserRole extends AbstractPersistable<Long>{
 
-    /**
-     * доступ
-     */
+  
     private ERole role;
 
-    {
-        objectType = EObjectType.USER_ROLE;
-    }
-
+  
     public UserRole() {
     }
 
-    @Column(name = S_ROLE, nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     public ERole getRole() {
         return role;
@@ -38,17 +30,5 @@ public class UserRole extends AbstractUserItem implements UserRoleConst {
     }
 
 
-    // --------------------------- JSON ------------------------------------------
-
-    public UserRole(final ObjectNode jsonObject) {
-        super(jsonObject);
-        this.role = JsonUtils.getEnum(jsonObject, S_ROLE, ERole.class);
-    }
-
-    @Override
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_ROLE, role);
-        return jsonObject;
-    }
+   
 }

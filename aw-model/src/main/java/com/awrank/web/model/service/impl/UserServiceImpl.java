@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 		
 		try{ //can be thrown javax.persistence.PersistenceException etc.
 			
-			userDao.persist(user);
+			userDao.save(user);
 		
 		}catch(Exception e){
 			
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void delete(User user) throws UserNotDeletedException{
 		
-		userDao.remove(user);
+		userDao.delete(user);
 
 	}
 
@@ -228,12 +228,12 @@ public class UserServiceImpl implements UserService {
 		Date today = new Date(creationDate.getMillis());
 		Date endedDate = new Date(mail_verificationcode_lifetime_duration + creationDate.getMillis());
 		
-		userEmailActivation.setCreatedDate(today);
+		//userEmailActivation.setCreatedDate(today);
 		userEmailActivation.setEndedDate(endedDate);
 		
 		userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
 		
-		userEmailActivationDao.persist(userEmailActivation);
+		userEmailActivationDao.save(userEmailActivation);
 		
 	}
 

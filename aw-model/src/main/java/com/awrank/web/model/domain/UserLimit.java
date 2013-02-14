@@ -1,38 +1,29 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.constant.EObjectType;
-import com.awrank.web.model.domain.constant.UserLimitConst;
-import com.awrank.web.model.utils.json.JsonUtils;
-import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * активность пользователей за день
- * расчетное допустимое количество запросов в день
+ * daily user activity: available requests per day
+ * 
  */
+@SuppressWarnings("serial")
 @Entity
-@Table(name = UserLimitConst.TABLE_NAME)
-public class UserLimit extends AbstractUserItem implements UserLimitConst {
+@Table(name = "user_limit")
+public class UserLimit extends AbstractPersistable<Long>{
 
-    /**
-     * доступное количество запросов
-     */
+	@Column(name = "available_requests", nullable = false)
     private Integer availableRequests;
-    /**
-     * день на который произведен расчет доступного количества
-     */
+
+    @Column(name = "started_at", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date startedDate;
-
-    {
-        objectType = EObjectType.USER_LIMIT;
-    }
-
+   
     public UserLimit() {
     }
-
-    @Column(name = S_AVAILABLE_REQUESTS, nullable = false)
+   
     public Integer getAvailableRequests() {
         return availableRequests;
     }
@@ -40,11 +31,7 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
     public void setAvailableRequests(Integer availableRequests) {
         this.availableRequests = availableRequests;
     }
-
-    @Column(name = S_STARTED_DATE, nullable = false)
-    @Temporal(TemporalType.DATE)
-    //@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-//@Type(type="org.jadira.usertype.dateandtime.jsr310.PersistentLocalDateTime")
+   
     public Date getStartedDate() {
         return startedDate;
     }
@@ -53,19 +40,4 @@ public class UserLimit extends AbstractUserItem implements UserLimitConst {
         this.startedDate = startedDate;
     }
 
-    // --------------------------- JSON ------------------------------------------
-
-    public UserLimit(final ObjectNode jsonObject) {
-        super(jsonObject);
-        this.availableRequests = JsonUtils.getInteger(jsonObject, S_AVAILABLE_REQUESTS);
-        this.startedDate = JsonUtils.getDate(jsonObject, S_STARTED_DATE);
-    }
-
-    @Override
-    public ObjectNode toJsonObject() {
-        final ObjectNode jsonObject = super.toJsonObject();
-        JsonUtils.set(jsonObject, S_AVAILABLE_REQUESTS, availableRequests);
-        JsonUtils.set(jsonObject, S_STARTED_DATE, startedDate);
-        return jsonObject;
-    }
 }

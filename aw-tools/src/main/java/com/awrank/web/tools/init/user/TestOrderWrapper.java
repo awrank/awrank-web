@@ -1,7 +1,6 @@
 package com.awrank.web.tools.init.user;
 
 import com.awrank.web.model.domain.UserOrder;
-import com.awrank.web.model.utils.select.SelectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +10,7 @@ import java.util.List;
 /**
  *
  */
+//TODO: refactor this out
 public class TestOrderWrapper {
     public static void main(String args[]) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("AwrankEMF");

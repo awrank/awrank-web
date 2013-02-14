@@ -47,7 +47,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (existing == null)
             throw new ObjectFieldException();
 
-        existing.setCode(dictionary.getCode());
+        existing.setCode(dictionary. getCode());
         existing.setText(dictionary.getText());
         existing.setLanguage(dictionary.getLanguage());
 
