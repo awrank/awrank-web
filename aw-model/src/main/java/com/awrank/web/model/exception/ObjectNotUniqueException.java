@@ -15,6 +15,9 @@ public class ObjectNotUniqueException extends AwRankModelException {
     private Integer objectBIndex;
     private Long objectBId;
 
+    public ObjectNotUniqueException() {
+    }
+
     public ObjectNotUniqueException(EObjectType objectType, Integer objectAIndex, Long objectAId, Integer objectBIndex, Long objectBId) {
         super(EMessageConst.OBJECT_NOT_UNIQUE.name());
         this.objectType = objectType;

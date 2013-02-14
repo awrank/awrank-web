@@ -1,4 +1,4 @@
-package com.awrank.web.model.dao.user;
+package com.awrank.web.model.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

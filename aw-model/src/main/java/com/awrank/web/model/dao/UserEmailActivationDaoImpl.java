@@ -1,8 +1,9 @@
-package com.awrank.web.model.dao.useremailactivation;
+package com.awrank.web.model.dao;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.awrank.web.model.dao.UserEmailActivationDao;
 import org.springframework.stereotype.Repository;
 
 import com.awrank.web.model.dao.AbstractDaoImpl;

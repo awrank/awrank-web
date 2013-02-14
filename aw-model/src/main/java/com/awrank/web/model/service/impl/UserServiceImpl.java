@@ -1,45 +1,30 @@
-package com.awrank.web.model.service.user;
+package com.awrank.web.model.service.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.service.UserService;
 import org.joda.time.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.awrank.web.model.dao.EntryPointDao;
-import com.awrank.web.model.dao.user.UserDao;
-import com.awrank.web.model.dao.user.UserDaoImpl;
-import com.awrank.web.model.dao.useremailactivation.UserEmailActivationDao;
+import com.awrank.web.model.dao.UserDao;
+import com.awrank.web.model.dao.UserEmailActivationDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
-import com.awrank.web.model.domain.constant.EAuthenticationMethod;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
-import com.awrank.web.model.service.sharing.ShareToServiceEmailImpl;
-import com.awrank.web.model.service.user.pojos.UserRegistrationFormPojo;
-import com.awrank.web.model.utils.emailauthentication.SMTPAPIHeader;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
 /**
@@ -110,7 +95,7 @@ public class UserServiceImpl implements UserService {
 	EmailSenderSendGridImpl sendGridEmailSender;
 	
 	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.user.UserService#add(com.awrank.web.model.domain.User)
+	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
 	 */
 	@Override
 	//@Transactional
@@ -129,7 +114,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.user.UserService#delete(com.awrank.web.model.domain.User)
+	 * @see com.awrank.web.model.service.UserService#delete(com.awrank.web.model.domain.User)
 	 */
 	@Override
 	@Transactional
@@ -140,7 +125,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.user.UserService#save(com.awrank.web.model.domain.User)
+	 * @see com.awrank.web.model.service.UserService#save(com.awrank.web.model.domain.User)
 	 */
 	@Override
 	public void save(User user) {
@@ -149,7 +134,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.user.UserService#findById(java.lang.Integer)
+	 * @see com.awrank.web.model.service.UserService#findById(java.lang.Integer)
 	 */
 	@Override
 	public List<User> findById(Long id) {
@@ -158,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.awrank.web.model.service.user.UserService#findByEmail(java.lang.String)
+	 * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
 	 */
 	@Override
 	public List<User> findByEmail(String email) {
@@ -186,7 +171,7 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(form.getFirstName());
 		user.setLastName(form.getLastName());
 		user.setEmail(form.getEmail());
-		user.setLanguage(form.getLanguage());
+		//user.setLanguage(form.getLanguage());
 		
 		add(user);
 		
