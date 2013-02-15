@@ -1,213 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>AwRank</title>
+	<meta charset="utf-8">
+	<title>AwRank</title>
 
-    <!-- Fav and touch icons -->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">-->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">-->
-    <!--<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
-    <link rel="shortcut icon" href="resources/img/favicon.ico">
+	<!-- Fav and touch icons -->
+	<!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">-->
+	<!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">-->
+	<!--<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
+	<link rel="shortcut icon" href="resources/img/favicon.ico">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- JS -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
-    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
-    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore.js"></script>
-    <script type="text/javascript" src="http://backbonejs.org/backbone.js"></script>
-    <script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
-    <script type="text/javascript" src="resources/js/awrank.js"></script>
-    <script type="text/javascript" src="resources/js/awrank_lng.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap//bootstrap-scrollspy.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-tab.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-tooltip.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-popover.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-button.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-collapse.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-carousel.js"></script>
-    <script type="text/javascript" src="resources/js/bootstrap/bootstrap-typeahead.js"></script>
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<!-- JS -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+	<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
+	<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.js"></script>
+	<!--<script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>-->
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-scrollspy.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tab.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tooltip.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-popover.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-button.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-collapse.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-carousel.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-typeahead.js"></script>
+	<script type="text/javascript" src="resources/js/underscore.js"></script>
+	<script type="text/javascript" src="resources/js/backbone.js"></script>
+	<script type="text/javascript" src="resources/js/awrank.js"></script>
+	<script type="text/javascript" src="resources/js/awrank_lng.js"></script>
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
-    <!-- Le styles -->
-    <link href="resources/css/bootstrap.css" rel="stylesheet">
-    <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
+	<!-- Le styles -->
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
 
-    <style type="text/css">
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
 
-        .sidebar-nav {
-            padding: 9px 0;
-        }
-    </style>
+		.sidebar-nav {
+			padding: 9px 0;
+		}
+	</style>
 </head>
 
 <body onload="fIndexBodyOnload()">
 
 <div class="container-fluid">
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand" href="#">AwRank</a>
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i>
-                            <span lngt="MY_ACCOUNT">My account</span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" onclick="fIndexLogout()" lngt="LOGOUT">Log out</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" style="z-index: 10000">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i>
-                            <span id="languageLabel">RU</span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" onclick="$('#languageLabel').text('EN');setLanguage('EN')"><i
-                                    class="icon-flag-GB"></i>EN</a></li>
-                            <li><a href="#" onclick="$('#languageLabel').text('RU');setLanguage('RU')"><i
-                                    class="icon-flag-RU"></i>RU</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="#">AwRank</a>
+				<ul class="nav pull-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i>
+							<span lngt="MY_ACCOUNT">My account</span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="fIndexLogout()" lngt="LOGOUT">Log out</a></li>
+						</ul>
+					</li>
+					<li class="dropdown" style="z-index: 10000">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i>
+							<span id="languageLabel">RU</span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" onclick="$('#languageLabel').text('EN');setLanguage('EN')"><i
+									class="icon-flag-GB"></i>EN</a></li>
+							<li><a href="#" onclick="$('#languageLabel').text('RU');setLanguage('RU')"><i
+									class="icon-flag-RU"></i>RU</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="well sidebar-nav">
-                <ul id="menu" class="nav nav-list">
-                    <li class="nav-header" lngt="SITE">SITE</li>
-                    <li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i
-                            class="icon-home"></i><span lngt="HOME">Home</span></a>
-                    </li>
-                    <li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
-                    <li><a href="#"><i class="icon-user"></i><span lngt="PROFILE">Profile</span></a></li>
-                    <li><a href="#"><i class="icon-folder-open"></i>Application</a></li>
-                    <li class="nav-header" lngt="ACTIVITY">ACTIVITY</li>
-                    <li><a href="#"><i class="icon-eye-open"></i><span lngt="REQUEST_HISTORY">Request history</span></a>
-                    </li>
-                    <li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()"><i
-                            class="icon-time"></i><span lngt="SESSION_HISTORY">Session
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="well sidebar-nav">
+				<ul id="menu" class="nav nav-list">
+					<li class="nav-header" lngt="SITE">SITE</li>
+					<li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i
+							class="icon-home"></i><span lngt="HOME">Home</span></a>
+					</li>
+					<li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
+					<li><a href="#"><i class="icon-user"></i><span lngt="PROFILE">Profile</span></a></li>
+					<li><a href="#"><i class="icon-folder-open"></i>Application</a></li>
+					<li class="nav-header" lngt="ACTIVITY">ACTIVITY</li>
+					<li><a href="#"><i class="icon-eye-open"></i><span lngt="REQUEST_HISTORY">Request history</span></a>
+					</li>
+					<li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()"><i
+							class="icon-time"></i><span lngt="SESSION_HISTORY">Session
                         history</span></a></li>
-                    <li class="nav-header" lngt="ADMINISTRATION">Administration</li>
-                    <li id="menuItemDictionary"><a href="#" onclick="fIndexMenuDictionaryOnclick()"><i
-                            class="icon-book"></i><span lngt="DICTIONARY">Dictionary</span></a></li>
-                </ul>
-            </div>
-            <!--/.well -->
-        </div>
-        <!--/span-->
-        <div id="rightContent" class="span9">
+					<li class="nav-header" lngt="ADMINISTRATION">Administration</li>
+					<li id="menuItemDictionary"><a href="#" onclick="fIndexMenuDictionaryOnclick()"><i
+							class="icon-book"></i><span lngt="DICTIONARY">Dictionary</span></a></li>
+				</ul>
+			</div>
+			<!--/.well -->
+		</div>
+		<!--/span-->
+		<div id="rightContent" class="span9">
 
-        </div>
-        <!--/span-->
-    </div>
-    <!--/row-->
+		</div>
+		<!--/span-->
+	</div>
+	<!--/row-->
 
-    <footer>
-        <p>&copy; AwRank 2013</p>
-    </footer>
+	<footer>
+		<p>&copy; AwRank 2013</p>
+	</footer>
 
 </div>
 
 
 <script type="text/javascript" language="JavaScript">
-    function fIndexBodyOnload() {
-        setContextPath('http://localhost:8080/awrank');
-        setLanguage('RU');
+	function fIndexBodyOnload() {
 
-        fIndexMenuSessionOnclick();
-//        fIndexMenuPricingOnclick();
-        fIndexLogout();
+		setContextPath('http://localhost:8080/aw-backend');
+		setLanguage('RU');
+		fIndexMenuPricingOnclick();
+		fIndexLogout();
 
-//        var div=fIndexLoad('body', 'divRegister');
-//        div.removeClass('hidden');
-    }
+//        fIndexMenuSessionOnclick();
+//        fIndexMenuDictionaryOnclick();
 
-    function fIndexMenuActive(menuItemId) {
-        $('#menu li.active').removeClass('active');
-        $('#' + menuItemId).addClass('active');
-    }
 
-    // TODO global js
-    function fIndexLoad(targetSelector, divId) {
-        var div = $('#' + divId);
-        if (div[0] == null) {
-            div = $('<div id="' + divId + '"/>');
-            div.load(divId + '.html', function () {
-                localizeLoadContent(div);
-            });
-            $(targetSelector).append(div);
+	}
 
-        }
-        return div;
-    }
+	function fIndexMenuActive(menuItemId) {
+		$('#menu li.active').removeClass('active');
+		$('#' + menuItemId).addClass('active');
+	}
 
-    function fIndexRightContentSelectDiv(divId) {
-        $('#rightContent>:not(.hidden)').addClass('hidden');
-        var div = fIndexLoad('#rightContent', divId);
-        div.removeClass('hidden');
-        return div;
-    }
+	// TODO global js
+	function fIndexLoad(targetSelector, divId) {
+		var div = $('#' + divId);
+		if (div[0] == null) {
+			div = $('<div id="' + divId + '"/>');
+			div.load(divId + '.html', function () {
+				localizeLoadContent(div);
+			});
+			$(targetSelector).append(div);
 
-    function fIndexMenuPricingOnclick() {
-        fIndexMenuActive('menuItemPricing');
-        fIndexRightContentSelectDiv('divPricing');
-    }
+		}
+		return div;
+	}
 
-    function fIndexMenuSessionOnclick() {
-        fIndexMenuActive('menuItemSession');
-        fIndexRightContentSelectDiv('divSession');
-    }
+	function fIndexRightContentSelectDiv(divId) {
+		$('#rightContent>:not(.hidden)').addClass('hidden');
+		var div = fIndexLoad('#rightContent', divId);
+		div.removeClass('hidden');
+		return div;
+	}
 
-    function fIndexMenuDictionaryOnclick() {
-        fIndexMenuActive('menuItemDictionary');
-        fIndexRightContentSelectDiv('divDictionary');
-    }
+	function fIndexMenuPricingOnclick() {
+		fIndexMenuActive('menuItemPricing');
+		fIndexRightContentSelectDiv('divPricing');
+	}
 
-    function fIndexLogout() {
-        // TODO exit
-        showLogin();
-    }
+	function fIndexMenuSessionOnclick() {
+		fIndexMenuActive('menuItemSession');
+		fIndexRightContentSelectDiv('divSession');
+	}
 
-    //TODO global js
-    function showLogin() {
-        $('#divRegister').addClass('hidden');
-        $('#divForgetPassword').addClass('hidden');
-        var div = fIndexLoad('body', 'divLogin');
-        div.removeClass('hidden');
-    }
+	function fIndexMenuDictionaryOnclick() {
+		fIndexMenuActive('menuItemDictionary');
+		fIndexRightContentSelectDiv('divDictionary');
+	}
 
-    //TODO global js
-    function showRegister() {
-        $('#divLogin').addClass('hidden');
-        $('#divForgetPassword').addClass('hidden');
-        var div = fIndexLoad('body', 'divRegister');
-        div.removeClass('hidden');
-    }
+	function fIndexLogout() {
+		// TODO exit
+		showLogin();
+	}
 
-    //TODO global js
-    function showForgetPassword() {
-        $('#divLogin').addClass('hidden');
-        $('#divRegister').addClass('hidden');
-        var div = fIndexLoad('body', 'divForgetPassword');
-        div.removeClass('hidden');
-    }
+	//TODO global js
+	function showLogin() {
+		$('#divRegister').addClass('hidden');
+		$('#divForgetPassword').addClass('hidden');
+		var div = fIndexLoad('body', 'divLogin');
+		div.removeClass('hidden');
+	}
+
+	//TODO global js
+	function showRegister() {
+		$('#divLogin').addClass('hidden');
+		$('#divForgetPassword').addClass('hidden');
+		var div = fIndexLoad('body', 'divRegister');
+		div.removeClass('hidden');
+	}
+
+	//TODO global js
+	function showForgetPassword() {
+		$('#divLogin').addClass('hidden');
+		$('#divRegister').addClass('hidden');
+		var div = fIndexLoad('body', 'divForgetPassword');
+		div.removeClass('hidden');
+	}
 
 </script>
 </body>

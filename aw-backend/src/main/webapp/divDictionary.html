@@ -1,84 +1,156 @@
 <div class="alert alert-block">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4>Warning!</h4>
-    Best check yo self, you're not...
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<h4>Warning!</h4>
+	Best check yo self, you're not...
 </div>
 
 <div class="row">
-    <div class="span12">
-        <h4 lngt="DICTIONARY"></h4>
-    </div>
+	<div class="span12">
+		<h4 lngt="DICTIONARY"></h4>
+	</div>
 </div>
 <div class="row">
-    <div class="span12">
-        <select id="language">
-            <option></option>
-        </select>
-        <input type="text" id="code"/>
-        <br>
-        <textarea id="text" cols="70"></textarea>
-        <br>
-        <input type="button" id="butSave" lngv="UPDATE" value="Save" onclick="fDictionaryListSave()"
-               disabled="disabled"/>
-        <input type="button" id="butAdd" lngv="INSERT" value="Add" onclick="fDictionaryListAdd()"/>
-    </div>
+	<div class="span12">
+		<select id="dictionary_language">
+			<option></option>
+		</select>
+		<input type="text" id="dictionary_code"/>
+		<br>
+		<textarea id="dictionary_text" cols="70"></textarea>
+		<br>
+		<input type="button" lngv="UPDATE" value="Save" class="btn disabled"
+			   onclick="fDictionaryListSave()"/>
+		<input type="button" lngv="INSERT" value="Add" class="btn" onclick="fDictionaryListAdd()"/>
+	</div>
 </div>
 
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th></th>
-        <th lngt="LANGUAGE">Language</th>
-        <th lngt="DICTIONARY_CODE">Code</th>
-        <th lngt="DICTIONARY_TEXT">Text</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody id="tableBodyDictionary">
-    <tr>
-        <td><a href="#" class="index">1</a></td>
-        <td><a href="#" class="language_code">RU</a></td>
-        <td><a href="#" class="code">ERROR</a></td>
-        <td><a href="#" class="text">Ошибка</a></td>
-        <td><input type="button" lngv="DELETE" value="Delete"></td>
-    </tr>
-    </tbody>
+<table class="table table-striped table-condensed">
+	<thead>
+	<tr>
+		<th></th>
+		<th lngt="LANGUAGE">Language</th>
+		<th lngt="DICTIONARY_CODE">Code</th>
+		<th lngt="DICTIONARY_TEXT">Text</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody id="tableBodyDictionary">
+	<script type="text/template">
+		<tr id="<%=id%>">
+			<td><a href="#" class="index"><%=index%></a></td>
+			<td><a href="#" class="language"><%=language%></a></td>
+			<td><a href="#" class="code"><%=code%></a></td>
+			<td><a href="#" class="text"><%=text%></a></td>
+			<td><input type="button" class="btn btn-danger" lngv="DELETE" value="Delete"></td>
+		</tr>
+	</script>
+	</tbody>
 </table>
 <script type="text/javascript" language="JavaScript">
-    var CDictionary = Backbone.Model.extend({
 
-    });
-    var CDictionaryList = Backbone.Collection.extend({
-        model: CDictionary
-    });
-    var dictionaryList = new CDictionaryList();
+	var CLanguage = Backbone.Model.extend({
+	});
+	var CLanguageList = Backbone.Collection.extend({
+		url: 'rest/languages/',
+		model: CLanguage
+	});
+	var CLanguageListView = Backbone.View.extend({
+		el: $('#dictionary_language'),
+		template: _.template("<option value='<%=name%>'><%=name%></option> "),
+		render: function () {
+			this.$el.empty();
+			for (var i = 0; i < this.collection.size(); i++) {
+				for (p in this.collection.at(i).attributes) {
+					var attr = {name: p}
+					this.$el.append(this.template(attr));
+					break;
+				}
+			}
+			return this;
+		}
+	});
+	var languageList = new CLanguageList();
+	var languageListView = new CLanguageListView({collection: languageList});
+	languageList.fetch({async: false});
+	languageListView.render();
 
-    var CDictionaryListView = Backbone.View.extend({
-        el: '#tableBodyDictionary',
-        template: _.template($('#tableBodyDictionary').html()),
-        model: CDictionaryList,
-        events: {
-            "click a": "select"
-        },
-        initialize: function () {
+	var CDictionary = Backbone.Model.extend({
+	});
+	var CDictionaryList = Backbone.Collection.extend({
+		url: 'rest/dictionary/',
+		model: CDictionary,
+		comparator: function (dictionary) {
+			return dictionary.get("code") + dictionary.get("language");
+		}
+	});
+	var CDictionaryListView = Backbone.View.extend({
+		el: $('#tableBodyDictionary'),
+		initialize: function () {
+			var o = $('#tableBodyDictionary script');
+			this.template = _.template(o.html());
+			o.remove();
 
-        },
-        render: function () {
-            for (var i = 0; i < this.model.length; i++) {
-                $(this.el).append(this.template(this.model.at(i).toJSON()));
-            }
-            return this;
-        },
-        select: function () {
-            alert('select')
-        }
-    });
+//							this.collection.on('add', this.render);
+//							this.collection.on('remove', this.render);
+//							this.listenTo(this.collection, 'change', this.render);
+		},
+		events: {
+			"click a": "selectRow",
+			"click input": "deleteRow"
+		},
 
-    var dictionaryListView = CDictionaryListView();
+		render: function () {
+			this.$el.empty();
+			for (var i = 0; i < this.collection.size(); i++) {
+				var attr = this.collection.at(i).toJSON();
+				attr.index = i + 1;
+				this.$el.append(this.template(attr));
+			}
+			return this;
+		},
+		selectRow: function (event) {
+			var tr = $(event.target).closest('tr');
+			selectDictionary = this.collection.get(tr.attr('id'));
+			$('#dictionary_language').val(selectDictionary.get("language"));
+			$('#dictionary_code').val(selectDictionary.get("code"));
+			$('#dictionary_text').val(selectDictionary.get("text"));
+//							return false;
+		},
+		deleteRow: function (event) {
+			var tr = $(event.target).closest('tr');
+			loadingShow('tableBodyDictionary');
+			this.collection.get(tr.attr('id')).destroy({
+				success: function (model, response) {
+					dictionaryListView.render();
+//									tr.remove();
+				},
+				complete: function () {
+					loadingHide();
+				}});
+		}
+	});
 
-    postJson('dictionary/list', null, function (data) {
-        dictionaryList.parse(data.dictionaryList);
+	var selectDictionary = null;
+	var dictionaryList = new CDictionaryList();
+	var dictionaryListView = new CDictionaryListView({collection: dictionaryList});
+	dictionaryList.fetch({async: false});
+	dictionaryListView.render();
 
-    });
+	function fDictionaryListSave() {
+
+	}
+
+	function fDictionaryListAdd() {
+		var language = $('#dictionary_language').val();
+		var code = $('#dictionary_code').val();
+		var text = $('#dictionary_text').val();
+		var dictionary = new CDictionary({"language": language, "code": code, "text": text})
+		dictionaryList.create(dictionary, {async: false});
+		dictionaryListView.render();
+	}
+
+	//    awrankGet('rest/dictionary', null, function (data) {
+	//        dictionaryList.parse(data.dictionaryList);
+	//    });
 
 </script>

@@ -26,6 +26,6 @@ public interface DictionaryService {
 	/**
 	 * Deletes dictionary entry
 	 */
-	void delete(Long id);
+	void delete(Long id) throws ObjectFieldException;
 
 }

@@ -63,7 +63,9 @@ public class DictionaryServiceImpl implements DictionaryService {
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void delete(Long id) {
+	public void delete(Long id) throws ObjectFieldException {
+		if (id == null)
+			throw new ObjectFieldException(Message.MISSING_OBJECT_ID, Dictionary.class,/*EObjectType.DICTIONARY,*/ null, id, "id"/*DictionaryConst.S_LANGUAGE*/);
 		dictionaryDao.delete(id);
 	}
 }

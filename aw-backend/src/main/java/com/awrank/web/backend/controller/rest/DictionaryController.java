@@ -49,12 +49,11 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Creates new dictionary entry
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
-	boolean delete(@RequestParam("id") Long id) throws Exception {
+	boolean delete(@PathVariable Long id) throws Exception {
 		dictionaryService.delete(id);
-
 		return true;
 	}
 }

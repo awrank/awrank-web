@@ -79,10 +79,10 @@ function reloadDictionaryMessage() {
 				l_dic_all = {};
 				for (var i = 0; i < list.length; i++) {
 					var item = list[i];
-					var l_dic_all_item = l_dic_all[item.language_code];
+					var l_dic_all_item = l_dic_all[item.language];
 					if (l_dic_all_item == undefined) {
 						l_dic_all_item = {};
-						l_dic_all[item.language_code] = l_dic_all_item;
+						l_dic_all[item.language] = l_dic_all_item;
 					}
 					l_dic_all_item[item.code] = item.text;
 				}
