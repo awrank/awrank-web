@@ -20,9 +20,7 @@ public class DictionaryController extends AbstractController {
 	 * Returns paginated list of dictionary entries
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public
-	@ResponseBody
-	Iterable<Dictionary> list() {
+	public @ResponseBody Iterable<Dictionary> list() {
 		return dictionaryService.findAll();
 	}
 
@@ -30,29 +28,23 @@ public class DictionaryController extends AbstractController {
 	 * Creates new dictionary entry
 	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
-	public
-	@ResponseBody
-	Dictionary create(@RequestBody Dictionary body) throws Exception {
+	public @ResponseBody Dictionary create(@RequestBody Dictionary body) throws Exception {
 		return dictionaryService.create(body);
 	}
 
 	/**
 	 * Updates dictionary entry
 	 */
-	@RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json", produces = "application/json")
-	public
-	@ResponseBody
-	Dictionary update(@RequestBody Dictionary body) throws Exception {
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json", produces = "application/json")
+	public @ResponseBody Dictionary update(@PathVariable("id") Long id, @RequestBody Dictionary body) throws Exception {
 		return dictionaryService.update(body);
 	}
 
 	/**
 	 * Creates new dictionary entry
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
-	public
-	@ResponseBody
-	boolean delete(@RequestParam("id") Long id) throws Exception {
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
+	public @ResponseBody boolean delete(@PathVariable("id") Long id) throws Exception {
 		dictionaryService.delete(id);
 
 		return true;
