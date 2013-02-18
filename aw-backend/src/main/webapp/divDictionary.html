@@ -11,16 +11,17 @@
 </div>
 <div class="row">
 	<div class="span12">
-		<select id="dictionary_language">
-			<option></option>
-		</select>
-		<input type="text" id="dictionary_code"/>
-		<br>
-		<textarea id="dictionary_text" cols="70"></textarea>
-		<br>
-		<input type="button" lngv="UPDATE" value="Save" class="btn disabled"
-			   onclick="fDictionaryListSave()"/>
-		<input type="button" lngv="INSERT" value="Add" class="btn" onclick="fDictionaryListAdd()"/>
+		<form id="dictionaryForm">
+			<select id="dictionary_language">
+				<option></option>
+			</select>
+			<input type="text" id="dictionary_code"/>
+			<br>
+			<textarea id="dictionary_text" cols="70"></textarea>
+			<br>
+			<input type="button" name="update" lngv="UPDATE" value="Save" class="btn disabled"/>
+			<input type="button" name="insert" lngv="INSERT" value="Add" class="btn"/>
+		</form>
 	</div>
 </div>
 
@@ -114,7 +115,8 @@
 			$('#dictionary_language').val(selectDictionary.get("language"));
 			$('#dictionary_code').val(selectDictionary.get("code"));
 			$('#dictionary_text').val(selectDictionary.get("text"));
-//							return false;
+
+			$('#dictionaryForm>input[name=update]').removeClass('disabled');
 		},
 		deleteRow: function (event) {
 			var tr = $(event.target).closest('tr');
@@ -136,18 +138,33 @@
 	dictionaryList.fetch({async: false});
 	dictionaryListView.render();
 
-	function fDictionaryListSave() {
-
-	}
-
-	function fDictionaryListAdd() {
-		var language = $('#dictionary_language').val();
-		var code = $('#dictionary_code').val();
-		var text = $('#dictionary_text').val();
-		var dictionary = new CDictionary({"language": language, "code": code, "text": text})
-		dictionaryList.create(dictionary, {async: false});
-		dictionaryListView.render();
-	}
+	var CDictionaryForm = Backbone.View.extend({
+		el: $('#dictionaryForm'),
+		events: {
+			"click input[name=insert]": "rowInsert",
+			"click input[name=update]": "rowUpdate"
+		},
+		rowInsert: function () {
+			var language = $('#dictionary_language').val();
+			var code = $('#dictionary_code').val();
+			var text = $('#dictionary_text').val();
+			var dictionary = new CDictionary({"language": language, "code": code, "text": text})
+			selectDictionary = dictionaryList.create(dictionary, {async: false});
+			$('#dictionaryForm>input[name=update]').removeClass('disabled');
+			dictionaryListView.render();
+		},
+		rowUpdate: function () {
+			if (!this.$el.find('input[name=update]').hasClass('disabled')) {
+				var language = $('#dictionary_language').val();
+				var code = $('#dictionary_code').val();
+				var text = $('#dictionary_text').val();
+				selectDictionary.set({language: language, code: code, text: text});
+				selectDictionary.save({async: false});
+				dictionaryListView.render();
+			}
+		}
+	})
+	var dictionaryForm = new CDictionaryForm();
 
 	//    awrankGet('rest/dictionary', null, function (data) {
 	//        dictionaryList.parse(data.dictionaryList);

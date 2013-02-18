@@ -39,10 +39,10 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Updates dictionary entry
 	 */
-	@RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json", produces = "application/json")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
-	Dictionary update(@RequestBody Dictionary body) throws Exception {
+	Dictionary update(/*@PathVariable Long id,*/ @RequestBody Dictionary body) throws Exception {
 		return dictionaryService.update(body);
 	}
 
