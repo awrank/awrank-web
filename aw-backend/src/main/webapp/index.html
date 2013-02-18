@@ -70,7 +70,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#">Action</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="fIndexLogout()" lngt="LOGOUT">Log out</a></li>
+							<li><a href="#login" onclick="fIndexLogout();" lngt="LOGOUT">Log out</a></li>
 						</ul>
 					</li>
 					<li class="dropdown" style="z-index: 10000">
@@ -93,8 +93,8 @@
 			<div class="well sidebar-nav">
 				<ul id="menu" class="nav nav-list">
 					<li class="nav-header" lngt="SITE">SITE</li>
-					<li id="menuItemPricing"><a href="#" onclick="fIndexMenuPricingOnclick()"><i
-							class="icon-home"></i><span lngt="HOME">Home</span></a>
+					<li id="menuItemPricing"><a href="#pricing"><i class="icon-home"></i><span
+							lngt="HOME">Home</span></a>
 					</li>
 					<li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
 					<li><a href="#"><i class="icon-user"></i><span lngt="PROFILE">Profile</span></a></li>
@@ -102,12 +102,11 @@
 					<li class="nav-header" lngt="ACTIVITY">ACTIVITY</li>
 					<li><a href="#"><i class="icon-eye-open"></i><span lngt="REQUEST_HISTORY">Request history</span></a>
 					</li>
-					<li id="menuItemSession"><a href="#" onclick="fIndexMenuSessionOnclick()"><i
-							class="icon-time"></i><span lngt="SESSION_HISTORY">Session
+					<li id="menuItemSession"><a href="#session"><i class="icon-time"></i><span lngt="SESSION_HISTORY">Session
                         history</span></a></li>
 					<li class="nav-header" lngt="ADMINISTRATION">Administration</li>
-					<li id="menuItemDictionary"><a href="#" onclick="fIndexMenuDictionaryOnclick()"><i
-							class="icon-book"></i><span lngt="DICTIONARY">Dictionary</span></a></li>
+					<li id="menuItemDictionary"><a href="#dictionary"><i class="icon-book"></i><span lngt="DICTIONARY">Dictionary</span></a>
+					</li>
 				</ul>
 			</div>
 			<!--/.well -->
@@ -128,38 +127,99 @@
 
 
 <script type="text/javascript" language="JavaScript">
-	function fIndexBodyOnload() {
 
+	var CRouter = Backbone.Router.extend({
+		routes: {
+			"login": "login",
+			"register": "register",
+			"forget_password": "forget_password",
+			"pricing": "pricing",
+			"session": "session",
+			"dictionary": "dictionary"
+		},
+		login: function () {
+			$('#divRegister').addClass('hidden');
+			$('#divForgetPassword').addClass('hidden');
+			var div = fIndexLoad('body', 'divLogin');
+			div.removeClass('hidden');
+		},
+		register: function () {
+			$('#divLogin').addClass('hidden');
+			$('#divForgetPassword').addClass('hidden');
+			var div = fIndexLoad('body', 'divRegister');
+			div.removeClass('hidden');
+		},
+		forget_password: function () {
+			$('#divLogin').addClass('hidden');
+			$('#divRegister').addClass('hidden');
+			var div = fIndexLoad('body', 'divForgetPassword');
+			div.removeClass('hidden');
+		},
+		pricing: function () {
+			fIndexMenuActive('menuItemPricing');
+			fIndexRightContentSelectDiv('divPricing');
+		},
+		session: function () {
+			fIndexMenuActive('menuItemSession');
+			fIndexRightContentSelectDiv('divSession');
+		},
+		dictionary: function () {
+			fIndexMenuActive('menuItemDictionary');
+			fIndexRightContentSelectDiv('divDictionary');
+		}
+	});
+	var workspace = new CRouter();
+
+	Backbone.history.start();
+
+	function fIndexBodyOnload() {
 		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
-//		fIndexMenuPricingOnclick();
+		workspace.navigate('pricing', {trigger: true});
 //		fIndexLogout();
 
 //        fIndexMenuSessionOnclick();
 //        fIndexMenuDictionaryOnclick();
-
-
 	}
 
+	function fIndexLogout() {
+		// TODO exit
+		return false;
+	}
+	// GLOBAL
+
+	/**
+	 * select menu item (other deselect)
+	 * @param menuItemId
+	 */
 	function fIndexMenuActive(menuItemId) {
 		$('#menu li.active').removeClass('active');
 		$('#' + menuItemId).addClass('active');
 	}
 
-	// TODO global js
+	/**
+	 * find div by id if not exist load from file (append div to target by targetSelector)
+	 * @param targetSelector
+	 * @param divId
+	 * @return div
+	 */
 	function fIndexLoad(targetSelector, divId) {
 		var div = $('#' + divId);
 		if (div[0] == null) {
 			div = $('<div id="' + divId + '"/>');
 			div.load(divId + '.html', function () {
 				localizeLoadContent(div);
+				$(targetSelector).append(div);
 			});
-			$(targetSelector).append(div);
-
 		}
 		return div;
 	}
-
+	/**
+	 * find div by id if not exist load from file (append div to rightContent)
+	 * set div visible (other hide)
+	 * @param divId
+	 * @return div
+	 */
 	function fIndexRightContentSelectDiv(divId) {
 		$('#rightContent>:not(.hidden)').addClass('hidden');
 		var div = fIndexLoad('#rightContent', divId);
@@ -167,48 +227,16 @@
 		return div;
 	}
 
-	function fIndexMenuPricingOnclick() {
-		fIndexMenuActive('menuItemPricing');
-		fIndexRightContentSelectDiv('divPricing');
-	}
-
-	function fIndexMenuSessionOnclick() {
-		fIndexMenuActive('menuItemSession');
-		fIndexRightContentSelectDiv('divSession');
-	}
-
-	function fIndexMenuDictionaryOnclick() {
-		fIndexMenuActive('menuItemDictionary');
-		fIndexRightContentSelectDiv('divDictionary');
-	}
-
-	function fIndexLogout() {
-		// TODO exit
-		showLogin();
-	}
-
-	//TODO global js
 	function showLogin() {
-		$('#divRegister').addClass('hidden');
-		$('#divForgetPassword').addClass('hidden');
-		var div = fIndexLoad('body', 'divLogin');
-		div.removeClass('hidden');
+		workspace.navigate('login', {trigger: true});
 	}
 
-	//TODO global js
 	function showRegister() {
-		$('#divLogin').addClass('hidden');
-		$('#divForgetPassword').addClass('hidden');
-		var div = fIndexLoad('body', 'divRegister');
-		div.removeClass('hidden');
+		workspace.navigate('register', {trigger: true});
 	}
 
-	//TODO global js
 	function showForgetPassword() {
-		$('#divLogin').addClass('hidden');
-		$('#divRegister').addClass('hidden');
-		var div = fIndexLoad('body', 'divForgetPassword');
-		div.removeClass('hidden');
+		workspace.navigate('forget_password', {trigger: true});
 	}
 
 </script>

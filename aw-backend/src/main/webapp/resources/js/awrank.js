@@ -5,8 +5,6 @@ function setContextPath(newContextPath) {
 	contextPath = newContextPath + '/';
 }
 
-var oldPost = [];
-
 function awrankGet(url, data, success, disableElementId) {
 	awrankAjax('GET', url, data, success, disableElementId);
 }
@@ -21,7 +19,7 @@ function awrankDelete(url, data, success, disableElementId) {
 }
 
 function awrankAjax(type, url, data, success, disableElementId) {
-	loadingShow(disableElementId);
+//	loadingShow(disableElementId);
 	var dataJson = null;
 	if (data != null) {
 		dataJson = $.toJSON(data);
@@ -32,44 +30,56 @@ function awrankAjax(type, url, data, success, disableElementId) {
 		data: dataJson,
 		dataType: "json",
 		contentType: "application/json",
-		success: success,
-		error: function (errorData, textStatus) {
-			switch (errorData.status) {
-				case 401:
-					oldPost.push({url: url, data: data, success: success, disableElementId: disableElementId});
-					//TODO
-					alert(getMessage('ERROR') + '401');
-//                        loginShow();
-
-					break;
-				case 403:
-					//TODO
-					alert(getMessage('ERROR') + ': ' + getMessage('ERROR_ACCESS'));
-					break;
-				case 500:
-					var text = errorData.responseText
-					if (text != null) {
-						try {
-							var o1 = $.evalJSON(text);
-							if (o1 != null && o1.error != null && o1.error.message != null) {
-								text = getMessage(o1.error.message);
-							}
-						} catch (e) {
-						}
-					}
-					//TODO
-					alert(getMessage('ERROR') + ': ' + text);
-					break;
-				default:
-					//TODO
-					alert(getMessage('ERROR') + ': ' + errorData.status + " : " + getMessage('ERROR_NETWORK'));
-					break;
-			}
-		},
-		complete: function () {
-			loadingHide();
-		}
+		success: success
 	});
+}
+
+// save query to execute them after authentication
+var oldPost = [];
+
+$(document).ajaxError(function (event, request, settings, exception) {
+	switch (request.status) {
+		case 401:
+			oldPost.push(settings);
+			//TODO
+			alert('401');
+//              loginShow();
+
+			break;
+		case 403:
+			alertError(getMessage('ERROR'), +getMessage('ERROR_ACCESS'));
+			break;
+		case 500:
+			var text = request.responseText
+			if (text != null) {
+				try {
+					var o1 = $.evalJSON(text);
+					if (o1 != null && o1.error != null && o1.error.message != null) {
+						text = getMessage(o1.error.message);
+					}
+				} catch (e) {
+				}
+			}
+			alertError(getMessage('ERROR'), text);
+			break;
+		default:
+			alertError(getMessage('ERROR'), request.status + " : " + getMessage('ERROR_NETWORK'));
+			break;
+	}
+});
+$(document).ajaxStart(function () {
+	loadingShow();
+})
+$(document).ajaxComplete(function () {
+	loadingHide();
+})
+
+function alertError(title, text) {
+	$('div[name=alert-error]').append('<div class="alert alert-error">' +
+		'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+		'<h4>' + title + '</h4>' +
+		text +
+		'</div>');
 }
 
 var loadingIndex = 0;

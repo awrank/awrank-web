@@ -1,7 +1,5 @@
-<div class="alert alert-block">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	<h4>Warning!</h4>
-	Best check yo self, you're not...
+<div name="alert-error">
+
 </div>
 
 <div class="row">
@@ -17,7 +15,7 @@
 			</select>
 			<input type="text" id="dictionary_code"/>
 			<br>
-			<textarea id="dictionary_text" cols="70"></textarea>
+			<textarea id="dictionary_text" class="input-block-level"></textarea>
 			<br>
 			<input type="button" name="update" lngv="UPDATE" value="Save" class="btn disabled"/>
 			<input type="button" name="insert" lngv="INSERT" value="Add" class="btn"/>
@@ -107,6 +105,7 @@
 				attr.index = i + 1;
 				this.$el.append(this.template(attr));
 			}
+			localizeLoadContent(this.$el);
 			return this;
 		},
 		selectRow: function (event) {
@@ -138,7 +137,7 @@
 	dictionaryList.fetch({async: false});
 	dictionaryListView.render();
 
-	var CDictionaryForm = Backbone.View.extend({
+	var CDictionaryFormView = Backbone.View.extend({
 		el: $('#dictionaryForm'),
 		events: {
 			"click input[name=insert]": "rowInsert",
@@ -149,24 +148,27 @@
 			var code = $('#dictionary_code').val();
 			var text = $('#dictionary_text').val();
 			var dictionary = new CDictionary({"language": language, "code": code, "text": text})
-			selectDictionary = dictionaryList.create(dictionary, {async: false});
-			$('#dictionaryForm>input[name=update]').removeClass('disabled');
-			dictionaryListView.render();
+			dictionaryList.create(dictionary, {
+				success: function () {
+					selectDictionary = dictionary;
+					$('#dictionaryForm>input[name=update]').removeClass('disabled');
+					dictionaryListView.render();
+				},
+				error: function () {
+					dictionaryList.remove(dictionary);
+				}
+			});
 		},
 		rowUpdate: function () {
 			if (!this.$el.find('input[name=update]').hasClass('disabled')) {
 				var language = $('#dictionary_language').val();
 				var code = $('#dictionary_code').val();
 				var text = $('#dictionary_text').val();
-				selectDictionary.save({language: language, code: code, text: text}, {async: false});
-				dictionaryListView.render();
+				selectDictionary.save({language: language, code: code, text: text}, {success: function () {
+					dictionaryListView.render();
+				}});
 			}
 		}
 	})
-	var dictionaryForm = new CDictionaryForm();
-
-	//    awrankGet('rest/dictionary', null, function (data) {
-	//        dictionaryList.parse(data.dictionaryList);
-	//    });
-
+	var dictionaryFormView = new CDictionaryFormView();
 </script>
