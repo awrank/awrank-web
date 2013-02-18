@@ -25,7 +25,7 @@ import com.awrank.web.backend.controller.pojos.TestJsonResultPOJO;
  *
  */
 @Controller
-public class TestPagesController {
+public class TestPagesController extends AbstractController {
 	
 	@RequestMapping("/mailtest")
 	public String showMailTestPage(HttpServletRequest request,
