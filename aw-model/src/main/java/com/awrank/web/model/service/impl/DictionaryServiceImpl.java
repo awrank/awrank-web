@@ -41,25 +41,26 @@ public class DictionaryServiceImpl implements DictionaryService {
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public Dictionary update(Dictionary dictionary) throws ObjectFieldException, ObjectNotUniqueException {
+	public Dictionary update(Long id, Dictionary dictionary) throws ObjectFieldException, ObjectNotUniqueException {
 		if (dictionary.getLanguage() == null)
-			throw new ObjectFieldException(Message.MISSING_DICTIONARY_LANGUAGE, Dictionary.class,/*EObjectType.DICTIONARY,*/ null, dictionary.getId(), "language"/*DictionaryConst.S_LANGUAGE*/);
+			throw new ObjectFieldException(Message.MISSING_DICTIONARY_LANGUAGE, Dictionary.class,/*EObjectType.DICTIONARY,*/ null, id, "language"/*DictionaryConst.S_LANGUAGE*/);
 		if (StringUtils.isEmptyOrWhitespaceOnly(dictionary.getCode()))
-			throw new ObjectFieldException(Message.MISSING_DICTIONARY_CODE, Dictionary.class,/*EObjectType.DICTIONARY, */null, dictionary.getId(), "code"/*DictionaryConst.S_CODE*/);
+			throw new ObjectFieldException(Message.MISSING_DICTIONARY_CODE, Dictionary.class,/*EObjectType.DICTIONARY, */null, id, "code"/*DictionaryConst.S_CODE*/);
 		if (StringUtils.isEmptyOrWhitespaceOnly(dictionary.getText()))
-			throw new ObjectFieldException(Message.MISSING_DICTIONARY_TEXT, Dictionary.class,/*EObjectType.DICTIONARY, */null, dictionary.getId(), "text"/*DictionaryConst.S_TEXT*/);
+			throw new ObjectFieldException(Message.MISSING_DICTIONARY_TEXT, Dictionary.class,/*EObjectType.DICTIONARY, */null, id, "text"/*DictionaryConst.S_TEXT*/);
 
 		Dictionary existing = dictionaryDao.findByCodeAndLanguage(dictionary.getCode(), dictionary.getLanguage());
-		if (existing != null && !existing.getId().equals(dictionary.getId()))
-			throw new ObjectNotUniqueException(Dictionary.class,/*EObjectType.DICTIONARY,*/ null, dictionary.getId(), null, existing.getId());
+		if (existing != null && !existing.getId().equals(id))
+			throw new ObjectNotUniqueException(Dictionary.class,/*EObjectType.DICTIONARY,*/ null, id, null, existing.getId());
 
+		if (existing == null) {
+			existing = dictionaryDao.findOne(id);
+		}
+		existing.setLanguage(dictionary.getLanguage());
+		existing.setCode(dictionary.getCode());
+		existing.setText(dictionary.getText());
 
-		Dictionary dictionaryOld = dictionaryDao.findOne(dictionary.getId());
-		dictionaryOld.setLanguage(dictionary.getLanguage());
-		dictionaryOld.setCode(dictionary.getCode());
-		dictionaryOld.setText(dictionary.getText());
-
-		return dictionaryDao.save(dictionaryOld);
+		return dictionaryDao.save(existing);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)

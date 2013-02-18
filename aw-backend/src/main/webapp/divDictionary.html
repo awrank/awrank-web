@@ -158,8 +158,7 @@
 				var language = $('#dictionary_language').val();
 				var code = $('#dictionary_code').val();
 				var text = $('#dictionary_text').val();
-				selectDictionary.set({language: language, code: code, text: text});
-				selectDictionary.save({async: false});
+				selectDictionary.save({language: language, code: code, text: text}, {async: false});
 				dictionaryListView.render();
 			}
 		}

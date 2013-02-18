@@ -21,7 +21,7 @@ public interface DictionaryService {
 	/**
 	 * Updates dictionary entry
 	 */
-	Dictionary update(Dictionary dictionary) throws ObjectFieldException, ObjectNotUniqueException;
+	Dictionary update(Long id, Dictionary dictionary) throws ObjectFieldException, ObjectNotUniqueException;
 
 	/**
 	 * Deletes dictionary entry
