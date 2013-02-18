@@ -29,14 +29,17 @@
 	        http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 
+    <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
+    <context:annotation-config/>
+
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
+    <context:component-scan base-package="com.awrank"/>
+
     <import resource="data-access-context.xml"/>
 
     <!-- Property placeholder configurer -->
     <util:properties id="emailProps" location="/WEB-INF/properties/email.properties" />
     <util:properties id="appProps" location="/WEB-INF/properties/application.properties" />
-
-    <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
-    <context:annotation-config/>
 
     <!-- Defines content negotiation manager, required to handle @JsonIgnore correctly -->
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" >
@@ -58,8 +61,13 @@
         </property>
     </bean>
 
-    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
-    <context:component-scan base-package="com.awrank"/>
+    <!-- View Resolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+   </bean>
+
+
 
     <!-- Social Auth lib -->
     <bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
@@ -96,5 +104,17 @@
         <constructor-arg value="/authSuccess"/>
         <constructor-arg value="/accessDenied"/>
     </bean>
+
+
+    <!-- Profiles -->
+    <!-- IMPORTANT: nested <beans/> MUST be place at the end of the file -->
+    <beans profile="dev">
+        <import resource="webapp-profile-dev.xml"/>
+    </beans>
+
+    <beans profile="prod">
+        <import resource="webapp-profile-prod.xml"/>
+    </beans>
+
 
 </beans>
