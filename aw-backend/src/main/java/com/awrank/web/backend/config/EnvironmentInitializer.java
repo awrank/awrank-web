@@ -19,10 +19,15 @@ public class EnvironmentInitializer implements ApplicationContextInitializer<Con
 
     private static Logger LOG = LoggerFactory.getLogger(EnvironmentInitializer.class);
 
+    private static final String PROFILE_DEV = "dev";
+
+    private static final String PROFILE_PROD = "prod";
+
     public void initialize(ConfigurableApplicationContext ctx) {
         ConfigurableEnvironment environment = ctx.getEnvironment();
         try {
-            environment.getPropertySources().addFirst(new ResourcePropertySource("classpath:props/boot.properties"));
+            String applicationProperties = "classpath:props/boot.properties";
+            environment.getPropertySources().addFirst(new ResourcePropertySource(applicationProperties));
             LOG.info("Project properties props/boot.properties has been successfully loaded");
         } catch (IOException e) {
             // it's ok if the file is not there. we will just log that info.
@@ -32,14 +37,8 @@ public class EnvironmentInitializer implements ApplicationContextInitializer<Con
 
         String property = environment.getProperty("build.production.profile");
         Boolean isProduction = Boolean.parseBoolean(property);
-        String profileName;
-        if (isProduction) {
-            environment.setActiveProfiles(ProdConfiguration.PROFILE_PROD);
-            profileName = ProdConfiguration.PROFILE_PROD;
-        } else {
-            environment.setActiveProfiles(DevConfiguration.PROFILE_DEV);
-            profileName = ProdConfiguration.PROFILE_DEV;
-        }
+        String profileName = (isProduction) ? PROFILE_PROD : PROFILE_DEV;
+        environment.setActiveProfiles(profileName);
         LOG.debug("The project is building with " + profileName.toUpperCase() + " profile.");
     }
 

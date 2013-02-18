@@ -14,12 +14,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 /**
- * User: a_polyakov
- * Refactered by Olga
- * No need in building JSON here: as far as all controllers MUST HAVE produces = "application/json", headers = "content-type=application/x-www-form-urlencoded"
- * in handlers the conversion Map <> JSON will be done automatically, here we heed to handle Exception and build Map with it's type and details etc.
+ * No need in building JSON here: as far as all controllers MUST HAVE produces = "application/json",
+ * headers = "content-type=application/x-www-form-urlencoded" in handlers the conversion Map <> JSON will be done
+ * automatically, here we heed to handle Exception and build Map with its type and details etc.
+ *
+ * @author Alex Polyakov
+ * @author Olga Korokhina
  */
-
 public abstract class AbstractController {
 
 	protected final void writeJsonObject(HttpServletResponse response, final ObjectNode jsonObject) throws IOException {
