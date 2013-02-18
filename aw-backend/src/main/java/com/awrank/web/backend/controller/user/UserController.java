@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,7 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
  */
 @Controller
 @RequestMapping(value = "/user")
-public class UserController {
+public class UserController extends AbstractController {
 	
 	@Autowired
     UserService userService;

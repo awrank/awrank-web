@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 @Controller
-public class MailTestPageController {
+public class MailTestPageController extends AbstractController {
 
 //----------------  Jango SMTP ------------
 
