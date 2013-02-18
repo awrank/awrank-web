@@ -56,12 +56,12 @@ public class LoginController extends AbstractController {
         return "login";
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(ModelMap model) {
-        SecurityContextHolder.clearContext();
-
-        return "login";
-    }
+//    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+//    public String logout(ModelMap model) {
+//        SecurityContextHolder.clearContext();
+//
+//        return "login";
+//    }
 
     /* Social Auth */
     @Autowired

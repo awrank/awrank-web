@@ -9,27 +9,18 @@
     <display-name>AWrank-web</display-name>
     <description>AWrank-web</description>
 
-    <!-- Java-based Spring container definition -->
-    <!--<context-param>-->
-        <!--<param-name>contextClass</param-name>-->
-        <!--<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>-->
-    <!--</context-param>-->
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
 
-    <!-- Location of Java @Configuration classes that configure the components that makeup this application -->
-    <!-- Location of xml configuration files as well -->
-    <!--<context-param>-->
-        <!--<param-name>contextConfigLocation</param-name>-->
-        <!--<param-value>-->
-            <!--com.awrank.web.backend.config-->
-        <!--</param-value>-->
-    <!--</context-param>-->
-
-    <!-- Probably leads to conflicts if use Java classes configurations -->
-    <!--<listener>-->
-        <!--<listener-class>-->
-            <!--org.springframework.web.context.ContextLoaderListener-->
-        <!--</listener-class>-->
-    <!--</listener>-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/webapp-security-context.xml
+        </param-value>
+    </context-param>
 
     <servlet>
         <servlet-name>webapp-dispatcher</servlet-name>
@@ -37,8 +28,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                /WEB-INF/webapp-dispatcher-servlet.xml,
-                <!--/WEB-INF/webapp-security-context.xml-->
+                /WEB-INF/webapp-dispatcher-servlet.xml
             </param-value>
         </init-param>
         <init-param>
@@ -83,16 +73,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--security -->
-    <!-- todo: temporary disabled because of problems in integration with spring-social -->
-    <!--<filter>-->
-        <!--<filter-name>springSecurityFilterChain</filter-name>-->
-        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-    <!--</filter>-->
+    <!--Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
 
-    <!--<filter-mapping>-->
-        <!--<filter-name>springSecurityFilterChain</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

@@ -38,23 +38,13 @@
     <!--a href="pages/dictionary/dictionary_list.jsp">Test dictionary</a> <br/ -->
 
 <p>
-<h5>TestRestController</h5>
+<h5>Test /rest controllers</h5>
 <ul>
     <li>
         <a href="rest/search?query=1">rest/search?query=1</a><br/>
     </li>
     <li>
-        <form action="rest/postjson" method="POST" accept="application/json" enctype="application/json">
-            Fill user data: <br/>
-            <label for="firstname">First name</label>
-            <input id="firstname" name="firstName" type="text"/><br/>
-
-            <label for="lastname">Last name</label>
-            <input id="lastname" name="lastName" type="text"/><br/>
-
-            <br/>
-            <input type="submit" value="Post">
-        </form>
+        <a href="rest/dictionary/1">rest/dictionary/1</a><br/>
     </li>
     <li>
         <a href="rest/user/2">rest/user/2</a><br/>
@@ -69,10 +59,10 @@
 <h3>LOGIN</h3>
 
 <p>
-    <a href="<c:url value="/register"/>">Register</a> |
-    <a href="<c:url value="/api/login"/>">API Login</a> |
-    <a href="<c:url value="/login"/>">Login</a> |
-    <a href="<c:url value="/api/logout"/>">Logout</a> <br/>
+    <a href="<c:url value="register"/>">Register</a> |
+    <a href="<c:url value="login"/>">Login</a> |
+    <a href="<c:url value="logout"/>">Logout</a> <br/>
+    <a href="<c:url value="j_spring_security_logout"/>">Spring Security Logout</a> <br/>
 </p>
 
 <br/>
