@@ -1,78 +1,78 @@
 <style type="text/css">
 
-    #divLogin {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(128, 128, 128, 0.9);
-        z-index: 1040;
-    }
+	#divLogin {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(128, 128, 128, 0.9);
+		z-index: 1040;
+	}
 </style>
 
 <div class="container">
-    <div class="row">
-        <div class="span3"></div>
-        <div class="span6">
-            <br>
+	<div class="row">
+		<div class="span3"></div>
+		<div class="span6">
+			<br>
 
-            <div class="alert alert-error">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h4>Error</h4>
-                Text
-            </div>
-            <div class="alert alert-block">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h4>Warning</h4>
-                Text
-            </div>
-            <form action="#" onsubmit="fLoginSubmit(); return false;" class="well">
-                <fieldset>
-                    <legend lngt="LOGIN_TITLE">Log in to your account</legend>
-                    <label lngt="WITH_SOCIAL_NETWORK">with social network:</label>
-                    <button id="loginGoogleButton" type="button" class="btn btn-large btn-primary" lngt="LOGIN_IN_WITH_GOOGLE">Log in
-                        with Google
-                    </button>
-                    <button id="loginFacebookButton" type="button" class="btn btn-large btn-primary pull-right"
-                            lngt="LOGIN_IN_WITH_FACEBOOK">Log in with Facebook
-                    </button>
-                    <br>
-                    <br>
-                    <label lngt="LOGIN_DESCRIPTION">or with registered details:</label>
+			<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<h4>Error</h4>
+				Text
+			</div>
+			<div class="alert alert-block">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<h4>Warning</h4>
+				Text
+			</div>
+			<form action="#" onsubmit="fLoginSubmit(); return false;" class="well">
+				<fieldset>
+					<legend lngt="LOGIN_TITLE">Log in to your account</legend>
+					<label lngt="WITH_SOCIAL_NETWORK">with social network:</label>
+					<button id="loginGoogleButton" type="button" class="btn btn-large btn-primary"
+							lngt="LOGIN_IN_WITH_GOOGLE">Log in
+						with Google
+					</button>
+					<button id="loginFacebookButton" type="button" class="btn btn-large btn-primary pull-right"
+							lngt="LOGIN_IN_WITH_FACEBOOK">Log in with Facebook
+					</button>
+					<br>
+					<br>
+					<label lngt="LOGIN_DESCRIPTION">or with registered details:</label>
 
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-envelope"></i></span>
-                        <input type="text" id="uid" class="span5" lngp="LOGIN_FIELD_LOGIN"
-                               placeholder="Email address or login">
-                    </div>
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-lock"></i></span>
-                        <input type="password" id="password" class="span5" lngp="PASSWORD" placeholder="Password">
-                    </div>
-                    <br>
-                    <button class="btn btn-large btn-primary pull-right" type="submit" lngt="LOGIN">Sign in</button>
-                </fieldset>
-                <hr>
-                <a href="#" onclick="showForgetPassword()" lngt="FORGET_PASSWORD">Forgotten your password?</a>
-                <span class="pull-right"><span lngt="LOGIN_FOOTER">Don't have an account?</span> <a href="#"
-                                                                                                    onclick="showRegister();"
-                                                                                                    lngt="REGISTRATION"></a></span>
-                <br>
-            </form>
-        </div>
-        <div class="span3"></div>
-    </div>
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-envelope"></i></span>
+						<input type="text" id="uid" class="span5" lngp="LOGIN_FIELD_LOGIN"
+							   placeholder="Email address or login">
+					</div>
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-lock"></i></span>
+						<input type="password" id="password" class="span5" lngp="PASSWORD" placeholder="Password">
+					</div>
+					<br>
+					<button class="btn btn-large btn-primary pull-right" type="submit" lngt="LOGIN">Sign in</button>
+				</fieldset>
+				<hr>
+				<a href="#forget_password" lngt="FORGET_PASSWORD">Forgotten your password?</a>
+				<span class="pull-right"><span lngt="LOGIN_FOOTER">Don't have an account?</span> <a href="#register"
+																									lngt="REGISTRATION"></a></span>
+				<br>
+			</form>
+		</div>
+		<div class="span3"></div>
+	</div>
 </div>
 
 <script type="text/javascript" language="JavaScript">
-    function fLoginSubmit() {
-        $('#divLogin').addClass('hidden');
-        $("loginGoogleButton").click(function() {
-            alert("Google");
-        });
-        $("loginFacebookButton").click(function() {
-            alert("Facebook");
-        });
-    }
+	function fLoginSubmit() {
+		$('#divLogin').addClass('hidden');
+		$("loginGoogleButton").click(function () {
+			alert("Google");
+		});
+		$("loginFacebookButton").click(function () {
+			alert("Facebook");
+		});
+	}
 </script>
