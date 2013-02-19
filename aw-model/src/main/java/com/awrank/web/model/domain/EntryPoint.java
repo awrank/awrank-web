@@ -1,9 +1,7 @@
 package com.awrank.web.model.domain;
 
 import org.joda.time.DateTime;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
 
 import javax.persistence.*;
@@ -82,7 +80,7 @@ public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRe
     }
     
     /**
-     * User that order belongs to.
+     * User that entry point belongs to.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)

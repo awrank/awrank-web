@@ -17,10 +17,13 @@ import com.awrank.web.model.dao.UserEmailActivationDao;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
+import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
+import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 
 @Service
@@ -83,6 +86,9 @@ public class UserEmailActivationServiceImpl implements
 	@Autowired
 	private EntryPointService entryPointService;
 	
+	@Autowired
+	private UserRoleService userRoleService;
+	
 	@Override
 	public void send(Map params) throws UserActivationEmailNotSetException {
 			
@@ -134,7 +140,13 @@ public class UserEmailActivationServiceImpl implements
 			thePoint.setVerifiedDate(creationDate);//TODO: refactor DAOs or/and db: for email verification we store verification date as Date, for entry point - as DateTime. Possible bottleneck here - we probably will need to check they are the sane!!! 
 			entryPointService.save(thePoint);
 			
+		//---------- we add record concerning user role to user_roles ----	
 			
+			UserRole role = new UserRole();
+			role.setUser(user);
+			role.setRole(Role.USER_VERIFIED);
+			
+			userRoleService.save(role);
 			
 			return true;
 		

@@ -12,6 +12,7 @@ import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,14 @@ public class UserController extends AbstractController {
         return result;
     }
 
-    //@Consumes("application/json")
+   /**
+    *  Here we go from registartion form so, technically, this is "/register"
+    * @param form
+    * @param request
+    * @return
+    * @throws EntryPointNotCreatedException
+    * @throws UserActivationEmailNotSetException
+    */
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public
     @ResponseBody()
@@ -65,8 +73,8 @@ public class UserController extends AbstractController {
         form.setUserRemoteAddr(request.getRemoteAddr());
 
         try {
-
-            userService.register(form);
+        	
+            userService.register(form, request);
 
             return getPositiveResponseMap();
 

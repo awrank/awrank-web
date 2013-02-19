@@ -5,6 +5,8 @@ package com.awrank.web.model.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.domain.EntryPoint;
@@ -78,6 +80,8 @@ public interface UserService {
 	 * @throws EntryPointNotCreatedException 
 	 * @throws UserActivationEmailNotSetException 
 	 */
-	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException; 
+	public void register(UserRegistrationFormPojo form, HttpServletRequest request)
+			throws UserNotCreatedException, EntryPointNotCreatedException,
+			UserActivationEmailNotSetException; 
 
 }

@@ -6,14 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
+import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import org.joda.time.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +33,8 @@ import com.awrank.web.model.dao.UserEmailActivationDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
+import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
@@ -30,6 +43,10 @@ import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
+
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 /**
  * @author Olga Korokhina
  *
@@ -47,16 +64,24 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserEmailActivationService userEmailActivationService;
 	
+	@Autowired
+	private UserRoleService userRoleService;
+	
+	@Autowired
+	@Qualifier("authenticationManager")
+	private AuthenticationManager authenticationManager;
+	
+	
+	@Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
+	//@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
 	@Transactional
 	@Override
-	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException{
+	public void register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException{
 		
 		//--------------------- create user ---------------------------
 		
 		User user = new User();
-		
-		//user.getRoles().add(new Role(user, Role.APPLICATION_ROLE.ROLE_USER));
-		 
+	    		 
 		user.setApiKey(form.getApiKey());
 		user.setFirstName(form.getFirstName());
 		user.setLastName(form.getLastName());
@@ -109,6 +134,34 @@ public class UserServiceImpl implements UserService {
 		userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
 			
 		userEmailActivationService.save(userEmailActivation);
+
+//-------------- here we need save a role for user -------------	
+		
+		UserRole role = new UserRole();
+		role.setUser(user);
+		role.setRole(Role.USER);
+		
+		userRoleService.save(role);
+		
+//---------- we need some authorization for register user + he is logged in right after it -------
+	//----- we need to do it here manually-----	
+    	
+		/*
+    	GrantedAuthority[] grantedAuthorities = new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_USER") };
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
+
+        // generate session if one doesn't exist
+        request.getSession();
+        
+        token.setDetails(new WebAuthenticationDetails(request));
+       
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+        */
+		
+        //-------------------------------
 		
 	}
 	

@@ -23,19 +23,18 @@ public class EntryPointServiceImpl implements EntryPointService {
 	
 	@Override
 	public void add(EntryPoint ep) throws EntryPointNotCreatedException {
-		// TODO Auto-generated method stub
-
+		entryPointDao.save(ep);
 	}
 
 	@Override
 	public void delete(EntryPoint ep) throws EntryPointNotDeletedException {
-		// TODO Auto-generated method stub
+		entryPointDao.delete(ep);
 
 	}
 
 	@Override
 	public void save(EntryPoint ep) {
-		// TODO Auto-generated method stub
+		entryPointDao.save(ep);
 
 	}
 
