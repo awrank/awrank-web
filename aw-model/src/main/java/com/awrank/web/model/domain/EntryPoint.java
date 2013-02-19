@@ -81,15 +81,10 @@ public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRe
         this.type = type;
     }
     
-    //----------- getting 
-    //org.hibernate.QueryException: could not resolve property: user_id of: com.awrank.web.model.domain.EntryPoint [select e from com.awrank.web.model.domain.EntryPoint e where e.user_id = :user_id]
-    //---without this, query can't see parent classes fields? o_O
-   
-    
     /**
-     * User associated with record.
+     * User that order belongs to.
      */
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 	

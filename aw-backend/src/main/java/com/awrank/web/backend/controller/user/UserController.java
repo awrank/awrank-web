@@ -2,9 +2,12 @@ package com.awrank.web.backend.controller.user;
 
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.domain.User;
-import com.awrank.web.model.domain.UserEmailActivation;
+
+import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
+import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
+import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
@@ -26,6 +29,9 @@ public class UserController extends AbstractController {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    UserEmailActivationService userEmailActivationService;
 
     private Map getPositiveResponseMap() {
 
@@ -48,7 +54,7 @@ public class UserController extends AbstractController {
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public
     @ResponseBody()
-    Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request) {
+    Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request) throws EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
         if (userService.findByEmail(form.getEmail()).size() > 0)
             return getNegativeResponseMap("this email already registered in system");
@@ -103,28 +109,10 @@ public class UserController extends AbstractController {
     @ResponseBody
     Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
 
-        //Here we check if such a key exists in db, if yes - fetch user's email and password and build the key with same hasher but with current user IP.
-
-        UserEmailActivation record = userService.findEmailVerificationByCode(key);
-
-        /*
-          if(record == null) return getNegativeResponseMap("key not found");
-
-          User user = record.getUser();
-
-          String new_key = SMTPAuthenticator.getHashed256(user.getEmail()+"."+testactivation_password+"."+request.getLocalAddr() +"."+request.getRemoteAddr());
-
-          System.out.println("remote host"+request.getRemoteHost());
-          System.out.println("remote adr: "+request.getRemoteAddr());
-          System.out.println("X-Forwarded-For: "+request.getHeader("X-Forwarded-For"));
-
-          System.out.println("new_key: "+new_key);
-
-          if( new_key.compareToIgnoreCase(key) == 0) return "key " +key+ " verified ok";
-          else return "key " +key+ " not verified";
-          */
-        return getNegativeResponseMap("not implemented in UserController well");
-
+    	Boolean response = userEmailActivationService.verify(key, request);
+    	
+    	if(response == false) return getNegativeResponseMap("not verified");
+    	else return getPositiveResponseMap();
 
     }
 

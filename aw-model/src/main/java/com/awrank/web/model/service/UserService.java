@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserEmailActivation;
+import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
+import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
@@ -73,15 +75,9 @@ public interface UserService {
 	 * 
 	 * @param form
 	 * @throws UserNotCreatedException 
+	 * @throws EntryPointNotCreatedException 
+	 * @throws UserActivationEmailNotSetException 
 	 */
-	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException; 
-	
-	/**
-	 *  Here we find in user_email_activation record by given code
-	 * @param code
-	 * @return
-	 */
-	public UserEmailActivation findEmailVerificationByCode(String code);
+	public void register(UserRegistrationFormPojo form) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException; 
 
-	public EntryPoint findEntryPointForUser(String code); 
 }
