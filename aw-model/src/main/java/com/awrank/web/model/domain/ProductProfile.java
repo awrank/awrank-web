@@ -15,81 +15,80 @@ import java.util.Date;
 @Entity
 @Table(name = "product_profiles")
 public class ProductProfile extends ExtendedAbstractAuditable<Long> {
-    /**
-     * Product that profile belong to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+	/**
+	 * Product that profile belong to.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "product_id", nullable = false, updatable = false)
+	private Product product;
 
-    /**
-     * Price of the product in certain moment.
-     */
-    @Column(name = "price", columnDefinition = "DECIMAL(8,2)", nullable = false)
-    private BigDecimal price;
+	/**
+	 * Price of the product in certain moment.
+	 */
+	@Column(name = "price", columnDefinition = "DECIMAL(8,2)", nullable = false)
+	private BigDecimal price;
 
-    /**
-     * Discount of the product in certain moment.
-     */
-    @Column(name = "discount", columnDefinition = "DECIMAL(8,2)", nullable = true)
-    private BigDecimal discount;
+	/**
+	 * Discount of the product in certain moment.
+	 */
+	@Column(name = "discount", columnDefinition = "DECIMAL(8,2)", nullable = true)
+	private BigDecimal discount;
 
-    /**
-     * Start date of profile. Together with endDate defines active period for product profile.
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "started_at", nullable = false)
-    private Date startedDate;
+	/**
+	 * Start date of profile. Together with endDate defines active period for product profile.
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "started_at", nullable = false)
+	private Date startedDate;
 
-    /**
-     * End date of profile.
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ended_at", nullable = false)
-    private Date endedDate;
+	/**
+	 * End date of profile.
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "ended_at", nullable = false)
+	private Date endedDate;
+
+	public ProductProfile() {
+	}
 
 
-    public ProductProfile() {
-    }
+	public BigDecimal getPrice() {
+		return price;
+	}
 
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+	public BigDecimal getDiscount() {
+		return discount;
+	}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
+	}
 
-    public BigDecimal getDiscount() {
-        return discount;
-    }
+	public DateTime getStartedDate() {
+		return (null == startedDate) ? null : new DateTime(startedDate);
+	}
 
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
+	public void setStartedDate(DateTime startedDate) {
+		this.startedDate = (null == startedDate) ? null : startedDate.toDate();
+	}
 
-    public DateTime getStartedDate() {
-        return (null == startedDate) ? null : new DateTime(startedDate);
-    }
+	public DateTime getEndedDate() {
+		return (null == endedDate) ? null : new DateTime(endedDate);
+	}
 
-    public void setStartedDate(DateTime startedDate) {
-        this.startedDate = (null == startedDate) ? null : startedDate.toDate();
-    }
+	public void setEndedDate(DateTime endedDate) {
+		this.endedDate = (null == startedDate) ? null : endedDate.toDate();
+	}
 
-    public DateTime getEndedDate() {
-        return (null == endedDate) ? null : new DateTime(endedDate);
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public void setEndedDate(DateTime endedDate) {
-        this.endedDate = (null == startedDate) ? null : endedDate.toDate();
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 }
