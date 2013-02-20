@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.awrank.web.model.utils.price.PriceUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,122 +12,133 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "payments")
 public class Payment extends ExtendedAbstractAuditable<Long> {
-    /**
-     * Returns payable amount.
-     */
-    @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
 
-    /**
-     * Returns payable amount in local currency.
-     */
-    @Column(name = "amount_currency", nullable = false)
-    private BigDecimal amountCurrency;
+	/**
+	 * Order to which the Payment
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "order_id", nullable = false, updatable = false)
+	private Order order;
 
-    /**
-     * Status of the payment.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private PaymentStatus status = PaymentStatus.UNALLOCATED;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_type", nullable = false, updatable = false)
+	private PaymentType paymentType;
 
-    /**
-     * Transaction reference of the payment.
-     */
-    @Column(name = "transaction_ref", nullable = true, length = 128)
-    private String transactionRef;
+	/**
+	 * Payable amount.
+	 */
+	@Column(name = "amount", columnDefinition = PriceUtils.SQL_PRICE_COLUMN_DEFINITION, nullable = false)
+	private BigDecimal amount;
 
-    /**
-     * Reference of the payment.
-     */
-    @Column(name = "payment_ref", nullable = true, length = 128)
-    private String paymentRef;
+	/**
+	 * Payable amount in local currency.
+	 */
+	@Column(name = "amount_currency", columnDefinition = PriceUtils.SQL_PRICE_COLUMN_DEFINITION, nullable = false)
+	private BigDecimal amountCurrency;
 
-    /**
-     * Payer reference of the payment.
-     */
-    @Column(name = "payer_ref", nullable = true, length = 128)
-    private String payerRef;
+	/**
+	 * Status of the payment.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private PaymentStatus status = PaymentStatus.UNALLOCATED;
 
-    /**
-     * Description of the payment.
-     */
-    @Column(name = "description", nullable = true, length = 255)
-    private String description;
+	/**
+	 * Transaction reference of the payment.
+	 */
+	@Column(name = "transaction_ref", nullable = true, length = 128)
+	private String transactionRef;
 
-    /**
-     * User that payment belongs to.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	/**
+	 * Reference of the payment.
+	 */
+	@Column(name = "payment_ref", nullable = true, length = 128)
+	private String paymentRef;
 
+	/**
+	 * Payer reference of the payment.
+	 */
+	@Column(name = "payer_ref", nullable = true, length = 128)
+	private String payerRef;
 
-    public Payment() {
-    }
+	/**
+	 * Description of the payment.
+	 */
+	@Column(name = "description", nullable = true, length = 255)
+	private String description;
 
+	public Payment() {
+	}
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+	public Order getOrder() {
+		return order;
+	}
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+	public void setOrder(Order order) {
+		this.order = order;
+	}
 
-    public BigDecimal getAmountCurrency() {
-        return amountCurrency;
-    }
+	public PaymentType getPaymentType() {
+		return paymentType;
+	}
 
-    public void setAmountCurrency(BigDecimal amountCurrency) {
-        this.amountCurrency = amountCurrency;
-    }
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
 
-    public PaymentStatus getStatus() {
-        return status;
-    }
+	public BigDecimal getAmount() {
+		return amount;
+	}
 
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
 
-    public String getTransactionRef() {
-        return transactionRef;
-    }
+	public BigDecimal getAmountCurrency() {
+		return amountCurrency;
+	}
 
-    public void setTransactionRef(String transactionRef) {
-        this.transactionRef = transactionRef;
-    }
+	public void setAmountCurrency(BigDecimal amountCurrency) {
+		this.amountCurrency = amountCurrency;
+	}
 
-    public String getPaymentRef() {
-        return paymentRef;
-    }
+	public PaymentStatus getStatus() {
+		return status;
+	}
 
-    public void setPaymentRef(String paymentRef) {
-        this.paymentRef = paymentRef;
-    }
+	public void setStatus(PaymentStatus status) {
+		this.status = status;
+	}
 
-    public String getPayerRef() {
-        return payerRef;
-    }
+	public String getTransactionRef() {
+		return transactionRef;
+	}
 
-    public void setPayerRef(String payerRef) {
-        this.payerRef = payerRef;
-    }
+	public void setTransactionRef(String transactionRef) {
+		this.transactionRef = transactionRef;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getPaymentRef() {
+		return paymentRef;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setPaymentRef(String paymentRef) {
+		this.paymentRef = paymentRef;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public String getPayerRef() {
+		return payerRef;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setPayerRef(String payerRef) {
+		this.payerRef = payerRef;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
