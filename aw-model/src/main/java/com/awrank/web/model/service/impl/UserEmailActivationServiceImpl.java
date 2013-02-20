@@ -9,7 +9,6 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 import org.joda.time.LocalDateTime;
 
 @Service

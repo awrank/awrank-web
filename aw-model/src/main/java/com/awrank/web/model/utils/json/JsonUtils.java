@@ -75,6 +75,8 @@ public class JsonUtils {
 		return jsonNode.getBooleanValue();
 	}
 
+	//---- Thought project we changed Date to joda's LocalDateTime, put attention here!
+	
 	public static Date getDate(final ObjectNode jsonObject, final String key) {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())
