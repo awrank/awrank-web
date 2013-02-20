@@ -43,15 +43,17 @@
  	 <!--  global-method-security pre-post-annotations="enabled" / -->
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="admin" password="pass" authorities="ROLE_ADMIN, ROLE_USER"/>
-                <user name="user1" password="1111" authorities="ROLE_USER"/>
-                <user name="user2" password="2222" authorities="ROLE_USER" disabled="true" />
-            </user-service>
-        </authentication-provider>
+        <authentication-provider ref="awRankingAuthenticationProvider" />
     </authentication-manager>
 
-
-                 
+	<beans:bean id="awRankingAuthenticationProvider" class="com.awrank.web.backend.authentication.AWRankingAuthenticationProviderImpl">
+	 		<beans:property name="userDetailsService" ref="awRaningUserDetailsService" />
+	 		<!-- user-service>
+	                <user name="admin" password="pass" authorities="ROLE_ADMIN, ROLE_USER"/>
+	                <user name="user1" password="1111" authorities="ROLE_USER"/>
+	                <user name="user2" password="2222" authorities="ROLE_USER" disabled="true" />
+	        </user-service -->
+	</beans:bean>
+     <beans:bean id="awRaningUserDetailsService" class="com.awrank.web.backend.authentication.AWRaningUserDetailsService">
+     </beans:bean>            
 </beans:beans>
