@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain.support;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.Date;
  * @version 1.0
  * @author Andrew Stoyaltsev
  */
+@MappedSuperclass
 public class DatedAbstractAuditable<ID extends Serializable> extends ExtendedAbstractAuditable<ID> {
 
     /**
