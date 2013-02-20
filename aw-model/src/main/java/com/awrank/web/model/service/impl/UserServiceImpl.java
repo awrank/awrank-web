@@ -13,6 +13,8 @@ import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(form.getLastName());
         user.setEmail(form.getEmail());
         //user.setLanguage(form.getLanguage());
+        user.setAuthorizationFailsCount(0);
 
         add(user);
 
@@ -105,7 +108,7 @@ public class UserServiceImpl implements UserService {
         userEmailActivationService.send(params);
 
 //-------------- store to db information about verification email was sent -------------------------------------------
-
+        
         UserEmailActivation userEmailActivation = new UserEmailActivation();
 
         userEmailActivation.setCode(key);

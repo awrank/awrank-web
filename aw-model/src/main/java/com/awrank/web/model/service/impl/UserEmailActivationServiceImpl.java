@@ -16,9 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import org.joda.time.LocalDateTime;
 
 @Service
 public class UserEmailActivationServiceImpl implements UserEmailActivationService {
@@ -101,11 +102,10 @@ public class UserEmailActivationServiceImpl implements UserEmailActivationServic
         if (userEmailActivation == null) return false;
 
         //-------------- we found and we activate -----------
-
-        DateTime creationDate = DateTime.now();
-        Date today = new Date(creationDate.getMillis());
-
-        if (userEmailActivation.getEndedDate().after(today)) { //found and fresh
+        
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime ended = userEmailActivation.getEndedDate();
+        if (ended.isAfter(today)) { //found and fresh
 
             //---------------  find entry point ----------------
 
@@ -126,7 +126,7 @@ public class UserEmailActivationServiceImpl implements UserEmailActivationServic
             userEmailActivation.setEmailVerifiedDate(today);
             userEmailActivationDao.save(userEmailActivation);
 
-            thePoint.setVerifiedDate(creationDate);//TODO: refactor DAOs or/and db: for email verification we store verification date as Date, for entry point - as DateTime. Possible bottleneck here - we probably will need to check they are the sane!!!
+            thePoint.setVerifiedDate(today);//TODO: refactor DAOs or/and db: for email verification we store verification date as Date, for entry point - as DateTime. Possible bottleneck here - we probably will need to check they are the sane!!!
             entryPointService.save(thePoint);
 
             //---------- we add record concerning user role to user_roles ----
@@ -137,14 +137,14 @@ public class UserEmailActivationServiceImpl implements UserEmailActivationServic
             userRoleService.save(role);
             return true;
         }
+       
         return false;
     }
 
     @Override
     public void save(UserEmailActivation userEmailActivation) {
-        DateTime creationDate = DateTime.now();
-        //Date today = new Date(creationDate.getMillis());
-        Date endedDate = new Date(mail_verificationcode_lifetime_duration + creationDate.getMillis());
+    	LocalDateTime creationDate = LocalDateTime.now();
+    	LocalDateTime endedDate = creationDate.plusMillis(mail_verificationcode_lifetime_duration);
         userEmailActivation.setEndedDate(endedDate);
         userEmailActivationDao.save(userEmailActivation);
     }

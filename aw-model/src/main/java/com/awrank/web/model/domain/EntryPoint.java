@@ -1,7 +1,10 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -36,7 +39,8 @@ public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "verified_at")
-    private Date verifiedDate;
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime verifiedDate;
 
     /**
      * Type of entry point (email, facebook, google)
@@ -66,12 +70,12 @@ public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
         this.password = password;
     }
 
-    public DateTime getVerifiedDate() {
-        return (null == verifiedDate) ? null : new DateTime(verifiedDate);
+    public LocalDateTime getVerifiedDate() {
+        return (null == verifiedDate) ? null : new LocalDateTime(verifiedDate);
     }
 
-    public void setVerifiedDate(DateTime verifiedDate) {
-        this.verifiedDate = (null == verifiedDate) ? null : verifiedDate.toDate();
+    public void setVerifiedDate(LocalDateTime verifiedDate) {
+        this.verifiedDate = (null == verifiedDate) ? null : verifiedDate;
     }
 
     public EntryPointType getType() {

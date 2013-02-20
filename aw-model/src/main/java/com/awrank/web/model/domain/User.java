@@ -90,7 +90,7 @@ public class User extends DatedAbstractAuditable<Long> {
     /**
      * A quantity of failed authorization attempts.
      */
-    @Column(name = "authorization_fails_count", nullable = false)
+    @Column(name = "authorization_fails_count", nullable = true)
     private Integer authorizationFailsCount;
 
     /**

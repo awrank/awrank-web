@@ -3,6 +3,10 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
+
 import java.util.Date;
 
 /**
@@ -15,7 +19,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "user_email_activation")
-public class UserEmailActivation extends AbstractUserRelatedEntityAuditable<Long> {
+public class UserEmailActivation extends  AbstractUserRelatedEntityAuditable<Long> {//AbstractUserRelatedEntityAuditable nested from DatedAbstractAuditable 
 
     @Column(name = "code", nullable = false)
     private String code;
@@ -31,8 +35,9 @@ public class UserEmailActivation extends AbstractUserRelatedEntityAuditable<Long
 
     @Column(name = "email_verified_at", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emailVerifiedDate;
-
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime emailVerifiedDate;
+    
     /**
      * Constructor
      */
@@ -73,11 +78,11 @@ public class UserEmailActivation extends AbstractUserRelatedEntityAuditable<Long
         this.email = email;
     }
 
-    public Date getEmailVerifiedDate() {
+    public LocalDateTime getEmailVerifiedDate() {
         return emailVerifiedDate;
     }
 
-    public void setEmailVerifiedDate(Date emailVerifiedDate) {
+    public void setEmailVerifiedDate(LocalDateTime emailVerifiedDate) {
         this.emailVerifiedDate = emailVerifiedDate;
     }
 }
