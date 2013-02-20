@@ -96,7 +96,7 @@
 
 
     <!-- Profiles -->
-    <!-- IMPORTANT: nested <beans/> MUST be place at the end of the file -->
+    <!-- IMPORTANT: nested <beans/> MUST be placed at the end of the file -->
     <beans profile="dev">
         <import resource="webapp-profile-dev.xml"/>
     </beans>

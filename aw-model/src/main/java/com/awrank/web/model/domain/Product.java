@@ -1,15 +1,17 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 
 import javax.persistence.*;
 
 /**
  * The <b>Product</b> class represents a product.
+ *
+ * @author Eugene Solomka
  */
 @Entity
 @Table(name = "products")
-public class Product extends ExtendedAbstractAuditable<Long> {
+public class Product extends DatedAbstractAuditable<Long> {
     /**
      * Name of the product.
      */

@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  */
 @SuppressWarnings("serial")
-public class UserRegistrationFormPojo  implements Serializable{
+public class UserRegistrationFormPOJO implements Serializable{
 	
 	private String firstName;
 	public String getFirstName() {

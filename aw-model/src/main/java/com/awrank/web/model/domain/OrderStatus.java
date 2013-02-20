@@ -2,6 +2,8 @@ package com.awrank.web.model.domain;
 
 /**
  * The <code>OrderStatus</code> represents enum for order status information.
+ *
+ * @author Eugene Solomka
  */
 public enum OrderStatus {
     /**

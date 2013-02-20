@@ -1,117 +1,119 @@
 package com.awrank.web.model.domain;
 
-
-import com.awrank.web.model.enums.SecretQuestion;
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.awrank.web.model.enums.SecretQuestion;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * User, refactored by Olga following Dictionary way 
+ * The {@code User} class represents a user entry.
+ *
+ * @author Alex Polyakov
+ * @author Olga Korokhina
  */
 @Entity
 @Table(name = "users")
-//@JsonIgnoreProperties({"createdDate", "lastModifiedDate", "createdBy", "lastModifiedBy"})
-public class User extends ExtendedAbstractAuditable<Long> {
-	/*
+public class User extends DatedAbstractAuditable<Long> {
+
+    /*
 	@Value("#{appProps[user_default_language_code]}")
 	private String user_default_language_code;
 	*/
-	/*
-	@Column(name = "id", nullable = false, unique = true)
-    private Long id;
-	
-    public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-*/
-	/**
-     * уникальный код, который будет использоваться для запросов к API
+    /**
+     * A unique key which is used in requests to API system service.
      */
-	@Column(name = "api_key", nullable = false, unique = true)
+    @Column(name = "api_key", nullable = false, unique = true)
     private String apiKey;
+
     /**
-     * пользователь, пригласивший в систему
+     * A user who invited the current user to the system.
      */
-	//@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	//@JoinColumn(name = "ref_user_id", nullable = true)
-	@Column(name = "ref_user_id", nullable = true)
+    //@ManyToOne(fetch = FetchType.LAZY, optional = true)
+    //@JoinColumn(name = "ref_user_id", nullable = true)
+    @Column(name = "ref_user_id", nullable = true)
     private User refUser;
+
     /**
-     * email пользователя
+     * User email.
      */
-	@Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     /**
-     * скайп
+     * User Skype id.
      */
-	@Column(name = "skype", nullable = true)
+    @Column(name = "skype", nullable = true)
     private String skype;
+
     /**
-     * имя
+     * User name.
      */
-	@Column(name = "first_name", nullable = true)
+    @Column(name = "first_name", nullable = true)
     private String firstName;
+
     /**
-     * фамилия
+     * User last name.
      */
-	@Column(name = "last_name", nullable = true)
+    @Column(name = "last_name", nullable = true)
     private String lastName;
+
     /**
-     * день рождения
+     * User date of birth.
      */
-	@Column(name = "birthday", nullable = true)
-	@Temporal(TemporalType.DATE)
+    @Column(name = "birthday", nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date birthday;
+
     /**
-     * code in dictionary for secret question
-     * код текст из словаря для секретного вопроса
+     * A code in dictionary for secret question
      */
-	@Column(name = "secret_question_dic_code", nullable = true)
-	@Enumerated(EnumType.STRING)
+    @Column(name = "secret_question_dic_code", nullable = true)
+    @Enumerated(EnumType.STRING)
     private SecretQuestion secretQuestionDicCode;
+
     /**
-     * ответ на секретный вопрос
+     * An answer for the secret question.
      */
-	@Column(name = "secret_answer", nullable = true)
+    @Column(name = "secret_answer", nullable = true)
     private String secretAnswer;
-    
+
     /**
-     * количество неудачных аутентификации
+     * Language code in two-chars format, e.g. "EN", "RU", etc.
      */
-	@Column(name = "autorization_fails_count", nullable = false)
+    @Column(name = "language_code", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Language language;
+
+    /**
+     * A quantity of failed authorization attempts.
+     */
+    @Column(name = "authorization_fails_count", nullable = false)
     private Integer authorizationFailsCount;
+
     /**
-     * последняя неудачная попытка
+     * A date of last failed attempt of authorization.
      */
-	@Column(name = "autorization_fails_last", nullable = true)
+    @Column(name = "authorization_fails_last", nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date authorizationFailsLastDate;
+
     /**
-     * дата блокирокви
+     * A date when a ban was started.
      */
-	@Column(name = "ban_started_at", nullable = true)
+    @Column(name = "ban_started_at", nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date banStartedDate;
-	
-	/**
-	 *  language code in "EN", "RU" format
-	 */
-	@Column(name = "language_code", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Language language;
-   
+
+
     public User() {
-    	
-    	this.authorizationFailsCount = 0;
-    	this.language = Language.valueOf("EN");
-    	//this.language = Language.valueOf(user_default_language_code);//doesn't work for some reason
-    	
+        this.authorizationFailsCount = 0;
+        this.language = Language.EN;
+        //this.language = Language.valueOf(user_default_language_code);//doesn't work for some reason
     }
-  
+
     public String getApiKey() {
         return apiKey;
     }
@@ -119,7 +121,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
-  
+
     public User getRefUser() {
         return refUser;
     }
@@ -127,7 +129,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setRefUser(User refUser) {
         this.refUser = refUser;
     }
-   
+
     public String getEmail() {
         return email;
     }
@@ -135,7 +137,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setEmail(String email) {
         this.email = email;
     }
-   
+
     public String getSkype() {
         return skype;
     }
@@ -143,7 +145,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setSkype(String skype) {
         this.skype = skype;
     }
-   
+
     public String getFirstName() {
         return firstName;
     }
@@ -151,7 +153,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-   
+
     public String getLastName() {
         return lastName;
     }
@@ -167,7 +169,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-   
+
     public SecretQuestion getSecretQuestionDicCode() {
         return secretQuestionDicCode;
     }
@@ -175,7 +177,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setSecretQuestionDicCode(SecretQuestion secretQuestionDicCode) {
         this.secretQuestionDicCode = secretQuestionDicCode;
     }
-   
+
     public String getSecretAnswer() {
         return secretAnswer;
     }
@@ -183,7 +185,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
     }
-   
+
 //    public Language getLanguage() {
 //        return language;
 //    }
@@ -191,7 +193,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
 //    public void setLanguage(Language language) {
 //        this.language = language;
 //    }
-//   
+
     public Integer getAuthorizationFailsCount() {
         return authorizationFailsCount;
     }
@@ -199,7 +201,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setAuthorizationFailsCount(Integer authorizationFailsCount) {
         this.authorizationFailsCount = authorizationFailsCount;
     }
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     public Date getAuthorizationFailsLastDate() {
         return authorizationFailsLastDate;
@@ -208,7 +210,7 @@ public class User extends ExtendedAbstractAuditable<Long> {
     public void setAuthorizationFailsLastDate(Date authorizationFailsLastDate) {
         this.authorizationFailsLastDate = authorizationFailsLastDate;
     }
-   
+
     @Temporal(TemporalType.TIMESTAMP)
     public Date getBanStartedDate() {
         return banStartedDate;

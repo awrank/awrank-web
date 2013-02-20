@@ -9,10 +9,19 @@ import java.util.Date;
 
 /**
  * The <b>ProductProfile</b> class defines product characteristic for certain moment of time.
+ *
+ * @author Eugene Solomka
  */
 @Entity
 @Table(name = "product_profiles")
 public class ProductProfile extends ExtendedAbstractAuditable<Long> {
+    /**
+     * Product that profile belong to.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     /**
      * Price of the product in certain moment.
      */
@@ -38,13 +47,6 @@ public class ProductProfile extends ExtendedAbstractAuditable<Long> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ended_at", nullable = false)
     private Date endedDate;
-
-    /**
-     * Product that profile belong to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
 
 
     public ProductProfile() {

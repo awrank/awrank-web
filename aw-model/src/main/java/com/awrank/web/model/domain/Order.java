@@ -1,29 +1,24 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
 
 import javax.persistence.*;
 
 /**
  * The <b>Order</b> class represents an order.
+ *
+ * @author Eugene Solomka
+ * @author Andrew Stoyaltsev
  */
 @Entity
 @Table(name = "orders")
-public class Order extends ExtendedAbstractAuditable<Long> {
+public class Order extends AbstractUserRelatedEntityAuditable<Long> {
     /**
      * Current order status.
      */
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.UNPAID;
-
-    /**
-     * User that order belongs to.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
 
     public Order() {
     }
@@ -58,11 +53,4 @@ public class Order extends ExtendedAbstractAuditable<Long> {
         return OrderStatus.DELETED.equals(status);
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

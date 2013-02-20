@@ -1,20 +1,23 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
 import org.joda.time.DateTime;
 
-import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
-
 import javax.persistence.*;
-
 import java.util.Date;
 
 /**
  * The <b>EntryPoint</b> class represents an entry point.
+ *
+ * @author Alex Polyakov
+ * @author Eugene Solomka
+ * @author Olga Korokhina
+ * @author Andrew Stoyaltsev
  */
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "entry_point")
-public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRelatedEntityAuditable<Long> {
+public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
     /**
      * User identifier for sign in (could be email or identifier in social network)
      */
@@ -23,7 +26,7 @@ public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRe
 
     /**
      * Password (required only for email sign in)
-     * encoded with SHA-2 + solt
+     * encoded with SHA-2 + salt
      */
     @Column(name = "password")
     private String password;
@@ -77,21 +80,6 @@ public class EntryPoint extends ExtendedAbstractAuditable<Long>{//AbstractUserRe
 
     public void setType(EntryPointType type) {
         this.type = type;
-    }
-    
-    /**
-     * User that entry point belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-	
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
 }

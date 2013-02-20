@@ -2,6 +2,8 @@ package com.awrank.web.model.domain;
 
 /**
  * The <code>ProductType</code> represents enum for product type information.
+ *
+ * @author Eugene Solomka
  */
 public enum ProductType {
     /**

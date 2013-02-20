@@ -1,11 +1,9 @@
 package com.awrank.web.model.domain;
 
 /**
- * Created with IntelliJ IDEA.
- * User: eugenes
- * Date: 2/12/13
- * Time: 12:05 AM
- * To change this template use File | Settings | File Templates.
+ * The enumeration represents types of possible ways to log in to the system.
+ *
+ * @author Eugene Solomla
  */
 public enum EntryPointType {
     LOGIN,

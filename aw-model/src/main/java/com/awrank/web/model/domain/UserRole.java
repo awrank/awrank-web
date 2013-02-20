@@ -1,22 +1,29 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.Role;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 
 /**
- * права пользователя
+ * The class describes domain entity which reflects user roles.
+ *
+ * @author Alex Polyakov
  */
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "user_roles")
-public class UserRole extends ExtendedAbstractAuditable<Long>{// AbstractPersistable<Long>{
+public class UserRole extends DatedAbstractAuditable<Long> {
+
+    /**
+     * A user that owns the role.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private Role role;
 
-  
     public UserRole() {
     }
 
@@ -30,13 +37,6 @@ public class UserRole extends ExtendedAbstractAuditable<Long>{// AbstractPersist
         this.role = role;
     }
 
-    /**
-     * User that role belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-	
     public User getUser() {
         return user;
     }
@@ -44,5 +44,5 @@ public class UserRole extends ExtendedAbstractAuditable<Long>{// AbstractPersist
     public void setUser(User user) {
         this.user = user;
     }
-   
+
 }

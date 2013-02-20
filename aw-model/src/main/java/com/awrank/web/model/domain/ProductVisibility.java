@@ -2,6 +2,8 @@ package com.awrank.web.model.domain;
 
 /**
  * The <code>ProductVisibility</code> represents enum for product visibility information.
+ *
+ * @author Eugene Solomka
  */
 public enum ProductVisibility {
     /**

@@ -1,40 +1,59 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import org.joda.time.DateTime;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Entry history of user
+ * The {@code EntryHistory} class describes one record in history table related to specified user.
+ *
+ * @author Alex Polyakov
+ * @author Eugene Solomka
+ * @author Andrew Stoyaltsev
  */
 @Entity
 @Table(name = "entry_history")
-public class EntryHistory extends AbstractPersistable<Long> {
+public class EntryHistory extends DatedAbstractAuditable<Long> {
+
+    /**
+     * User that entry history belongs to.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    /**
+     * Entry point that entry history belongs to.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "entry_point_id", nullable = false)
+    private EntryPoint entryPoint;
+
     /**
      * Remote IP address where user was signed in.
      */
-    @Column(name = "ip_addres", nullable = false, length = 64)
+    @Column(name = "ip_address", nullable = false, length = 64)
     private String ipAddress;
 
     /**
      * Entered successfully?
      */
-    @Column(name = "success", nullable = false, length = 64)
+    @Column(name = "success", nullable = false)
     private boolean success;
 
     /**
-     * Session Identifier
+     * Session identifier
      */
     @Column(name = "session_id", nullable = false)
     private String sessionId;
 
     /**
-     * Request spend for session.
+     * Request spent for session.
      */
-    @Column(name = "spend_requests")
-    private Integer spendRequests;
+    @Column(name = "spent_requests")
+    private Integer spentRequests;
 
     /**
      * Date when user has signed in.
@@ -50,24 +69,8 @@ public class EntryHistory extends AbstractPersistable<Long> {
     @Column(name = "signed_out_at", nullable = true)
     private Date signoutDate;
 
-    /**
-     * Entry point that entry history belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "entry_point_id", nullable = false)
-    private EntryPoint entryPoint;
-
-    /**
-     * User that entry history belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-
     public EntryHistory() {
     }
-
 
     public String getIpAddress() {
         return ipAddress;
@@ -93,12 +96,12 @@ public class EntryHistory extends AbstractPersistable<Long> {
         this.sessionId = sessionId;
     }
 
-    public Integer getSpendRequests() {
-        return spendRequests;
+    public Integer getSpentRequests() {
+        return spentRequests;
     }
 
-    public void setSpendRequests(Integer spendRequests) {
-        this.spendRequests = spendRequests;
+    public void setSpentRequests(Integer spentRequests) {
+        this.spentRequests = spentRequests;
     }
 
     public DateTime getSigninDate() {

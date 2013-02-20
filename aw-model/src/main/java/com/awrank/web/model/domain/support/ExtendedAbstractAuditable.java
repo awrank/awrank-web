@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Extension of {@link AbstractAuditable} with overridden mapping and defined user.
  *
- * @author Eugne Solomka
+ * @author Eugene Solomka
  */
 @AttributeOverrides({
         @AttributeOverride(name = "createdDate", column = @Column(name = "created_at")),
