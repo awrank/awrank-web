@@ -1,9 +1,10 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * The {@code UserLimit} entry represents daily user activity. In other words, it shows available requests per day.
@@ -17,12 +18,19 @@ import java.util.Date;
 @Table(name = "user_limit")
 public class UserLimit extends AbstractUserRelatedEntityAuditable<Long> {
 
+    /**
+     * A quantity of allowed request per day.
+     */
     @Column(name = "available_requests", nullable = false)
     private Integer availableRequests;
 
+    /**
+     * A day when calculation of request quantity was performed.
+     */
     @Column(name = "started_at", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date startedDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime startedDate;
 
     public UserLimit() {
     }
@@ -35,11 +43,11 @@ public class UserLimit extends AbstractUserRelatedEntityAuditable<Long> {
         this.availableRequests = availableRequests;
     }
 
-    public Date getStartedDate() {
+    public LocalDateTime getStartedDate() {
         return startedDate;
     }
 
-    public void setStartedDate(Date startedDate) {
+    public void setStartedDate(LocalDateTime startedDate) {
         this.startedDate = startedDate;
     }
 

@@ -1,41 +1,19 @@
 package com.awrank.web.model.domain;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Diary entry about user's information changes
+ *
+ * @author Eugene Solomka
  */
 @Entity
 @Table(name = "diary")
-public class Diary extends AbstractPersistable<Long> {
-    /**
-     * Previous value
-     */
-    @Column(name = "old_val", length = 255)
-    private String oldValue;
-
-    /**
-     * New value
-     */
-    @Column(name = "new_val", length = 255)
-    private String newValue;
-
-    /**
-     * Event
-     */
-    @Column(name = "event", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DiaryEvent event;
-
-    /**
-     * Date when event happened
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", nullable = false)
-    private Date date;
+public class Diary extends AbstractUserRelatedEntityAuditable<Long> {
 
     /**
      * Entry history that diary entry belongs to.
@@ -45,16 +23,33 @@ public class Diary extends AbstractPersistable<Long> {
     private EntryHistory entryHistory;
 
     /**
-     * User that order belongs to.
+     * Previous value.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "old_val", length = 255)
+    private String oldValue;
 
+    /**
+     * New value.
+     */
+    @Column(name = "new_val", length = 255)
+    private String newValue;
+
+    /**
+     * Event.
+     */
+    @Column(name = "event", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DiaryEvent event;
+
+    /**
+     * Date when event happened.
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime date;
 
     public Diary() {
     }
-
 
     public String getOldValue() {
         return oldValue;
@@ -80,11 +75,11 @@ public class Diary extends AbstractPersistable<Long> {
         this.event = event;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -96,11 +91,4 @@ public class Diary extends AbstractPersistable<Long> {
         this.entryHistory = entryHistory;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

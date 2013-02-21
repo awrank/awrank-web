@@ -32,7 +32,7 @@ public class Product extends DatedAbstractAuditable<Long> {
     private ProductType productType;
 
     /**
-     * Visibility
+     * Visibility.
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "visibility", nullable = false)

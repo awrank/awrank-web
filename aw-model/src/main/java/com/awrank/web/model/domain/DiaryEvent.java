@@ -2,6 +2,8 @@ package com.awrank.web.model.domain;
 
 /**
  * The <code>DiaryEvent</code> is represented diary event information.
+ *
+ * @author Eugene Solomka
  */
 public enum DiaryEvent {
     /**
@@ -37,7 +39,7 @@ public enum DiaryEvent {
     /**
      * When user successfully finished payment
      */
-    SUCCESFULLY_PAID,
+    SUCCESSFULLY_PAID,
 
     /**
      * When error during payment process happened

@@ -5,43 +5,50 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.*;
 
 /**
- * promo codes
- * refactored by Olga
+ * The class contains information about {@code PromoCode} instance.
+ *
+ * @author Alex Polyakov
+ * @author Eugene Solomka
+ * @author Olga Korokhina
+ * @author Andrew Stoyaltsev
  */
 @Entity
 @Table(name = "promo_codes")
 public class PromoCode extends AbstractPersistable<Long> {
 
     /**
-     * TODO
-     * ?
+     * TODO: description ?
      */
-	@Column(name = "reference", nullable = true)	
+    @Column(name = "reference", nullable = true)
     private String reference;
+
     /**
-     * code
+     * Code.
      */
     @Column(name = "code", nullable = false, unique = true)
     private String code;
-    
-    //TODO: replace with "product"
+
+    // todo: need product profile ?
+
     /**
-     * product settings
+     * Product.
      */
-//  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//  @JoinColumn(name = S_TARIFF_SETTINGS, nullable = false)
-    //private TariffSettings tariffSettings;
-    
-//    /**
-//     * order
-//     */
-//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-//    @JoinColumn(name = "user_order_id", nullable = true)
-//    private UserOrder userOrder;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    /**
+     * Order.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "order_id", nullable = true)
+    private Order order;
+
+    // todo: need user?
 
     public PromoCode() {
     }
-    
+
     public String getReference() {
         return reference;
     }
@@ -58,19 +65,19 @@ public class PromoCode extends AbstractPersistable<Long> {
         this.code = code;
     }
 
-//    public TariffSettings getTariffSettings() {
-//        return tariffSettings;
-//    }
-//
-//    public void setTariffSettings(TariffSettings tariffSettings) {
-//        this.tariffSettings = tariffSettings;
-//    }
-//
-//    public UserOrder getUserOrder() {
-//        return userOrder;
-//    }
-//
-//    public void setUserOrder(UserOrder userOrder) {
-//        this.userOrder = userOrder;
-//    }
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

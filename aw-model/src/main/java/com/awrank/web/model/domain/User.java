@@ -3,6 +3,8 @@ package com.awrank.web.model.domain;
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
 import com.awrank.web.model.enums.SecretQuestion;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -64,8 +66,9 @@ public class User extends DatedAbstractAuditable<Long> {
      * User date of birth.
      */
     @Column(name = "birthday", nullable = true)
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime birthday;
 
     /**
      * A code in dictionary for secret question
@@ -97,15 +100,17 @@ public class User extends DatedAbstractAuditable<Long> {
      * A date of last failed attempt of authorization.
      */
     @Column(name = "authorization_fails_last", nullable = true)
-    @Temporal(TemporalType.DATE)
-    private Date authorizationFailsLastDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime authorizationFailsLastDate;
 
     /**
      * A date when a ban was started.
      */
     @Column(name = "ban_started_at", nullable = true)
-    @Temporal(TemporalType.DATE)
-    private Date banStartedDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime banStartedDate;
 
 
     public User() {
@@ -162,11 +167,11 @@ public class User extends DatedAbstractAuditable<Long> {
         this.lastName = lastName;
     }
 
-    public Date getBirthday() {
+    public LocalDateTime getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDateTime birthday) {
         this.birthday = birthday;
     }
 
@@ -203,20 +208,20 @@ public class User extends DatedAbstractAuditable<Long> {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getAuthorizationFailsLastDate() {
+    public LocalDateTime getAuthorizationFailsLastDate() {
         return authorizationFailsLastDate;
     }
 
-    public void setAuthorizationFailsLastDate(Date authorizationFailsLastDate) {
+    public void setAuthorizationFailsLastDate(LocalDateTime authorizationFailsLastDate) {
         this.authorizationFailsLastDate = authorizationFailsLastDate;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getBanStartedDate() {
+    public LocalDateTime getBanStartedDate() {
         return banStartedDate;
     }
 
-    public void setBanStartedDate(Date banStartedDate) {
+    public void setBanStartedDate(LocalDateTime banStartedDate) {
         this.banStartedDate = banStartedDate;
     }
 }

@@ -1,13 +1,10 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
-
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * The <b>EntryPoint</b> class represents an entry point.
@@ -22,20 +19,19 @@ import java.util.Date;
 @Table(name = "entry_point")
 public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
     /**
-     * User identifier for sign in (could be email or identifier in social network)
+     * User identifier for sign in (could be email or identifier in social network).
      */
     @Column(name = "uid", nullable = false)
     private String uid;
 
     /**
-     * Password (required only for email sign in)
-     * encoded with SHA-2 + salt
+     * Password (required only for email sign in) encoded with SHA-2 + salt.
      */
     @Column(name = "password")
     private String password;
 
     /**
-     * Date when entry point was verified
+     * Date when entry point was verified.
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "verified_at")
@@ -51,9 +47,7 @@ public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
 
 
     public EntryPoint() {
-    	
     }
-
 
     public String getUid() {
         return uid;

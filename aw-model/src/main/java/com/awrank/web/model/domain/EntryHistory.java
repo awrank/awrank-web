@@ -1,10 +1,10 @@
 package com.awrank.web.model.domain;
 
-import com.awrank.web.model.domain.support.DatedAbstractAuditable;
-import org.joda.time.DateTime;
+import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * The {@code EntryHistory} class describes one record in history table related to specified user.
@@ -15,14 +15,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "entry_history")
-public class EntryHistory extends DatedAbstractAuditable<Long> {
-
-    /**
-     * User that entry history belongs to.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+public class EntryHistory extends AbstractUserRelatedEntityAuditable<Long> {
 
     /**
      * Entry point that entry history belongs to.
@@ -44,7 +37,7 @@ public class EntryHistory extends DatedAbstractAuditable<Long> {
     private boolean success;
 
     /**
-     * Session identifier
+     * Session identifier.
      */
     @Column(name = "session_id", nullable = false)
     private String sessionId;
@@ -60,14 +53,16 @@ public class EntryHistory extends DatedAbstractAuditable<Long> {
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "signed_in_at", nullable = false)
-    private Date signinDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime signinDate;
 
     /**
      * Date when user has signed out.
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "signed_out_at", nullable = true)
-    private Date signoutDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime signoutDate;
 
     public EntryHistory() {
     }
@@ -104,20 +99,20 @@ public class EntryHistory extends DatedAbstractAuditable<Long> {
         this.spentRequests = spentRequests;
     }
 
-    public DateTime getSigninDate() {
-        return (null == signinDate) ? null : new DateTime(signinDate);
+    public LocalDateTime getSigninDate() {
+        return (null == signinDate) ? null : new LocalDateTime(signinDate);
     }
 
-    public void setSigninDate(DateTime signinDate) {
-        this.signinDate = (null == signinDate) ? null : signinDate.toDate();
+    public void setSigninDate(LocalDateTime signinDate) {
+        this.signinDate = signinDate;
     }
 
-    public DateTime getSignoutDate() {
-        return (null == signoutDate) ? null : new DateTime(signoutDate);
+    public LocalDateTime getSignoutDate() {
+        return (null == signoutDate) ? null : new LocalDateTime(signoutDate);
     }
 
-    public void setSignoutDate(DateTime signoutDate) {
-        this.signoutDate = (null == signoutDate) ? null : signoutDate.toDate();
+    public void setSignoutDate(LocalDateTime signoutDate) {
+        this.signoutDate = signoutDate;
     }
 
     public EntryPoint getEntryPoint() {
@@ -128,11 +123,4 @@ public class EntryHistory extends DatedAbstractAuditable<Long> {
         this.entryPoint = entryPoint;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
