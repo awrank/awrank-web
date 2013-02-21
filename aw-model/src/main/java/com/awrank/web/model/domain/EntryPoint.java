@@ -51,6 +51,7 @@ public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
 
 
     public EntryPoint() {
+    	
     }
 
 

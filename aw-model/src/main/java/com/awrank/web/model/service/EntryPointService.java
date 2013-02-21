@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.exception.entrypoint.*;
 import com.awrank.web.model.domain.User;
 
@@ -23,5 +24,5 @@ public interface EntryPointService {
 	
 	public List<EntryPoint> findEntryPointForUser(User user);
 	
-	
+	public String findPasswordForUserByEntryPointType(User user, EntryPointType type);
 }

@@ -1,10 +1,12 @@
 package com.awrank.web.model.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.exception.userrole.*;
 import com.awrank.web.model.domain.UserRole;
 
@@ -23,5 +25,5 @@ public interface UserRoleService {
 	
 	public List<UserRole> findUserRoleForUser(User user);
 	
-	
+	public Set<Role> findUserRolesSetForUser(User user);
 }

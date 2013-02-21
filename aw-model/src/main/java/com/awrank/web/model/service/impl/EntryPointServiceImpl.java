@@ -1,5 +1,6 @@
 package com.awrank.web.model.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.UserRole;
 import com.awrank.web.model.exception.entrypoint.*;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.domain.User;
@@ -42,6 +45,26 @@ public class EntryPointServiceImpl implements EntryPointService {
 	public List<EntryPoint> findEntryPointForUser(User user) {
 		
 		return entryPointDao.select(user);
+	}
+	
+	@Override
+	public String findPasswordForUserByEntryPointType(User user, EntryPointType type){
+		
+		List<EntryPoint> list = entryPointDao.selectActiveByType(user, String.valueOf(type));
+		
+		if(list == null || list.size() == 0) return null;
+		
+		return list.get(0).getPassword();
+		/*
+		List<EntryPoint> filtered = new ArrayList<EntryPoint>();
+		
+		//It shall be more beautiful way with Collections here but I can't recall it now
+		for (EntryPoint ep : list) { if(ep.getEndedDate() == null) filtered.add(ep); }
+		
+		if(filtered.size() == 0) return null;
+		
+		return filtered.get(0).getPassword();
+		*/
 	}
 
 }
