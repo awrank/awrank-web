@@ -24,8 +24,6 @@ import com.awrank.web.model.service.UserService;
 public class AWRankingAuthenticationProviderImpl extends
 		AbstractUserDetailsAuthenticationProvider {
 
-	@Autowired
-	private ApplicationContext appContext;
 	
 	//@Autowired
 	private AWRankingUserDetailsService userDetailsService;
@@ -37,12 +35,7 @@ public class AWRankingAuthenticationProviderImpl extends
 	}
 	
 	public AWRankingUserDetailsService getUserDetailsService(){
-		
-		
-		if(userDetailsService ==  null && appContext != null){
-			userDetailsService = (AWRankingUserDetailsService) appContext.getBean("userDetailsService");
-		}
-		
+	
 		return userDetailsService;
 	}
 	
@@ -69,8 +62,8 @@ public class AWRankingAuthenticationProviderImpl extends
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
 		
-		getUserDetailsService().loadUserByUsername(username);
-		return null;
+		return getUserDetailsService().loadUserByUsername(username);
+		
 	}
 
 }

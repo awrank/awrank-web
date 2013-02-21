@@ -29,9 +29,6 @@ import com.awrank.web.model.service.UserService;
  */
 @Service
 public class AWRankingUserDetailsService implements UserDetailsService {
-
-	@Autowired
-	private ApplicationContext appContext;
 	
 	//@Autowired 
 	//@Qualifier("entryPointServiceImpl")
@@ -61,10 +58,6 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 	}
 	
 	public UserRoleService getUserRoleService(){
-		
-		if(userRoleService ==  null && appContext != null){
-			userRoleService = (UserRoleService) appContext.getBean("userRoleService");
-		}
 		
 		return userRoleService;
 	}

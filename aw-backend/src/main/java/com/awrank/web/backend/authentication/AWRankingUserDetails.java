@@ -89,15 +89,28 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	 * @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
 	 */
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	/*
+	public AWRankingGrantedAuthority[] getAuthorities() {
+		
+		
+		List list = new ArrayList();
+		for (Role role : roles) {
+		list.add(new AWRankingGrantedAuthority(user.getId(), user.getEmail(), role.toString()));
+		}
+		return (AWRankingGrantedAuthority[])list.toArray(new GrantedAuthority[0]);
+		
+	}
+	*/
 	
-		if(user == null) return null;
+	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
 		List<AWRankingGrantedAuthority> list = new ArrayList<AWRankingGrantedAuthority>();
+	
+		if(user == null) return list;
 		
 		for (Role role : roles) {
 		
-			list.add(new AWRankingGrantedAuthority(user.getId(), role.toString()));
+			list.add(new AWRankingGrantedAuthority(user.getId(), user.getEmail(), role.toString()));//email as username
 		}
 		
 		return list;

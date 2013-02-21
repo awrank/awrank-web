@@ -13,6 +13,7 @@
 
     <!-- anonymous login -->
     <http pattern="/login.jsp*" security="none"/>
+    <http pattern="/index*" security="none"/>
 
   
     <!-- Stateless RESTful service using Basic authentication -->

@@ -13,13 +13,16 @@ public class AWRankingGrantedAuthority implements GrantedAuthority {
 	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
 	 */
 	
-	public AWRankingGrantedAuthority(Long userId, String authority){
+	public AWRankingGrantedAuthority(Long userId, String username, String authority){
 		
 		this.userId = userId;
+		this.username = username;
 		this.authority = authority;
+		
 	}
 	
 	private Long userId;
+	private String username;
 	private String authority;//ROLE_USER etc. - not password but role wording
 	
 	@Override
