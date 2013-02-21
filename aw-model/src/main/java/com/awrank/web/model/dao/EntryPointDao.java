@@ -22,6 +22,9 @@ public interface EntryPointDao extends CrudRepository<EntryPoint, Long> {
 	 List<EntryPoint> select(@Param("user") User user);
 	 
 	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.endedDate is NULL")
-	 //@Query("select e from EntryPoint e where e.user = :user and e.type = :type")
 	 List<EntryPoint> selectActiveByType(@Param("user") User user, @Param("type") String type);
+	 
+	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.password = :password and e.endedDate is NULL")
+	 List<EntryPoint> selectActiveByTypeAndPassword(@Param("user") User user, @Param("type") String type, @Param("password") String password);
+	 
 }

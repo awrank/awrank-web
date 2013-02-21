@@ -1,6 +1,9 @@
 package com.awrank.web.backend.controller.user;
 
+import com.awrank.web.backend.authentication.AWRankingUserDetails;
+import com.awrank.web.backend.authentication.AWRankingUserDetailsService;
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
@@ -11,6 +14,11 @@ import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +40,13 @@ public class UserController extends AbstractController {
 
     @Autowired
     private UserEmailActivationService userEmailActivationService;
+
+    @Autowired
+    private AWRankingUserDetailsService awRankingUserDetailsService;
+
+    @Autowired
+    @Qualifier("authenticationManager")
+    private AuthenticationManager authenticationManager;
 
     private Map getPositiveResponseMap() {
         Map<String, String> result = new HashMap<String, String>();
@@ -78,8 +93,30 @@ public class UserController extends AbstractController {
         form.setUserRemoteAddr(request.getRemoteAddr());
 
         try {
-            userService.register(form, request);
+            User user = userService.register(form, request);
+            //if registered ok - we need to log user in manualy
+            
+            //---------- we need some authorization for register user + he is logged in right after it -------
+            //----- we need to do it here manually-----
+
+    		
+           // AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
+
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
+
+            // generate session if one doesn't exist
+            request.getSession();
+            
+            AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
+            
+            token.setDetails(details);
+           
+            Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+            SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+                       
             return getPositiveResponseMap();
+            
         } catch (UserNotCreatedException e) {
             e.printStackTrace();
             return getNegativeResponseMap(e.getMessage());

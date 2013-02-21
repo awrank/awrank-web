@@ -24,5 +24,9 @@ public interface EntryPointService {
 	
 	public List<EntryPoint> findEntryPointForUser(User user);
 	
+	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type);
+	
+	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user, EntryPointType type, String password);
+	
 	public String findPasswordForUserByEntryPointType(User user, EntryPointType type);
 }

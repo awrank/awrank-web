@@ -67,4 +67,17 @@ public class EntryPointServiceImpl implements EntryPointService {
 		*/
 	}
 
+	@Override
+	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user,
+			EntryPointType type) {
+		
+		return entryPointDao.selectActiveByType(user, String.valueOf(type));
+	}
+
+	@Override
+	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user,
+			EntryPointType type, String password) {
+		
+		return entryPointDao.selectActiveByTypeAndPassword(user, String.valueOf(type), password);
+	}
 }

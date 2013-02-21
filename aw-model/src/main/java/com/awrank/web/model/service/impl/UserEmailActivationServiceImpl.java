@@ -131,7 +131,7 @@ public class UserEmailActivationServiceImpl implements UserEmailActivationServic
 
             UserRole role = new UserRole();
             role.setUser(user);
-            role.setRole(Role.USER_VERIFIED);
+            role.setRole(Role.ROLE_USER_VERIFIED);
             userRoleService.save(role);
             return true;
         }

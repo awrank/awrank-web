@@ -1,5 +1,6 @@
 package com.awrank.web.model.service.impl;
 
+
 import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
@@ -16,14 +17,11 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,17 +46,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleService userRoleService;
-
-    @Autowired
-    @Qualifier("authenticationManager")
-    private AuthenticationManager authenticationManager;
-
-
+ 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
     //@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
     @Transactional
     @Override
-    public void register(UserRegistrationFormPOJO form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
+    public User register(UserRegistrationFormPOJO form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
         //--------------------- create user ---------------------------
 
@@ -122,30 +115,34 @@ public class UserServiceImpl implements UserService {
 
         UserRole role = new UserRole();
         role.setUser(user);
-        role.setRole(Role.USER);
+        role.setRole(Role.ROLE_USER);
 
         userRoleService.save(role);
 
+ /*       
 //---------- we need some authorization for register user + he is logged in right after it -------
         //----- we need to do it here manually-----
 
-		/*
-    	GrantedAuthority[] grantedAuthorities = new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_USER") };
+		
+       // AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
 
         // generate session if one doesn't exist
         request.getSession();
         
-        token.setDetails(new WebAuthenticationDetails(request));
+        AWRankingUserDetails details = aWRaningUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
+        
+        token.setDetails(details);
        
         Authentication authenticatedUser = authenticationManager.authenticate(token);
 
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-        */
+       
 
         //-------------------------------
-
+*/
+        return user;
     }
 
 
@@ -188,7 +185,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void save(User user) {
-        // TODO Auto-generated method stub
+    	
+    	userDao.save(user);
 
     }
 
@@ -197,8 +195,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> findById(Long id) {
-        // TODO Auto-generated method stub
-        return new ArrayList<User>();
+    	
+    	return userDao.findById(id);
     }
 
     /* (non-Javadoc)
@@ -206,14 +204,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> findByEmail(String email) {
-        // TODO Auto-generated method stub
-        return new ArrayList<User>();
+     
+        return userDao.findByEmail(email);
     }
 
     @Override
     public List<User> findByAPIKey(String key) {
-        // TODO Auto-generated method stub
-        return new ArrayList<User>();
+      
+    	 return userDao.findByIPIKey(key);
     }
 
 }

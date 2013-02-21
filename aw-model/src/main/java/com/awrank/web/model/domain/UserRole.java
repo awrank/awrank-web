@@ -22,13 +22,13 @@ public class UserRole extends DatedAbstractAuditable<Long> {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public UserRole() {
     }
-
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
+   
     public Role getRole() {
         return role;
     }

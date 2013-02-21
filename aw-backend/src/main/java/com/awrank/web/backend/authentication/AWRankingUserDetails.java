@@ -4,7 +4,9 @@
 package com.awrank.web.backend.authentication;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,19 @@ import com.awrank.web.model.service.UserService;
  */
 @SuppressWarnings("serial")
 public class AWRankingUserDetails implements Serializable, UserDetails {
-
-	@Autowired 
-	EntryPointService entryPointService;
 	
-	@Autowired 
-	UserRoleService userRoleService;
 	
 	private String password;
+	
+	public void setPassword(String value){
+		
+		password = value;
+	}
+	
+	public String getPassword(){
+		
+		return password;
+	}
 	
 	private User user;
 		
@@ -51,7 +58,6 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	
 	public Set<Role> getRoles() {
 
-		if(roles == null) fetchRoles();
 		return roles;
 	}
 
@@ -59,7 +65,12 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 		this.roles = roles;
 	
 	}
+	
+	public AWRankingUserDetails(User user){
 		
+		this.user = user;
+	}
+	
 	//------- as far as we can have several entry points for same user we need to have login type to fetch the password
 	
 	private EntryPointType type = EntryPointType.LOGIN;//default value is login
@@ -79,34 +90,20 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	/*
-		List list = new ArrayList();
-		for (Authority role : roles) {
-		list.add(new GrantedAuthorityImpl(role.getAuthority()));
+	
+		if(user == null) return null;
+		
+		List<AWRankingGrantedAuthority> list = new ArrayList<AWRankingGrantedAuthority>();
+		
+		for (Role role : roles) {
+		
+			list.add(new AWRankingGrantedAuthority(user.getId(), role.toString()));
 		}
-		return (GrantedAuthority[])list.toArray(new GrantedAuthority[0]);
-		*/
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see org.springframework.security.core.userdetails.UserDetails#getPassword()
-	 */
-	@Override
-	public String getPassword() {
 		
-		if(password == null) fetchPassword();	
-		return password;
-	}
+		return list;
 
-	protected void fetchPassword(){
-		
-		password = entryPointService.findPasswordForUserByEntryPointType(user, type);
 	}
 	
-	protected void fetchRoles(){
-		
-		roles = userRoleService.findUserRolesSetForUser(user);
-	}
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.userdetails.UserDetails#getUsername()
 	 */
@@ -119,6 +116,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 		return null;
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.userdetails.UserDetails#isAccountNonExpired()
 	 */

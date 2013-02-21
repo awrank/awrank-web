@@ -70,12 +70,13 @@ public interface UserService {
      * part of EntryPoint, not User
      *
      * @param form
+     * @return 
      * @throws UserNotCreatedException
      * @throws EntryPointNotCreatedException
      * @throws UserActivationEmailNotSetException
      *
      */
-    void register(UserRegistrationFormPOJO form, HttpServletRequest request)
+    User register(UserRegistrationFormPOJO form, HttpServletRequest request)
             throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException;
 
 }

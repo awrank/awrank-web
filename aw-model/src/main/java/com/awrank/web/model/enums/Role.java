@@ -9,20 +9,25 @@ public enum Role {
     /**
      * Registered user.
      */
-    USER,
+    ROLE_USER,
 
     /**
      * User which confirmed his email.
      */
-    USER_VERIFIED,
+    ROLE_USER_VERIFIED,
 
     /**
      * The role allows to edit user data.
      */
-    EDIT_USER,
+    ROLE_EDIT_USER,
 
     /**
      * The role allows to edit dictionary data.
      */
-    EDIT_DICTIONARY
+    ROLE_EDIT_DICTIONARY,
+    
+    /**
+     *  Admin
+     */
+    ROLE_ADMIN
 }
