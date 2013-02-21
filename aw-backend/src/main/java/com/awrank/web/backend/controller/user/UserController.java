@@ -9,7 +9,9 @@ import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetE
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
+import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
+import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
@@ -36,8 +38,17 @@ import java.util.Map;
 public class UserController extends AbstractController {
 
     @Autowired
+    @Qualifier("userServiceImpl")
     private UserService userService;
 
+    @Autowired
+    @Qualifier("userRoleServiceImpl")
+    private UserRoleService userRoleService;
+    
+    @Autowired
+    @Qualifier("entryPointServiceImpl")
+    private EntryPointService entryPointService;
+    
     @Autowired
     private UserEmailActivationService userEmailActivationService;
 
@@ -106,6 +117,10 @@ public class UserController extends AbstractController {
 
             // generate session if one doesn't exist
             request.getSession();
+            
+            awRankingUserDetailsService.setUserService(userService);
+            awRankingUserDetailsService.setUserRoleService(userRoleService);
+            awRankingUserDetailsService.setEntryPointService(entryPointService);
             
             AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
             

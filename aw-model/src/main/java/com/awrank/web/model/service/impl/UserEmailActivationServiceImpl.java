@@ -10,6 +10,7 @@ import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +77,11 @@ public class UserEmailActivationServiceImpl implements UserEmailActivationServic
     EmailSenderSendGridImpl sendGridEmailSender;
 
     @Autowired
+    @Qualifier("entryPointServiceImpl")
     private EntryPointService entryPointService;
 
     @Autowired
+    @Qualifier("userRoleServiceImpl")
     private UserRoleService userRoleService;
 
     @Override

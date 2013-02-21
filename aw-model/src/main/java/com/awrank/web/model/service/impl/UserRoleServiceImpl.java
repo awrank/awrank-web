@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.awrank.web.model.dao.UserRoleDao;
@@ -22,6 +23,7 @@ import com.awrank.web.model.domain.User;
 public class UserRoleServiceImpl implements UserRoleService {
 
 	@Autowired
+	@Qualifier("userRoleDao")
 	private UserRoleDao userRoleDao;
 	
 	@Override

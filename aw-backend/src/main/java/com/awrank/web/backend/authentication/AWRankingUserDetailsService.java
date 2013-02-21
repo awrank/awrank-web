@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,13 +30,19 @@ import com.awrank.web.model.service.UserService;
 @Service
 public class AWRankingUserDetailsService implements UserDetailsService {
 
-	@Autowired 
+	@Autowired
+	private ApplicationContext appContext;
+	
+	//@Autowired 
+	//@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
 	
-	@Autowired 
+//	@Autowired 
+//	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 	
-	@Autowired 
+//	@Autowired 
+//	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
 	public void setUserService(UserService value){
@@ -46,6 +55,29 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 		return userService;
 	}
 
+	public void setUserRoleService(UserRoleService value){
+		
+		userRoleService = value;
+	}
+	
+	public UserRoleService getUserRoleService(){
+		
+		if(userRoleService ==  null && appContext != null){
+			userRoleService = (UserRoleService) appContext.getBean("userRoleService");
+		}
+		
+		return userRoleService;
+	}
+	
+	public void setEntryPointService(EntryPointService value){
+		
+		entryPointService = value;
+	}
+	
+	public EntryPointService getEntryPointService(){
+		
+		return entryPointService;
+	}
 	/**
 	 *  Building a set of getDetailsForUser for given user. As far as we have several entry points with password each
 	 *  
@@ -87,7 +119,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 		detail.setPassword(password);
 		detail.setType(type);
 		
-		Set<Role> roles = userRoleService.findUserRolesSetForUser(user);
+		Set<Role> roles = getUserRoleService().findUserRolesSetForUser(user);
 		
 		detail.setRoles(roles);
 		

@@ -17,6 +17,7 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,12 +40,14 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
+    @Qualifier("entryPointServiceImpl")
     private EntryPointService entryPointService;
 
     @Autowired
     private UserEmailActivationService userEmailActivationService;
 
     @Autowired
+    @Qualifier("userRoleServiceImpl")
     private UserRoleService userRoleService;
  
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
@@ -118,30 +121,7 @@ public class UserServiceImpl implements UserService {
         role.setRole(Role.ROLE_USER);
 
         userRoleService.save(role);
-
- /*       
-//---------- we need some authorization for register user + he is logged in right after it -------
-        //----- we need to do it here manually-----
-
-		
-       // AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
-
-        // generate session if one doesn't exist
-        request.getSession();
-        
-        AWRankingUserDetails details = aWRaningUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
-        
-        token.setDetails(details);
-       
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-       
-
-        //-------------------------------
-*/
+ 
         return user;
     }
 

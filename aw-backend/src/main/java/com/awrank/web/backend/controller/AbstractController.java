@@ -37,9 +37,10 @@ public abstract class AbstractController {
 		final Map jsonObject = new HashMap();
 		jsonObject.put("result", "failure");
 		final Map jsonException = new HashMap();
-		jsonException.put("exception", e.getClass().getCanonicalName());
+		
 		jsonException.put("message", e.getMessage());
 		jsonException.put("handler", this.getClass().getCanonicalName());
+		jsonException.put("exception", e.getClass().getCanonicalName());
 		StringWriter writer = new StringWriter();
 		e.printStackTrace(new PrintWriter(writer));
 		jsonException.put("stack_trace", writer.toString());
