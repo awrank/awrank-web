@@ -5,7 +5,7 @@ import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetE
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
-import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +60,7 @@ public interface UserService {
     /**
      * Find user by email, in case of not found returns empty List - no exception thrown, put attention here!!!
      *
-     * @param email
+     * @param key
      * @return
      */
     List<User> findByAPIKey(String key);
@@ -76,7 +76,7 @@ public interface UserService {
      * @throws UserActivationEmailNotSetException
      *
      */
-    User register(UserRegistrationFormPOJO form, HttpServletRequest request)
+    User register(UserRegistrationFormPojo form, HttpServletRequest request)
             throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException;
 
 }

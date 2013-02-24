@@ -12,7 +12,7 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
-import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
 import org.joda.time.LocalDateTime;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     //@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
     @Transactional
     @Override
-    public User register(UserRegistrationFormPOJO form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
+    public User register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
         //--------------------- create user ---------------------------
 

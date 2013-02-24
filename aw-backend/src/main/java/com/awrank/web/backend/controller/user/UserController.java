@@ -14,7 +14,7 @@ import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
-import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPOJO;
+import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -89,7 +89,7 @@ public class UserController extends AbstractController {
             headers = "content-type=application/x-www-form-urlencoded")
     public
     @ResponseBody()
-    Map addUser(@ModelAttribute UserRegistrationFormPOJO form, HttpServletRequest request)
+    Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
             throws EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
         if (userService.findByEmail(form.getEmail()).size() > 0) {
