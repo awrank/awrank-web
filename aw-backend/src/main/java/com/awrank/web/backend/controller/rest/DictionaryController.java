@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller exposes basic methods to work with dictionary through REST.
+ *
+ * @author Eugene Solomka
  */
 @Controller
 @RequestMapping(value = "/rest/dictionary")
