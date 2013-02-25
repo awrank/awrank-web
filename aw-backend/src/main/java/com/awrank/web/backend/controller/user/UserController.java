@@ -117,11 +117,11 @@ public class UserController extends AbstractController {
 
 			// generate session if one doesn't exist
 			request.getSession();
-
+/*
 			awRankingUserDetailsService.setUserService(userService);
 			awRankingUserDetailsService.setUserRoleService(userRoleService);
 			awRankingUserDetailsService.setEntryPointService(entryPointService);
-
+*/
 			AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
 
 			token.setDetails(details);

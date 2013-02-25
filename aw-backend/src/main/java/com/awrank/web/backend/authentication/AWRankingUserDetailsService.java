@@ -7,6 +7,9 @@ import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,16 +27,16 @@ import java.util.Set;
 @Service
 public class AWRankingUserDetailsService implements UserDetailsService {
 
-	//@Autowired 
-	//@Qualifier("entryPointServiceImpl")
+	@Autowired 
+	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
 
-	//	@Autowired
-//	@Qualifier("userRoleServiceImpl")
+	@Autowired
+	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 
-	//	@Autowired
-//	@Qualifier("userServiceImpl")
+	@Autowired
+	@Qualifier("userServiceImpl")
 	private UserService userService;
 
 	public void setUserService(UserService value) {

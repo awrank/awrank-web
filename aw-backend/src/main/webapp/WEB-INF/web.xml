@@ -18,7 +18,11 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/webapp-security-context.xml
+          	/WEB-INF/webapp-security-context.xml
+          	/WEB-INF/webapp-profile-dev.xml
+          	/WEB-INF/webapp-profile-prod.xml
+          	/WEB-INF/data-access-context.xml
+          	/WEB-INF/webapp-dispatcher-context.xml
         </param-value>
     </context-param>
 
@@ -28,7 +32,11 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                /WEB-INF/webapp-dispatcher-servlet.xml
+             	/WEB-INF/webapp-security-context.xml
+          	/WEB-INF/webapp-profile-dev.xml
+          	/WEB-INF/webapp-profile-prod.xml
+          	/WEB-INF/data-access-context.xml
+          	/WEB-INF/webapp-dispatcher-context.xml
             </param-value>
         </init-param>
         <init-param>

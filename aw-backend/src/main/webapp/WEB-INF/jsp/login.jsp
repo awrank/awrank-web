@@ -42,7 +42,7 @@
     <form method="POST" action="<c:url value="/j_spring_security_check" />">
         <table align="center" frame="hsides">
             <tr>
-                <td align="right">Login</td>
+                <td align="right">Email</td>
                 <td><input type="text" name="j_username"/></td>
             </tr>
             <tr>

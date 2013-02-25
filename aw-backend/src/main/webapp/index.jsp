@@ -62,9 +62,11 @@
     <a href="<c:url value="register"/>">Register</a> |
     <a href="<c:url value="login"/>">Login</a> |
     <a href="<c:url value="logout"/>">Logout</a> <br/>
-    <a href="<c:url value="j_spring_security_logout"/>">Spring Security Logout</a> <br/>
+ 
 </p>
 
+<h3>Admin section</h3>
+	<a href="<c:url value="admin/welcome"/>">Check access</a>
 <br/>
 
 <h3>Session scope</h3>
