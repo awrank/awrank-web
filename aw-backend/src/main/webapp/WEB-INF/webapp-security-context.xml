@@ -29,7 +29,7 @@
         <intercept-url pattern="/user/add" access="permitAll"/>
         <intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
 
-        <form-login login-page="/login.jsp"
+        <form-login login-page="/login"
                     default-target-url="/welcome"
                     authentication-failure-url="/loginFailed"/>
         <logout logout-url="/logout" logout-success-url="/index.jsp"/>

@@ -149,8 +149,9 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 			throws UsernameNotFoundException {
 
 		User user = userService.findOneByEmail(username);
-
-
+		List details = getDetailsForUser(user);
+		if(details == null || details.size() == 0) return new AWRankingUserDetails(user);
+		
 		return getDetailsForUser(user).get(0);
 	}
 
