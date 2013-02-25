@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 		String key;
 		try {
 
-			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + form.getPassword() + "." + form.getUserLocalAddr() + "." + form.getUserLocalAddr());
+			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + form.getPassword() + "." + form.getUserLocalAddr() + "." + form.getUserRemoteAddr());
 
 		} catch (Exception e1) {
 
