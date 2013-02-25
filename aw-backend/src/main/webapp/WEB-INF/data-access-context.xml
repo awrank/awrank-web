@@ -1,9 +1,9 @@
 <beans
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://www.springframework.org/schema/beans"
-        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-        xmlns:tx="http://www.springframework.org/schema/tx"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.springframework.org/schema/beans"
+		xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/data/jpa
         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
@@ -11,43 +11,43 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.awrank.web.model.domain"/>
-        <property name="mappingResources" value="META-INF/orm.xml"/>
-        <property name="loadTimeWeaver">
-            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
-        </property>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="true"/>
-            </bean>
-        </property>
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-                <!-- prop key="hibernate.hbm2ddl.auto">update</prop -->
-            </props>
-        </property>
-    </bean>
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="packagesToScan" value="com.awrank.web.model.domain"/>
+		<property name="mappingResources" value="META-INF/orm.xml"/>
+		<property name="loadTimeWeaver">
+			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+		</property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true"/>
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<!--<prop key="hibernate.hbm2ddl.auto">create-drop</prop>-->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-    </bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
 
-    <jpa:auditing auditor-aware-ref="auditorAware"/>
+	<jpa:auditing auditor-aware-ref="auditorAware"/>
 
-    <bean id="auditorAware" class="com.awrank.web.model.utils.user.AuditorAwareImpl"/>
+	<bean id="auditorAware" class="com.awrank.web.model.utils.user.AuditorAwareImpl"/>
 
-    <bean class="org.springframework.data.jpa.domain.support.AuditingBeanFactoryPostProcessor"/>
+	<bean class="org.springframework.data.jpa.domain.support.AuditingBeanFactoryPostProcessor"/>
 
-    <jpa:repositories
-            base-package="com.awrank.web.model.dao"
-            entity-manager-factory-ref="entityManagerFactory"
-            transaction-manager-ref="transactionManager"/>
+	<jpa:repositories
+			base-package="com.awrank.web.model.dao"
+			entity-manager-factory-ref="entityManagerFactory"
+			transaction-manager-ref="transactionManager"/>
 
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>

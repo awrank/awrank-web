@@ -14,8 +14,6 @@ import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
-
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,162 +33,161 @@ import java.util.Map;
 //@PropertySource("/WEB-INF/properties/application.properties")
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+	@Autowired
+	private UserDao userDao;
 
-    @Autowired
-    @Qualifier("entryPointServiceImpl")
-    private EntryPointService entryPointService;
+	@Autowired
+	@Qualifier("entryPointServiceImpl")
+	private EntryPointService entryPointService;
 
-    @Autowired
-    private UserEmailActivationService userEmailActivationService;
+	@Autowired
+	private UserEmailActivationService userEmailActivationService;
 
-    @Autowired
-    @Qualifier("userRoleServiceImpl")
-    private UserRoleService userRoleService;
- 
-    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
-    //@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
-    @Transactional
-    @Override
-    public User register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
+	@Autowired
+	@Qualifier("userRoleServiceImpl")
+	private UserRoleService userRoleService;
 
-        //--------------------- create user ---------------------------
+	@Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
+	//@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
+	@Transactional
+	@Override
+	public User register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
-        User user = new User();
+		//--------------------- create user ---------------------------
 
-        user.setApiKey(form.getApiKey());
-        user.setFirstName(form.getFirstName());
-        user.setLastName(form.getLastName());
-        user.setEmail(form.getEmail());
-        //user.setLanguage(form.getLanguage());
-        user.setAuthorizationFailsCount(0);
+		User user = new User();
 
-        add(user);
+		user.setApiKey(form.getApiKey());
+		user.setFirstName(form.getFirstName());
+		user.setLastName(form.getLastName());
+		user.setEmail(form.getEmail());
+		//user.setLanguage(form.getLanguage());
+		user.setAuthorizationFailsCount(0);
 
-        //---------------- create entrance point for him -----------------
+		add(user);
 
-        EntryPoint entryPoint = new EntryPoint();
+		//---------------- create entrance point for him -----------------
 
-        entryPoint.setUser(user);
+		EntryPoint entryPoint = new EntryPoint();
 
-        entryPoint.setUid(user.getEmail());
-        entryPoint.setPassword(form.getPassword());
-        entryPoint.setType(EntryPointType.EMAIL.EMAIL);//on registration we demand User to have email
+		entryPoint.setUser(user);
 
-        entryPointService.add(entryPoint);
+		entryPoint.setUid(user.getEmail());
+		entryPoint.setPassword(form.getPassword());
+		entryPoint.setType(EntryPointType.EMAIL.EMAIL);//on registration we demand User to have email
 
-        //---------------- sending verification email --------------------
+		entryPointService.add(entryPoint);
 
-        String key;
-        try {
+		//---------------- sending verification email --------------------
 
-            key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + form.getPassword() + "." + form.getUserLocalAddr() + "." + form.getUserLocalAddr());
+		String key;
+		try {
 
-        } catch (Exception e1) {
+			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + form.getPassword() + "." + form.getUserLocalAddr() + "." + form.getUserLocalAddr());
 
-            e1.printStackTrace();
-            throw new UserNotCreatedException();
-        }
+		} catch (Exception e1) {
 
-        Map<String, Object> params = new HashMap<String, Object>();
+			e1.printStackTrace();
+			throw new UserNotCreatedException();
+		}
 
-        params.put("localAddr", form.getUserLocalAddr());
-        params.put("remoteAddr", form.getUserRemoteAddr());
-        params.put("testactivation_email", user.getEmail());
-        params.put("testactivation_password", form.getPassword());
+		Map<String, Object> params = new HashMap<String, Object>();
 
-        userEmailActivationService.send(params);
+		params.put("localAddr", form.getUserLocalAddr());
+		params.put("remoteAddr", form.getUserRemoteAddr());
+		params.put("testactivation_email", user.getEmail());
+		params.put("testactivation_password", form.getPassword());
+
+		userEmailActivationService.send(params);
 
 //-------------- store to db information about verification email was sent -------------------------------------------
-        
-        UserEmailActivation userEmailActivation = new UserEmailActivation();
 
-        userEmailActivation.setCode(key);
-        userEmailActivation.setUser(user);
-        userEmailActivation.setEmail(user.getEmail());
-        userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
+		UserEmailActivation userEmailActivation = new UserEmailActivation();
 
-        userEmailActivationService.save(userEmailActivation);
+		userEmailActivation.setCode(key);
+		userEmailActivation.setUser(user);
+		userEmailActivation.setEmail(user.getEmail());
+		userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
+
+		userEmailActivationService.save(userEmailActivation);
 
 //-------------- here we need save a role for user -------------	
 
-        UserRole role = new UserRole();
-        role.setUser(user);
-        role.setRole(Role.ROLE_USER);
+		UserRole role = new UserRole();
+		role.setUser(user);
+		role.setRole(Role.ROLE_USER);
 
-        userRoleService.save(role);
- 
-        return user;
-    }
+		userRoleService.save(role);
+
+		return user;
+	}
 
 
-    /* (non-Javadoc)
-     * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
-     */
-    @Override
-    //@Transactional
-    public void add(User user) throws UserNotCreatedException {
+	/* (non-Javadoc)
+	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
+	 */
+	@Override
+	//@Transactional
+	public void add(User user) throws UserNotCreatedException {
 
-        try { //can be thrown javax.persistence.PersistenceException etc.
+		try { //can be thrown javax.persistence.PersistenceException etc.
 
-            //Session session = sessionFactory.getCurrentSession();
-            //session.save(user);
-            userDao.save(user);
+			//Session session = sessionFactory.getCurrentSession();
+			//session.save(user);
+			userDao.save(user);
 
-            //session.flush();
+			//session.flush();
 
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            throw new UserNotCreatedException();
+			throw new UserNotCreatedException();
 
-        }
+		}
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.awrank.web.model.service.UserService#delete(com.awrank.web.model.domain.User)
-     */
-    @Override
-    @Transactional
-    public void delete(User user) throws UserNotDeletedException {
+	/* (non-Javadoc)
+	 * @see com.awrank.web.model.service.UserService#delete(com.awrank.web.model.domain.User)
+	 */
+	@Override
+	@Transactional
+	public void delete(User user) throws UserNotDeletedException {
 
-        userDao.delete(user);
+		userDao.delete(user);
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.awrank.web.model.service.UserService#save(com.awrank.web.model.domain.User)
-     */
-    @Override
-    public void save(User user) {
-    	
-    	userDao.save(user);
+	/* (non-Javadoc)
+	 * @see com.awrank.web.model.service.UserService#save(com.awrank.web.model.domain.User)
+	 */
+	@Override
+	public void save(User user) {
 
-    }
+		userDao.save(user);
 
-    /* (non-Javadoc)
-     * @see com.awrank.web.model.service.UserService#findById(java.lang.Integer)
-     */
-    @Override
-    public List<User> findById(Long id) {
-    	
-    	return userDao.findById(id);
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
-     */
-    @Override
-    public List<User> findByEmail(String email) {
-     
-        return userDao.findByEmail(email);
-    }
+	/* (non-Javadoc)
+	 * @see com.awrank.web.model.service.UserService#findById(java.lang.Integer)
+	 */
+	@Override
+	public User findOne(Long id) {
 
-    @Override
-    public List<User> findByAPIKey(String key) {
-      
-    	 return userDao.findByIPIKey(key);
-    }
+		return userDao.findOne(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
+	 */
+	@Override
+	public User findOneByEmail(String email) {
+		return userDao.findByEmail(email);
+	}
+
+	@Override
+	public User findByAPIKey(String key) {
+
+		return userDao.findByIPIKey(key);
+	}
 
 }

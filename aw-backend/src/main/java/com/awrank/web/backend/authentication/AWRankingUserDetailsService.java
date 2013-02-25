@@ -1,18 +1,5 @@
 package com.awrank.web.backend.authentication;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
@@ -20,126 +7,136 @@ import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class for providing custom authentication services, based on Spring Security
- * 
- * @author Olga Korokhina
  *
+ * @author Olga Korokhina
  */
 @Service
 public class AWRankingUserDetailsService implements UserDetailsService {
-	
+
 	//@Autowired 
 	//@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
-	
-//	@Autowired 
+
+	//	@Autowired
 //	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
-	
-//	@Autowired 
+
+	//	@Autowired
 //	@Qualifier("userServiceImpl")
 	private UserService userService;
-	
-	public void setUserService(UserService value){
-		
+
+	public void setUserService(UserService value) {
+
 		userService = value;
 	}
-	
-	public UserService getUserService(){
-		
+
+	public UserService getUserService() {
+
 		return userService;
 	}
 
-	public void setUserRoleService(UserRoleService value){
-		
+	public void setUserRoleService(UserRoleService value) {
+
 		userRoleService = value;
 	}
-	
-	public UserRoleService getUserRoleService(){
-		
+
+	public UserRoleService getUserRoleService() {
+
 		return userRoleService;
 	}
-	
-	public void setEntryPointService(EntryPointService value){
-		
+
+	public void setEntryPointService(EntryPointService value) {
+
 		entryPointService = value;
 	}
-	
-	public EntryPointService getEntryPointService(){
-		
+
+	public EntryPointService getEntryPointService() {
+
 		return entryPointService;
 	}
+
 	/**
-	 *  Building a set of getDetailsForUser for given user. As far as we have several entry points with password each
-	 *  
+	 * Building a set of getDetailsForUser for given user. As far as we have several entry points with password each
+	 *
 	 * @param user
 	 * @return
 	 */
-	public List<AWRankingUserDetails> getDetailsForUser(User user){
-		
-		List<AWRankingUserDetails>  ud_list= new ArrayList<AWRankingUserDetails>();
-		
+	public List<AWRankingUserDetails> getDetailsForUser(User user) {
+
+		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
+
 		List<EntryPoint> ep_list = entryPointService.findEntryPointForUser(user);
-		
-		for (EntryPoint ep : ep_list){
-			
+
+		for (EntryPoint ep : ep_list) {
+
 			AWRankingUserDetails detail = new AWRankingUserDetails(user);
 			detail.setType(ep.getType());
 			detail.setPassword(ep.getPassword());
-			
+
 			Set<Role> roles = userRoleService.findUserRolesSetForUser(user);
-			
+
 			detail.setRoles(roles);
-			
+
 			ud_list.add(detail);
 		}
-		
+
 		return ud_list;
 	}
-	
+
 	/**
-	 *  creates one AWRankingUserDetails by given details, used in manual user authentication after registration
+	 * creates one AWRankingUserDetails by given details, used in manual user authentication after registration
+	 *
 	 * @param user
 	 * @param password
 	 * @param type
 	 * @return
 	 */
-	public AWRankingUserDetails createUserDetailsForUserByCredentials(User user, String password, EntryPointType type){
-		
+	public AWRankingUserDetails createUserDetailsForUserByCredentials(User user, String password, EntryPointType type) {
+
 		AWRankingUserDetails detail = new AWRankingUserDetails(user);
 		detail.setPassword(password);
 		detail.setType(type);
-		
+
 		Set<Role> roles = getUserRoleService().findUserRolesSetForUser(user);
-		
+
 		detail.setRoles(roles);
-		
+
 		return detail;
 	}
-	
-	public List<AWRankingUserDetails> getDetailsForUserByEntryPointType(User user, EntryPointType type){
-		
-		List<AWRankingUserDetails>  ud_list= new ArrayList<AWRankingUserDetails>();
-		
+
+	public List<AWRankingUserDetails> getDetailsForUserByEntryPointType(User user, EntryPointType type) {
+
+		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
+
 		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user, type);
-		
-		for (EntryPoint ep : ep_list){
-			
+
+		for (EntryPoint ep : ep_list) {
+
 			AWRankingUserDetails detail = new AWRankingUserDetails(user);
 			detail.setType(ep.getType());
 			detail.setPassword(ep.getPassword());
-			
+
 			Set<Role> roles = userRoleService.findUserRolesSetForUser(user);
-			
+
 			detail.setRoles(roles);
-			
+
 			ud_list.add(detail);
 		}
-		
+
 		return ud_list;
 	}
+
 	/*
 	 * TODO: implement more intelligent
 	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
@@ -147,11 +144,11 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username)//can be login or email
 			throws UsernameNotFoundException {
-		
-		List<User> list = userService.findByEmail(username);
-		
-		
-		return getDetailsForUser(list.get(0)).get(0);
+
+		User user = userService.findOneByEmail(username);
+
+
+		return getDetailsForUser(user).get(0);
 	}
 
 }

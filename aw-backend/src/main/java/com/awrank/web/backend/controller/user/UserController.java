@@ -37,157 +37,157 @@ import java.util.Map;
 @RequestMapping(value = "/user")
 public class UserController extends AbstractController {
 
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService userService;
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
-    @Autowired
-    @Qualifier("userRoleServiceImpl")
-    private UserRoleService userRoleService;
-    
-    @Autowired
-    @Qualifier("entryPointServiceImpl")
-    private EntryPointService entryPointService;
-    
-    @Autowired
-    private UserEmailActivationService userEmailActivationService;
+	@Autowired
+	@Qualifier("userRoleServiceImpl")
+	private UserRoleService userRoleService;
 
-    @Autowired
-    private AWRankingUserDetailsService awRankingUserDetailsService;
+	@Autowired
+	@Qualifier("entryPointServiceImpl")
+	private EntryPointService entryPointService;
 
-    @Autowired
-    @Qualifier("authenticationManager")
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private UserEmailActivationService userEmailActivationService;
 
-    private Map getPositiveResponseMap() {
-        Map<String, String> result = new HashMap<String, String>();
-        result.put("result", "ok");
-        return result;
-    }
+	@Autowired
+	private AWRankingUserDetailsService awRankingUserDetailsService;
 
-    private Map getNegativeResponseMap(String reason) {
-        Map<String, String> result = new HashMap<String, String>();
-        result.put("result", "failure");
-        result.put("reason", reason);
-        return result;
-    }
+	@Autowired
+	@Qualifier("authenticationManager")
+	private AuthenticationManager authenticationManager;
 
-    /**
-     * Here we go from registration form so, technically, this is "/register"
-     *
-     * @param form
-     * @param request
-     * @return
-     * @throws EntryPointNotCreatedException
-     * @throws UserActivationEmailNotSetException
-     *
-     */
-    @RequestMapping(
-            value = "/add",
-            method = {RequestMethod.POST, RequestMethod.GET},
-            produces = "application/json",
-            headers = "content-type=application/x-www-form-urlencoded")
-    public
-    @ResponseBody()
-    Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
-            throws EntryPointNotCreatedException, UserActivationEmailNotSetException {
+	private Map getPositiveResponseMap() {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("result", "ok");
+		return result;
+	}
 
-        if (userService.findByEmail(form.getEmail()).size() > 0) {
-            return getNegativeResponseMap("This email is already registered in the system!");
-        }
+	private Map getNegativeResponseMap(String reason) {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("result", "failure");
+		result.put("reason", reason);
+		return result;
+	}
 
-        if (userService.findByAPIKey(form.getApiKey()).size() > 0) {
-            return getNegativeResponseMap("This apikey is already registered in the system!");
-        }
+	/**
+	 * Here we go from registration form so, technically, this is "/register"
+	 *
+	 * @param form
+	 * @param request
+	 * @return
+	 * @throws EntryPointNotCreatedException
+	 * @throws UserActivationEmailNotSetException
+	 *
+	 */
+	@RequestMapping(
+			value = "/add",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+	Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
+			throws EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
-        form.setUserLocalAddr(request.getLocalAddr());
-        form.setUserRemoteAddr(request.getRemoteAddr());
+		if (userService.findOneByEmail(form.getEmail()) != null) {
+			return getNegativeResponseMap("This email is already registered in the system!");
+		}
 
-        try {
-            User user = userService.register(form, request);
-            //if registered ok - we need to log user in manualy
-            
-            //---------- we need some authorization for register user + he is logged in right after it -------
-            //----- we need to do it here manually-----
+		if (userService.findByAPIKey(form.getApiKey()) != null) {
+			return getNegativeResponseMap("This apikey is already registered in the system!");
+		}
 
-    		
-           // AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
+		form.setUserLocalAddr(request.getLocalAddr());
+		form.setUserRemoteAddr(request.getRemoteAddr());
 
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
+		try {
+			User user = userService.register(form, request);
+			//if registered ok - we need to log user in manualy
 
-            // generate session if one doesn't exist
-            request.getSession();
-            
-            awRankingUserDetailsService.setUserService(userService);
-            awRankingUserDetailsService.setUserRoleService(userRoleService);
-            awRankingUserDetailsService.setEntryPointService(entryPointService);
-            
-            AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
-            
-            token.setDetails(details);
-           
-            Authentication authenticatedUser = authenticationManager.authenticate(token);
-
-            SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-                       
-            return getPositiveResponseMap();
-            
-        } catch (UserNotCreatedException e) {
-            e.printStackTrace();
-            return getNegativeResponseMap(e.getMessage());
-        }
-
-    }
-
-    //headers = "Accept=application/json"
-    @RequestMapping(
-            value = "/delete",
-            method = {RequestMethod.POST, RequestMethod.GET},
-            produces = "application/json",
-            headers = "content-type=application/x-www-form-urlencoded")
-    //@Consumes("application/json")
-    public
-    @ResponseBody
-    Map deleteUser(@RequestBody User user) {
-        if (userService.findByEmail(user.getEmail()).size() == 0) {
-            return getNegativeResponseMap("User with this email is not registered in the system!");
-        }
-        if (userService.findById(user.getId()).size() == 0) {
-            return getNegativeResponseMap("user with this ID not registered in system");
-        }
-
-        try {
-            userService.delete(user);
-            return getPositiveResponseMap();
-        } catch (UserNotDeletedException e) {
-
-            e.printStackTrace();
-            return getNegativeResponseMap(e.getMessage());
-        }
-    }
+			//---------- we need some authorization for register user + he is logged in right after it -------
+			//----- we need to do it here manually-----
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/verifyemail/{key}")
-    public
-    @ResponseBody
-    Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+			// AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
 
-        Boolean response = userEmailActivationService.verify(key, request);
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
 
-        if (response == false) return getNegativeResponseMap("not verified");
-        else return getPositiveResponseMap();
+			// generate session if one doesn't exist
+			request.getSession();
 
-    }
+			awRankingUserDetailsService.setUserService(userService);
+			awRankingUserDetailsService.setUserRoleService(userRoleService);
+			awRankingUserDetailsService.setEntryPointService(entryPointService);
 
-    //------------------- refactor out it not needed ---------------
+			AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
 
-    public void setUserService(UserServiceImpl value) {
+			token.setDetails(details);
 
-        userService = value;
-    }
+			Authentication authenticatedUser = authenticationManager.authenticate(token);
 
-    public UserService getUserService() {
+			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 
-        return userService;
-    }
+			return getPositiveResponseMap();
+
+		} catch (UserNotCreatedException e) {
+			e.printStackTrace();
+			return getNegativeResponseMap(e.getMessage());
+		}
+
+	}
+
+	//headers = "Accept=application/json"
+	@RequestMapping(
+			value = "/delete",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	//@Consumes("application/json")
+	public
+	@ResponseBody
+	Map deleteUser(@RequestBody User user) {
+		if (userService.findOneByEmail(user.getEmail()) == null) {
+			return getNegativeResponseMap("User with this email is not registered in the system!");
+		}
+		if (userService.findOne(user.getId()) == null) {
+			return getNegativeResponseMap("user with this ID not registered in system");
+		}
+
+		try {
+			userService.delete(user);
+			return getPositiveResponseMap();
+		} catch (UserNotDeletedException e) {
+
+			e.printStackTrace();
+			return getNegativeResponseMap(e.getMessage());
+		}
+	}
+
+
+	@RequestMapping(method = RequestMethod.GET, value = "/verifyemail/{key}")
+	public
+	@ResponseBody
+	Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+
+		Boolean response = userEmailActivationService.verify(key, request);
+
+		if (response == false) return getNegativeResponseMap("not verified");
+		else return getPositiveResponseMap();
+
+	}
+
+	//------------------- refactor out it not needed ---------------
+
+	public void setUserService(UserServiceImpl value) {
+
+		userService = value;
+	}
+
+	public UserService getUserService() {
+
+		return userService;
+	}
 }
