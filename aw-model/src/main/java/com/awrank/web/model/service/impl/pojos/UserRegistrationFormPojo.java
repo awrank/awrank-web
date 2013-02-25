@@ -10,6 +10,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class UserRegistrationFormPojo implements Serializable {
 
+	 private String IP;
+
+	   public String getIP() {
+	        return IP;
+	    }
+
+	    public void setIP(String ip) {
+	        this.IP = ip;
+	    }
+	    
     private String firstName;
 
     public String getFirstName() {

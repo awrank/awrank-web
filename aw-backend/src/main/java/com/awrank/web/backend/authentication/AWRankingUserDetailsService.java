@@ -141,7 +141,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 	}
 
 	/*
-	 * TODO: implement more intelligent
+	 *
 	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
 	 */
 	@Override

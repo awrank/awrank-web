@@ -36,6 +36,9 @@
         <mvc:message-converters register-defaults="true">
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
         </mvc:message-converters>
+        <mvc:argument-resolvers>
+        	<bean class="org.springframework.data.web.PageableArgumentResolver" />
+    	</mvc:argument-resolvers>
     </mvc:annotation-driven>
 
     <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">

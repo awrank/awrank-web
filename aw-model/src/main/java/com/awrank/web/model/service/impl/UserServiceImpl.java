@@ -16,12 +16,15 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -176,6 +179,20 @@ public class UserServiceImpl implements UserService {
 		return userDao.findOne(id);
 	}
 
+	@Override
+	public List<User> getAll(){
+		
+		return (List<User>) userDao.findAll();
+		
+	}
+	
+	@Override
+	public Page<User> getPage(Pageable pageable){
+		
+		return (Page<User>) userDao.findAll(pageable);
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
 	 */

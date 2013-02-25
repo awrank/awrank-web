@@ -1,5 +1,7 @@
 package com.awrank.web.model.service;
 
+import java.util.List;
+
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
@@ -8,6 +10,9 @@ import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Interface for REST service working with users
@@ -54,7 +59,6 @@ public interface UserService {
 	 */
 	User findOneByEmail(String email);
 
-
 	/**
 	 * Find user by email, in case of not found returns empty List - no exception thrown, put attention here!!!
 	 *
@@ -77,4 +81,6 @@ public interface UserService {
 	User register(UserRegistrationFormPojo form, HttpServletRequest request)
 			throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException;
 
+	List<User> getAll();
+	Page<User> getPage(Pageable pageable);
 }
