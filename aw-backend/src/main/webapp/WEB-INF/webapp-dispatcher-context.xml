@@ -25,6 +25,9 @@
     <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
     <context:component-scan base-package="com.awrank"/>
 
+    <!-- To serve the static resources: css, js, images, etc. -->
+    <mvc:resources mapping="/static/**" location="/" />
+
     <import resource="data-access-context.xml"/>
 
     <!-- Property placeholder configurer -->

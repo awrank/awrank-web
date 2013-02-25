@@ -13,9 +13,9 @@
 
     <!-- anonymous login -->
     <http pattern="/login.jsp*" security="none"/>
+    <!-- todo: probably, not necessary anymore -->
     <http pattern="/index*" security="none"/>
 
-  
     <!-- Stateless RESTful service using Basic authentication -->
     <http pattern="/rest/**" access-denied-page="/403.jsp">
         <intercept-url pattern='/**' access="ROLE_USER, ROLE_ADMIN"/>

@@ -25,7 +25,7 @@ public class User extends DatedAbstractAuditable<Long> {
 	/**
 	 * A unique key which is used in requests to API system service.
 	 */
-	@Column(name = "api_key", nullable = false, unique = true)
+	@Column(name = "api_key", nullable = false, unique = true, length = 255)
 	private String apiKey;
 
 	/**

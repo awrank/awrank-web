@@ -1,6 +1,6 @@
 package com.awrank.web.model.domain;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 
 import javax.persistence.*;
 
@@ -14,7 +14,13 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "promo_codes")
-public class PromoCode extends AbstractPersistable<Long> {
+public class PromoCode extends DatedAbstractAuditable<Long> {
+
+    /**
+     * Promotion code.
+     */
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
 
     /**
      * TODO: description ?
@@ -22,13 +28,7 @@ public class PromoCode extends AbstractPersistable<Long> {
     @Column(name = "reference", nullable = true)
     private String reference;
 
-    /**
-     * Code.
-     */
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
-
-    // todo: need product profile ?
+    // todo: need user?
 
     /**
      * Product.
@@ -37,14 +37,14 @@ public class PromoCode extends AbstractPersistable<Long> {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    // todo: need product profile ?
+
     /**
      * Order.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "order_id", nullable = true)
     private Order order;
-
-    // todo: need user?
 
     public PromoCode() {
     }

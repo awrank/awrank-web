@@ -4,10 +4,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>awrank.com</title>
-    <link href="main.css" rel="stylesheet" type="text/css"/>
+
+    <jsp:directive.include file="/WEB-INF/jsp/header.jspf"/>
+
+    <link href="${contextPath}/static/main.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
     <script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/awrank.js"></script>
+    <%--<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/awrank.js"></script>--%>
+    <script type="text/javascript" src="${resources}/js/awrank.js"></script>
 
     <style type="text/css">
         h3 {
@@ -17,11 +21,11 @@
         }
     </style>
 
-    <jsp:directive.include file="/WEB-INF/jsp/header.jspf"/>
+
 </head>
 <body onload="fIndexOnload();">
 
-<h1>Welcome to the Awrank web application! <a href="index.html">[index.html]</a></h1>
+<h1>Welcome to the Awrank web application! <a href="static/index.html">[index.html]</a></h1>
 
 <%-- twitter bootstrap color--%>
 <h3>EMAIL</h3>

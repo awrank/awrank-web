@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 
 /**
  * Payout to referral users.
+ *
+ * @author Eugene Solomka
  */
 @Entity
 @Table(name = "payouts")

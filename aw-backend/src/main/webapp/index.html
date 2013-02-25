@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
 	<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
 	<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.js"></script>
-	<!--<script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>-->
+
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
@@ -55,7 +55,9 @@
 	</style>
 </head>
 
-<body onload="fIndexBodyOnload()">
+<!-- todo: this function produces infinity number of request to rest/dictionary and lead to memory stack overflow -->
+<!--<body onload="fIndexBodyOnload()">-->
+<body>
 
 <div class="container-fluid">
 
@@ -173,7 +175,8 @@
 	Backbone.history.start();
 
 	function fIndexBodyOnload() {
-		setContextPath('http://localhost:8080/aw-backend');
+		setContextPath('http://localhost:8080/awrank');
+//		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
 		workspace.navigate('pricing', {trigger: true});
 //		fIndexLogout();
