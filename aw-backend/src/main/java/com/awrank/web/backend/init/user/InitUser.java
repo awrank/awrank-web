@@ -2,10 +2,13 @@ package com.awrank.web.backend.init.user;
 
 import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.dao.UserDao;
+import com.awrank.web.model.dao.UserRoleDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.utils.user.CurrentUserUtils;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.DateTime;
@@ -25,7 +28,9 @@ public class InitUser {
 	private UserDao userDao;
 	@Autowired
 	private EntryPointDao entryPointDao;
-
+	@Autowired
+	private UserRoleDao userRoleDao;
+	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initAnonymous() {
 		User user = userDao.findByEmail("anonymous@awrank.com");
@@ -49,9 +54,44 @@ public class InitUser {
 			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
+			
+			UserRole role = new UserRole();
+			role.setUser(user);
+			role.setRole(Role.ROLE_USER);
+			userRoleDao.save(role);
 		}
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void initRegularUser() {
+		User user = userDao.findByEmail("user@awrank.com");
+		if (user == null) {
+			user = new User();
+			user.setApiKey("REGULAR_USER");
+			user.setRefUser(null);
+			user.setEmail("user@awrank.com");
+			user.setSkype(null);
+			user.setFirstName("user");
+			user.setLastName("user");
+			user.setBirthday(null);
+			user.setSecretQuestionDicCode(null);
+			user.setSecretAnswer(null);
+			user.setLanguage(Language.EN);
+			user.setAuthorizationFailsCount(0);
+			user.setAuthorizationFailsLastDate(null);
+			user.setBanStartedDate(null);
+			user.setCreatedDate(new DateTime());
+			user.setCreatedBy(user);
+			user.setLastModifiedDate(user.getCreatedDate());
+			user.setLastModifiedBy(user);
+			userDao.save(user);
+			
+			UserRole role = new UserRole();
+			role.setUser(user);
+			role.setRole(Role.ROLE_USER_VERIFIED);
+			userRoleDao.save(role);
+		}
+	}
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initAdmin() {
 		User user = userDao.findByEmail("admin@awrank.com");
@@ -87,6 +127,11 @@ public class InitUser {
 			entryPoint.setCreatedDate(new DateTime());
 			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
+			
+			UserRole role = new UserRole();
+			role.setUser(user);
+			role.setRole(Role.ROLE_ADMIN);
+			userRoleDao.save(role);
 		}
 	}
 

@@ -25,6 +25,7 @@ public class InitAll {
 	@PostConstruct
 	public void init() {
 		initUser.initAnonymous();
+		initUser.initRegularUser();
 		initUser.initAdmin();
 		initDictionary.init();
 		initProduct.init();
