@@ -55,6 +55,16 @@ public class InitUser {
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 			
+			EntryPoint entryPoint = new EntryPoint();
+			entryPoint.setUser(user);
+			entryPoint.setType(EntryPointType.LOGIN);
+			entryPoint.setUid("anonymous");
+			entryPoint.setPassword(PasswordUtils.hashPassword("anonymous"));
+			entryPoint.setVerifiedDate(new LocalDateTime(0));
+			entryPoint.setCreatedDate(new DateTime());
+			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
+			entryPointDao.save(entryPoint);
+			
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER);
@@ -85,6 +95,16 @@ public class InitUser {
 			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
+			
+			EntryPoint entryPoint = new EntryPoint();
+			entryPoint.setUser(user);
+			entryPoint.setType(EntryPointType.LOGIN);
+			entryPoint.setUid("user");
+			entryPoint.setPassword(PasswordUtils.hashPassword("user"));
+			entryPoint.setVerifiedDate(new LocalDateTime(0));
+			entryPoint.setCreatedDate(new DateTime());
+			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
+			entryPointDao.save(entryPoint);
 			
 			UserRole role = new UserRole();
 			role.setUser(user);
