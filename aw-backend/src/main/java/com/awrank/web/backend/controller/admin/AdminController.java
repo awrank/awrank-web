@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.awrank.web.backend.controller.AbstractController;
 
@@ -21,7 +22,9 @@ import com.awrank.web.backend.controller.AbstractController;
 public class AdminController extends AbstractController {
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String printWelcome(ModelMap model, Principal principal) {	
+    public 
+    @ResponseBody()
+    String printWelcome(ModelMap model, Principal principal) {	
     	
     		  String name = principal.getName();
     	        List<GrantedAuthority> authorities =

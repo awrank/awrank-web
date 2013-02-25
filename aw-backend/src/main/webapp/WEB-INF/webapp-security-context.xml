@@ -25,9 +25,9 @@
     <!-- Additional filter chain for normal users, matching all other requests -->
     <http pattern="/**" access-denied-page="/403.jsp" use-expressions="true" auto-config="true" authentication-manager-ref="authenticationManager">
         <intercept-url pattern="/index*" access="permitAll"/>
-        <!-- intercept-url pattern="/user/*" access="ROLE_USER"/ -->
+        <!-- intercept-url pattern="/user/*" access="hasRole('ROLE_USER')"/ -->
         <intercept-url pattern="/user/add" access="permitAll"/>
-        <intercept-url pattern="/admin/*" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login login-page="/login.jsp"
                     default-target-url="/welcome"
@@ -53,19 +53,6 @@
 
 	<beans:bean id="awRankingAuthenticationProvider" class="com.awrank.web.backend.authentication.AWRankingAuthenticationProviderImpl">
 	 		<beans:property name="userDetailsService" ref="awRankingUserDetailsService" />
-	 		<!-- user-service>
-	                <user name="admin" password="pass" authorities="ROLE_ADMIN, ROLE_USER"/>
-	                <user name="user1" password="1111" authorities="ROLE_USER"/>
-	                <user name="user2" password="2222" authorities="ROLE_USER" disabled="true" />
-	        </user-service -->
 	</beans:bean>
-     <beans:bean id="awRankingUserDetailsService" class="com.awrank.web.backend.authentication.AWRankingUserDetailsService">
-     	<!-- beans:property name="userService" ref="userServiceImpl" />
-     	<beans:property name="userRoleService" ref="userRoleServiceImpl" />
-     	<beans:property name="entryPointService" ref="entryPointServiceImpl" /-->
-     </beans:bean>           
-     <!-- beans:bean id="userServiceImpl" name="userServiceImpl" class="com.awrank.web.model.service.impl.UserServiceImpl" />
-     <beans:bean id="userRoleServiceImpl" name="userRoleServiceImpl" class="com.awrank.web.model.service.impl.UserRoleServiceImpl" />
-     <beans:bean id="entryPointServiceImpl" name="entryPointServiceImpl" class="com.awrank.web.model.service.impl.EntryPointServiceImpl" /-->
-  
+    <beans:bean id="awRankingUserDetailsService" class="com.awrank.web.backend.authentication.AWRankingUserDetailsService" />
 </beans:beans>
