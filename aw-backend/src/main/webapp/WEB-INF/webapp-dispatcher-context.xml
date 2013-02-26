@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <beans
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns="http://www.springframework.org/schema/beans"
-		xmlns:context="http://www.springframework.org/schema/context"
-		xmlns:aop="http://www.springframework.org/schema/aop"
-		xmlns:mvc="http://www.springframework.org/schema/mvc"
-		xmlns:util="http://www.springframework.org/schema/util"
-		xsi:schemaLocation="http://www.springframework.org/schema/beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd
@@ -19,100 +19,99 @@
 	        http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 
-	<!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
-	<context:annotation-config/>
+    <!-- Activates various annotations to be detected in bean classes: e.g. Spring's @Required, @Autowired, etc. -->
+    <context:annotation-config/>
 
-	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
-	<context:component-scan base-package="com.awrank"/>
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans. -->
+    <context:component-scan base-package="com.awrank"/>
 
-	<!-- To serve the static resources: css, js, images, etc. -->
-	<!--<mvc:resources mapping="/static/**" location="/" />-->
+    <!-- To serve the static resources: css, js, images, etc. -->
+    <!--<mvc:resources mapping="/static/**" location="/" />-->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/*.html" location="/"/>
 
-	<import resource="data-access-context.xml"/>
+    <import resource="data-access-context.xml"/>
 
-	<!-- Property placeholder configurer -->
-	<util:properties id="emailProps" location="/WEB-INF/properties/email.properties"/>
-	<util:properties id="appProps" location="/WEB-INF/properties/application.properties"/>
+    <!-- Property placeholder configurer -->
+    <util:properties id="emailProps" location="/WEB-INF/properties/email.properties"/>
+    <util:properties id="appProps" location="/WEB-INF/properties/application.properties"/>
 
-	<!-- Defines content negotiation manager, required to handle @JsonIgnore correctly -->
-	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
-		<mvc:message-converters register-defaults="true">
-			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-		</mvc:message-converters>
-		<mvc:argument-resolvers>
-			<bean class="org.springframework.data.web.PageableArgumentResolver"/>
-		</mvc:argument-resolvers>
-	</mvc:annotation-driven>
+    <!-- Defines content negotiation manager, required to handle @JsonIgnore correctly -->
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.data.web.PageableArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
 
-	<mvc:resources mapping="/resources/**" location="/resources/"/>
-	<mvc:resources mapping="/*.html" location="/"/>
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="false"/>
+        <property name="favorParameter" value="false"/>
+        <property name="ignoreAcceptHeader" value="false"/>
+        <property name="mediaTypes">
+            <value>
+                html=text/html
+                json=application/json
+                *=*/*
+            </value>
+        </property>
+    </bean>
 
-	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-		<property name="favorPathExtension" value="false"/>
-		<property name="favorParameter" value="false"/>
-		<property name="ignoreAcceptHeader" value="false"/>
-		<property name="mediaTypes">
-			<value>
-				html=text/html
-				json=application/json
-				*=*/*
-			</value>
-		</property>
-	</bean>
-
-	<!-- View Resolver -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/jsp/"/>
-		<property name="suffix" value=".jsp"/>
-	</bean>
-
-
-	<!-- Social Auth lib -->
-	<bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
-		<property name="applicationProperties">
-			<props>
-				<!-- todo: properties are not resolvable. fix it -->
-				<!--<prop key="www.google.com.consumer_key">${google.clientId}</prop>-->
-				<!--<prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>-->
-				<!--<prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>-->
-				<!--<prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>-->
-
-				<prop key="www.google.com.consumer_key">
-					567712796156-lh9rc61kk5qsllng54sk314sui0tls09.apps.googleusercontent.com
-				</prop>
-				<prop key="www.google.com.consumer_secret">IML_o6lOCHm6ysnbQi_VQsL9</prop>
-				<prop key="graph.facebook.com.consumer_key">124759354366792</prop>
-				<prop key="graph.facebook.com.consumer_secret">a19dff99272c3eb06501619ea4e775a9</prop>
-			</props>
-
-		</property>
-	</bean>
-
-	<bean id="socialAuthManager" class="org.brickred.socialauth.SocialAuthManager" scope="session">
-		<property name="socialAuthConfig" ref="socialAuthConfig"/>
-		<aop:scoped-proxy/>
-	</bean>
-
-	<bean id="socialAuthTemplate" class="org.brickred.socialauth.spring.bean.SocialAuthTemplate" scope="session">
-		<aop:scoped-proxy/>
-	</bean>
-
-	<bean id="socialAuthWebController" class="org.brickred.socialauth.spring.controller.SocialAuthWebController">
-		<constructor-arg value="http://awrank.com:8080/awrank"/>
-		<constructor-arg value="/authSuccess"/>
-		<constructor-arg value="/accessDenied"/>
-	</bean>
+    <!-- View Resolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
 
-	<!-- Profiles -->
-	<!-- IMPORTANT: nested <beans/> MUST be placed at the end of the file -->
-	<beans profile="dev">
-		<import resource="webapp-profile-dev.xml"/>
-	</beans>
+    <!-- Social Auth lib -->
+    <bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
+        <property name="applicationProperties">
+            <props>
+                <!-- todo: properties are not resolvable. fix it -->
+                <!--<prop key="www.google.com.consumer_key">${google.clientId}</prop>-->
+                <!--<prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>-->
+                <!--<prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>-->
+                <!--<prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>-->
 
-	<beans profile="prod">
-		<import resource="webapp-profile-prod.xml"/>
-	</beans>
+                <prop key="www.google.com.consumer_key">
+                    567712796156-lh9rc61kk5qsllng54sk314sui0tls09.apps.googleusercontent.com
+                </prop>
+                <prop key="www.google.com.consumer_secret">IML_o6lOCHm6ysnbQi_VQsL9</prop>
+                <prop key="graph.facebook.com.consumer_key">124759354366792</prop>
+                <prop key="graph.facebook.com.consumer_secret">a19dff99272c3eb06501619ea4e775a9</prop>
+            </props>
+
+        </property>
+    </bean>
+
+    <bean id="socialAuthManager" class="org.brickred.socialauth.SocialAuthManager" scope="session">
+        <property name="socialAuthConfig" ref="socialAuthConfig"/>
+        <aop:scoped-proxy/>
+    </bean>
+
+    <bean id="socialAuthTemplate" class="org.brickred.socialauth.spring.bean.SocialAuthTemplate" scope="session">
+        <aop:scoped-proxy/>
+    </bean>
+
+    <bean id="socialAuthWebController" class="org.brickred.socialauth.spring.controller.SocialAuthWebController">
+        <constructor-arg value="http://awrank.com:8080/awrank"/>
+        <constructor-arg value="/authSuccess"/>
+        <constructor-arg value="/accessDenied"/>
+    </bean>
+
+
+    <!-- Profiles -->
+    <!-- IMPORTANT: nested <beans/> MUST be placed at the end of the file -->
+    <beans profile="dev">
+        <import resource="webapp-profile-dev.xml"/>
+    </beans>
+
+    <beans profile="prod">
+        <import resource="webapp-profile-prod.xml"/>
+    </beans>
 
 
 </beans>
