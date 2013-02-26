@@ -1,9 +1,13 @@
 package com.awrank.web.model.service;
 
 import com.awrank.web.model.domain.EntryHistory;
+import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.entryhistory.*;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author Olga Korokhina
@@ -19,5 +23,7 @@ public interface EntryHistoryService {
 	public void save(EntryHistory ep);
 
 	public  List<EntryHistory> findByIP(String ipAddress);
+	
+	public Page<EntryHistory> getPageByUser(User user, Pageable pageable);
 	
 }

@@ -53,6 +53,9 @@
     <li>
         <a href="rest/user/2">rest/user/2</a><br/>
     </li>
+     <li>
+        <a href="rest/profile/accesshistory">rest/profile/accesshistory</a><br/>
+    </li>
 </ul>
 
 

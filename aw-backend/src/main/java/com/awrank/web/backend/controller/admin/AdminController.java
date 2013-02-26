@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.domain.EntryHistory;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.service.EntryHistoryService;
@@ -115,7 +116,7 @@ public class AdminController extends AbstractController {
     		List<EntryHistory> ehlist= entryHistoryService.findByIP(ip);
     		
     		for( EntryHistory e : ehlist ){
-    			
+    			((DatedAbstractAuditable) e.getUser()).getId();
     			list.add(e.getUser());
     		}
     		
