@@ -58,7 +58,7 @@ public class InitUser {
 			EntryPoint entryPoint = new EntryPoint();
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
-			entryPoint.setUid("anonymous");
+			entryPoint.setUid(user.getEmail());
 			entryPoint.setPassword(PasswordUtils.hashPassword("anonymous"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
 			entryPoint.setCreatedDate(new DateTime());
@@ -128,7 +128,7 @@ public class InitUser {
 			EntryPoint entryPoint = new EntryPoint();
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
-			entryPoint.setUid("user");
+			entryPoint.setUid(user.getEmail());
 			entryPoint.setPassword(PasswordUtils.hashPassword("user"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
 			entryPoint.setCreatedDate(new DateTime());
@@ -199,7 +199,7 @@ public class InitUser {
 			EntryPoint entryPoint = new EntryPoint();
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
-			entryPoint.setUid("admin");
+			entryPoint.setUid(user.getEmail());
 			entryPoint.setPassword(PasswordUtils.hashPassword("1"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
 			entryPoint.setCreatedDate(new DateTime());

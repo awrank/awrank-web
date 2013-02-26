@@ -87,6 +87,7 @@ public class LoginController extends AbstractController {
         	entryPoint =  new EntryPoint();
         	entryPoint.setType(details.getType());//LOGIN
         	entryPoint.setUser(user);
+        	entryPoint.setUid(user.getEmail());
         	entryPoint.setPassword(details.getPassword());
         	
         	entryPointService.save(entryPoint);
@@ -153,7 +154,7 @@ public class LoginController extends AbstractController {
 	         EntryPoint entryPoint;
 	         if(list.size() > 0) entryPoint = list.get(0);
 	         else {
-	         //---------- if we by some mirricle doesn't have an enter point for this user with such a type - create	
+	         //---------- if we by some miracle don't have an enter point for this user with such a type - create	
 	         	
 	         	entryPoint =  new EntryPoint();
 	         	entryPoint.setType(details.getType());//LOGIN
@@ -176,7 +177,7 @@ public class LoginController extends AbstractController {
 	    	
 	        model.addAttribute("error", "true");
     	}
-        return "login Failed";
+        return "login";
     }
 
 //    @RequestMapping(value = "/logout", method = RequestMethod.GET)

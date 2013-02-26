@@ -7,6 +7,8 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
 import com.awrank.web.model.service.EntryPointService;
+import com.awrank.web.model.utils.user.PasswordUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +81,6 @@ public class EntryPointServiceImpl implements EntryPointService {
 	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user,
 			EntryPointType type, String password) {
 		
-		return entryPointDao.selectActiveByTypeAndPassword(user, type, password);
+		return entryPointDao.selectActiveByTypeAndPassword(user, type, PasswordUtils.hashPassword(password));
 	}
 }
