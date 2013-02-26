@@ -17,68 +17,68 @@ import javax.persistence.*;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "entry_point")
-public class EntryPoint extends AbstractUserRelatedEntityAuditable<Long> {
-    /**
-     * User identifier for sign in (could be email or identifier in social network).
-     */
-    @Column(name = "uid", nullable = false)
-    private String uid;
+public class EntryPoint extends AbstractUserRelatedEntityAuditable {
+	/**
+	 * User identifier for sign in (could be email or identifier in social network).
+	 */
+	@Column(name = "uid", nullable = false)
+	private String uid;
 
-    /**
-     * Password (required only for email sign in) encoded with SHA-2 + salt.
-     */
-    @Column(name = "password")
-    private String password;
+	/**
+	 * Password (required only for email sign in) encoded with SHA-2 + salt.
+	 */
+	@Column(name = "password")
+	private String password;
 
-    /**
-     * Date when entry point was verified.
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "verified_at")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime verifiedDate;
+	/**
+	 * Date when entry point was verified.
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "verified_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime verifiedDate;
 
-    /**
-     * Type of entry point (email, facebook, google)
-     */
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EntryPointType type;
+	/**
+	 * Type of entry point (email, facebook, google)
+	 */
+	@Column(name = "type", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EntryPointType type;
 
 
-    public EntryPoint() {
-    }
+	public EntryPoint() {
+	}
 
-    public String getUid() {
-        return uid;
-    }
+	public String getUid() {
+		return uid;
+	}
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public LocalDateTime getVerifiedDate() {
-        return (null == verifiedDate) ? null : new LocalDateTime(verifiedDate);
-    }
+	public LocalDateTime getVerifiedDate() {
+		return (null == verifiedDate) ? null : new LocalDateTime(verifiedDate);
+	}
 
-    public void setVerifiedDate(LocalDateTime verifiedDate) {
-        this.verifiedDate = (null == verifiedDate) ? null : verifiedDate;
-    }
+	public void setVerifiedDate(LocalDateTime verifiedDate) {
+		this.verifiedDate = (null == verifiedDate) ? null : verifiedDate;
+	}
 
-    public EntryPointType getType() {
-        return type;
-    }
+	public EntryPointType getType() {
+		return type;
+	}
 
-    public void setType(EntryPointType type) {
-        this.type = type;
-    }
+	public void setType(EntryPointType type) {
+		this.type = type;
+	}
 
 }

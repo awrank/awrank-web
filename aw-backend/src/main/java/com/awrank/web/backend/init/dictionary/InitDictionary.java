@@ -62,6 +62,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "SITE", "SITE"));
 		list.add(new Dictionary(null, Language.RU, "UPDATE", "Обновить"));
 		list.add(new Dictionary(null, Language.EN, "UPDATE", "Update"));
+		list.add(new Dictionary(null, Language.RU, "ORDER", "Заказ"));
+		list.add(new Dictionary(null, Language.EN, "ORDER", "Order"));
 //      ENTITY
 		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));
 		list.add(new Dictionary(null, Language.EN, "DICTIONARY_CODE", "Code"));

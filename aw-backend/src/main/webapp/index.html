@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
 	<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
 	<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.js"></script>
-
+	<!--<script type="text/plain" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>-->
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
@@ -55,9 +55,7 @@
 	</style>
 </head>
 
-<!-- todo: this function produces infinity number of request to rest/dictionary and lead to memory stack overflow -->
-<!--<body onload="fIndexBodyOnload()">-->
-<body>
+<body onload="fIndexBodyOnload()">
 
 <div class="container-fluid">
 
@@ -95,8 +93,11 @@
 			<div class="well sidebar-nav">
 				<ul id="menu" class="nav nav-list">
 					<li class="nav-header" lngt="SITE">SITE</li>
-					<li id="menuItemPricing"><a href="#pricing"><i class="icon-home"></i><span
+					<li id="menuItemHome"><a href="#"><i class="icon-home"></i><span
 							lngt="HOME">Home</span></a>
+					</li>
+					<li id="menuItemPricing"><a href="#pricing"><i class="icon-shopping-cart"></i><span
+							lngt="ORDER">Order</span></a>
 					</li>
 					<li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
 					<li><a href="#"><i class="icon-user"></i><span lngt="PROFILE">Profile</span></a></li>
@@ -175,8 +176,8 @@
 	Backbone.history.start();
 
 	function fIndexBodyOnload() {
-		setContextPath('http://localhost:8080/awrank');
-//		setContextPath('http://localhost:8080/aw-backend');
+//		setContextPath('http://localhost:8080/awrank');
+		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
 		workspace.navigate('pricing', {trigger: true});
 //		fIndexLogout();

@@ -1,12 +1,13 @@
 package com.awrank.web.model.dao;
 
 import com.awrank.web.model.domain.EntryPoint;
-import java.util.List;
-import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * The {@code EntryPointDao} is a data-centric service for the {@link EntryPoint} entity.

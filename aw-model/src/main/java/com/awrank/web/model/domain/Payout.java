@@ -14,12 +14,12 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "payouts")
-public class Payout extends ExtendedAbstractAuditable<Long> {
-    /**
-     * Amount payout to referral user.
-     */
-    @Column(name = "amount", columnDefinition = "DECIMAL(8,2)", nullable = false)
-    private BigDecimal amount;
+public class Payout extends ExtendedAbstractAuditable {
+	/**
+	 * Amount payout to referral user.
+	 */
+	@Column(name = "amount", columnDefinition = "DECIMAL(8,2)", nullable = false)
+	private BigDecimal amount;
 
 
 //    /**

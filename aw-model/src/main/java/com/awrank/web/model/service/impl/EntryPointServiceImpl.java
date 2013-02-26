@@ -1,29 +1,26 @@
 package com.awrank.web.model.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
-import com.awrank.web.model.domain.UserRole;
-import com.awrank.web.model.exception.entrypoint.*;
-import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
+import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
+import com.awrank.web.model.service.EntryPointService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Olga Korokhina
- *
  */
 @Service
 public class EntryPointServiceImpl implements EntryPointService {
 
 	@Autowired
 	private EntryPointDao entryPointDao;
-	
+
 	@Override
 	public void add(EntryPoint ep) throws EntryPointNotCreatedException {
 		entryPointDao.save(ep);
@@ -43,12 +40,12 @@ public class EntryPointServiceImpl implements EntryPointService {
 
 	@Override
 	public List<EntryPoint> findEntryPointForUser(User user) {
-		
+
 		return entryPointDao.select(user);
 	}
-	
+
 	/**
-	 *  Returns only active! idealy single one OR empty list
+	 * Returns only active! idealy single one OR empty list
 	 */
 	@Override
 	public String findPasswordForUserByEntryPointType(User user, EntryPointType type){
@@ -71,6 +68,7 @@ public class EntryPointServiceImpl implements EntryPointService {
 	}
 
 	@Override
+
 	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type) {
 		
 		return entryPointDao.selectActiveByType(user, type);

@@ -11,125 +11,125 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "products")
-public class Product extends DatedAbstractAuditable<Long> {
-    /**
-     * Name of the product.
-     */
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
+public class Product extends DatedAbstractAuditable {
+	/**
+	 * Name of the product.
+	 */
+	@Column(name = "name", nullable = false, length = 255)
+	private String name;
 
-    /**
-     * Description of the product.
-     */
-    @Column(name = "description", nullable = false, length = 255)
-    private String description;
+	/**
+	 * Description of the product.
+	 */
+	@Column(name = "description", nullable = false, length = 255)
+	private String description;
 
-    /**
-     * Type.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private ProductType productType;
+	/**
+	 * Type.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private ProductType productType;
 
-    /**
-     * Visibility.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "visibility", nullable = false)
-    private ProductVisibility productVisibility;
+	/**
+	 * Visibility.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "visibility", nullable = false)
+	private ProductVisibility productVisibility;
 
-    /**
-     * Expiration period.
-     */
-    @Column(name = "period")
-    private Integer periodInDays;
+	/**
+	 * Expiration period.
+	 */
+	@Column(name = "period")
+	private Integer periodInDays;
 
-    /**
-     * Count of available daily requests.
-     */
-    @Column(name = "daily_requests")
-    private Integer countDailyRequest;
+	/**
+	 * Count of available daily requests.
+	 */
+	@Column(name = "daily_requests")
+	private Integer countDailyRequest;
 
-    /**
-     * Count of available monthly requests.
-     */
-    @Column(name = "monthly_requests")
-    private Integer countMonthlyRequest;
+	/**
+	 * Count of available monthly requests.
+	 */
+	@Column(name = "monthly_requests")
+	private Integer countMonthlyRequest;
 
-    /**
-     * Is active?
-     */
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
-
-
-    public Product() {
-    }
+	/**
+	 * Is active?
+	 */
+	@Column(name = "is_active", nullable = false)
+	private boolean isActive = true;
 
 
-    public String getName() {
-        return name;
-    }
+	public Product() {
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getDescription() {
-        return description;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public ProductType getProductType() {
-        return productType;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public ProductVisibility getProductVisibility() {
-        return productVisibility;
-    }
+	public ProductType getProductType() {
+		return productType;
+	}
 
-    public void setProductVisibility(ProductVisibility productVisibility) {
-        this.productVisibility = productVisibility;
-    }
+	public void setProductType(ProductType productType) {
+		this.productType = productType;
+	}
 
-    public Integer getPeriodInDays() {
-        return periodInDays;
-    }
+	public ProductVisibility getProductVisibility() {
+		return productVisibility;
+	}
 
-    public void setPeriodInDays(Integer periodInDays) {
-        this.periodInDays = periodInDays;
-    }
+	public void setProductVisibility(ProductVisibility productVisibility) {
+		this.productVisibility = productVisibility;
+	}
 
-    public Integer getCountDailyRequest() {
-        return countDailyRequest;
-    }
+	public Integer getPeriodInDays() {
+		return periodInDays;
+	}
 
-    public void setCountDailyRequest(Integer countDailyRequest) {
-        this.countDailyRequest = countDailyRequest;
-    }
+	public void setPeriodInDays(Integer periodInDays) {
+		this.periodInDays = periodInDays;
+	}
 
-    public Integer getCountMonthlyRequest() {
-        return countMonthlyRequest;
-    }
+	public Integer getCountDailyRequest() {
+		return countDailyRequest;
+	}
 
-    public void setCountMonthlyRequest(Integer countMonthlyRequest) {
-        this.countMonthlyRequest = countMonthlyRequest;
-    }
+	public void setCountDailyRequest(Integer countDailyRequest) {
+		this.countDailyRequest = countDailyRequest;
+	}
 
-    public Boolean getActive() {
-        return isActive;
-    }
+	public Integer getCountMonthlyRequest() {
+		return countMonthlyRequest;
+	}
 
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
+	public void setCountMonthlyRequest(Integer countMonthlyRequest) {
+		this.countMonthlyRequest = countMonthlyRequest;
+	}
+
+	public Boolean getActive() {
+		return isActive;
+	}
+
+	public void setActive(Boolean active) {
+		isActive = active;
+	}
 }
 
 
