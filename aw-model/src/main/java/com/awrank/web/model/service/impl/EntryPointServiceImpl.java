@@ -53,7 +53,7 @@ public class EntryPointServiceImpl implements EntryPointService {
 	@Override
 	public String findPasswordForUserByEntryPointType(User user, EntryPointType type){
 		
-		List<EntryPoint> list = entryPointDao.selectActiveByType(user, String.valueOf(type));
+		List<EntryPoint> list = entryPointDao.selectActiveByType(user, type);
 		
 		if(list == null || list.size() == 0) return null;
 		
@@ -71,21 +71,16 @@ public class EntryPointServiceImpl implements EntryPointService {
 	}
 
 	@Override
-	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, String type) {
-		
-		return entryPointDao.selectActiveByType(user, String.valueOf(type));
-	}
-
-	@Override
 	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type) {
 		
-		return entryPointDao.selectActiveByType(user, String.valueOf(type));
+		return entryPointDao.selectActiveByType(user, type);
 	}
+
 	
 	@Override
 	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user,
 			EntryPointType type, String password) {
 		
-		return entryPointDao.selectActiveByTypeAndPassword(user, String.valueOf(type), password);
+		return entryPointDao.selectActiveByTypeAndPassword(user, type, password);
 	}
 }

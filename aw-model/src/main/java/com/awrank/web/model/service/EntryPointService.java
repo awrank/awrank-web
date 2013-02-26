@@ -26,12 +26,10 @@ public interface EntryPointService {
 	/**
 	 *  Returns only active! idealy single one OR empty list
 	 */
-	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, String type);
+	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type);
 
 	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user, EntryPointType type, String password);
 
 	public String findPasswordForUserByEntryPointType(User user, EntryPointType type);
-
-	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user,
-			EntryPointType type);
+	
 }

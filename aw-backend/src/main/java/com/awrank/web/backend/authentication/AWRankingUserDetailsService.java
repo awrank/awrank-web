@@ -8,11 +8,13 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -122,7 +124,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 
 		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
 
-		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user, String.valueOf(type));
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user,type);
 
 		for (EntryPoint ep : ep_list) {
 
@@ -155,4 +157,43 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 		return getDetailsForUser(user).get(0);
 	}
 
+	public UserDetails loadUserByUsernameAndPassword(String username, Object credentials) throws BadCredentialsException{
+		
+		User user = userService.findOneByEmail(username);
+		
+		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
+		
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, EntryPointType.LOGIN, String.valueOf(credentials));;
+		
+		for (EntryPoint ep : ep_list) {
+
+			AWRankingUserDetails detail = new AWRankingUserDetails(user);
+			detail.setType(ep.getType());
+			detail.setPassword(ep.getPassword());
+
+			Set<Role> roles = userRoleService.findUserRolesSetForUser(user);
+
+			detail.setRoles(roles);
+
+			ud_list.add(detail);
+		}
+
+		if(ud_list == null || ud_list.size() == 0){
+			//------- log the bad login access --------------
+			
+			LocalDateTime time  = LocalDateTime.now();
+	         
+	         Integer acc = user.getAuthorizationFailsCount();
+	         if(acc == null) acc = 0;
+	         acc++;
+	         user.setAuthorizationFailsCount(acc);
+	         user.setAuthorizationFailsLastDate(time);
+	         
+	         userService.save(user);
+	         
+			throw new BadCredentialsException("Wrong password");
+		}
+		
+		return ud_list.get(0);
+	}
 }

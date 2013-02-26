@@ -62,7 +62,7 @@ public class AWRankingAuthenticationProviderImpl extends
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
 		
-		return getUserDetailsService().loadUserByUsername(username);
+		return getUserDetailsService().loadUserByUsernameAndPassword(username, authentication.getCredentials());
 		
 	}
 

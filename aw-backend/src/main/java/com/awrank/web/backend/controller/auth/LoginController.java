@@ -104,7 +104,6 @@ public class LoginController extends AbstractController {
 		
 		entryHistoryService.save(entryHistory);
 		
-        // define user role.
         return "hello";
     }
 
@@ -118,10 +117,66 @@ public class LoginController extends AbstractController {
         return "logout";
     }
     
+    /**
+     * Unsuccessful attempt - we log it down and increment attempts info for user entry point 
+     * @param model
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = "/loginFailed", method = RequestMethod.GET)
-    public String loginFailed(ModelMap model) {
-        model.addAttribute("error", "true");
-        return "login";
+    public String loginFailed(ModelMap model, Principal principal) {
+    	
+    	if(principal != null){//normally principal is null here and we log bad access in  AWRankingUserDetailsService::loadUserByUsernameAndPassword
+	    	 String name = principal.getName();
+	         AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+	         List<GrantedAuthority> authorities =
+	                 (List<GrantedAuthority>) ((UsernamePasswordAuthenticationToken) principal).getAuthorities();
+	
+	         model.addAttribute("username", name);
+	         model.addAttribute("authorities", authorities);
+	         //--------- and here we log the success login down ----------
+	        
+	         User user = details.getUser(); 
+	         LocalDateTime time  = LocalDateTime.now();
+	         
+	         Integer acc = user.getAuthorizationFailsCount();
+	         if(acc == null) acc = 0;
+	         acc++;
+	         user.setAuthorizationFailsCount(acc);
+	         user.setAuthorizationFailsLastDate(time);
+	         
+	         userService.save(user);
+	         
+	         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	         List<EntryPoint> list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, details.getType(), details.getPassword());//
+	        
+	         EntryPoint entryPoint;
+	         if(list.size() > 0) entryPoint = list.get(0);
+	         else {
+	         //---------- if we by some mirricle doesn't have an enter point for this user with such a type - create	
+	         	
+	         	entryPoint =  new EntryPoint();
+	         	entryPoint.setType(details.getType());//LOGIN
+	         	entryPoint.setUser(user);
+	         	entryPoint.setPassword(details.getPassword());
+	      	
+	         }
+	         
+	         entryPointService.save(entryPoint);
+	         
+	         EntryHistory entryHistory = new EntryHistory();
+	 		entryHistory.setUser(user);
+	 		entryHistory.setSuccess(true);
+	 		entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+	 		entryHistory.setEntryPoint(entryPoint);
+	 		entryHistory.setSigninDate(time);
+	 		entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+	 		
+	 		entryHistoryService.save(entryHistory);
+	    	
+	        model.addAttribute("error", "true");
+    	}
+        return "login Failed";
     }
 
 //    @RequestMapping(value = "/logout", method = RequestMethod.GET)
