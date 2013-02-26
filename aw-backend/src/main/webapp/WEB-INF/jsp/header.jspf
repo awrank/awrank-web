@@ -8,21 +8,21 @@
     <meta name="author" content=""/>
 
     <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
-    <c:set var="staticResources" value="${contextPath}/static/resources"/>
+    <c:set var="resources" value="${contextPath}/resources"/>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src="${staticResources}/js/html5.js"></script>
+    <script src="${resources}/js/html5.js"></script>
     <![endif]-->
 
-    <script src="${staticResources}/js/jquery/1.8.3/jquery-1.8.3.min.js"><![CDATA[<!-- -->]]></script>
-    <script src="${staticResources}/js/jqueryui/1.9/jquery-ui-1.9.1.custom.min.js"><![CDATA[<!-- -->]]></script>
-    <script src="${staticResources}/js/bootstrap/bootstrap.min.js"><![CDATA[<!-- -->]]></script>
-    <script src="${staticResources}/js/form.js"><![CDATA[<!-- -->]]></script>
+    <script src="${resources}/js/jquery/1.8.3/jquery-1.8.3.min.js"><![CDATA[<!-- -->]]></script>
+    <script src="${resources}/js/jqueryui/1.9/jquery-ui-1.9.1.custom.min.js"><![CDATA[<!-- -->]]></script>
+    <script src="${resources}/js/bootstrap/bootstrap.min.js"><![CDATA[<!-- -->]]></script>
+    <script src="${resources}/js/form.js"><![CDATA[<!-- -->]]></script>
 
     <!-- Le styles -->
-    <link href="${staticResources}/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${staticResources}/css/flick/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <link href="${staticResources}/css/style.css" rel="stylesheet"/>
+    <link href="${resources}/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${resources}/css/flick/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+    <link href="${resources}/css/style.css" rel="stylesheet"/>
 
 <%--</jsp:root>--%>
