@@ -15,7 +15,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "users")
-public class User extends DatedAbstractAuditable<Long> {
+public class User extends DatedAbstractAuditable {
 
     /*
 	@Value("#{appProps[user_default_language_code]}")

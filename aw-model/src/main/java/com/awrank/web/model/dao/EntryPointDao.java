@@ -1,12 +1,13 @@
 package com.awrank.web.model.dao;
 
 import com.awrank.web.model.domain.EntryPoint;
-import java.util.List;
+import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * The {@code EntryPointDao} is a data-centric service for the {@link EntryPoint} entity.
@@ -17,14 +18,14 @@ import org.springframework.data.repository.query.Param;
  * @author Eugene Solomka
  */
 public interface EntryPointDao extends CrudRepository<EntryPoint, Long> {
-	
-	 @Query("select e from EntryPoint e where e.user = :user")
-	 List<EntryPoint> select(@Param("user") User user);
-	 
-	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.endedDate is NULL")
-	 List<EntryPoint> selectActiveByType(@Param("user") User user, @Param("type") String type);
-	 
-	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.password = :password and e.endedDate is NULL")
-	 List<EntryPoint> selectActiveByTypeAndPassword(@Param("user") User user, @Param("type") String type, @Param("password") String password);
-	 
+
+	@Query("select e from EntryPoint e where e.user = :user")
+	List<EntryPoint> select(@Param("user") User user);
+
+	@Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.endedDate is NULL")
+	List<EntryPoint> selectActiveByType(@Param("user") User user, @Param("type") String type);
+
+	@Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.password = :password and e.endedDate is NULL")
+	List<EntryPoint> selectActiveByTypeAndPassword(@Param("user") User user, @Param("type") EntryPointType type, @Param("password") String password);
+
 }

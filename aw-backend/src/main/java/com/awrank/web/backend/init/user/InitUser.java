@@ -4,12 +4,7 @@ import com.awrank.web.model.dao.EntryHistoryDao;
 import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.dao.UserRoleDao;
-import com.awrank.web.model.domain.EntryHistory;
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.EntryPointType;
-import com.awrank.web.model.domain.Language;
-import com.awrank.web.model.domain.User;
-import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.utils.user.CurrentUserUtils;
 import com.awrank.web.model.utils.user.PasswordUtils;
@@ -32,10 +27,10 @@ public class InitUser {
 	private EntryPointDao entryPointDao;
 	@Autowired
 	private UserRoleDao userRoleDao;
-	
+
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;
-	
+
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initAnonymous() {
 		User user = userDao.findByEmail("anonymous@awrank.com");
@@ -59,7 +54,7 @@ public class InitUser {
 			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
-			
+
 			EntryPoint entryPoint = new EntryPoint();
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
@@ -69,15 +64,17 @@ public class InitUser {
 			entryPoint.setCreatedDate(new DateTime());
 			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
-			
+
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER);
+			role.setCreatedDate(new DateTime());
+			role.setLastModifiedDate(entryPoint.getCreatedDate());
 			userRoleDao.save(role);
-			
-			LocalDateTime time  = LocalDateTime.now();
-			LocalDateTime time2  = time.plusMillis(4000000);
-			
+
+			LocalDateTime time = LocalDateTime.now();
+			LocalDateTime time2 = time.plusMillis(4000000);
+
 			EntryHistory entryHistory = new EntryHistory();
 			entryHistory.setUser(user);
 			entryHistory.setSuccess(true);
@@ -86,8 +83,10 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistory.setCreatedDate(new DateTime());
+			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
-			
+
 			EntryHistory entryHistory2 = new EntryHistory();
 			entryHistory2.setUser(user);
 			entryHistory2.setSuccess(true);
@@ -95,8 +94,10 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session anonimus 2");
 			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistory2.setCreatedDate(new DateTime());
+			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
-			
+
 		}
 	}
 
@@ -123,7 +124,7 @@ public class InitUser {
 			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
-			
+
 			EntryPoint entryPoint = new EntryPoint();
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
@@ -133,15 +134,17 @@ public class InitUser {
 			entryPoint.setCreatedDate(new DateTime());
 			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
-			
+
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER_VERIFIED);
+			role.setCreatedDate(new DateTime());
+			role.setLastModifiedDate(entryPoint.getCreatedDate());
 			userRoleDao.save(role);
-			
-			LocalDateTime time  = LocalDateTime.now();
-			LocalDateTime time2  = time.plusMillis(4000000);
-			
+
+			LocalDateTime time = LocalDateTime.now();
+			LocalDateTime time2 = time.plusMillis(4000000);
+
 			EntryHistory entryHistory = new EntryHistory();
 			entryHistory.setUser(user);
 			entryHistory.setEntryPoint(entryPoint);
@@ -150,8 +153,10 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setSessionId("init session ruser 1");
+			entryHistory.setCreatedDate(new DateTime());
+			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
-			
+
 			EntryHistory entryHistory2 = new EntryHistory();
 			entryHistory2.setUser(user);
 			entryHistory2.setEntryPoint(entryPoint);
@@ -159,9 +164,12 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session ruser 2");
 			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistory2.setCreatedDate(new DateTime());
+			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}
+
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initAdmin() {
 		User user = userDao.findByEmail("admin@awrank.com");
@@ -197,15 +205,17 @@ public class InitUser {
 			entryPoint.setCreatedDate(new DateTime());
 			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
-			
+
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_ADMIN);
+			role.setCreatedDate(new DateTime());
+			role.setLastModifiedDate(entryPoint.getCreatedDate());
 			userRoleDao.save(role);
-			
-			LocalDateTime time  = LocalDateTime.now();
-			LocalDateTime time2  = time.plusMillis(4000000);
-			
+
+			LocalDateTime time = LocalDateTime.now();
+			LocalDateTime time2 = time.plusMillis(4000000);
+
 			EntryHistory entryHistory = new EntryHistory();
 			entryHistory.setUser(user);
 			entryHistory.setSessionId("init session admin 1");
@@ -214,8 +224,10 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setEntryPoint(entryPoint);
+			entryHistory.setCreatedDate(new DateTime());
+			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
-			
+
 			EntryHistory entryHistory2 = new EntryHistory();
 			entryHistory2.setUser(user);
 			entryHistory2.setEntryPoint(entryPoint);
@@ -223,6 +235,8 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session admin 2");
 			entryHistory2.setSuccess(true);
+			entryHistory2.setCreatedDate(new DateTime());
+			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}

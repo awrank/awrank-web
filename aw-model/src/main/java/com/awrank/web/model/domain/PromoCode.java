@@ -14,70 +14,70 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "promo_codes")
-public class PromoCode extends DatedAbstractAuditable<Long> {
+public class PromoCode extends DatedAbstractAuditable {
 
-    /**
-     * Promotion code.
-     */
-    @Column(name = "code", nullable = false, unique = true, length = 64)
-    private String code;
+	/**
+	 * Promotion code.
+	 */
+	@Column(name = "code", nullable = false, unique = true, length = 64)
+	private String code;
 
-    /**
-     * TODO: description ?
-     */
-    @Column(name = "reference", nullable = true)
-    private String reference;
+	/**
+	 * TODO: description ?
+	 */
+	@Column(name = "reference", nullable = true)
+	private String reference;
 
-    // todo: need user?
+	// todo: need user?
 
-    /**
-     * Product.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+	/**
+	 * Product.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
-    // todo: need product profile ?
+	// todo: need product profile ?
 
-    /**
-     * Order.
-     */
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "order_id", nullable = true)
-    private Order order;
+	/**
+	 * Order.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "order_id", nullable = true)
+	private Order order;
 
-    public PromoCode() {
-    }
+	public PromoCode() {
+	}
 
-    public String getReference() {
-        return reference;
-    }
+	public String getReference() {
+		return reference;
+	}
 
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public Product getProduct() {
-        return product;
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 
-    public Order getOrder() {
-        return order;
-    }
+	public Order getOrder() {
+		return order;
+	}
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+	public void setOrder(Order order) {
+		this.order = order;
+	}
 }

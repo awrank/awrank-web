@@ -4,7 +4,6 @@ import com.awrank.web.model.domain.User;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Extension of {@link AbstractAuditable} with overridden mapping and defined user.
@@ -20,5 +19,5 @@ import java.io.Serializable;
 		@AssociationOverride(name = "lastModifiedBy", joinColumns = @JoinColumn(name = "last_updated_by_user_id"))
 })
 @MappedSuperclass
-public class ExtendedAbstractAuditable<ID extends Serializable> extends AbstractAuditable<User, ID> {
+public class ExtendedAbstractAuditable extends AbstractAuditable<User, Long> {
 }
