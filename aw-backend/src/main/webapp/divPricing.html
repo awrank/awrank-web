@@ -1,32 +1,67 @@
-<div class="row-fluid">
-    <div class="span4 well pagination-centered">
-        <h2 lngt="TARIFF_STARTED_NAME">Started</h2>
+<div name="alert-error"></div>
+<div id="divPricingRow" class="row-fluid">
+	<script type="text/template">
+		<div class="span4 well pagination-centered">
+			<h2 lngt="<%=productName%>"></h2>
 
-        <p lngt="TARIFF_STARTED_DESCRIPTION">Great for web master to get started</p>
-        <h4>$9.99
-            <small lngt="PER_MONTH">per month</small>
-        </h4>
-        <p><a class="btn btn-warning" href="#"><span lngt="TARIFF_CHOOSE">Choose plan</span> &raquo;</a></p>
-    </div>
-    <!--/span-->
-    <div class="span4 well pagination-centered">
-        <h2 lngt="TARIFF_BASIC_NAME">Basic</h2>
+			<p lngt="<%=productDescription%>"></p>
+			<h4><%=price%>
+				<%if (productPeriodInDays==30){%>
+				<small lngt="PER_MONTH"></small>
+				<%}else{%>
+				<small lngt="TARIFF_PER">per</small>
+				<small><%=productPeriodInDays%></small>
+				<small lngt="TARIFF_DAYS">days</small>
+				<%}%>
+			</h4>
+			<p><%=productCountDailyRequest%></p>
 
-        <p lngt="TARIFF_BASIC_DESCRIPTION">Great for web master to get started</p>
-        <h4>$14.99
-            <small lngt="PER_MONTH">per month</small>
-        </h4>
-        <p><a class="btn btn-warning" href="#"><span lngt="TARIFF_CHOOSE">Choose plan</span> &raquo;</a></p>
-    </div>
-    <!--/span-->
-    <div class="span4 well pagination-centered">
-        <h2 lngt="TARIFF_PRO_NAME">Pro</h2>
+			<p><%=productCountMonthlyRequest%></p>
 
-        <p lngt="TARIFF_PRO_DESCRIPTION">Great for web master to get started</p>
-        <h4>$24.99
-            <small lngt="PER_MONTH">per month</small>
-        </h4>
-        <p><a class="btn btn-warning" href="#"><span lngt="TARIFF_CHOOSE">Choose plan</span> &raquo;</a></p>
-    </div>
-    <!--/span-->
+			<p><%=discount%></p>
+
+			<p><a class="btn btn-warning" href="#"><span lngt="TARIFF_CHOOSE"></span> &raquo;</a></p>
+		</div>
+	</script>
 </div>
+<script type="text/javascript" language="JavaScript">
+	var CProductPojo = Backbone.Model.extend({
+	});
+	var CProductPojoList = Backbone.Collection.extend({
+		url: 'rest/product/',
+		model: CProductPojo
+	});
+	var CProductPojoListView = Backbone.View.extend({
+		el: $('#divPricingRow'),
+		initialize: function () {
+			var o = $('#divPricingRow script');
+			this.template = _.template(o.html());
+			o.remove();
+		},
+		events: {
+			"click a": "payment"
+		},
+		render: function () {
+			this.$el.empty();
+			for (var i = 0; i < this.collection.size(); i++) {
+				var attr = this.collection.at(i).toJSON();
+				attr.index = i + 1;
+				this.$el.append(this.template(attr));
+			}
+			localizeLoadContent(this.$el);
+			return this;
+		},
+		payment: function (event) {
+			alert("payment");
+			//TODO
+//			var tr = $(event.target).closest('tr');
+//			selectDictionary = this.collection.get(tr.attr('id'));
+		}
+	});
+
+	var productPojoList = new CProductPojoList();
+	var productPojoListView = new CProductPojoListView({collection: productPojoList});
+	productPojoList.fetch({async: false});
+	productPojoListView.render();
+
+</script>

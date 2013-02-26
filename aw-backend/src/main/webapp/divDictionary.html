@@ -1,7 +1,4 @@
-<div name="alert-error">
-
-</div>
-
+<div name="alert-error"></div>
 <div class="row">
 	<div class="span12">
 		<h4 lngt="DICTIONARY"></h4>
@@ -88,10 +85,6 @@
 			var o = $('#tableBodyDictionary script');
 			this.template = _.template(o.html());
 			o.remove();
-
-//							this.collection.on('add', this.render);
-//							this.collection.on('remove', this.render);
-//							this.listenTo(this.collection, 'change', this.render);
 		},
 		events: {
 			"click a": "selectRow",

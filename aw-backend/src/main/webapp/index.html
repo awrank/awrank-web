@@ -42,6 +42,7 @@
 	<link href="resources/css/bootstrap.css" rel="stylesheet">
 	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
 	<link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
+	<link href="resources/css/awrank.css" rel="stylesheet">
 
 	<style type="text/css">
 		body {
@@ -138,7 +139,8 @@
 			"forget_password": "forget_password",
 			"pricing": "pricing",
 			"session": "session",
-			"dictionary": "dictionary"
+			"dictionary": "dictionary",
+			'*path': 'defaultRoute'
 		},
 		login: function () {
 			$('#divRegister').addClass('hidden');
@@ -169,6 +171,9 @@
 		dictionary: function () {
 			fIndexMenuActive('menuItemDictionary');
 			fIndexRightContentSelectDiv('divDictionary');
+		},
+		defaultRoute: function () {
+			workspace.navigate('pricing', {trigger: true});
 		}
 	});
 	var workspace = new CRouter();
@@ -179,11 +184,6 @@
 //		setContextPath('http://localhost:8080/awrank');
 		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
-		workspace.navigate('pricing', {trigger: true});
-//		fIndexLogout();
-
-//        fIndexMenuSessionOnclick();
-//        fIndexMenuDictionaryOnclick();
 	}
 
 	function fIndexLogout() {

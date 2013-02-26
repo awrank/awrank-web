@@ -1,7 +1,6 @@
 var contextPath = null;
 
 function setContextPath(newContextPath) {
-//	contextPath = newContextPath + '/api/';
 	contextPath = newContextPath + '/';
 }
 
@@ -70,7 +69,8 @@ $(document).ajaxError(function (event, request, settings, exception) {
 $(document).ajaxStart(function () {
 	loadingShow();
 })
-$(document).ajaxComplete(function () {
+//$(document).ajaxComplete(function () {
+$(document).ajaxStop(function () {
 	loadingHide();
 })
 
@@ -114,7 +114,8 @@ function loadingShow(id) {
 }
 
 function loadingHide() {
-	loadingIndex--;
+	if (loadingIndex > 0)
+		loadingIndex--;
 	if (loadingIndex == 0)
 		$('#loading').animate({opacity: 'hide'}, 200);
 }

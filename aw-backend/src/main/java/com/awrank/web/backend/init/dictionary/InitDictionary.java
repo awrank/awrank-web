@@ -147,7 +147,11 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "TARIFF_PRO_NAME", "Профессиональный"));
 		list.add(new Dictionary(null, Language.EN, "TARIFF_PRO_NAME", "Pro"));
 		list.add(new Dictionary(null, Language.RU, "TARIFF_PRO_DESCRIPTION", "Отлично подходит для веб-мастера, чтобы начать работу3"));
-		list.add(new Dictionary(null, Language.EN, "TARIFF_PRO_DESCRIPTION", "Great for web master to get started3"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_PRO_DESCRIPTION", "Great for web master to get started"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_PER", "за"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_PER", "per"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_DAYS", "дней"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_DAYS", "days"));
 
 		list.add(new Dictionary(null, Language.RU, "SESSION_HISTORY", "История посещений"));
 		list.add(new Dictionary(null, Language.EN, "SESSION_HISTORY", "Session history"));
