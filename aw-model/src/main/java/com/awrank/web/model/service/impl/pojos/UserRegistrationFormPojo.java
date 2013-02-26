@@ -10,14 +10,14 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class UserRegistrationFormPojo implements Serializable {
 
-	 private String IP;
+	 private String ip;
 
-	   public String getIP() {
-	        return IP;
+	   public String getIp() {
+	        return ip;
 	    }
 
-	    public void setIP(String ip) {
-	        this.IP = ip;
+	    public void setIp(String ip) {
+	        this.ip = ip;
 	    }
 	    
     private String firstName;

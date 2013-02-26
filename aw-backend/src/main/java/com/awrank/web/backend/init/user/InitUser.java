@@ -1,8 +1,10 @@
 package com.awrank.web.backend.init.user;
 
+import com.awrank.web.model.dao.EntryHistoryDao;
 import com.awrank.web.model.dao.EntryPointDao;
 import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.dao.UserRoleDao;
+import com.awrank.web.model.domain.EntryHistory;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
@@ -30,6 +32,9 @@ public class InitUser {
 	private EntryPointDao entryPointDao;
 	@Autowired
 	private UserRoleDao userRoleDao;
+	
+	@Autowired
+	private EntryHistoryDao entryHistoryDao;
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initAnonymous() {
@@ -69,6 +74,29 @@ public class InitUser {
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER);
 			userRoleDao.save(role);
+			
+			LocalDateTime time  = LocalDateTime.now();
+			LocalDateTime time2  = time.plusMillis(4000000);
+			
+			EntryHistory entryHistory = new EntryHistory();
+			entryHistory.setUser(user);
+			entryHistory.setSuccess(true);
+			entryHistory.setSessionId("init session anonimus 1");
+			entryHistory.setEntryPoint(entryPoint);
+			entryHistory.setSigninDate(time);
+			entryHistory.setSignoutDate(time2);
+			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistoryDao.save(entryHistory);
+			
+			EntryHistory entryHistory2 = new EntryHistory();
+			entryHistory2.setUser(user);
+			entryHistory2.setSuccess(true);
+			entryHistory2.setEntryPoint(entryPoint);
+			entryHistory2.setSigninDate(time);
+			entryHistory2.setSessionId("init session anonimus 2");
+			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistoryDao.save(entryHistory2);
+			
 		}
 	}
 
@@ -110,6 +138,28 @@ public class InitUser {
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER_VERIFIED);
 			userRoleDao.save(role);
+			
+			LocalDateTime time  = LocalDateTime.now();
+			LocalDateTime time2  = time.plusMillis(4000000);
+			
+			EntryHistory entryHistory = new EntryHistory();
+			entryHistory.setUser(user);
+			entryHistory.setEntryPoint(entryPoint);
+			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistory.setSuccess(true);
+			entryHistory.setSigninDate(time);
+			entryHistory.setSignoutDate(time2);
+			entryHistory.setSessionId("init session ruser 1");
+			entryHistoryDao.save(entryHistory);
+			
+			EntryHistory entryHistory2 = new EntryHistory();
+			entryHistory2.setUser(user);
+			entryHistory2.setEntryPoint(entryPoint);
+			entryHistory2.setSuccess(true);
+			entryHistory2.setSigninDate(time);
+			entryHistory2.setSessionId("init session ruser 2");
+			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistoryDao.save(entryHistory2);
 		}
 	}
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -152,6 +202,28 @@ public class InitUser {
 			role.setUser(user);
 			role.setRole(Role.ROLE_ADMIN);
 			userRoleDao.save(role);
+			
+			LocalDateTime time  = LocalDateTime.now();
+			LocalDateTime time2  = time.plusMillis(4000000);
+			
+			EntryHistory entryHistory = new EntryHistory();
+			entryHistory.setUser(user);
+			entryHistory.setSessionId("init session admin 1");
+			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistory.setSuccess(true);
+			entryHistory.setSigninDate(time);
+			entryHistory.setSignoutDate(time2);
+			entryHistory.setEntryPoint(entryPoint);
+			entryHistoryDao.save(entryHistory);
+			
+			EntryHistory entryHistory2 = new EntryHistory();
+			entryHistory2.setUser(user);
+			entryHistory2.setEntryPoint(entryPoint);
+			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistory2.setSigninDate(time);
+			entryHistory2.setSessionId("init session admin 2");
+			entryHistory2.setSuccess(true);
+			entryHistoryDao.save(entryHistory2);
 		}
 	}
 

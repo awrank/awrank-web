@@ -7,6 +7,7 @@ import com.awrank.web.model.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -24,5 +25,5 @@ public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory
     Page<EntryHistory> findByUser(User user, Pageable pageable);
     
     @Query("select e from EntryHistory e where e.ipAddress = :ipAddress")
-    List<EntryHistory> findByIP(String ipAddress);
+    List<EntryHistory> findByIP(@Param("ipAddress") String ipAddress);
 }

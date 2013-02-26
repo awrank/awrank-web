@@ -1,11 +1,7 @@
 package com.awrank.web.model.service;
 
 import com.awrank.web.model.domain.EntryHistory;
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.EntryPointType;
-import com.awrank.web.model.domain.User;
-import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
-import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
+import com.awrank.web.model.exception.entryhistory.*;
 
 import java.util.List;
 
@@ -16,9 +12,9 @@ import java.util.List;
 //@Service
 public interface EntryHistoryService {
 
-	//public void add(EntryHistory ep) throws EntryHistoryNotCreatedException;
+	public void add(EntryHistory ep) throws EntryHistoryNotCreatedException;
 
-	//public void delete(EntryHistory ep) throws EntryHistoryNotDeletedException;
+	public void delete(EntryHistory ep) throws EntryHistoryNotDeletedException;
 
 	public void save(EntryHistory ep);
 

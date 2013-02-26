@@ -107,19 +107,20 @@ public class AdminController extends AbstractController {
 			headers = "content-type=application/x-www-form-urlencoded")
 	public
 	@ResponseBody()
-	List<User> getUserByIP(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
+    Object[] getUserByIP(@ModelAttribute UserRegistrationFormPojo form, ModelMap model)
 			{
     	// here fetch from entry_history and get list of users ever came from given IP
-    		List<User> list = new ArrayList<User>();
-    		String ip = String.valueOf(form.getIP());
+    		ArrayList<User> list = new ArrayList<User>();
+    		String ip = String.valueOf(form.getIp());
     		List<EntryHistory> ehlist= entryHistoryService.findByIP(ip);
     		
-    		for( EntryHistory e:ehlist ){
+    		for( EntryHistory e : ehlist ){
     			
     			list.add(e.getUser());
     		}
-    	
-    		return list;
+    		
+    		model.addAttribute("result", list.toArray());
+    		return list.toArray();
 				
     }
 }
