@@ -122,7 +122,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 
 		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
 
-		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user, type);
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user, String.valueOf(type));
 
 		for (EntryPoint ep : ep_list) {
 

@@ -5,10 +5,13 @@ import org.brickred.socialauth.Contact;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.exception.SocialAuthException;
 import org.brickred.socialauth.spring.bean.SocialAuthTemplate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -16,31 +19,91 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.model.domain.EntryHistory;
+import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.User;
+import com.awrank.web.model.service.EntryHistoryService;
+import com.awrank.web.model.service.EntryPointService;
+import com.awrank.web.model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import com.awrank.web.backend.authentication.AWRankingGrantedAuthority;
+import com.awrank.web.backend.authentication.AWRankingUserDetails;
 
 /**
+ * In this controller we also track login attempts etc. and log to entry_history - do not 
+ * kill this without making an alternative!
+ * 
  * @author Andrew Stoyaltsev
+ * @author Olga Korokhina
  */
 @Controller
 //@RequestMapping(value = "/auth")
 public class LoginController extends AbstractController {
 
+	@Autowired
+	@Qualifier("entryHistoryServiceImpl")
+	private EntryHistoryService entryHistoryService;
+	
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
+	
+	@Autowired
+	@Qualifier("entryPointServiceImpl")
+	private EntryPointService entryPointService;
+	
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String printWelcome(ModelMap model, Principal principal) {
 
         String name = principal.getName();
+        AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         List<GrantedAuthority> authorities =
                 (List<GrantedAuthority>) ((UsernamePasswordAuthenticationToken) principal).getAuthorities();
 
         model.addAttribute("username", name);
         model.addAttribute("authorities", authorities);
+        //--------- and here we log the success login down ----------
+       
+        User user = details.getUser(); 
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        
+        List<EntryPoint> list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, details.getType(), details.getPassword());//
+       
+        EntryPoint entryPoint;
+        if(list.size() > 0) entryPoint = list.get(0);
+        else {
+        //---------- if we by some mirricle doesn't have an enter point for this user with such a type - create	
+        	
+        	entryPoint =  new EntryPoint();
+        	entryPoint.setType(details.getType());//LOGIN
+        	entryPoint.setUser(user);
+        	entryPoint.setPassword(details.getPassword());
+        	
+        	entryPointService.save(entryPoint);
+        }
+        
+        LocalDateTime time  = LocalDateTime.now();
+        
+        EntryHistory entryHistory = new EntryHistory();
+		entryHistory.setUser(user);
+		entryHistory.setSuccess(true);
+		entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+		entryHistory.setEntryPoint(entryPoint);
+		entryHistory.setSigninDate(time);
+		entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+		
+		entryHistoryService.save(entryHistory);
+		
         // define user role.
         return "hello";
     }
@@ -50,6 +113,11 @@ public class LoginController extends AbstractController {
         return "login";
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(ModelMap model) {
+        return "logout";
+    }
+    
     @RequestMapping(value = "/loginFailed", method = RequestMethod.GET)
     public String loginFailed(ModelMap model) {
         model.addAttribute("error", "true");

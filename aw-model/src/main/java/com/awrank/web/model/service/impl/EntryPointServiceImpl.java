@@ -47,6 +47,9 @@ public class EntryPointServiceImpl implements EntryPointService {
 		return entryPointDao.select(user);
 	}
 	
+	/**
+	 *  Returns only active! idealy single one OR empty list
+	 */
 	@Override
 	public String findPasswordForUserByEntryPointType(User user, EntryPointType type){
 		
@@ -68,12 +71,17 @@ public class EntryPointServiceImpl implements EntryPointService {
 	}
 
 	@Override
-	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user,
-			EntryPointType type) {
+	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, String type) {
 		
 		return entryPointDao.selectActiveByType(user, String.valueOf(type));
 	}
 
+	@Override
+	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type) {
+		
+		return entryPointDao.selectActiveByType(user, String.valueOf(type));
+	}
+	
 	@Override
 	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user,
 			EntryPointType type, String password) {

@@ -22,6 +22,10 @@ public class AWRankingGrantedAuthority implements GrantedAuthority {
 	}
 	
 	private Long userId;
+	public Long getUserId() {
+		return userId;
+	}
+
 	private String username;
 	private String authority;//ROLE_USER etc. - not password but role wording
 	
