@@ -20,7 +20,7 @@ public class AbstractUserRelatedEntityAuditable extends DatedAbstractAuditable {
 	/**
 	 * User associated with record.
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "user_id", nullable = false, updatable = false)
 	private User user;
 

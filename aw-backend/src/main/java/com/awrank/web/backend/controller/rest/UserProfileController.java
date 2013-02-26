@@ -55,7 +55,6 @@ public class UserProfileController extends AbstractController {
 			Page<EntryHistory> allEntryHistory = entryHistoryService.getPageByUser(user, pageable);
 	    	
 	    	model.addAttribute("result", allEntryHistory.getContent());
-	    	
 	    	        
 	    	return allEntryHistory;
 		}

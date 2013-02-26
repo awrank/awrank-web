@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -116,8 +117,11 @@ public class AdminController extends AbstractController {
     		List<EntryHistory> ehlist= entryHistoryService.findByIP(ip);
     		
     		for( EntryHistory e : ehlist ){
-    			((DatedAbstractAuditable) e.getUser()).getId();
-    			list.add(e.getUser());
+    			
+    			Hibernate.initialize(e.getUser());
+    			Long id = ((DatedAbstractAuditable) e.getUser()).getId();
+    			User user = userService.findOne(id);
+    			list.add(user);
     		}
     		
     		model.addAttribute("result", list.toArray());
