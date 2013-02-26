@@ -25,7 +25,7 @@ public class User extends DatedAbstractAuditable<Long> {
 	/**
 	 * A unique key which is used in requests to API system service.
 	 */
-	@Column(name = "api_key", nullable = false, unique = true, length = 255)
+	@Column(name = "api_key", nullable = false, unique = true, length = 64)
 	private String apiKey;
 
 	/**
@@ -39,7 +39,7 @@ public class User extends DatedAbstractAuditable<Long> {
 	/**
 	 * User email.
 	 */
-	@Column(name = "email", nullable = false, unique = true)
+	@Column(name = "email", nullable = false, unique = true, length = 128)
 	private String email;
 
 	/**
@@ -84,7 +84,7 @@ public class User extends DatedAbstractAuditable<Long> {
 	/**
 	 * Language code in two-chars format, e.g. "EN", "RU", etc.
 	 */
-	@Column(name = "language_code", nullable = false)
+	@Column(name = "language_code", nullable = false, length = 2)
 	@Enumerated(EnumType.STRING)
 	private Language language;
 

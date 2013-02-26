@@ -23,7 +23,7 @@ public class Dictionary extends ExtendedAbstractAuditable<Long> {
     /**
      * Language.
      */
-    @Column(name = "language", nullable = false)
+    @Column(name = "language", nullable = false, length = 2)
     @Enumerated(EnumType.STRING)
     private Language language;
 

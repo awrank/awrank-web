@@ -19,7 +19,7 @@ public class PromoCode extends DatedAbstractAuditable<Long> {
     /**
      * Promotion code.
      */
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false, unique = true, length = 64)
     private String code;
 
     /**
