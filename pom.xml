@@ -196,6 +196,20 @@
                 <version>2.0-beta2</version>
             </dependency>
 
+            <!-- social alternative -->
+            <dependency>
+                <groupId>com.google.oauth-client</groupId>
+                <artifactId>google-oauth-client</artifactId>
+                <version>1.13.1-beta</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.oauth-client</groupId>
+                <artifactId>google-oauth-client-servlet</artifactId>
+                <version>1.13.1-beta</version>
+            </dependency>
+
+
             <!-- Joda Time -->
             <dependency>
                 <groupId>joda-time</groupId>

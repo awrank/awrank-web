@@ -5,5 +5,6 @@
 </head>
 <body>
 <h3>HTTP Status 403 - Access denied.</h3>
+<a href="<%=request.getContextPath()%>">back</a>
 </body>
 </html>

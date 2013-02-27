@@ -17,16 +17,16 @@
 
 <div style="text-align: center;">
     <c:if test="${not empty error}">
-    <!-- span style="color: red; ">
+        <!-- span style="color: red; ">
         <b>We did not recognize the username or password you entered.<br/>
-            Please try again.</b><br/>
+        Please try again.</b><br/>
         <br/>
         If you don't remember your username or password, <a href="">click here</a> and <br/>
         we'll email you instructions to reset your password.<br/>
         <br/>
         <i>Spring message : ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</i><br/>
         <br/>
-    </span -->
+        </span -->
     </c:if>
     <form method="POST" action="<c:url value="user/add" />" accept="application/json" enctype="application/json">
         <table align="center" frame="hsides">
@@ -34,7 +34,7 @@
                 <td align="right">First Name</td>
                 <td><input type="text" name="firstName"/></td>
             </tr>
-             <tr>
+            <tr>
                 <td align="right">Last Name</td>
                 <td><input type="text" name="lastName"/></td>
             </tr>
@@ -46,11 +46,11 @@
                 <td align="right">Password*</td>
                 <td><input type="password" name="password"/></td>
             </tr>
-             <tr>
+            <tr>
                 <td align="right">API Key*</td>
                 <td><input type="apiKey" name="apiKey"/></td>
             </tr>
-             <tr>
+            <tr>
                 <td align="right">Language(EN, RU)</td>
                 <td><input type="language" name="language"/></td>
             </tr>
@@ -62,5 +62,12 @@
         </table>
     </form>
 </div>
+
+<div align="center">
+    <br/><br/><br/>
+    [<a href="<%=request.getContextPath()%>">home</a>]
+    [<a href="login">login</a>]
+</div>
+
 </body>
 </html>

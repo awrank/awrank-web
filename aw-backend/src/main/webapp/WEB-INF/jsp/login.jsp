@@ -10,6 +10,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <title>Login page</title>
     <%--<jsp:directive.include file="header.jspf"/>--%>
+    <style type="text/css">
+        td {
+            text-align: left;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -31,35 +38,67 @@
     </span>
     </c:if>
 
-    <div>
-        <form action="signin/google" method="POST">
-            <button type="submit" class="btn btn-large btn-primary">Sign in with Google</button>
-            <input type="hidden" name="scope"
-                   value="https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo#email https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/tasks https://www-opensocial.googleusercontent.com/api/people https://www.googleapis.com/auth/drive"/>
-        </form>
-    </div>
+    <c:if test="${isError eq true}">
+        <b>Oops! Something goes wrong: ${errorMessage}</b>
+    </c:if>
 
-    <form method="POST" action="<c:url value="/j_spring_security_check" />">
-        <table align="center" frame="hsides">
+    <table align="center" cellspacing="0" border="0">
+        <tr>
+            <td colspan="2" align="left"><h2>Log in to your account</h2></td>
+        </tr>
+        <tr bgcolor="aqua">
+            <td align="left"><b>with social network:</b></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr bgcolor="aqua">
+            <td>
+                <div>
+                    <form action="loginViaGoogle" method="GET">
+                        <button type="submit" class="btn btn-large btn-primary">Log in with Google</button>
+                    </form>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <form action="socialauth?id=facebook" method="POST">
+                        <button type="submit" class="btn btn-large btn-primary">Log in with Facebook</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 20px;"><b>or with registered details:</b></td>
+            <td>&nbsp;</td>
+        </tr>
+        <form method="POST" action="<c:url value="/j_spring_security_check" />">
             <tr>
-                <td align="right">Email</td>
-                <td><input type="text" name="j_username"/></td>
-            </tr>
-            <tr>
-                <td align="right">Password</td>
-                <td><input type="password" name="j_password"/></td>
-            </tr>
-            <tr>
-                <td colspan="2" align="right"><input type="submit" value="Login"/>
-                    <input type="reset" value="Reset"/>
+                <td colspan="2">
+                    Email: <input type="text" name="j_username" style="width: 50%"/>
                 </td>
             </tr>
-        </table>
-    </form>
-    <a href="<c:url value="register"/>">Register</a>
+            <tr>
+                <td colspan="2">
+                    Password: <input type="password" name="j_password" style="width: 50%"/>
+                </td>
+            </tr>
+            <tr align="right">
+                <td colspan="2" align="right" style="padding-top: 20px;">
+                    <input type="submit" id="submit" align="right"/>
+                </td>
+            </tr>
+        </form>
+        <tr>
+            <td style="padding-top: 20px;"><a href="<c:url value="forgot"/>">Forgotten your password?</a></td>
+            <td style="padding-top: 20px;">Don't have an account? <a href="<c:url value="register"/>">Register</a></td>
+        </tr>
+    </table>
+
+
 </div>
 
-<div>
+<%-- Social Auth Demo--%>
+<div style="visibility: hidden;">
+    <hr/>
     <table cellpadding="10" cellspacing="10" align="center">
         <tr>
             <td colspan="8"><h3 align="center">Welcome to Social Auth Demo</h3></td>
@@ -77,9 +116,10 @@
         </tr>
         <tr>
             <td colspan="8" align="center">
-                <form action="socialauth" <%--onsubmit="return validate(this);--%>">
-                    or enter OpenID url: <input type="text" value="" name="id"/>
-                    <input type="submit" value="Submit"/>
+                <form action="socialauth"
+                <%--onsubmit="return validate(this);--%>">
+                or enter OpenID url: <input type="text" value="" name="id"/>
+                <input type="submit" value="Submit"/>
                 </form>
             </td>
         </tr>
