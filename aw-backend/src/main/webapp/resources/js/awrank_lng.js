@@ -64,43 +64,46 @@ function localizeLoadContent(content) {
 }
 
 function initDictionaryMessage() {
-	if (l_dic_all == undefined) {
+	if (l_dic_all == null) {
 		reloadDictionaryMessage();
 	}
 }
 
 function reloadDictionaryMessage() {
-	$.ajax(
-		contextPath + 'rest/dictionary', {
-			type: 'get',
-			async: false,
-			dataType: 'json',
-			success: function (list) {
-				l_dic_all = {};
-				for (var i = 0; i < list.length; i++) {
-					var item = list[i];
-					var l_dic_all_item = l_dic_all[item.language];
-					if (l_dic_all_item == undefined) {
-						l_dic_all_item = {};
-						l_dic_all[item.language] = l_dic_all_item;
+	if (contextPath != null) {
+		$.ajax(
+			contextPath + 'rest/dictionary', {
+				type: 'get',
+				async: false,
+				dataType: 'json',
+				success: function (list) {
+					l_dic_all = {};
+					for (var i = 0; i < list.length; i++) {
+						var item = list[i];
+						var l_dic_all_item = l_dic_all[item.language];
+						if (l_dic_all_item == undefined) {
+							l_dic_all_item = {};
+							l_dic_all[item.language] = l_dic_all_item;
+						}
+						l_dic_all_item[item.code] = item.text;
 					}
-					l_dic_all_item[item.code] = item.text;
+				},
+				error: function (errorData, textStatus) {
+					awrankDebug('Error init dictionary');
 				}
-				setLanguage('RU');
-			},
-			error: function (errorData, textStatus) {
-				alert('Error init dictionary');
-			}
-		});
+			});
+	} else {
+		awrankDebug('Error load dictionary before set contextPath');
+	}
 }
 
 function getMessage(text) {
 	initDictionaryMessage();
-	var m = undefined;
-	if (l_dic && l_dic != undefined) {
+	var m = null;
+	if (l_dic != null) {
 		m = l_dic[text];
 	}
-	if (m == undefined) {
+	if (m == null) {
 		m = text;
 	}
 	return m;

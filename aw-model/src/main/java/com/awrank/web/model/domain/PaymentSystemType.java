@@ -6,7 +6,7 @@ package com.awrank.web.model.domain;
  *
  * @author Alex Polyakov
  */
-public enum PaymentType {
+public enum PaymentSystemType {
 
 	/**
 	 * Payment system WebMoney

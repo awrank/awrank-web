@@ -3,8 +3,8 @@ package com.awrank.web.model.service.impl;
 import com.awrank.web.model.dao.ProductDao;
 import com.awrank.web.model.dao.ProductProfileCustomDao;
 import com.awrank.web.model.dao.ProductProfileDao;
+import com.awrank.web.model.dao.pojos.PricingFormProductProfilePojo;
 import com.awrank.web.model.service.ProductService;
-import com.awrank.web.model.service.impl.pojos.PricingFormProductProfilePojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +21,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	public ProductProfileCustomDao productProfileCustomDao;
 
+	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public List<PricingFormProductProfilePojo> selectAvailable() {
 		return productProfileCustomDao.selectAvailable();

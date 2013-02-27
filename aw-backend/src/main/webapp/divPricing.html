@@ -1,11 +1,11 @@
 <div name="alert-error"></div>
 <div id="divPricingRow" class="row-fluid">
 	<script type="text/template">
-		<div class="span4 well pagination-centered">
+		<div product_id="<%=id%>" class="span4 well pagination-centered">
 			<h2 lngt="<%=productName%>"></h2>
 
 			<p lngt="<%=productDescription%>"></p>
-			<h4><%=price%>
+			<h4><%=price%>$
 				<%if (productPeriodInDays==30){%>
 				<small lngt="PER_MONTH"></small>
 				<%}else{%>
@@ -14,22 +14,90 @@
 				<small lngt="TARIFF_DAYS">days</small>
 				<%}%>
 			</h4>
-			<p><%=productCountDailyRequest%></p>
-
-			<p><%=productCountMonthlyRequest%></p>
-
-			<p><%=discount%></p>
-
+			<%if(productCountDailyRequest>0){%>
+			<p><span lngt="TARIFF_COUNT_DAILY_REQUEST_TITLE"></span>: <%=productCountDailyRequest%></p>
+			<%}%>
+			<%if(productCountMonthlyRequest>0){%>
+			<p><span lngt="TARIFF_COUNT_MONTHLY_REQUEST_TITLE"></span>: <%=productCountMonthlyRequest%></p>
+			<%}%>
+			<%if(discount>0){%>
+			<p><span lngt="TARIFF_DISCOUNT_TITLE"></span>: <%=discount%>$</p>
+			<%}%>
 			<p><a class="btn btn-warning" href="#"><span lngt="TARIFF_CHOOSE"></span> &raquo;</a></p>
 		</div>
 	</script>
 </div>
+
+<div id="divPayment" class="modal hide fade">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 lngt="PAYMENT">Payment</h3>
+	</div>
+
+	<div class="modal-body">
+		<div name="alert-error"></div>
+		<div id="divPaymentProductInfo">
+			<script type="text/template">
+				<h2 lngt="<%=productName%>">productName</h2>
+
+				<p lngt="<%=productDescription%>">productDescription</p>
+				<h4><%=price%>
+					<%if (productPeriodInDays==30){%>
+					<small lngt="PER_MONTH"></small>
+					<%}else{%>
+					<small lngt="TARIFF_PER">per</small>
+					<small><%=productPeriodInDays%></small>
+					<small lngt="TARIFF_DAYS">days</small>
+					<%}%>
+				</h4>
+				<%if(productCountDailyRequest>0){%>
+				<p><span lngt="TARIFF_COUNT_DAILY_REQUEST_TITLE"></span>: <%=productCountDailyRequest%>
+				</p>
+				<%}%>
+				<%if(productCountMonthlyRequest>0){%>
+				<p><span lngt="TARIFF_COUNT_MONTHLY_REQUEST_TITLE"></span>:
+					<%=productCountMonthlyRequest%></p>
+				<%}%>
+				<%if(discount>0){%>
+				<p><span lngt="TARIFF_DISCOUNT_TITLE"></span>: <%=discount%>$</p>
+				<%}%>
+			</script>
+		</div>
+		<div id="divPaymentPaymentSystemChoice" class="row-fluid pagination-centered">
+			<div id="divPaymentPaymentSystem2checkout" class="span6 hidden">
+				<a class="btn">
+					<img src="resources/img/logo_2checkout.png" width="210" height="80">
+				</a>
+			</div>
+			<div id="divPaymentPaymentSystemWebmoney" class="span6 hidden">
+				<a class="btn">
+					<img src="resources/img/logo_webmoney.png" width="210" height="80">
+				</a>
+				<br>
+				<br>
+				<a href="https://passport.webmoney.ru/asp/certview.asp?wmid=" target="_blank">
+					<img src="resources/img/webmoney_certificate.png" alt="Проверить аттестат"
+						 border="0"/><br/>
+					<span>Проверить аттестат</span></a>
+			</div>
+			<a id="divPaymentPaymentMore" lngt="MORE" class="hidden">More</a>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" language="JavaScript">
 	var CProductPojo = Backbone.Model.extend({
 	});
 	var CProductPojoList = Backbone.Collection.extend({
 		url: 'rest/product/',
 		model: CProductPojo
+	});
+	var CPaymentSystemPojo = Backbone.Model.extend({
+	});
+	var CPaymentSystemPojoList = Backbone.Collection.extend({
+		url: 'rest/payment_system/',
+		model: CPaymentSystemPojo
 	});
 	var CProductPojoListView = Backbone.View.extend({
 		el: $('#divPricingRow'),
@@ -52,16 +120,80 @@
 			return this;
 		},
 		payment: function (event) {
-			alert("payment");
+			var product_id = $(event.target).closest('div').attr("product_id");
+			this.options.productPojoView.model = this.collection.get(product_id);
+			this.options.productPojoView.render();
+			$('#divPayment').modal();
+			//TODO
+		}
+	});
+	var CProductPojoView = Backbone.View.extend({
+		el: $('#divPaymentProductInfo'),
+		initialize: function () {
+			var o = $('#divPaymentProductInfo script');
+			this.template = _.template(o.html());
+			o.remove();
+		},
+		render: function () {
+			this.$el.html(this.template(this.model.toJSON()));
+			localizeLoadContent(this.$el);
+			return this;
+		}
+	});
+	var CPaymentSystemPojoListView = Backbone.View.extend({
+		el: $('#divPaymentPaymentSystemChoice'),
+		initialize: function () {
+			this.hidePaymentSystem = [];
+		},
+		events: {
+			"click a.btn": "payment",
+			"click #divPaymentPaymentMore": "showHidePaymentSystem"
+		},
+		render: function () {
+			for (var i = 0; i < this.collection.size(); i++) {
+				var model = this.collection.at(i);
+				var paymentSystemId = model.get("id");
+				var paymentSystemType = model.get("paymentSystemType");
+				var testMode = model.get("testMode");
+				if (paymentSystemType == 'TWO_CHECKOUT') {
+					$('#divPaymentPaymentSystem2checkout').removeClass('hidden');
+				} else if (paymentSystemType == 'WEB_MONEY') {
+
+					if (l_dic_language == 'RU') {
+						$('#divPaymentPaymentSystemWebmoney').removeClass('hidden');
+					} else {
+						this.hidePaymentSystem.push($('#divPaymentPaymentSystemWebmoney'));
+						$('#divPaymentPaymentMore').removeClass('hidden');
+					}
+				}
+				//TODO
+			}
+			return this;
+		},
+		payment: function (event) {
+			var product_id = $(event.target).closest('div').attr("product_id");
+			alertError("test");
+//					alert("payment" + product_id);
 			//TODO
 //			var tr = $(event.target).closest('tr');
 //			selectDictionary = this.collection.get(tr.attr('id'));
+		},
+		showHidePaymentSystem: function () {
+			for (i in this.hidePaymentSystem) {
+				this.hidePaymentSystem[i].removeClass('hidden');
+			}
+			$('#divPaymentPaymentMore').addClass('hidden');
 		}
 	});
 
 	var productPojoList = new CProductPojoList();
-	var productPojoListView = new CProductPojoListView({collection: productPojoList});
 	productPojoList.fetch({async: false});
+	var productPojoListView = new CProductPojoListView({collection: productPojoList,
+		productPojoView: new CProductPojoView()});
 	productPojoListView.render();
+	var paymentSystemPojoList = new CPaymentSystemPojoList();
+	paymentSystemPojoList.fetch({async: false});
+	var paymentSystemPojoListView = new CPaymentSystemPojoListView({collection: paymentSystemPojoList});
+	paymentSystemPojoListView.render();
 
 </script>

@@ -1,6 +1,6 @@
 package com.awrank.web.model.dao;
 
-import com.awrank.web.model.service.impl.pojos.PricingFormProductProfilePojo;
+import com.awrank.web.model.dao.pojos.PricingFormProductProfilePojo;
 
 import java.util.List;
 

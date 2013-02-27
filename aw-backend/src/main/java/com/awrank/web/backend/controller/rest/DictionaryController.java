@@ -19,7 +19,7 @@ public class DictionaryController extends AbstractController {
 	private DictionaryService dictionaryService;
 
 	/**
-	 * Returns paginated list of dictionary entries
+	 * Returns list of dictionary entries
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public

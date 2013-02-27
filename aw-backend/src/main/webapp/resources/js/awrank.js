@@ -1,4 +1,4 @@
-var contextPath = null;
+var contextPath = "./";
 
 function setContextPath(newContextPath) {
 	contextPath = newContextPath + '/';
@@ -66,13 +66,16 @@ $(document).ajaxError(function (event, request, settings, exception) {
 			break;
 	}
 });
-$(document).ajaxStart(function () {
-	loadingShow();
-})
-//$(document).ajaxComplete(function () {
-$(document).ajaxStop(function () {
-	loadingHide();
-})
+
+function activeAjaxListener() {
+	$(document).ajaxStart(function () {
+		loadingShow();
+	})
+	$(document).ajaxComplete(function () {
+//$(document).ajaxStop(function () {
+		loadingHide();
+	})
+}
 
 function alertError(title, text) {
 	$('div[name=alert-error]').append('<div class="alert alert-error">' +
@@ -80,6 +83,7 @@ function alertError(title, text) {
 		'<h4>' + title + '</h4>' +
 		text +
 		'</div>');
+	awrankDebug(title + text);
 }
 
 var loadingIndex = 0;
@@ -118,6 +122,13 @@ function loadingHide() {
 		loadingIndex--;
 	if (loadingIndex == 0)
 		$('#loading').animate({opacity: 'hide'}, 200);
+}
+
+
+function awrankDebug(o) {
+	// in production need commented console.error
+//	console.log(o);
+	console.error(o);
 }
 
 function dateTimeToString(date) {

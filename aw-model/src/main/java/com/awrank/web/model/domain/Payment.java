@@ -28,7 +28,7 @@ public class Payment extends ExtendedAbstractAuditable {
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_type", nullable = false, updatable = false)
-	private PaymentType paymentType;
+	private PaymentSystemType paymentSystemType;
 
 	/**
 	 * Payable amount.
@@ -84,12 +84,12 @@ public class Payment extends ExtendedAbstractAuditable {
 		this.order = order;
 	}
 
-	public PaymentType getPaymentType() {
-		return paymentType;
+	public PaymentSystemType getPaymentSystemType() {
+		return paymentSystemType;
 	}
 
-	public void setPaymentType(PaymentType paymentType) {
-		this.paymentType = paymentType;
+	public void setPaymentSystemType(PaymentSystemType paymentSystemType) {
+		this.paymentSystemType = paymentSystemType;
 	}
 
 	public BigDecimal getAmount() {

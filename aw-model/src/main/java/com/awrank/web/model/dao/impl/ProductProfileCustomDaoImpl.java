@@ -1,8 +1,8 @@
 package com.awrank.web.model.dao.impl;
 
 import com.awrank.web.model.dao.ProductProfileCustomDao;
+import com.awrank.web.model.dao.pojos.PricingFormProductProfilePojo;
 import com.awrank.web.model.domain.constant.ProductProfileConst;
-import com.awrank.web.model.service.impl.pojos.PricingFormProductProfilePojo;
 import com.awrank.web.model.utils.select.SelectUtils;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Repository
 public class ProductProfileCustomDaoImpl extends AbstractDaoImpl implements ProductProfileCustomDao {
+	@Override
 	public List<PricingFormProductProfilePojo> selectAvailable() {
 		List<PricingFormProductProfilePojo> list = SelectUtils.getWrapperList(em, PricingFormProductProfilePojo.class,
 				"where o." + ProductProfileConst.H_STARTED_DATE + " <= NOW()" +

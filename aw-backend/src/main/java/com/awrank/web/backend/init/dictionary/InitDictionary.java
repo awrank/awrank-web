@@ -58,12 +58,16 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "PASSWORD", "Password"));
 		list.add(new Dictionary(null, Language.RU, "PASSWORD_CONFIRM", "Подтвердите пароль"));
 		list.add(new Dictionary(null, Language.EN, "PASSWORD_CONFIRM", "Password confirm"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT", "Оплата"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT", "Payment"));
 		list.add(new Dictionary(null, Language.RU, "SITE", "САЙТ"));
 		list.add(new Dictionary(null, Language.EN, "SITE", "SITE"));
 		list.add(new Dictionary(null, Language.RU, "UPDATE", "Обновить"));
 		list.add(new Dictionary(null, Language.EN, "UPDATE", "Update"));
 		list.add(new Dictionary(null, Language.RU, "ORDER", "Заказ"));
 		list.add(new Dictionary(null, Language.EN, "ORDER", "Order"));
+		list.add(new Dictionary(null, Language.RU, "MORE", "еще"));
+		list.add(new Dictionary(null, Language.EN, "MORE", "more"));
 //      ENTITY
 		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));
 		list.add(new Dictionary(null, Language.EN, "DICTIONARY_CODE", "Code"));
@@ -152,6 +156,12 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "TARIFF_PER", "per"));
 		list.add(new Dictionary(null, Language.RU, "TARIFF_DAYS", "дней"));
 		list.add(new Dictionary(null, Language.EN, "TARIFF_DAYS", "days"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_COUNT_DAILY_REQUEST_TITLE", "Количество запросов доступное в день"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_COUNT_DAILY_REQUEST_TITLE", "The number of requests available per day"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_COUNT_MONTHLY_REQUEST_TITLE", "Количество запросов доступное на месяц"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_COUNT_MONTHLY_REQUEST_TITLE", "The number of requests available per month"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_DISCOUNT_TITLE", "Скидка"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_DISCOUNT_TITLE", "Discount"));
 
 		list.add(new Dictionary(null, Language.RU, "SESSION_HISTORY", "История посещений"));
 		list.add(new Dictionary(null, Language.EN, "SESSION_HISTORY", "Session history"));

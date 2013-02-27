@@ -30,8 +30,11 @@
 		<intercept-url pattern="/rest/language" access="permitAll" method="GET"/>
 		<intercept-url pattern="/rest/dictionary" access="permitAll" method="GET"/>
 		<intercept-url pattern="/rest/product" access="permitAll" method="GET"/>
+		<intercept-url pattern="/rest/payment_system" access="permitAll" method="GET"/>
+		<intercept-url pattern="/rest/**" access="permitAll"/>
+		<!--  hasRole('ROLE_ADMIN') -->
+
 		<intercept-url pattern="/user/add" access="permitAll"/>
-		<intercept-url pattern="/rest/**" access="permitAll"/><!--  hasRole('ROLE_ADMIN') -->
 		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
 
 		<form-login login-page="/login"

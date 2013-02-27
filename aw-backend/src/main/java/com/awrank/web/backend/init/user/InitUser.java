@@ -32,7 +32,7 @@ public class InitUser {
 	private EntryHistoryDao entryHistoryDao;
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void initAnonymous() {
+	public User initAnonymous() {
 		User user = userDao.findByEmail("anonymous@awrank.com");
 		if (user == null) {
 			user = new User();
@@ -55,6 +55,7 @@ public class InitUser {
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 		}
+		return user;
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)

@@ -1,4 +1,4 @@
-package com.awrank.web.model.service.impl.pojos;
+package com.awrank.web.model.dao.pojos;
 
 import com.awrank.web.model.domain.ProductProfile;
 import com.awrank.web.model.domain.constant.ProductProfileConst;
@@ -11,6 +11,7 @@ import java.math.BigDecimal;
  * User: a_polyakov
  */
 public class PricingFormProductProfilePojo {
+	private final Long id;
 	private final String productName;
 	private final String productDescription;
 	private final int productPeriodInDays;
@@ -21,6 +22,7 @@ public class PricingFormProductProfilePojo {
 
 	@SelectFrom(ProductProfile.class)
 	public PricingFormProductProfilePojo(
+			@SelectField(ProductProfileConst.H_ID) Long id,
 			@SelectField(ProductProfileConst.H_PRODUCT__NAME) String productName,
 			@SelectField(ProductProfileConst.H_PRODUCT__DESCRIPTION) String productDescription,
 			@SelectField(ProductProfileConst.H_PRODUCT__PERIOD_IN_DAYS) int productPeriodInDays,
@@ -29,6 +31,7 @@ public class PricingFormProductProfilePojo {
 			@SelectField(ProductProfileConst.H_PRICE) BigDecimal price,
 			@SelectField(ProductProfileConst.H_DISCOUNT) BigDecimal discount
 	) {
+		this.id = id;
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productPeriodInDays = productPeriodInDays;
@@ -36,6 +39,10 @@ public class PricingFormProductProfilePojo {
 		this.productCountMonthlyRequest = productCountMonthlyRequest;
 		this.price = price;
 		this.discount = discount;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getProductName() {
