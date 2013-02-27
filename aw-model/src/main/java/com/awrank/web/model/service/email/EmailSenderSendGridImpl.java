@@ -70,6 +70,10 @@ public class EmailSenderSendGridImpl implements EmailSender {
     //@Value("${mail.testactivation.verifyurl}")
     private String testactivation_url;
 
+    @Value("#{emailProps[mail_password_changeurl]}")
+    //@Value("${mail.password.changeurl}")
+    private String passwordchanging_url;
+    
 
     /* (non-Javadoc)
       * @see com.awrank.web.model.service.email.EmailSender#send(java.lang.String, java.util.Map)
@@ -77,6 +81,112 @@ public class EmailSenderSendGridImpl implements EmailSender {
     @Override
     public void send(String template, Map<String, Object> params) throws Exception {
 
+    	if(template == xsmtp_header_category) sendEmailVerificationEmail(params);
+    	if(template == "changing_password") sendPasswordChangingEmail(params);
+    	
+    }
+    
+    protected void sendPasswordChangingEmail(Map<String, Object> params) throws Exception {
+   
+    	//-------- TODO: we need to write down password changing keys same was as email activation ----	
+    	 if (params.containsKey("sgsmpt_host_name")) sgsmpt_host_name = (String) params.get("sgsmpt_host_name");
+         if (params.containsKey("sgsmpt_port")) sgsmpt_port = (String) params.get("sgsmpt_port");
+         if (params.containsKey("sgsmpt_user_name")) sgsmpt_user_name = (String) params.get("sgsmpt_user_name");
+         if (params.containsKey("sgsmpt_password")) sgsmpt_password = (String) params.get("sgsmpt_password");
+         if (params.containsKey("testactivation_email"))
+             testactivation_email = (String) params.get("testactivation_email");
+         if (params.containsKey("testactivation_password"))
+             testactivation_password = (String) params.get("testactivation_password");
+         if (params.containsKey("xsmtp_header_var_name"))
+             xsmtp_header_var_name = (String) params.get("xsmtp_header_var_name");
+         if (params.containsKey("xsmtp_header_var_value"))
+             xsmtp_header_var_value = (String) params.get("xsmtp_header_var_value");
+         if (params.containsKey("smpt_from_email")) smpt_from_email = (String) params.get("smpt_from_email");
+
+         String localAddr = "";
+         if (params.containsKey("localAddr")) localAddr = (String) params.get("localAddr");
+
+         String remoteAddr = "";
+         if (params.containsKey("remoteAddr")) localAddr = (String) params.get("remoteAddr");
+
+         Properties properties = new Properties();
+         properties.put("mail.transport.protocol", "smtp");
+         properties.put("mail.smtp.host", sgsmpt_host_name);
+         properties.put("mail.smtp.port", sgsmpt_port);
+         properties.put("mail.smtp.auth", "true");
+
+         Session smtpSession = (Session) getAuthenticatedSession(properties, sgsmpt_user_name, sgsmpt_password);
+
+         smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
+
+         SMTPAPIHeader header = new SMTPAPIHeader();
+
+         LinkedList<String> recipients = new LinkedList<String>();
+         recipients.add(testactivation_email);
+         header.addTo(recipients);
+
+         String key = SMTPAuthenticator.getHashed256(testactivation_email + "." + testactivation_password + "." + localAddr + "." + remoteAddr);
+         if ((xsmtp_header_var_value != null) && String.valueOf(xsmtp_header_var_value).length() > 0)
+             key = xsmtp_header_var_value;
+
+         System.out.println("local" + localAddr);
+         System.out.println("remote: " + remoteAddr);
+
+         LinkedList<String> activation_keys = new LinkedList<String>();
+         activation_keys.add(key);
+
+         if (xsmtp_header_var_name == null || String.valueOf(xsmtp_header_var_name).length() == 0)
+             header.addSubVal("%activation_key%", activation_keys);
+         else header.addSubVal(xsmtp_header_var_name, activation_keys);
+
+         /*
+         if (template == null) header.setCategory("email activation");
+         else header.setCategory(template);
+          */
+         header.setCategory("change password");
+         //----------------- sending ---------------------------
+
+         MimeMessage message = new MimeMessage(smtpSession);
+
+         Multipart multipart = new MimeMultipart("alternative");
+         BodyPart part1 = new MimeBodyPart();
+
+
+         part1.setText("You or someone else requestes a password change for your AWranking account.");
+         BodyPart part2 = new MimeBodyPart();
+
+       
+         if (key == null)
+             key = SMTPAuthenticator.getHashed256(testactivation_email + "." + testactivation_password + "." + localAddr + "." + remoteAddr);
+         StringBuilder bldr = new StringBuilder("<a href=");
+         bldr.append("\"");
+         bldr.append(passwordchanging_url);
+         bldr.append(key);
+         bldr.append("\"");
+         bldr.append(">");
+         bldr.append(passwordchanging_url);
+         bldr.append(key);
+         bldr.append("</a>");
+         String mess = bldr.toString();
+         part2.setContent(mess, "text/html");
+         multipart.addBodyPart(part1);
+         multipart.addBodyPart(part2);
+         message.setFrom(new InternetAddress(smpt_from_email));
+         message.addRecipient(Message.RecipientType.TO,
+                 new InternetAddress(testactivation_email));
+         message.setSubject("Your requested password change");
+         message.setContent(multipart);
+
+         if (header != null) {
+             System.out.println(header.asJSON());
+             message.addHeader("X-SMTPAPI", header.asJSON());
+         }
+
+         share(smtpSession, message);
+    	
+    }
+    
+    protected void sendEmailVerificationEmail(Map<String, Object> params) throws Exception {
         //------------------ configuring ------------------
         //TODO: refactor this search - build mapping and go via it
         if (params.containsKey("sgsmpt_host_name")) sgsmpt_host_name = (String) params.get("sgsmpt_host_name");
@@ -129,9 +239,11 @@ public class EmailSenderSendGridImpl implements EmailSender {
             header.addSubVal("%activation_key%", activation_keys);
         else header.addSubVal(xsmtp_header_var_name, activation_keys);
 
+        /*
         if (template == null) header.setCategory("email activation");
         else header.setCategory(template);
-
+         */
+        header.setCategory("email activation");
         //----------------- sending ---------------------------
 
         MimeMessage message = new MimeMessage(smtpSession);

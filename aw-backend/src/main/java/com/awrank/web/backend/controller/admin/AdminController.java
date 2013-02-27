@@ -76,6 +76,13 @@ public class AdminController extends AbstractController {
     return allUsers;
     }
     
+    /**
+     * List of user with pagination
+     * 
+     * @param model
+     * @param pageable
+     * @return
+     */
     @RequestMapping(value = "/userlistpage", method = RequestMethod.GET, produces = "application/json")
     public 
     @ResponseBody()
@@ -102,6 +109,12 @@ public class AdminController extends AbstractController {
     	return userService.findOneByEmail(form.getEmail());	
 	}
     
+    /**
+     * Get users ever logged in from given IP
+     * @param form
+     * @param model
+     * @return
+     */
     @RequestMapping(
 			value = "/ip",
 			method = {RequestMethod.POST, RequestMethod.GET},
@@ -109,7 +122,7 @@ public class AdminController extends AbstractController {
 			headers = "content-type=application/x-www-form-urlencoded")
 	public
 	@ResponseBody()
-    Object[] getUserByIP(@ModelAttribute UserRegistrationFormPojo form, ModelMap model)
+    List<User> getUserByIP(@ModelAttribute UserRegistrationFormPojo form, ModelMap model)
 			{
     	// here fetch from entry_history and get list of users ever came from given IP
     		ArrayList<User> list = new ArrayList<User>();
@@ -117,15 +130,63 @@ public class AdminController extends AbstractController {
     		List<EntryHistory> ehlist= entryHistoryService.findByIP(ip);
     		
     		for( EntryHistory e : ehlist ){
-    			
-    			Hibernate.initialize(e.getUser());
+    			//Hibernate.initialize(e.getUser());
     			Long id = ((DatedAbstractAuditable) e.getUser()).getId();
-    			User user = userService.findOne(id);
-    			list.add(user);
+    			if(id != null){
+	    			User user = userService.findOne(id);
+	    			list.add(user);
+    			}
     		}
     		
-    		model.addAttribute("result", list.toArray());
-    		return list.toArray();
-				
+    		model.addAttribute("result", list);
+    		return list;
+    }
+    
+    /**
+     * Get all entry points for user with given email
+     * @param form
+     * @param model
+     * @return
+     */
+    @RequestMapping(
+			value = "/userentryhistory",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+    List<EntryHistory> getEntryHistoryByUser(@ModelAttribute UserRegistrationFormPojo form, ModelMap model)
+			{
+    		
+    		String email = String.valueOf(form.getEmail());		
+    		User user = userService.findOneByEmail(email);
+    		List<EntryHistory> ehlist= entryHistoryService.findAllByUser(user);
+    		
+    		model.addAttribute("result", ehlist);
+    		return ehlist;
+    }
+    
+    /**
+     * Get all access IPs for user with given email
+     * @param form
+     * @param model
+     * @return
+     */
+    @RequestMapping(
+			value = "/useriphistory",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+    List<String> getIPByUser(@ModelAttribute UserRegistrationFormPojo form, ModelMap model)
+			{
+    		
+    		String email = String.valueOf(form.getEmail());		
+    		User user = userService.findOneByEmail(email);
+    		List<String> iplist= entryHistoryService.findAllIPByUser(user);
+    		
+    		model.addAttribute("result", iplist);
+    		return iplist;
     }
 }

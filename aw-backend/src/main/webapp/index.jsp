@@ -50,9 +50,39 @@
 
 
 </p>
-
 </p>
+<h3>User Profile</h3>
+<p>
+	<a href="<c:url value="rest/profile/accesshistory"/>">My last 100 login (you have to be logged in)</a>
+</p>
+<p>
+	<a href="<c:url value="rest/profile/accesshistory?page=0&page.size=50&page.sort=signinDate&page.sort.dir=asc&isLogin=true"/>">My last 50 login (you have to be logged in)</a>
+</p>
+<p>
+	<a href="<c:url value="rest/profile/accesshistory?page=0&page.size=10&page.sort=signinDate&page.sort.dir=asc&isLogin=true"/>">My last 10 login (you have to be logged in)</a>
+</p>
+<hr/>
+<p>
+	<div height="100">
+	<form method="POST" action="<c:url value="rest/profile/resetpassword" />" accept="application/json" enctype="application/json">
+		<table align="left">
 
+			<tr>
+				<td align="right">Email*</td>
+				<td><input type="text" name="email" value="okorokhina@gmail.com"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"><input type="submit" value="Reset password (send link to email)"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</p>
 <h3>LOGIN</h3>
 
 <p>
@@ -69,15 +99,15 @@
 </p>
 <hr/>
 <p>
-	<a href="<c:url value="admin/userlist"/>">Get all</a>
+	<a href="<c:url value="admin/userlist"/>">Get all users</a>
 </p>
 
 <p>
-	<a href="<c:url value="admin/userlistpage"/>">Get Page 0-30 (default)</a>
+	<a href="<c:url value="admin/userlistpage"/>">Get users, Page 0-30 (default)</a>
 </p>
 
 <p>
-	<a href="<c:url value="admin/userlistpage?page=0&page.size=2&page.sort=firstName&page.sort.dir=asc&isLogin=true"/>">Get
+	<a href="<c:url value="admin/userlistpage?page=0&page.size=2&page.sort=firstName&page.sort.dir=asc&isLogin=true"/>">Get users, 
 		Page 0-1 (with argument)</a>
 </p>
 <hr/>
@@ -116,7 +146,52 @@
 				<td><input type="text" name="ip" value="0:0:0:0:0:0:0:1%0"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="right"><input type="submit" value="Search by IP"/>
+				<td colspan="2" align="right"><input type="submit" value="Search users by IP"/>
+					<input type="reset" value="Reset"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</p>
+<hr/>
+<p>
+
+<div height="100">
+	<form method="POST" action="<c:url value="admin/userentryhistory" />" accept="application/json" enctype="application/json">
+		<table align="left">
+
+			<tr>
+				<td align="right">Email*</td>
+				<td><input type="text" name="email" value="user@awrank.com"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"><input type="submit" value="Get EntryPoints for user"/>
+					<input type="reset" value="Reset"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</p>
+<div height="100">
+	<form method="POST" action="<c:url value="admin/useriphistory" />" accept="application/json" enctype="application/json">
+		<table align="left">
+
+			<tr>
+				<td align="right">Email*</td>
+				<td><input type="text" name="email" value="user@awrank.com"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"><input type="submit" value="Get Ips for user"/>
 					<input type="reset" value="Reset"/>
 				</td>
 			</tr>

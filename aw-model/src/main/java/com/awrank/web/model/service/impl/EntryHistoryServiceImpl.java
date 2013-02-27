@@ -48,4 +48,16 @@ public class EntryHistoryServiceImpl implements EntryHistoryService {
 		
 		return (Page<EntryHistory>) entryHistoryDao.findByUser(user, pageable);
 	}
+	
+	@Override
+	public  List<EntryHistory> findAllByUser(User user){
+		
+		return entryHistoryDao.findAllByUser(user);
+	}
+	
+	@Override
+	public  List<String> findAllIPByUser(User user){
+		
+		return entryHistoryDao.findAllIPByUser(user);
+	}
 }

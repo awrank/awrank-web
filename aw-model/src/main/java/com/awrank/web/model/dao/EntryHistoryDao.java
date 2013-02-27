@@ -26,4 +26,10 @@ public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory
     
     @Query("select e from EntryHistory e where e.ipAddress = :ipAddress")
     List<EntryHistory> findByIP(@Param("ipAddress") String ipAddress);
+    
+    @Query("select e from EntryHistory e where e.user = :user")
+    List<EntryHistory> findAllByUser(@Param("user") User user);
+    
+    @Query("select DISTINCT e.ipAddress from EntryHistory e where e.user = :user")
+    List<String> findAllIPByUser(@Param("user") User user);
 }

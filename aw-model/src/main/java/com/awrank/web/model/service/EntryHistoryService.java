@@ -24,6 +24,10 @@ public interface EntryHistoryService {
 
 	public  List<EntryHistory> findByIP(String ipAddress);
 	
+	public  List<EntryHistory> findAllByUser(User user);
+	
+	public  List<String> findAllIPByUser(User user);
+	
 	public Page<EntryHistory> getPageByUser(User user, Pageable pageable);
 	
 }
