@@ -38,9 +38,10 @@
     </span>
     </c:if>
 
-    <c:if test="${isError eq true}">
-        <b>Oops! Something goes wrong: ${errorMessage}</b>
-    </c:if>
+    <b>auth status code:</b> ${authStatusCode}</br>
+    <b>auth message:</b> ${authMessage}</br>
+    <b>details:</b> ${details}
+
 
     <table align="center" cellspacing="0" border="0">
         <tr>

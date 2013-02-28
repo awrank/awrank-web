@@ -64,36 +64,6 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-
-    <!-- Social Auth lib -->
-    <bean id="socialAuthConfig" class="org.brickred.socialauth.SocialAuthConfig">
-        <property name="applicationProperties">
-            <props>
-                <prop key="www.google.com.consumer_key">${google.clientId}</prop>
-                <prop key="www.google.com.consumer_secret">${google.clientSecret}</prop>
-                <prop key="graph.facebook.com.consumer_key">${facebook.appId}</prop>
-                <prop key="graph.facebook.com.consumer_secret">${facebook.appSecret}</prop>
-            </props>
-
-        </property>
-    </bean>
-
-    <bean id="socialAuthManager" class="org.brickred.socialauth.SocialAuthManager" scope="session">
-        <property name="socialAuthConfig" ref="socialAuthConfig"/>
-        <aop:scoped-proxy/>
-    </bean>
-
-    <bean id="socialAuthTemplate" class="org.brickred.socialauth.spring.bean.SocialAuthTemplate" scope="session">
-        <aop:scoped-proxy/>
-    </bean>
-
-    <bean id="socialAuthWebController" class="org.brickred.socialauth.spring.controller.SocialAuthWebController">
-        <constructor-arg value="${social.redirect.url}"/>
-        <constructor-arg value="/socialAuthSuccess"/>
-        <constructor-arg value="/socialAuthFailed"/>
-    </bean>
-
-
     <!-- Profiles -->
     <!-- IMPORTANT: nested <beans/> MUST be placed at the end of the file -->
     <beans profile="dev">

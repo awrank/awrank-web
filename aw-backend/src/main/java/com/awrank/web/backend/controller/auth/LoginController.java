@@ -2,22 +2,23 @@ package com.awrank.web.backend.controller.auth;
 
 import com.awrank.web.backend.authentication.AWRankingUserDetails;
 import com.awrank.web.backend.controller.AbstractController;
-import com.awrank.web.model.domain.EntryHistory;
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.*;
 import com.awrank.web.model.service.EntryHistoryService;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserService;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.brickred.socialauth.AuthProvider;
-import org.brickred.socialauth.Contact;
-import org.brickred.socialauth.SocialAuthManager;
-import org.brickred.socialauth.exception.SocialAuthException;
-import org.brickred.socialauth.spring.bean.SocialAuthTemplate;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,6 +48,8 @@ import java.util.List;
  */
 @Controller
 public class LoginController extends AbstractController {
+
+    private static Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     @Qualifier("entryHistoryServiceImpl")
@@ -181,73 +183,140 @@ public class LoginController extends AbstractController {
     }
 
     /* Network login */
+    private final String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
+    private final String GOOGLE_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
+    private final String clientId = "567712796156-lh9rc61kk5qsllng54sk314sui0tls09.apps.googleusercontent.com";
+    private final String clientSecret = "IML_o6lOCHm6ysnbQi_VQsL9";
+    private final String host = "http://peabody.com.ua:8080/awrank";
+    private final String redirectUri = host + "/googleCallback";
+    private String accessToken;
+
     @RequestMapping(value = "/loginViaGoogle", method = RequestMethod.GET)
     public String loginViaGoogle(ModelMap modelMap) throws IOException {
         modelMap.addAttribute("isError", false);
-
-        final String AUTH_ENDPOINT_URL = "https://accounts.google.com/o/oauth2/auth";
-        final String clientId = "567712796156-lh9rc61kk5qsllng54sk314sui0tls09.apps.googleusercontent.com";
-        final String clientSecret = "IML_o6lOCHm6ysnbQi_VQsL9";
-        final String redirectUrl = "http://awrank.com:8080/awrank/googleAuthSuccess";
-
-        StringBuilder requestParams = new StringBuilder();
-        requestParams.append("client_id=").append(clientId).append("&");
-        requestParams.append("scope=").append(URLEncoder.encode(
-                "https://www.googleapis.com/auth/userinfo.email" +
-                        " " +
-                        "https://www.googleapis.com/auth/userinfo.profile", "UTF-8"))
+        StringBuilder queryString = new StringBuilder();
+        queryString.append("client_id=").append(clientId).append("&");
+        queryString.append("scope=").append(URLEncoder.encode(
+                "https://www.googleapis.com/auth/userinfo.email" + " " + "https://www.googleapis.com/auth/userinfo.profile", "UTF-8"))
                 .append("&");
-        requestParams.append("redirect_uri=").append(URLEncoder.encode(redirectUrl, "UTF-8")).append("&");
-        requestParams.append("response_type=").append("code");//.append("&");
+        queryString.append("redirect_uri=").append(URLEncoder.encode(redirectUri, "UTF-8")).append("&");
+        queryString.append("response_type=").append("code").append("&");
+        queryString.append("state=code");
 
         HttpClient httpClient = new HttpClient();
-        //String url = URLEncoder.encode(requestParams.toString(), "UTF-8");
-        HttpMethod method = new GetMethod(AUTH_ENDPOINT_URL + "?" + requestParams);
-        int code = httpClient.executeMethod(method);
-        if (code == HttpStatus.SC_OK) {
-            System.out.println("Google request ok!");
-            modelMap.addAttribute("isError", true);
-            modelMap.addAttribute("errorMessage", "Google request ok!");
-            //return "forward:/index.html";
-        } else {
-            modelMap.addAttribute("isError", true);
-            modelMap.addAttribute("errorMessage", "Http code = " + code);
-            //return "login";
+        String uri = GOOGLE_AUTH_URL + "?" + queryString;
+        System.out.println("Request URI: " + uri);
+        return "redirect:" + uri;
+    }
+
+    @RequestMapping(value = "/googleCallback")
+    public ModelAndView googleCallback(HttpServletRequest request, Principal principal) throws Exception {
+        ModelAndView mav = new ModelAndView("login");
+        mav.addObject("authStatusCode", "UNKNOWN");
+        mav.addObject("authMessage", "Probably none of the conditions were not fulfilled.");
+
+        String state = request.getParameter("state");
+        if (StringUtils.hasLength(state)) {
+
+            if (state.equals("code")) { // handle receiving of auth code
+                String error = request.getParameter("error");
+                if (StringUtils.hasLength(error)) {
+                    mav.addObject("authStatusCode", "NEGATIVE");
+                    mav.addObject("authMessage", error);
+                    LOG.debug("Negative response from Google: " + error);
+                    return mav;
+                }
+
+                String authCode = request.getParameter("code");
+                if (StringUtils.hasLength(authCode)) {
+                    mav.addObject("authStatusCode", "POSITIVE");
+                    mav.addObject("authMessage", "Google returns code: " + authCode);
+                    LOG.debug("Positive response from Google: code=" + authCode);
+
+                    LOG.debug("Getting info about user...");
+
+                    HttpClient httpClient = new HttpClient();
+                    PostMethod postMethod = new PostMethod(GOOGLE_TOKEN_URL);
+                    postMethod.addRequestHeader("Host", "accounts.google.com");
+                    postMethod.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                    NameValuePair[] params = new NameValuePair[]{
+                            new NameValuePair("code", authCode),
+                            new NameValuePair("client_id", clientId),
+                            new NameValuePair("client_secret", clientSecret),
+                            new NameValuePair("redirect_uri", redirectUri),
+                            new NameValuePair("grant_type", "authorization_code"),
+                    };
+                    postMethod.setRequestBody(params);
+                    int resCode = httpClient.executeMethod(postMethod);
+                    if (resCode == HttpStatus.SC_OK) {
+                        String responseJson = postMethod.getResponseBodyAsString();
+                        mav.addObject("details", "Token request - ok.\n" + responseJson);
+
+                        JSONObject jsonObject = new JSONObject(responseJson);
+                        accessToken = jsonObject.getString("access_token");
+                        String uri = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken;
+                        GetMethod getMethod = new GetMethod(uri);
+                        resCode = httpClient.executeMethod(getMethod);
+                        if (resCode == HttpStatus.SC_OK) {
+                            jsonObject = new JSONObject(getMethod.getResponseBodyAsString());
+                            // User class is most applicable for given response
+                            User tempUser = new User();
+                            tempUser.setEmail(jsonObject.getString("email"));
+                            tempUser.setFirstName(jsonObject.getString("given_name"));
+                            tempUser.setLastName(jsonObject.getString("family_name"));
+                            if (jsonObject.getString("locale").equals("ru")) {
+                                tempUser.setLanguage(Language.RU);
+                            } else {
+                                tempUser.setLanguage(Language.EN);
+                            }
+                            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+                            LocalDateTime birthday = LocalDateTime.parse(jsonObject.getString("birthday"), formatter);
+                            tempUser.setBirthday(birthday);
+
+                            // find user in db
+                            User user = userService.findOneByEmail(tempUser.getEmail());
+                            if (user != null) {
+                                List<EntryPoint> list = entryPointService.findEntryPointForUserByEntryPointType(user, EntryPointType.GOOGLE);
+                                if (list != null && list.size()>0) {
+                                    EntryPoint entryPoint = list.get(0);
+
+                                    EntryHistory entryHistory = new EntryHistory();
+                                    entryHistory.setUser(tempUser);
+                                    entryHistory.setSuccess(true);
+                                    entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+                                    entryHistory.setEntryPoint(entryPoint);
+                                    entryHistory.setSigninDate(LocalDateTime.now());
+                                    entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+                                    entryHistoryService.save(entryHistory);
+                                    mav.setViewName("redirect:/index.html");
+                                } else {
+                                    mav.addObject("details", "Sorry, we can't recognize you. Probably you're not registered yet.");
+                                }
+                            } else {
+                                mav.addObject("details", "User not found by email: " + tempUser.getEmail());
+                                // for testing: redirect anyway even if user is not found
+                                //mav.setViewName("redirect:/index.html");
+                            }
+                        } else {
+                            mav.addObject("details", "Could not get userinfo");
+                        }
+                    } else {
+                        mav.addObject("details", "Token request - nok");
+                    }
+
+                    return mav;
+                }
+            } else if (state.equals("token")) {
+                System.out.println(request.getParameterNames());
+            }
+
         }
-        return "login";
+
+
+        return mav;
     }
 
-    @RequestMapping(value = "/googleAuthSuccess")
-    public ModelAndView googleAuthSuccess(HttpServletRequest request) throws Exception {
-        System.out.println(request);
-
-        return null;
-    }
-
-    @RequestMapping(value = "/oauth2callback")
-    public ModelAndView googleCallback(HttpServletRequest request) throws Exception {
-        System.out.println(request);
-
-        return null;
-    }
-
-
-
-
-    /* Social Auth */
-    @Autowired
-    private SocialAuthTemplate socialAuthTemplate;
-
-    @RequestMapping(value = "/socialAuthSuccess")
-    public ModelAndView socialAuthSuccess(final HttpServletRequest request) throws Exception {
-        System.out.println(request);
-
-        return null;
-    }
-
-    @RequestMapping(value = "/socialAuthFailed")
-    public String socialAuthFailed() {
-        return null;
-    }
+    //@Value("#{emailProps[mail_sg_smtp_server_host]}")
 
 }
