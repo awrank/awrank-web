@@ -203,7 +203,6 @@ public class LoginController extends AbstractController {
         queryString.append("response_type=").append("code").append("&");
         queryString.append("state=code");
 
-        HttpClient httpClient = new HttpClient();
         String uri = GOOGLE_AUTH_URL + "?" + queryString;
         System.out.println("Request URI: " + uri);
         return "redirect:" + uri;

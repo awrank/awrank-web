@@ -61,7 +61,7 @@
             </td>
             <td>
                 <div>
-                    <form action="socialauth?id=facebook" method="POST">
+                    <form action="loginViaFacebook" method="GET">
                         <button type="submit" class="btn btn-large btn-primary">Log in with Facebook</button>
                     </form>
                 </div>
