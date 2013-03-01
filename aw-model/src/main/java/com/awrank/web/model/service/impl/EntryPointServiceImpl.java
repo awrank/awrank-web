@@ -57,16 +57,6 @@ public class EntryPointServiceImpl implements EntryPointService {
 		if(list == null || list.size() == 0) return null;
 		
 		return list.get(0).getPassword();
-		/*
-		List<EntryPoint> filtered = new ArrayList<EntryPoint>();
-		
-		//It shall be more beautiful way with Collections here but I can't recall it now
-		for (EntryPoint ep : list) { if(ep.getEndedDate() == null) filtered.add(ep); }
-		
-		if(filtered.size() == 0) return null;
-		
-		return filtered.get(0).getPassword();
-		*/
 	}
 
 	@Override
@@ -81,6 +71,6 @@ public class EntryPointServiceImpl implements EntryPointService {
 	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user,
 			EntryPointType type, String password) {
 		
-		return entryPointDao.selectActiveByTypeAndPassword(user, type, PasswordUtils.hashPassword(password));
+		return entryPointDao.selectActiveByTypeAndPassword(user, type, password);
 	}
 }

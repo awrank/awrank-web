@@ -15,7 +15,7 @@ import javax.persistence.*;
 		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "last_updated_at", nullable = false))
 })
 @AssociationOverrides({
-		@AssociationOverride(name = "createdBy", joinColumns = @JoinColumn(name = "created_by_user_id")),
+		@AssociationOverride(name = "createdBy", joinColumns = @JoinColumn(name = "created_by_user_id")),//NULL here means was creared by "System"
 		@AssociationOverride(name = "lastModifiedBy", joinColumns = @JoinColumn(name = "last_updated_by_user_id"))
 })
 @MappedSuperclass

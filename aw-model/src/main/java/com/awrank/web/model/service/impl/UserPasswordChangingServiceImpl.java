@@ -1,28 +1,33 @@
 package com.awrank.web.model.service.impl;
 
 import com.awrank.web.model.dao.StateChangeTokenDao;
-import com.awrank.web.model.domain.*;
+import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.StateChangeToken;
+import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserRole;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
-import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
-import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
+import com.awrank.web.model.exception.passwordchanging.*;
 import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserEmailActivationService;
+import com.awrank.web.model.service.StateChangeTokenService;
+import com.awrank.web.model.service.UserPasswordChangingService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
+
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import org.joda.time.LocalDateTime;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
-public class UserEmailActivationServiceImpl extends UserEmailActivationService {
+public class UserPasswordChangingServiceImpl extends UserPasswordChangingService {
 
     //----------------  Send Grid SMTP ------------
 
@@ -53,6 +58,10 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
     @Value("#{emailProps[mail_xsmtp_header_var_value]}")
     //@Value("${mail.xsmtp.header.var.value}")
     private String xsmtp_header_var_value;
+    
+    @Value("#{emailProps[password_xsmtp_header_category]}")
+    //@Value("${mail.from.email}")
+    private String password_xsmtp_header_category;
 
 //------------ other email settings -----------------
 
@@ -60,17 +69,15 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
     //@Value("${mail.from.email}")
     private String smpt_from_email;
 
-    @Value("#{emailProps[mail_testactivation_verifyurl]}")
+    @Value("#{emailProps[mail_password_changeurl]}")
     //@Value("${mail.testactivation.verifyurl}")
-    private String testactivation_url;
-
-//-- email verification code lifetime duration, milliseconds --
-
-    @Value("#{appProps[mail_verificationcode_lifetime_duration]}")
-    private Integer mail_verificationcode_lifetime_duration;
+    private String mail_password_changeurl;
 
 //--------------------------------------------------
 
+    @Value("#{appProps[mail_passwordchangingcode_lifetime_duration]}")
+    private Integer mail_passwordchangingcode_lifetime_duration;
+    
     @Autowired
     private StateChangeTokenDao stateChangeTokenDao;
 
@@ -85,21 +92,19 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
     @Qualifier("userRoleServiceImpl")
     private UserRoleService userRoleService;
 
-    @Override
-    public void send(Map params) throws UserActivationEmailNotSetException {
+	
+    public void send(Map params) throws PasswordChangingEmailNotSetException {
         try {
-            sendGridEmailSender.send(xsmtp_header_category, params);
+            sendGridEmailSender.send(password_xsmtp_header_category, params);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    @Transactional
-    public Boolean verify(String key, HttpServletRequest request) throws UserActivationWasNotVerifiedException {
-
-        //------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
-    	StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_EMAIL_VERIFICATION);
+    public Boolean verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException{
+    	
+    	 //------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
+    	StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_PASSWORD_CHANGE);
 
         if (stateChangeToken == null) return false;
 
@@ -120,7 +125,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
                 if (point.getType() == EntryPointType.EMAIL) thePoint = point;
             }
 
-            if (thePoint == null) return false;//not found proper entry point - can't activate
+            if (thePoint == null) return false;//not found proper entry point - can't change
 
 
             //------------ we have found point and activation record ----------
@@ -128,31 +133,28 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
             stateChangeToken.setTokenUsedAtDate(today);
             stateChangeTokenDao.save(stateChangeToken);
 
-            thePoint.setVerifiedDate(today);
+            thePoint.setEndedDate(today);//entry point is no longer active
             entryPointService.save(thePoint);
 
-            //---------- we add record concerning user role to user_roles ----
-
-            UserRole role = new UserRole();
-            role.setUser(user);
-            role.setRole(Role.ROLE_USER_VERIFIED);
-            userRoleService.save(role);
+            //TODO: here add record in Diary about password changing
+           
             return true;
         }
-       
-        return false;
+    	
+    	return false;
     }
 
-    @Override
-    public void save(StateChangeToken stateChangeToken) {
-    	LocalDateTime creationDate = LocalDateTime.now();
-    	LocalDateTime endedDate = creationDate.plusMillis(mail_verificationcode_lifetime_duration);
-    	stateChangeToken.setEndedDate(endedDate);
-    	stateChangeTokenDao.save(stateChangeToken);
-    }
+	public void save(StateChangeToken act){
+		
+		LocalDateTime creationDate = LocalDateTime.now();
+    	LocalDateTime endedDate = creationDate.plusMillis(mail_passwordchangingcode_lifetime_duration);
+    	act.setEndedDate(endedDate);
+    	stateChangeTokenDao.save(act);
+	}
 
-    @Override
-    public StateChangeToken findByCode(String code) {
-    	return stateChangeTokenDao.select(code, StateChangeTokenType.USER_EMAIL_VERIFICATION);
-    }
+	public StateChangeToken findByCode(String code){
+		
+		return stateChangeTokenDao.select(code, StateChangeTokenType.USER_PASSWORD_CHANGE);
+	}
+    
 }

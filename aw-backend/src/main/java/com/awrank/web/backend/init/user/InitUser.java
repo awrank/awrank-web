@@ -163,25 +163,25 @@ public class InitUser {
 			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
 
-			entryPoint = new EntryPoint();
-			entryPoint.setUser(user);
-			entryPoint.setType(EntryPointType.EMAIL);
-			entryPoint.setUid(user.getEmail());
-			entryPoint.setPassword(PasswordUtils.hashPassword("1"));
-			entryPoint.setVerifiedDate(new LocalDateTime(0));
-			entryPoint.setCreatedDate(new DateTime());
-			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
-			entryPointDao.save(entryPoint);
+			EntryPoint entryPoint2 = new EntryPoint();
+			entryPoint2.setUser(user);
+			entryPoint2.setType(EntryPointType.EMAIL);
+			entryPoint2.setUid(user.getEmail());
+			entryPoint2.setPassword(PasswordUtils.hashPassword("1"));
+			entryPoint2.setVerifiedDate(new LocalDateTime(0));
+			entryPoint2.setCreatedDate(new DateTime());
+			entryPoint2.setLastModifiedDate(entryPoint.getCreatedDate());
+			entryPointDao.save(entryPoint2);
 
-			entryPoint = new EntryPoint();
-			entryPoint.setUser(user);
-			entryPoint.setType(EntryPointType.GOOGLE);
-			entryPoint.setUid("113359939181883937834");
-			entryPoint.setPassword(null);
-			entryPoint.setVerifiedDate(new LocalDateTime(0));
-			entryPoint.setCreatedDate(new DateTime());
-			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
-			entryPointDao.save(entryPoint);
+			EntryPoint entryPoint3 = new EntryPoint();
+			entryPoint3.setUser(user);
+			entryPoint3.setType(EntryPointType.GOOGLE);
+			entryPoint3.setUid("113359939181883937834");
+			entryPoint3.setPassword(null);
+			entryPoint3.setVerifiedDate(new LocalDateTime(0));
+			entryPoint3.setCreatedDate(new DateTime());
+			entryPoint3.setLastModifiedDate(entryPoint.getCreatedDate());
+			entryPointDao.save(entryPoint3);
 
 			UserRole role = new UserRole();
 			role.setUser(user);

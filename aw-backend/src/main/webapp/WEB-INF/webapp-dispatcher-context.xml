@@ -93,7 +93,9 @@
         <constructor-arg value="/socialAuthFailed"/>
     </bean>
 
-
+ 	<bean id="userEmailActivationServiceImpl" class="com.awrank.web.model.service.impl.UserEmailActivationServiceImpl" />
+ 	<bean id="userPasswordChangingServiceImpl" class="com.awrank.web.model.service.impl.UserPasswordChangingServiceImpl" />	
+ 	
     <!-- Profiles -->
     <!-- IMPORTANT: nested <beans/> MUST be placed at the end of the file -->
     <beans profile="dev">

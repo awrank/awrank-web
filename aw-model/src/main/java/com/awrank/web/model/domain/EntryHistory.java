@@ -20,7 +20,7 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 	/**
 	 * Entry point that entry history belongs to.
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "entry_point_id", nullable = false)
 	private EntryPoint entryPoint;
 

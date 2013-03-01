@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
+import com.awrank.web.model.utils.user.PasswordUtils;
 
 /**
  * Class for providing custom authentication provider, based on Spring Security
@@ -62,7 +63,7 @@ public class AWRankingAuthenticationProviderImpl extends
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
 		
-		return getUserDetailsService().loadUserByUsernameAndPassword(username, authentication.getCredentials());
+		return getUserDetailsService().loadUserByUsernameAndPassword(username, PasswordUtils.hashPassword(String.valueOf(authentication.getCredentials())));
 		
 	}
 

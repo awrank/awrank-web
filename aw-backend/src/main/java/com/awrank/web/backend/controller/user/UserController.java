@@ -10,11 +10,14 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.EntryPointService;
+import com.awrank.web.model.service.StateChangeTokenService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.utils.user.PasswordUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,7 +53,8 @@ public class UserController extends AbstractController {
 	private EntryPointService entryPointService;
 
 	@Autowired
-	private UserEmailActivationService userEmailActivationService;
+	@Qualifier("userEmailActivationServiceImpl")
+	private StateChangeTokenService userEmailActivationService;
 
 	@Autowired
 	private AWRankingUserDetailsService awRankingUserDetailsService;
@@ -64,7 +68,13 @@ public class UserController extends AbstractController {
 		result.put("result", "ok");
 		return result;
 	}
-
+	
+	private Map getPositiveResponseMap(String resultStr) {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("result", resultStr);
+		return result;
+	}
+	
 	private Map getNegativeResponseMap(String reason) {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("result", "failure");
@@ -80,6 +90,7 @@ public class UserController extends AbstractController {
 	 * @return
 	 * @throws EntryPointNotCreatedException
 	 * @throws UserActivationEmailNotSetException
+	 * @throws UserNotCreatedException 
 	 *
 	 */
 	@RequestMapping(
@@ -90,7 +101,7 @@ public class UserController extends AbstractController {
 	public
 	@ResponseBody()
 	Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
-			throws EntryPointNotCreatedException, UserActivationEmailNotSetException {
+			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
 
 		if (userService.findOneByEmail(form.getEmail()) != null) {
 			return getNegativeResponseMap("This email is already registered in the system!");
@@ -102,23 +113,22 @@ public class UserController extends AbstractController {
 
 		form.setUserLocalAddr(request.getLocalAddr());
 		form.setUserRemoteAddr(request.getRemoteAddr());
-
-		try {
+			
+			final String plainPassword = form.getPassword(); 
+			form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
+			
 			User user = userService.register(form, request);
-			//if registered ok - we need to log user in manualy
-
+			
 			//---------- we need some authorization for register user + he is logged in right after it -------
-			//----- we need to do it here manually-----
-
-
+			
 			// AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
 
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());//, grantedAuthorities);
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), plainPassword);
 
 			// generate session if one doesn't exist
 			request.getSession();
 
-			AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, form.getPassword(), EntryPointType.EMAIL);
+			AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, plainPassword, EntryPointType.EMAIL);
 
 			token.setDetails(details);
 
@@ -126,12 +136,8 @@ public class UserController extends AbstractController {
 
 			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 
-			return getPositiveResponseMap();
+			return getPositiveResponseMap("Verification email was sent to your email");
 
-		} catch (UserNotCreatedException e) {
-			e.printStackTrace();
-			return getNegativeResponseMap(e.getMessage());
-		}
 
 	}
 
@@ -144,22 +150,16 @@ public class UserController extends AbstractController {
 	//@Consumes("application/json")
 	public
 	@ResponseBody
-	Map deleteUser(@RequestBody User user) {
+	Map deleteUser(@RequestBody User user) throws UserNotDeletedException {
 		if (userService.findOneByEmail(user.getEmail()) == null) {
 			return getNegativeResponseMap("User with this email is not registered in the system!");
 		}
 		if (userService.findOne(user.getId()) == null) {
 			return getNegativeResponseMap("user with this ID not registered in system");
 		}
-
-		try {
-			userService.delete(user);
-			return getPositiveResponseMap();
-		} catch (UserNotDeletedException e) {
-
-			e.printStackTrace();
-			return getNegativeResponseMap(e.getMessage());
-		}
+	
+		userService.delete(user);
+		return getPositiveResponseMap();
 	}
 
 

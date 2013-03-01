@@ -158,12 +158,14 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 	}
 
 	public UserDetails loadUserByUsernameAndPassword(String username, Object credentials) throws BadCredentialsException{
-		
+		//TODO: here check if this is email or login and select different types of entry point
 		User user = userService.findOneByEmail(username);
+		
+		if(user == null) throw new BadCredentialsException("User not found");
 		
 		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
 		
-		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, EntryPointType.LOGIN, String.valueOf(credentials));;
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, EntryPointType.EMAIL, String.valueOf(credentials));
 		
 		for (EntryPoint ep : ep_list) {
 

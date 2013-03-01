@@ -18,7 +18,7 @@ public class Diary extends AbstractUserRelatedEntityAuditable {
 	/**
 	 * Entry history that diary entry belongs to.
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "entry_history_id", nullable = false)
 	private EntryHistory entryHistory;
 

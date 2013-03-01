@@ -4,16 +4,19 @@ package com.awrank.web.model.service.impl;
 import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
+import com.awrank.web.model.enums.StateChangeTokenType;
+import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserEmailActivationService;
+import com.awrank.web.model.service.StateChangeTokenService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -44,7 +47,8 @@ public class UserServiceImpl implements UserService {
 	private EntryPointService entryPointService;
 
 	@Autowired
-	private UserEmailActivationService userEmailActivationService;
+	@Qualifier("userEmailActivationServiceImpl")
+	private StateChangeTokenService userEmailActivationService;
 
 	@Autowired
 	@Qualifier("userRoleServiceImpl")
@@ -76,8 +80,8 @@ public class UserServiceImpl implements UserService {
 		entryPoint.setUser(user);
 
 		entryPoint.setUid(user.getEmail());
-		entryPoint.setPassword(form.getPassword());
-		entryPoint.setType(EntryPointType.EMAIL.EMAIL);//on registration we demand User to have email
+		entryPoint.setPassword(form.getPassword());//here password shall be already hashed
+		entryPoint.setType(EntryPointType.EMAIL);//on registration we demand User to have email
 
 		entryPointService.add(entryPoint);
 
@@ -101,18 +105,26 @@ public class UserServiceImpl implements UserService {
 		params.put("testactivation_email", user.getEmail());
 		params.put("testactivation_password", form.getPassword());
 
-		userEmailActivationService.send(params);
+		try {
+			
+			userEmailActivationService.send(params);
+			
+		} catch (AwRankException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 //-------------- store to db information about verification email was sent -------------------------------------------
 
-		UserEmailActivation userEmailActivation = new UserEmailActivation();
+		StateChangeToken stateChangeToken = new StateChangeToken();
 
-		userEmailActivation.setCode(key);
-		userEmailActivation.setUser(user);
-		userEmailActivation.setEmail(user.getEmail());
-		userEmailActivation.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
+		stateChangeToken.setToken(key);
+		stateChangeToken.setType(StateChangeTokenType.USER_EMAIL_VERIFICATION);
+		stateChangeToken.setUser(user);
+		stateChangeToken.setValue(user.getEmail());
+		stateChangeToken.setIpAddress(form.getUserRemoteAddr());//Check later if we need remote or local IP here
 
-		userEmailActivationService.save(userEmailActivation);
+		userEmailActivationService.save(stateChangeToken);
 
 //-------------- here we need save a role for user -------------	
 

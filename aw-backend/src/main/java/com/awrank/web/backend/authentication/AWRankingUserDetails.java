@@ -73,7 +73,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	
 	//------- as far as we can have several entry points for same user we need to have login type to fetch the password
 	
-	private EntryPointType type = EntryPointType.LOGIN;//default value is login
+	private EntryPointType type = EntryPointType.EMAIL;//default value is login
 	
 	public void setType(EntryPointType value){
 		
@@ -124,7 +124,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	public String getUsername() {
 	
 		if(user == null || type == null) return null;
-		if(type == EntryPointType.LOGIN) return user.getFirstName();
+		if(type == EntryPointType.LOGIN) return user.getEmail();
 		if(type == EntryPointType.EMAIL) return user.getEmail();
 		return null;
 	}

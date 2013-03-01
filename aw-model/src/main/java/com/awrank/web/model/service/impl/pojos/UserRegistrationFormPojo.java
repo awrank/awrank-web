@@ -91,6 +91,8 @@ public class UserRegistrationFormPojo implements Serializable {
         this.userLocalAddr = userLocalAddr;
     }
 
+    private String userRemoteAddr;
+    
     public String getUserRemoteAddr() {
         return userRemoteAddr;
     }
@@ -99,7 +101,6 @@ public class UserRegistrationFormPojo implements Serializable {
         this.userRemoteAddr = userRemoteAddr;
     }
 
-    private String userRemoteAddr;
-
+    
 
 }
