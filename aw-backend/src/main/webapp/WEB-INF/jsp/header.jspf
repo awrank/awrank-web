@@ -3,9 +3,9 @@
 <%--xmlns:c="http://java.sun.com/jsp/jstl/core">--%>
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
-<meta charset="utf-8"/>
-<meta name="description" content=""/>
-<meta name="author" content=""/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="resources" value="${contextPath}/resources"/>
