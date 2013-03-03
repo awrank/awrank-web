@@ -6,7 +6,6 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserService;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
@@ -27,19 +27,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.List;
 
 /**
- * todo: Class description
+ * This class provides authentication process (request/handling callbacks) for user via
+ * <a href="facebook.com">Facebook</a> OAuth.
  *
  * @author Andrew Stoyaltsev
  */
 @Controller
-public class FacebookController {
+public class FacebookAuthController {
 
-    private static Logger LOG = LoggerFactory.getLogger(FacebookController.class);
+    private static Logger LOG = LoggerFactory.getLogger(FacebookAuthController.class);
 
     @Autowired
     @Qualifier("entryHistoryServiceImpl")
@@ -53,37 +53,42 @@ public class FacebookController {
     @Qualifier("entryPointServiceImpl")
     private EntryPointService entryPointService;
 
+	@Value("#{app[oauth.facebook.auth.url]}")
+	private String socialAuthUrl;
 
-    /* Network login */
-    private final String FACEBOOK_AUTH_URL = "https://www.facebook.com/dialog/oauth";
-    private final String FACEBOOK_TOKEN_URL = "https://graph.facebook.com/oauth/access_token?";
-    private final String clientId = "124759354366792";
-    private final String clientSecret = "a19dff99272c3eb06501619ea4e775a9";
-    private final String host = "http://peabody.com.ua:8080/awrank";
-    private final String redirectUri = host + "/facebookCallback";
-    private String accessToken;
+	@Value("#{app[oauth.facebook.token.url]}")
+	private String socialTokenUrl;
+
+	@Value("#{app[oauth.facebook.clientId]}")
+	private String clientId;
+
+	@Value("#{app[oauth.facebook.clientSecret]}")
+	private String clientSecret;
+
+	@Value("#{app[oauth.redirect.uri.template]}")
+	private String redirectUri;
+
+	private String accessToken;
 
     @RequestMapping(value = "/loginViaFacebook", method = RequestMethod.GET)
-    public String loginViaGoogle(ModelMap modelMap) throws IOException {
+    public String loginViaFacebook(ModelMap modelMap) throws IOException {
         modelMap.addAttribute("isError", false);
 
         StringBuilder queryString = new StringBuilder();
         queryString.append("client_id=").append(clientId).append("&");
-        //queryString.append("redirect_uri=").append(URLEncoder.encode(redirectUri, "UTF-8")).append("&");
         queryString.append("redirect_uri=").append(redirectUri).append("&");
         queryString.append("response_type=").append("code");
 
-        String uri = FACEBOOK_AUTH_URL + "?" + queryString;
+        String uri = socialAuthUrl + "?" + queryString;
         System.out.println("Request URI: " + uri);
         return "redirect:" + uri;
     }
 
     @RequestMapping(value = "/facebookCallback")
-    public ModelAndView googleCallback(HttpServletRequest request, Principal principal) throws Exception {
+    public ModelAndView facebookCallback(HttpServletRequest request, Principal principal) throws Exception {
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("authStatusCode", "UNKNOWN");
         mav.addObject("authMessage", "Probably none of the conditions were not fulfilled.");
-
 
         String authCode = request.getParameter("code");
         if (StringUtils.hasLength(authCode)) {
@@ -93,18 +98,16 @@ public class FacebookController {
 
             StringBuilder queryString = new StringBuilder();
             queryString.append("client_id=").append(clientId).append("&");
-            //queryString.append("redirect_uri=").append(URLEncoder.encode(redirectUri, "UTF-8")).append("&");
             queryString.append("redirect_uri=").append(redirectUri).append("&");
             queryString.append("client_secret=").append(clientSecret).append("&");
             queryString.append("code=").append(authCode);
 
             HttpClient httpClient = new HttpClient();
-            GetMethod getMethod = new GetMethod(FACEBOOK_TOKEN_URL + "?" + queryString);
+            GetMethod getMethod = new GetMethod(socialTokenUrl + "?" + queryString);
             int resCode = httpClient.executeMethod(getMethod);
             if (resCode == HttpStatus.SC_OK) {
                 String response = getMethod.getResponseBodyAsString();
                 mav.addObject("details", "Token request - ok.\n" + response);
-                // access_token=AAABxd8zZC20gBAHU6JktVFArUlKub9OLQuIVbNIOvCufrQ31w1wSLryb3UU8aSbyzvXUGEAwwVGkV48yV3kUv9l4WZC7YRIldYJzqwvwZDZD&expires=5114224
                 String[] pairs = response.split("&");
                 accessToken = pairs[0].split("=")[1];
 
@@ -113,7 +116,7 @@ public class FacebookController {
                 resCode = httpClient.executeMethod(getMethod);
                 if (resCode == HttpStatus.SC_OK) {
                     JSONObject jsonObject = new JSONObject(getMethod.getResponseBodyAsString());
-                    // User class is most applicable for given response
+                    // Class User is most applicable to store given response data
                     User tempUser = new User();
                     tempUser.setEmail(jsonObject.getString("email"));
                     tempUser.setFirstName(jsonObject.getString("first_name"));
@@ -148,8 +151,6 @@ public class FacebookController {
                         }
                     } else {
                         mav.addObject("details", "User not found by email: " + tempUser.getEmail());
-                        // for testing: redirect anyway even if user is not found
-                        //mav.setViewName("redirect:/index.html");
                     }
                 } else {
                     mav.addObject("details", "Could not get userinfo");
@@ -157,11 +158,8 @@ public class FacebookController {
             } else {
                 mav.addObject("details", "Token request - nok");
             }
-
             return mav;
         }
-
-
         return mav;
     }
 

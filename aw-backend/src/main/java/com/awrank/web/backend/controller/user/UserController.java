@@ -11,13 +11,11 @@ import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.StateChangeTokenService;
-import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.user.PasswordUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,13 +66,13 @@ public class UserController extends AbstractController {
 		result.put("result", "ok");
 		return result;
 	}
-	
+
 	private Map getPositiveResponseMap(String resultStr) {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("result", resultStr);
 		return result;
 	}
-	
+
 	private Map getNegativeResponseMap(String reason) {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("result", "failure");
@@ -90,8 +88,8 @@ public class UserController extends AbstractController {
 	 * @return
 	 * @throws EntryPointNotCreatedException
 	 * @throws UserActivationEmailNotSetException
-	 * @throws UserNotCreatedException 
 	 *
+	 * @throws UserNotCreatedException
 	 */
 	@RequestMapping(
 			value = "/add",
@@ -113,30 +111,30 @@ public class UserController extends AbstractController {
 
 		form.setUserLocalAddr(request.getLocalAddr());
 		form.setUserRemoteAddr(request.getRemoteAddr());
-			
-			final String plainPassword = form.getPassword(); 
-			form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
-			
-			User user = userService.register(form, request);
-			
-			//---------- we need some authorization for register user + he is logged in right after it -------
-			
-			// AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
 
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), plainPassword);
+		final String plainPassword = form.getPassword();
+		form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
 
-			// generate session if one doesn't exist
-			request.getSession();
+		User user = userService.register(form, request);
 
-			AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, plainPassword, EntryPointType.EMAIL);
+		//---------- we need some authorization for register user + he is logged in right after it -------
 
-			token.setDetails(details);
+		// AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
 
-			Authentication authenticatedUser = authenticationManager.authenticate(token);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), plainPassword);
 
-			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		// generate session if one doesn't exist
+		request.getSession();
 
-			return getPositiveResponseMap("Verification email was sent to your email");
+		AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, plainPassword, EntryPointType.EMAIL);
+
+		token.setDetails(details);
+
+		Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+		return getPositiveResponseMap("Verification email was sent to your email");
 
 
 	}
@@ -157,7 +155,7 @@ public class UserController extends AbstractController {
 		if (userService.findOne(user.getId()) == null) {
 			return getNegativeResponseMap("user with this ID not registered in system");
 		}
-	
+
 		userService.delete(user);
 		return getPositiveResponseMap();
 	}
