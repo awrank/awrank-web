@@ -4,6 +4,7 @@ import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Returns list of dictionary entries
 	 */
+	@PreAuthorize("permitAll")
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public
 	@ResponseBody
@@ -31,6 +33,8 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Creates new dictionary entry
 	 */
+	@PreAuthorize("permitAll")
+//	TODO @PreAuthorize("hasRole('')")
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
@@ -41,6 +45,8 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Updates dictionary entry
 	 */
+	@PreAuthorize("permitAll")
+//	TODO @PreAuthorize("hasRole('')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
@@ -51,6 +57,8 @@ public class DictionaryController extends AbstractController {
 	/**
 	 * Creates new dictionary entry
 	 */
+	@PreAuthorize("permitAll")
+//	TODO @PreAuthorize("hasRole('')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody

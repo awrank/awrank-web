@@ -1,9 +1,8 @@
 package com.awrank.web.model.service;
 
 import com.awrank.web.model.domain.StateChangeToken;
-import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
-import com.awrank.web.model.exception.passwordchanging.*;
-import org.springframework.stereotype.Service;
+import com.awrank.web.model.exception.passwordchanging.PasswordChangeWasNotVerifiedException;
+import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -13,11 +12,11 @@ import java.util.Map;
  *
  * @author Olga Korokhina
  */
-@Service
+//@Service
 public abstract class UserPasswordChangingService implements StateChangeTokenService {
 
 	public abstract void send(Map params) throws PasswordChangingEmailNotSetException;
-	 
+
 	public abstract Boolean verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException;//in case some technical problems only!
 
 	public abstract void save(StateChangeToken act);

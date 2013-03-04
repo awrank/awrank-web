@@ -17,13 +17,12 @@ import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -42,25 +41,24 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	@Autowired
-	@Qualifier("entryPointServiceImpl")
+//	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
 
-	@Autowired
-	@Qualifier("userEmailActivationServiceImpl")
+	//	@Autowired
+//	@Qualifier("userEmailActivationServiceImpl")
+	@Resource(name = "userEmailActivationServiceImpl")
 	private StateChangeTokenService userEmailActivationService;
 
 	@Autowired
-	@Qualifier("userRoleServiceImpl")
+//	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 
-	@Secured("IS_AUTHENTICATED_ANONYMOUSLY")//<global-method-security jsr250-annotations="enabled" /> in config
-	//@PreAuthorize("isAnonymous()")// <global-method-security pre-post-annotations="enabled" /> in config
 	@Transactional
 	@Override
-	public User register(UserRegistrationFormPojo form, HttpServletRequest request)
-			throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
+	public EntryPoint register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
-		//---- create user ----
+		//--------------------- create user ---------------------------
+
 		User user = new User();
 		user.setApiKey(form.getApiKey());
 		user.setFirstName(form.getFirstName());
@@ -70,7 +68,8 @@ public class UserServiceImpl implements UserService {
 		user.setAuthorizationFailsCount(0);
 		add(user);
 
-		//---- create entrance point for him ----
+		//---------------- create entrance point for him -----------------
+
 		EntryPoint entryPoint = new EntryPoint();
 		entryPoint.setUser(user);
 		entryPoint.setUid(user.getEmail());
@@ -78,7 +77,8 @@ public class UserServiceImpl implements UserService {
 		entryPoint.setType(EntryPointType.EMAIL);//on registration we demand User to have email
 		entryPointService.add(entryPoint);
 
-		//---- sending verification email ----
+		//---------------- sending verification email --------------------
+
 		String key;
 		try {
 			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + form.getPassword() + "." + form.getUserLocalAddress() + "." + form.getUserRemoteAddress());
@@ -96,11 +96,12 @@ public class UserServiceImpl implements UserService {
 		try {
 			userEmailActivationService.send(params);
 		} catch (AwRankException e) {
-			// todo: add LOG
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		//---- store to db information about verification email was sent ----
+//-------------- store to db information about verification email was sent -------------------------------------------
+
 		StateChangeToken stateChangeToken = new StateChangeToken();
 		stateChangeToken.setToken(key);
 		stateChangeToken.setType(StateChangeTokenType.USER_EMAIL_VERIFICATION);
@@ -109,13 +110,14 @@ public class UserServiceImpl implements UserService {
 		stateChangeToken.setIpAddress(form.getUserRemoteAddress());//Check later if we need remote or local IP here
 		userEmailActivationService.save(stateChangeToken);
 
-		//---- here we need save a role for user ----
+//-------------- here we need save a role for user -------------	
+
 		UserRole role = new UserRole();
 		role.setUser(user);
 		role.setRole(Role.ROLE_USER);
 		userRoleService.save(role);
 
-		return user;
+		return entryPoint;
 	}
 
 	/* (non-Javadoc)
@@ -177,8 +179,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* (non-Javadoc)
-		 * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
-		 */
+	 * @see com.awrank.web.model.service.UserService#findByEmail(java.lang.String)
+	 */
 	@Override
 	public User findOneByEmail(String email) {
 		return userDao.findByEmail(email);

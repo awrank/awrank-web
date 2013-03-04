@@ -1,23 +1,18 @@
 package com.awrank.web.backend.controller.user;
 
-import com.awrank.web.backend.authentication.AWRankingUserDetails;
-import com.awrank.web.backend.authentication.AWRankingUserDetailsService;
 import com.awrank.web.backend.controller.AbstractController;
-import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
-import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.StateChangeTokenService;
-import com.awrank.web.model.service.UserRoleService;
-import com.awrank.web.model.service.UserService;
+import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,27 +35,28 @@ import java.util.Map;
 public class UserController extends AbstractController {
 
 	@Autowired
-	@Qualifier("userServiceImpl")
+//	@Qualifier("userServiceImpl")
 	private UserService userService;
 
 	@Autowired
-	@Qualifier("userRoleServiceImpl")
+//	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 
 	@Autowired
-	@Qualifier("entryPointServiceImpl")
+//	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
 
-	@Autowired
-	@Qualifier("userEmailActivationServiceImpl")
+	//	@Autowired
+	//@Qualifier("userEmailActivationServiceImpl")
+	@Resource(name = "userEmailActivationServiceImpl")
 	private StateChangeTokenService userEmailActivationService;
 
 	@Autowired
-	private AWRankingUserDetailsService awRankingUserDetailsService;
+	//@Qualifier("authenticationManager")
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	@Qualifier("authenticationManager")
-	private AuthenticationManager authenticationManager;
+	private UserDetailsService userDetailsService;
 
 	private Map getPositiveResponseMap() {
 		Map<String, String> result = new HashMap<String, String>();
@@ -89,7 +86,6 @@ public class UserController extends AbstractController {
 	 * @throws EntryPointNotCreatedException
 	 * @throws UserActivationEmailNotSetException
 	 *
-	 * @throws UserNotCreatedException
 	 */
 	@RequestMapping(
 			value = "/add",
@@ -115,7 +111,7 @@ public class UserController extends AbstractController {
 		final String plainPassword = form.getPassword();
 		form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
 
-		User user = userService.register(form, request);
+		EntryPoint entryPoint = userService.register(form, request);
 
 		//---------- we need some authorization for register user + he is logged in right after it -------
 
@@ -126,7 +122,7 @@ public class UserController extends AbstractController {
 		// generate session if one doesn't exist
 		request.getSession();
 
-		AWRankingUserDetails details = awRankingUserDetailsService.createUserDetailsForUserByCredentials(user, plainPassword, EntryPointType.EMAIL);
+		AWRankingUserDetails details = userDetailsService.fillUserDetails(entryPoint);
 
 		token.setDetails(details);
 

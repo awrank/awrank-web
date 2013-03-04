@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * The {@code User} class represents a user entry.
@@ -110,11 +111,13 @@ public class User extends DatedAbstractAuditable {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime banStartedDate;
 
+	@OneToMany(mappedBy = "user", cascade = {})
+	private Set<EntryPoint> entryPoints;
+
+	@OneToMany(mappedBy = "user", cascade = {})
+	private Set<UserRole> userRoles;
 
 	public User() {
-		this.authorizationFailsCount = 0;
-		this.language = Language.EN;
-		//this.language = Language.valueOf(user_default_language_code);//doesn't work for some reason
 	}
 
 	public String getApiKey() {
@@ -205,7 +208,6 @@ public class User extends DatedAbstractAuditable {
 		this.authorizationFailsCount = authorizationFailsCount;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
 	public LocalDateTime getAuthorizationFailsLastDate() {
 		return authorizationFailsLastDate;
 	}
@@ -214,12 +216,28 @@ public class User extends DatedAbstractAuditable {
 		this.authorizationFailsLastDate = authorizationFailsLastDate;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
+
 	public LocalDateTime getBanStartedDate() {
 		return banStartedDate;
 	}
 
 	public void setBanStartedDate(LocalDateTime banStartedDate) {
 		this.banStartedDate = banStartedDate;
+	}
+
+	public Set<EntryPoint> getEntryPoints() {
+		return entryPoints;
+	}
+
+	public void setEntryPoints(Set<EntryPoint> entryPoints) {
+		this.entryPoints = entryPoints;
+	}
+
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 }

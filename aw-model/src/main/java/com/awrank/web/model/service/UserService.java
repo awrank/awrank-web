@@ -1,18 +1,17 @@
 package com.awrank.web.model.service;
 
-import java.util.List;
-
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Interface for REST service working with users
@@ -78,9 +77,10 @@ public interface UserService {
 	 * @throws UserActivationEmailNotSetException
 	 *
 	 */
-	User register(UserRegistrationFormPojo form, HttpServletRequest request)
+	EntryPoint register(UserRegistrationFormPojo form, HttpServletRequest request)
 			throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException;
 
 	List<User> getAll();
+
 	Page<User> getPage(Pageable pageable);
 }

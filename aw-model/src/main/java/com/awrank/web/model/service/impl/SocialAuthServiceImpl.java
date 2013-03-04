@@ -1,7 +1,10 @@
 package com.awrank.web.model.service.impl;
 
 import com.awrank.web.model.dao.UserDao;
-import com.awrank.web.model.domain.*;
+import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.StateChangeToken;
+import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.UserRole;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.AwRankException;
@@ -17,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -83,7 +85,7 @@ public class SocialAuthServiceImpl implements SocialAuthService {
 		 */
 
 		User user = new User(); // ???
-		List<EntryPoint> list = entryPointService.findEntryPointForUserByType(user, EntryPointType.GOOGLE);
+//		List<EntryPoint> list = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.GOOGLE, uid);
 		// 2
 
 		return getNegativeResponseMap("Social Login method is not implemented yet!");
