@@ -1,9 +1,7 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
-import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
-
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
@@ -54,7 +52,7 @@ public class StateChangeToken extends AbstractUserRelatedEntityAuditable {
 	private LocalDateTime tokenUsedAtDate;
 
 	/**
-	 * Token type, e.g. USER_EMAIL_VERIFICATIOM, USER_PASSWORD_CHANGE etc.
+	 * Token type, e.g. USER_EMAIL_VERIFICATION, USER_PASSWORD_CHANGE etc.
 	 */
 	@Column(name = "type", nullable = false)
 	@Enumerated(EnumType.STRING)

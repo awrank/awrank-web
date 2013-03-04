@@ -18,11 +18,11 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-          	/WEB-INF/webapp-security-context.xml
-          	/WEB-INF/webapp-profile-dev.xml
-          	/WEB-INF/webapp-profile-prod.xml
-          	/WEB-INF/data-access-context.xml
-          	/WEB-INF/webapp-dispatcher-context.xml
+            /WEB-INF/webapp-security-context.xml
+            /WEB-INF/webapp-profile-dev.xml
+            /WEB-INF/webapp-profile-prod.xml
+            /WEB-INF/data-access-context.xml
+            /WEB-INF/webapp-dispatcher-context.xml
         </param-value>
     </context-param>
 
@@ -30,18 +30,18 @@
         <servlet-name>webapp-dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>
-             	/WEB-INF/webapp-security-context.xml
-          	/WEB-INF/webapp-profile-dev.xml
-          	/WEB-INF/webapp-profile-prod.xml
-          	/WEB-INF/data-access-context.xml
-          	/WEB-INF/webapp-dispatcher-context.xml
-            </param-value>
-        </init-param>
-        <init-param>
             <param-name>contextInitializerClasses</param-name>
             <param-value>com.awrank.web.backend.config.EnvironmentInitializer</param-value>
+        </init-param>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                /WEB-INF/webapp-security-context.xml
+                /WEB-INF/webapp-profile-dev.xml
+                /WEB-INF/webapp-profile-prod.xml
+                /WEB-INF/data-access-context.xml
+                /WEB-INF/webapp-dispatcher-context.xml
+            </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -63,26 +63,26 @@
 
     <!-- FILTERS -->
     <!-- http://stackoverflow.com/questions/12423645/org-hibernate-lazyinitializationexception-could-not-initialize-proxy-no-sessi  -->
-<!-- filter>
-	<filter-name>OpenSessionInViewFilter</filter-name> 
-	<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-	<init-param>
-        <param-name>singleSession</param-name>
-        <param-value>true</param-value>
-    </init-param>
-    <init-param>
-        <param-name>flushMode</param-name>
-        <param-value>AUTO</param-value>
-    </init-param>
-    <init-param>
-        <param-name>sessionFactoryBeanName</param-name>
-        <param-value>HBSessionFactory</param-value>
-    </init-param>
-</filter>
-<filter-mapping>
+    <!-- filter>
         <filter-name>OpenSessionInViewFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping -->
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+        <init-param>
+            <param-name>singleSession</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>flushMode</param-name>
+            <param-value>AUTO</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sessionFactoryBeanName</param-name>
+            <param-value>HBSessionFactory</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+            <filter-name>OpenSessionInViewFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping -->
     <!-- Ensure UTF-8 character encoding is used -->
     <filter>
         <filter-name>encodingFilter</filter-name>

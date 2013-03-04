@@ -171,6 +171,19 @@
                 <version>${spring.security.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20090211</version>
+            </dependency>
+
+
             <!-- Spring Data & JPA -->
             <dependency>
                 <groupId>org.springframework.data</groupId>
@@ -182,33 +195,6 @@
                 <artifactId>spring-data-jpa</artifactId>
                 <version>${spring.jpa.version}</version>
             </dependency>
-
-            <!-- Social Auth-->
-            <dependency>
-                <groupId>org.brickred</groupId>
-                <artifactId>socialauth</artifactId>
-                <version>3.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.brickred</groupId>
-                <artifactId>socialauth-spring</artifactId>
-                <version>2.0-beta2</version>
-            </dependency>
-
-            <!-- social alternative -->
-            <dependency>
-                <groupId>com.google.oauth-client</groupId>
-                <artifactId>google-oauth-client</artifactId>
-                <version>1.13.1-beta</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.oauth-client</groupId>
-                <artifactId>google-oauth-client-servlet</artifactId>
-                <version>1.13.1-beta</version>
-            </dependency>
-
 
             <!-- Joda Time -->
             <dependency>
@@ -304,15 +290,6 @@
             <id>springsource-repo</id>
             <name>SpringSource Repository</name>
             <url>http://repo.springsource.org/release</url>
-        </repository>
-
-        <!-- Social Auth -->
-        <repository>
-            <id>sonatype-oss-public</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
         </repository>
     </repositories>
 

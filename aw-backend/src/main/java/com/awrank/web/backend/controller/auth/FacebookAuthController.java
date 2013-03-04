@@ -53,20 +53,20 @@ public class FacebookAuthController {
     @Qualifier("entryPointServiceImpl")
     private EntryPointService entryPointService;
 
-	@Value("#{app[oauth.facebook.auth.url]}")
+	@Value("${oauth.facebook.auth.url}")
 	private String socialAuthUrl;
 
-	@Value("#{app[oauth.facebook.token.url]}")
+	@Value("${oauth.facebook.token.url}")
 	private String socialTokenUrl;
 
-	@Value("#{app[oauth.facebook.clientId]}")
-	private String clientId;
+	//@Value("${oauth.facebook.appId}")
+	private String clientId = "347948558644172";
 
-	@Value("#{app[oauth.facebook.clientSecret]}")
-	private String clientSecret;
+	//@Value("${oauth.facebook.appSecret}")
+	private String clientSecret = "270be44d06652edad696a58438dfbd5a";
 
-	@Value("#{app[oauth.redirect.uri.template]}")
-	private String redirectUri;
+	//@Value("${oauth.facebook.redirect.uri}")
+	private String redirectUri = "http://awrank.com:8080/awrank/facebookCallback";
 
 	private String accessToken;
 

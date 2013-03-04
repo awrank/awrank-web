@@ -55,23 +55,26 @@ public class GoogleAuthController {
 	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
 
-	@Value("#{app[oauth.google.auth.url]}")
+	@Value("${oauth.google.auth.url}")
 	private String socialAuthUrl;
 
-	@Value("#{app[oauth.google.token.url]}")
+	@Value("${oauth.google.token.url}")
 	private String socialTokenUrl;
 
-	@Value("#{app[oauth.google.clientId]}")
-	private String clientId;
+	//@Value("${oauth.google.clientId}")
+	// probably this prop is loaded before profile detection
+	private String clientId = "833205848531.apps.googleusercontent.com";
 
-	@Value("#{app[oauth.google.clientSecret]}")
-	private String clientSecret;
+	//@Value("${oauth.google.clientSecret}")
+	private String clientSecret = "S56giFrR-y7kDNn2qPFV1hRY";
 
-	@Value("#{app[ooauth.google.userinfo.url]}")
+	// @Value
+	private String redirectUri = "http://awrank.com:8080/awrank/googleOAuthCallback";
+
+	@Value("${oauth.google.userinfo.url}")
 	private String socialUserInfoUrl;
 
-	@Value("#{app[app.uri]}")
-	private String appUri;
+	private String appUri = "http://awrank.com:8080/awrank";
 
 	private String accessToken;
 
@@ -82,7 +85,7 @@ public class GoogleAuthController {
 		queryString.append("scope=").append(URLEncoder.encode(
 				"https://www.googleapis.com/auth/userinfo.email" + " " +
 				"https://www.googleapis.com/auth/userinfo.profile", "UTF-8")).append("&");
-		queryString.append("redirect_uri=").append(URLEncoder.encode(appUri + "/googleOAuthCallback?do=login", "UTF-8")).append("&");
+		queryString.append("redirect_uri=").append(URLEncoder.encode(redirectUri, "UTF-8")).append("&");
 		// ?do=reg
 		queryString.append("response_type=").append("code").append("&");
 		queryString.append("state=code");
@@ -101,6 +104,7 @@ public class GoogleAuthController {
 				String error = request.getParameter("error");
 				if (StringUtils.hasLength(error)) {
 					LOG.debug("Negative response from Google: " + error);
+					// todo: what json format?
 					return error;
 				}
 
@@ -110,7 +114,7 @@ public class GoogleAuthController {
 
 					LOG.debug("Getting info about user...");
 					HttpClient httpClient = new HttpClient();
-					PostMethod postMethod = new PostMethod(socialAuthUrl);
+					PostMethod postMethod = new PostMethod(socialTokenUrl);
 					postMethod.addRequestHeader("Host", "accounts.google.com");
 					postMethod.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
@@ -121,7 +125,8 @@ public class GoogleAuthController {
 							new NameValuePair("code", authCode),
 							new NameValuePair("client_id", clientId),
 							new NameValuePair("client_secret", clientSecret),
-							new NameValuePair("redirect_uri", appUri + "/user/add/google"),
+							//new NameValuePair("redirect_uri", appUri + "/user/add/google"),
+							new NameValuePair("redirect_uri", redirectUri),
 							new NameValuePair("grant_type", "authorization_code"),
 					};
 					postMethod.setRequestBody(params);
@@ -150,12 +155,15 @@ public class GoogleAuthController {
 							// rest fields from response json
 
 						} else {
+							System.out.println("Get userinfo request failed");
 						}
 					} else {
+						System.out.println("Get access_token request failed");
 					}
 					return null;
 				}
 			} else {
+				System.out.println("Auth code is null");
 			}
 
 		}

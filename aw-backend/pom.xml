@@ -135,15 +135,14 @@
             <artifactId>spring-security-web</artifactId>
         </dependency>
 
-        <!-- Social Auth-->
         <dependency>
-            <groupId>org.brickred</groupId>
-            <artifactId>socialauth</artifactId>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.brickred</groupId>
-            <artifactId>socialauth-spring</artifactId>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
         </dependency>
 
         <!-- Logging -->
@@ -172,10 +171,10 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.jadira.usertype</groupId>
-			<artifactId>usertype.core</artifactId>		
-		</dependency>
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.core</artifactId>
+        </dependency>
 
         <!-- JSTL -->
         <dependency>
