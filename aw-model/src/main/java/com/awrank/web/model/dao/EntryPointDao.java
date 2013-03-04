@@ -16,16 +16,19 @@ import java.util.List;
  * plus some methods to perform searches (extends {@link CrudRepository}).
  *
  * @author Eugene Solomka
+ * @author Andrew Stoyaltsev
  */
 public interface EntryPointDao extends CrudRepository<EntryPoint, Long> {
-	
-	 @Query("select e from EntryPoint e where e.user = :user")
-	 List<EntryPoint> select(@Param("user") User user);
-	 
-	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.endedDate is NULL")
-	 List<EntryPoint> selectActiveByType(@Param("user") User user, @Param("type") EntryPointType type);
-	 
-	 @Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.password = :password and e.endedDate is NULL")
-	 List<EntryPoint> selectActiveByTypeAndPassword(@Param("user") User user, @Param("type") EntryPointType type, @Param("password") String password);
-	 
+
+	@Query("select e from EntryPoint e where e.user = :user")
+	List<EntryPoint> select(@Param("user") User user);
+
+	@Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.endedDate is NULL")
+	List<EntryPoint> selectActiveByType(@Param("user") User user, @Param("type") EntryPointType type);
+
+	@Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.password = :password and e.endedDate is NULL")
+	List<EntryPoint> selectActiveByTypeAndPassword(@Param("user") User user, @Param("type") EntryPointType type, @Param("password") String password);
+
+	@Query("select e from EntryPoint e where e.user = :user and e.type = :type and e.uid = :uid and e.verifiedDate is not NULL and e.endedDate is NULL")
+	List<EntryPoint> selectActiveByTypeAndUID(@Param("user") User user, @Param("type") EntryPointType type, @Param("uid") String uid);
 }

@@ -1,106 +1,159 @@
 package com.awrank.web.model.service.impl.pojos;
 
+import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.Language;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.Serializable;
 
 /**
  * POJO(well, actually a bean :) ) for user registration via "our" webform;
  *
  * @author Olga Korokhina
+ * @author Andrew Stoyaltsev
  */
 @SuppressWarnings("serial")
 public class UserRegistrationFormPojo implements Serializable {
 
-	 private String ip;
+	private String firstName;
 
-	   public String getIp() {
-	        return ip;
-	    }
+	private String lastName;
 
-	    public void setIp(String ip) {
-	        this.ip = ip;
-	    }
-	    
-    private String firstName;
+	private String email;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	private String password;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	private Language language;
 
-    private String lastName;
+	private String apiKey;
 
-    public String getLastName() {
-        return lastName;
-    }
+	private String ip;
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	private String userLocalAddress;
 
-    private String password;
+	private String userRemoteAddress;
 
-    public String getPassword() {
-        return password;
-    }
+	private String networkUID;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	private EntryPointType networkType;
 
-    private String email;
+	private boolean emailVerified;
 
-    public String getEmail() {
-        return email;
-    }
+	private LocalDateTime birthday;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    private String apiKey;
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public String getApiKey() {
-        return apiKey;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-//	private ELanguage language;
-//	public ELanguage getLanguage() {
-//		return language;
-//	}
-//	public void setLanguage(ELanguage language) {
-//		this.language = language;
-//	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    /**
-     * local and remote addresses needed for email verification: email shall be verified from the same IP
-     * the registration was initiated;
-     */
-    private String userLocalAddr;
+	public String getLastName() {
+		return lastName;
+	}
 
-    public String getUserLocalAddr() {
-        return userLocalAddr;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public void setUserLocalAddr(String userLocalAddr) {
-        this.userLocalAddr = userLocalAddr;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    private String userRemoteAddr;
-    
-    public String getUserRemoteAddr() {
-        return userRemoteAddr;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setUserRemoteAddr(String userRemoteAddr) {
-        this.userRemoteAddr = userRemoteAddr;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
+	/**
+	 * local and remote addresses needed for email verification: email shall be verified from the same IP
+	 * the registration was initiated;
+	 */
+
+	public String getUserLocalAddress() {
+		return userLocalAddress;
+	}
+
+	public void setUserLocalAddress(String userLocalAddress) {
+		this.userLocalAddress = userLocalAddress;
+	}
+
+	public String getUserRemoteAddress() {
+		return userRemoteAddress;
+	}
+
+	public void setUserRemoteAddress(String userRemoteAddress) {
+		this.userRemoteAddress = userRemoteAddress;
+	}
+
+	public String getNetworkUID() {
+		return networkUID;
+	}
+
+	public void setNetworkUID(String networkUID) {
+		this.networkUID = networkUID;
+	}
+
+	public boolean isEmailVerified() {
+		return emailVerified;
+	}
+
+	public void setEmailVerified(boolean emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+
+	public LocalDateTime getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(LocalDateTime birthday) {
+		this.birthday = birthday;
+	}
+
+	public void setBirthday(String date, String format) {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
+		setBirthday(formatter.parseLocalDateTime(date));
+	}
+
+	public EntryPointType getNetworkType() {
+		return networkType;
+	}
+
+	public void setNetworkType(EntryPointType networkType) {
+		this.networkType = networkType;
+	}
 }

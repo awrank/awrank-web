@@ -54,14 +54,14 @@
         <tr bgcolor="aqua">
             <td>
                 <div>
-                    <form action="loginViaGoogle" method="GET">
+                    <form action="auth/google/login" method="GET">
                         <button type="submit" class="btn btn-large btn-primary">Log in with Google</button>
                     </form>
                 </div>
             </td>
             <td>
                 <div>
-                    <form action="loginViaFacebook" method="GET">
+                    <form action="auth/facebook/login" method="GET">
                         <button type="submit" class="btn btn-large btn-primary">Log in with Facebook</button>
                     </form>
                 </div>

@@ -28,6 +28,33 @@
         <br/>
         </span -->
     </c:if>
+
+    <table align="center" cellspacing="0" border="0">
+        <tr>
+            <td colspan="2" align="left"><h2>Create a new account</h2></td>
+        </tr>
+        <tr bgcolor="aqua">
+            <td align="left"><b>with social network:</b></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr bgcolor="aqua">
+            <td>
+                <div>
+                    <form action="auth/google/register" method="GET">
+                        <button type="submit" class="btn btn-large btn-primary">Sign up with Google</button>
+                    </form>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <form action="auth/facebook/register" method="GET">
+                        <button type="submit" class="btn btn-large btn-primary">Sign up with Facebook</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+
     <form method="POST" action="<c:url value="user/add" />" accept="application/json" enctype="application/json">
         <table align="center" frame="hsides">
             <tr>
@@ -47,6 +74,7 @@
                 <td><input type="password" name="password"/></td>
             </tr>
             <tr>
+                <%-- todo: not correct, should be removed --%>
                 <td align="right">API Key*</td>
                 <td><input type="apiKey" name="apiKey"/></td>
             </tr>

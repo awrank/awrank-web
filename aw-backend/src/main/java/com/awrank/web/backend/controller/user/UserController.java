@@ -109,8 +109,8 @@ public class UserController extends AbstractController {
 			return getNegativeResponseMap("This apikey is already registered in the system!");
 		}
 
-		form.setUserLocalAddr(request.getLocalAddr());
-		form.setUserRemoteAddr(request.getRemoteAddr());
+		form.setUserLocalAddress(request.getLocalAddr());
+		form.setUserRemoteAddress(request.getRemoteAddr());
 
 		final String plainPassword = form.getPassword();
 		form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
@@ -165,23 +165,17 @@ public class UserController extends AbstractController {
 	public
 	@ResponseBody
 	Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
-
-		Boolean response = userEmailActivationService.verify(key, request);
-
-		if (response == false) return getNegativeResponseMap("not verified");
-		else return getPositiveResponseMap();
-
+		boolean response = userEmailActivationService.verify(key, request);
+		return response ? getPositiveResponseMap() : getNegativeResponseMap("not verified");
 	}
 
 	//------------------- refactor out it not needed ---------------
 
 	public void setUserService(UserServiceImpl value) {
-
 		userService = value;
 	}
 
 	public UserService getUserService() {
-
 		return userService;
 	}
 }

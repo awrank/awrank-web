@@ -3,7 +3,6 @@ package com.awrank.web.backend.controller.rest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +25,6 @@ import com.awrank.web.backend.authentication.AWRankingGrantedAuthority;
 import com.awrank.web.backend.authentication.AWRankingUserDetails;
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.model.domain.EntryHistory;
-import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.domain.User;
@@ -35,11 +32,8 @@ import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.service.UserPasswordChangingService;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
-import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
-import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
 import com.awrank.web.model.service.EntryHistoryService;
 import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
@@ -201,7 +195,7 @@ public class UserProfileController extends AbstractController {
 		 //-------- not logged in or an admin so send the link -------------------	
 		 
 		 	User user = userService.findOneByEmail(form.getEmail());
-		 	String testactivation_password = entryPointService.findPasswordForUserByEntryPointType(user, EntryPointType.EMAIL);//current password
+		 	String testactivation_password = entryPointService.findPasswordForUserByType(user, EntryPointType.EMAIL);//current password
 		 	
 		 	if(testactivation_password == null) return getNegativeResponseMap("No current password");
 		 	

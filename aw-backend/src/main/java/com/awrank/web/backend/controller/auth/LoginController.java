@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class LoginController extends AbstractController {
     private EntryPointService entryPointService;
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String printWelcome(ModelMap model, Principal principal) {
+    public String printWelcome(ModelMap model, Principal principal, HttpServletRequest request) {
 
         String name = principal.getName();
         AWRankingUserDetails details =
@@ -66,8 +67,8 @@ public class LoginController extends AbstractController {
         User user = details.getUser();
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
-        List<EntryPoint> list =
-                entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, details.getType(), details.getPassword());
+        List<EntryPoint> list = entryPointService
+				.findEntryPointForUserByTypeAndPassword(user, details.getType(), details.getPassword());
 
         EntryPoint entryPoint;
         if (list.size() > 0) {
@@ -140,7 +141,7 @@ public class LoginController extends AbstractController {
             userService.save(user);
 
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            List<EntryPoint> list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, details.getType(), details.getPassword());//
+            List<EntryPoint> list = entryPointService.findEntryPointForUserByTypeAndPassword(user, details.getType(), details.getPassword());//
 
             EntryPoint entryPoint;
             if (list.size() > 0) entryPoint = list.get(0);

@@ -9,27 +9,30 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
 import java.util.List;
 
 /**
+ * Interface for REST service working with entry points
+ *
  * @author Olga Korokhina
- *         Interface for REST service working with entry points
  */
 //@Service
 public interface EntryPointService {
 
-	public void add(EntryPoint ep) throws EntryPointNotCreatedException;
+	void add(EntryPoint ep) throws EntryPointNotCreatedException;
 
-	public void delete(EntryPoint ep) throws EntryPointNotDeletedException;
+	void delete(EntryPoint ep) throws EntryPointNotDeletedException;
 
-	public void save(EntryPoint ep);
+	void save(EntryPoint ep);
 
-	public List<EntryPoint> findEntryPointForUser(User user);
+	List<EntryPoint> findEntryPointForUser(User user);
 
 	/**
-	 *  Returns only active! idealy single one OR empty list
+	 *  Returns only active! ideally single one OR empty list
 	 */
-	public List<EntryPoint> findEntryPointForUserByEntryPointType(User user, EntryPointType type);
+	List<EntryPoint> findEntryPointForUserByType(User user, EntryPointType type);
 
-	public List<EntryPoint> findEntryPointForUserByEntryPointTypeAndPassword(User user, EntryPointType type, String password);
+	List<EntryPoint> findEntryPointForUserByTypeAndPassword(User user, EntryPointType type, String password);
 
-	public String findPasswordForUserByEntryPointType(User user, EntryPointType type);
-	
+	String findPasswordForUserByType(User user, EntryPointType type);
+
+	List<EntryPoint> findForUserByTypeAndUID(User user, EntryPointType type, String uid);
+
 }

@@ -124,7 +124,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 
 		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
 
-		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointType(user,type);
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByType(user, type);
 
 		for (EntryPoint ep : ep_list) {
 
@@ -165,7 +165,7 @@ public class AWRankingUserDetailsService implements UserDetailsService {
 		
 		List<AWRankingUserDetails> ud_list = new ArrayList<AWRankingUserDetails>();
 		
-		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByEntryPointTypeAndPassword(user, EntryPointType.EMAIL, String.valueOf(credentials));
+		List<EntryPoint> ep_list = entryPointService.findEntryPointForUserByTypeAndPassword(user, EntryPointType.EMAIL, String.valueOf(credentials));
 		
 		for (EntryPoint ep : ep_list) {
 
