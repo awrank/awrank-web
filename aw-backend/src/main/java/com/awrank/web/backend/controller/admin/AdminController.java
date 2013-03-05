@@ -2,20 +2,24 @@ package com.awrank.web.backend.controller.admin;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Hibernate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +40,9 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.service.DiaryService;
 import com.awrank.web.model.service.EntryHistoryService;
 import com.awrank.web.model.service.EntryPointService;
+import com.awrank.web.model.service.StateChangeTokenService;
 import com.awrank.web.model.service.UserService;
+import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 
@@ -47,6 +53,9 @@ import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController extends AbstractController {
+
+	@Value("#{emailProps[blocked_xsmtp_header_category]}")
+	private String blocked_xsmtp_header_category;
 	
 	@Autowired
 	@Qualifier("userServiceImpl")
@@ -63,7 +72,10 @@ public class AdminController extends AbstractController {
 	@Autowired
 	@Qualifier("diaryServiceImpl")
 	private DiaryService diaryService;
-
+	
+	@Autowired
+	EmailSenderSendGridImpl sendGridEmailSender;
+	 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public 
     @ResponseBody()
@@ -133,7 +145,7 @@ public class AdminController extends AbstractController {
     	user.setBanStartedDate(LocalDateTime.now());
     	userService.save(user);
     	
-    	// Shall we introduce the "enabled" to EntryPoint and set it here to false? 
+    	//Shall we introduce the "enabled" to EntryPoint and set it here to false? 
     	//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
     	
     	AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -148,23 +160,39 @@ public class AdminController extends AbstractController {
 		
 		//---------- find/create EntryHistory ------------
 		
-		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
+		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
 		EntryHistory entryHistory;
 		
 		if(entryHistoryList.size() == 0){//create one if not found
 			
 			entryHistory = new EntryHistory();
 			entryHistory.setUser(admin);//associated with Admin's entry history record
-			entryHistory.setSessionId(request.getSession().getId());
-			entryHistory.setIpAddress(request.getRemoteAddr());
+			
+			entryHistory.setSessionId(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+			entryHistory.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+			
+			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, admin.getEmail());
+			entryHistory.setEntryPoint(entryPoint);
+			entryHistory.setSigninDate(LocalDateTime.now());
 			entryHistoryService.save(entryHistory);
 		}
 		else entryHistory = entryHistoryList.get(0);
 		
 		drec.setEntryHistory(entryHistory);
-		
 		diaryService.save(drec);
-    	
+		
+		//----------send email to user about he was blocked -------------
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+	
+		params.put("testactivation_email", user.getEmail());
+		try {
+			sendGridEmailSender.send(blocked_xsmtp_header_category, params);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     	return user;	
 	}
     

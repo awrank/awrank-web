@@ -78,6 +78,9 @@ public class EmailSenderSendGridImpl implements EmailSender {
     //@Value("${mail.from.email}")
     private String password_xsmtp_header_category;
 
+    @Value("#{emailProps[blocked_xsmtp_header_category]}")
+    private String blocked_xsmtp_header_category;
+    
     /* (non-Javadoc)
       * @see com.awrank.web.model.service.email.EmailSender#send(java.lang.String, java.util.Map)
       */
@@ -85,8 +88,67 @@ public class EmailSenderSendGridImpl implements EmailSender {
     public void send(String template, Map<String, Object> params) throws Exception {
 
     	if(template == xsmtp_header_category) sendEmailVerificationEmail(params);
-    	if(template == password_xsmtp_header_category) sendPasswordChangingEmail(params);
+    	else if(template == password_xsmtp_header_category) sendPasswordChangingEmail(params);
+    	else if(template == blocked_xsmtp_header_category) sendUserBlockedEmail(params);
     	
+    }
+    
+    protected void sendUserBlockedEmail(Map<String, Object> params) throws Exception {
+    	   
+    	//-------- TODO: we need to write down password changing keys same was as email activation ----	
+    	 if (params.containsKey("sgsmpt_host_name")) sgsmpt_host_name = String.valueOf(params.get("sgsmpt_host_name"));
+         if (params.containsKey("sgsmpt_port")) sgsmpt_port = String.valueOf(params.get("sgsmpt_port"));
+         if (params.containsKey("sgsmpt_user_name")) sgsmpt_user_name = String.valueOf(params.get("sgsmpt_user_name"));
+         if (params.containsKey("sgsmpt_password")) sgsmpt_password = String.valueOf(params.get("sgsmpt_password"));
+
+         if (params.containsKey("testactivation_email"))
+             testactivation_email = String.valueOf(params.get("testactivation_email"));
+         if (params.containsKey("smpt_from_email")) smpt_from_email = String.valueOf(params.get("smpt_from_email"));
+         
+         Properties properties = new Properties();
+         properties.put("mail.transport.protocol", "smtp");
+         properties.put("mail.smtp.host", sgsmpt_host_name);
+         properties.put("mail.smtp.port", sgsmpt_port);
+         properties.put("mail.smtp.auth", "true");
+
+         Session smtpSession = (Session) getAuthenticatedSession(properties, sgsmpt_user_name, sgsmpt_password);
+
+         smtpSession.setDebug(true);//for debug purposes, set to false or delete lately
+
+         SMTPAPIHeader header = new SMTPAPIHeader();
+
+         LinkedList<String> recipients = new LinkedList<String>();
+         recipients.add(testactivation_email);
+         header.addTo(recipients);
+        
+         header.setCategory(blocked_xsmtp_header_category);
+         
+         //----------------- sending ---------------------------
+
+         MimeMessage message = new MimeMessage(smtpSession);
+
+         Multipart multipart = new MimeMultipart("alternative");
+         BodyPart part1 = new MimeBodyPart();
+
+         part1.setText("Your AWranking account was blocked.");
+         BodyPart part2 = new MimeBodyPart();
+         StringBuilder bldr = new StringBuilder("Your AWranking account was blocked");
+         String mess = bldr.toString();
+         part2.setContent(mess, "text/html");
+         multipart.addBodyPart(part1);
+         multipart.addBodyPart(part2);
+         message.setFrom(new InternetAddress(smpt_from_email));
+         message.addRecipient(Message.RecipientType.TO,
+                 new InternetAddress(testactivation_email));
+         message.setSubject("Your AWranking account was blocked.");
+         message.setContent(multipart);
+
+         if (header != null) {
+             System.out.println(header.asJSON());
+             message.addHeader("X-SMTPAPI", header.asJSON());
+         }
+
+         share(smtpSession, message);
     }
     
     protected void sendPasswordChangingEmail(Map<String, Object> params) throws Exception {
