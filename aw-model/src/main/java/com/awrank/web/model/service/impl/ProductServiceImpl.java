@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl extends AbstarctServiceImpl implements ProductService {
+public class ProductServiceImpl extends AbstractServiceImpl implements ProductService {
 	@Autowired
 	public ProductDao productDao;
 	@Autowired

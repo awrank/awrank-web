@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Andrew Stoyaltsev
  */
-public interface SocialAuthService extends AbstarctService {
+public interface SocialAuthService extends AbstractService {
 
 	Map login(UserRegistrationFormPojo userInfo, HttpServletRequest request);
 

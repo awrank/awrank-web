@@ -3,7 +3,7 @@ package com.awrank.web.model.service;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangeWasNotVerifiedException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
-import com.awrank.web.model.service.impl.AbstarctServiceImpl;
+import com.awrank.web.model.service.impl.AbstractServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Olga Korokhina
  */
-public abstract class UserPasswordChangingService extends AbstarctServiceImpl implements StateChangeTokenService {
+public abstract class UserPasswordChangingService extends AbstractServiceImpl implements StateChangeTokenService {
 
 	public abstract void send(Map params) throws PasswordChangingEmailNotSetException;
 

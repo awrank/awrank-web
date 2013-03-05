@@ -14,7 +14,7 @@ import java.util.List;
  *         Interface for REST service working with entry histories
  */
 //@Service
-public interface EntryHistoryService extends AbstaractService {
+public interface EntryHistoryService extends AbstractService {
 
 	public void add(EntryHistory ep) throws EntryHistoryNotCreatedException;
 
@@ -22,14 +22,14 @@ public interface EntryHistoryService extends AbstaractService {
 
 	public void save(EntryHistory ep);
 
-	public  List<EntryHistory> findByIP(String ipAddress);
-	
-	public  List<EntryHistory> findBySessionId(String sessionId);
-	
-	public  List<EntryHistory> findAllByUser(User user);
-	
-	public  List<String> findAllIPByUser(User user);
-	
+	public List<EntryHistory> findByIP(String ipAddress);
+
+	public List<EntryHistory> findBySessionId(String sessionId);
+
+	public List<EntryHistory> findAllByUser(User user);
+
+	public List<String> findAllIPByUser(User user);
+
 	public Page<EntryHistory> getPageByUser(User user, Pageable pageable);
 
 }

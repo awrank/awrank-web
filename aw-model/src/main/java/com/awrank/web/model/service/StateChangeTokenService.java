@@ -6,7 +6,7 @@ import com.awrank.web.model.exception.AwRankException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-public interface StateChangeTokenService extends AbstarctService {
+public interface StateChangeTokenService extends AbstractService {
 
 	void send(Map params) throws AwRankException;
 

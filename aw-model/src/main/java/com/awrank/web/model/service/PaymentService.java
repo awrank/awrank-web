@@ -1,4 +1,4 @@
 package com.awrank.web.model.service;
 
-public interface PaymentService extends AbstarctService {
+public interface PaymentService extends AbstractService {
 }
