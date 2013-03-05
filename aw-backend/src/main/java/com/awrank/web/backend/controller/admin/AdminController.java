@@ -138,60 +138,13 @@ public class AdminController extends AbstractController {
 			headers = "content-type=application/x-www-form-urlencoded")
 	public
 	@ResponseBody()
-	User blockUserByEmail(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request, Principal principal)
+	User blockUserByEmail(@ModelAttribute UserRegistrationFormPojo form, Principal principal)
 		{
     	
+    	if(principal == null) return null;
+    	
     	User user = userService.findOneByEmail(form.getEmail());
-    	user.setBanStartedDate(LocalDateTime.now());
-    	userService.save(user);
-    	
-    	//Shall we introduce the "enabled" to EntryPoint and set it here to false? 
-    	//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-    	
-    	AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		User admin = details.getUser();
-		
-    	//------ here add record in Diary about user was blocked
-		
-		Diary drec = new Diary();
-		drec.setEvent(DiaryEvent.BLOCKED);
-		drec.setUser(user);
-		drec.setCreatedBy(admin);
-		
-		//---------- find/create EntryHistory ------------
-		
-		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-		EntryHistory entryHistory;
-		
-		if(entryHistoryList.size() == 0){//create one if not found
-			
-			entryHistory = new EntryHistory();
-			entryHistory.setUser(admin);//associated with Admin's entry history record
-			
-			entryHistory.setSessionId(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-			entryHistory.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
-			
-			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, admin.getEmail());
-			entryHistory.setEntryPoint(entryPoint);
-			entryHistory.setSigninDate(LocalDateTime.now());
-			entryHistoryService.save(entryHistory);
-		}
-		else entryHistory = entryHistoryList.get(0);
-		
-		drec.setEntryHistory(entryHistory);
-		diaryService.save(drec);
-		
-		//----------send email to user about he was blocked -------------
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-	
-		params.put("testactivation_email", user.getEmail());
-		try {
-			sendGridEmailSender.send(blocked_xsmtp_header_category, params);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	if(user != null) userService.blockUser(user, principal);
 		
     	return user;	
 	}
@@ -209,24 +162,14 @@ public class AdminController extends AbstractController {
 			headers = "content-type=application/x-www-form-urlencoded")
 	public
 	@ResponseBody()
-	User blockUserByID(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
+	User blockUserByID(@ModelAttribute UserRegistrationFormPojo form, Principal principal)
 		{
     	
-    	User user = userService.findOneByEmail(form.getEmail());
-    	user.setBanStartedDate(LocalDateTime.now());
-    	userService.save(user);
+    	if(principal == null) return null;
     	
-    	// Shall we introduce the "enabled" to EntryPoint and set it here to false? 
-    	//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-    	
-    	//------ here add record in Diary about user was blocked
+    	User user = userService.findOne(form.getId());
+    	if(user != null) userService.blockUser(user, principal);
 		
-		Diary drec = new Diary();
-		drec.setEvent(DiaryEvent.BLOCKED);
-		drec.setUser(user);
-		
-		diaryService.save(drec);
-    	
     	return user;	
 	}
     

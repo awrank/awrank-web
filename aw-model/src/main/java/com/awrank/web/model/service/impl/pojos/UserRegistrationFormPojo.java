@@ -18,6 +18,8 @@ import java.io.Serializable;
 public class UserRegistrationFormPojo implements Serializable {
 
 	private String firstName;
+	
+	private Long id;
 
 	private String lastName;
 
@@ -43,6 +45,14 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	private LocalDateTime birthday;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	public String getIp() {
 		return ip;
 	}

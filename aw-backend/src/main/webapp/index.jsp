@@ -250,6 +250,7 @@
     <br/>
 </div>
 </p>
+<p>
 <div height="100">
     <form method="POST" action="<c:url value="admin/blockuserbyemail" />" accept="application/json"
           enctype="application/json">
@@ -261,6 +262,29 @@
             </tr>
             <tr>
                 <td colspan="2" align="right"><input type="submit" value="Block user by email"/>
+                    <input type="reset" value="Reset"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+</p>
+<p>
+<div height="100">
+    <form method="POST" action="<c:url value="admin/blockuserbyid" />" accept="application/json"
+          enctype="application/json">
+        <table align="left">
+
+            <tr>
+                <td align="right">Id*</td>
+                <td><input type="text" name="id" value="4"/></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><input type="submit" value="Block user by id"/>
                     <input type="reset" value="Reset"/>
                 </td>
             </tr>

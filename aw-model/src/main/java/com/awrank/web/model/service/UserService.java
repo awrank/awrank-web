@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -82,4 +84,6 @@ public interface UserService extends AbstractService {
 	List<User> getAll();
 
 	Page<User> getPage(Pageable pageable);
+	
+	User blockUser(User user, Principal principal);
 }
