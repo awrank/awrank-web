@@ -2,7 +2,6 @@ package com.awrank.web.backend.controller.auth;
 
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
-import com.awrank.web.model.service.SocialAuthService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -13,17 +12,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class provides authentication process (request/handling callbacks) for user via
@@ -32,50 +32,34 @@ import java.net.URLEncoder;
  * @author Andrew Stoyaltsev
  */
 @Controller
-public class GoogleAuthController {
+public class GoogleAuthController extends AbstractSocialAuthController {
 
 	private static Logger LOG = LoggerFactory.getLogger(GoogleAuthController.class);
 
-	@Autowired
-	private SocialAuthService socialAuthService;
+	//@Value("${oauth.google.auth.url}")
+	private String socialAuthUrl = "https://accounts.google.com/o/oauth2/auth";
 
-	@Value("${oauth.google.auth.url}")
-	private String socialAuthUrl;
-
-	@Value("${oauth.google.token.url}")
-	private String socialTokenUrl;
+	//@Value("${oauth.google.token.url}")
+	private String socialTokenUrl = "https://accounts.google.com/o/oauth2/token";
 
 	//@Value("${oauth.google.clientId}")
-	// probably this prop is loaded before profile detection
 	private String clientId = "833205848531.apps.googleusercontent.com";
 
 	//@Value("${oauth.google.clientSecret}")
 	private String clientSecret = "S56giFrR-y7kDNn2qPFV1hRY";
 
-	// @Value
+	//@Value("${oauth.google.redirect.uri}")
 	private String redirectUri = "http://awrank.com:8080/awrank/googleOAuthCallback";
 
-	@Value("${oauth.google.userinfo.url}")
-	private String socialUserInfoUrl;
-
-	private String authAction = null;
+	//@Value("${oauth.google.userinfo.url}")
+	private String socialUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
 	@RequestMapping(value = "/auth/google/{action}", method = RequestMethod.GET)
 	public String authViaGoogle(@PathVariable(value = "action") String action) throws IOException {
-		if (StringUtils.hasLength(action)) {
-			this.authAction = action;
-			return "redirect:" + getRequestAuthCodeURI();
-		} else {
-			System.out.println("Error: Google Auth action not specified!");
-		}
-		return "login";
+		return super.authViaNetwork(action);
 	}
 
-	/**
-	 * @return
-	 * @throws IOException
-	 */
-	private String getRequestAuthCodeURI() throws IOException {
+	protected String getRequestAuthCodeURI() throws IOException {
 		StringBuilder queryString = new StringBuilder();
 		queryString.append("client_id=").append(clientId).append("&");
 		queryString.append("scope=").append(URLEncoder.encode(
@@ -89,58 +73,30 @@ public class GoogleAuthController {
 		return uri;
 	}
 
-	@RequestMapping(value = "/googleOAuthCallback")
-	public String googleCallback(HttpServletRequest request) throws Exception {
+	@RequestMapping(value = "/googleOAuthCallback", produces = "application/json")
+	@ResponseBody()
+	public Map googleCallback(HttpServletRequest request) throws Exception {
 		String state = request.getParameter("state");
+		String message;
 		if (StringUtils.hasLength(state)) {
-
-			if (state.equals("code")) { // handle receiving of auth code
+			if (state.equals("code")) {
 				String error = request.getParameter("error");
 				if (StringUtils.hasLength(error)) {
 					LOG.debug("Negative response from Google: " + error);
-					// todo: what json format?
-					return error;
+					return getNegativeResponseMap(error);
 				}
-
-				String authCode = request.getParameter("code");
-				if (StringUtils.hasLength(authCode)) {
-					LOG.debug("Google response: auth code=" + authCode);
-
-					String accessToken = requestAccessToken(authCode);
-					LOG.debug("Google access_token: " + accessToken);
-
-					if (StringUtils.hasLength(accessToken)) {
-						UserRegistrationFormPojo userInfo = requestUserInfo(accessToken);
-						if (this.authAction.equals("login")) {
-							socialAuthService.login(userInfo, request);
-							// need check if login ok? then redirect
-							return "redirect:index.html";
-						} else if (this.authAction.equals("register")) {
-							// need check if registration ok? then redirect
-							socialAuthService.register(userInfo, request);
-							return "redirect:index.html"; // or profile page?
-						}
-					} else {
-						LOG.warn("Access token is null");
-					}
-				} else {
-					LOG.warn("Auth code is null");
-				}
+				return super.handleNetworkCallback(request);
 			} else {
-				LOG.warn("Custom 'state' param does not correspond initial request value! state=" + state);
+				message = "Custom 'state' param does not correspond initial request value! state=" + state;
 			}
+		} else {
+			message = "'state' parameter is not specified!";
 		}
-		return null;
+		LOG.warn(message);
+		return getNegativeResponseMap(message);
 	}
 
-	/**
-	 *
-	 * @param authCode
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	private String requestAccessToken(String authCode) throws IOException, JSONException {
+	protected String requestAccessToken(String authCode) throws IOException, JSONException {
 		String token = null;
 		LOG.debug("Request Google for access token...");
 		HttpClient httpClient = new HttpClient();
@@ -169,14 +125,7 @@ public class GoogleAuthController {
 		return token;
 	}
 
-	/**
-	 *
-	 * @param accessToken
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	private UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
+	protected UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
 		UserRegistrationFormPojo userInfo = new UserRegistrationFormPojo();
 		LOG.debug("Request Google for user info...");
 		HttpClient httpClient = new HttpClient();
@@ -196,7 +145,10 @@ public class GoogleAuthController {
 			userInfo.setNetworkUID(jsonObject.optString("id"));
 			userInfo.setEmailVerified(jsonObject.optBoolean("verified_email"));
 			// todo: move out date format to constants
-			userInfo.setBirthday(jsonObject.optString("birthday"), "yyyy-MM-dd");
+			String birthday = jsonObject.optString("birthday");
+			if (StringUtils.hasLength(birthday)) {
+				userInfo.setBirthday(birthday, "yyyy-MM-dd");
+			}
 		} else {
 			LOG.warn("Get Google userinfo request failed");
 		}

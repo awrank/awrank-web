@@ -27,7 +27,7 @@ public interface UserService extends AbstractService {
 	 *
 	 * @param user
 	 */
-	void add(User user) throws UserNotCreatedException;
+	User add(User user) throws UserNotCreatedException;
 
 	/**
 	 * Delete user, throw exception in case of was not done

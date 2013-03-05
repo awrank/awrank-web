@@ -211,9 +211,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
 	 */
 	@Override
-	public void add(User user) throws UserNotCreatedException {
+	public User add(User user) throws UserNotCreatedException {
 		try {
-			userDao.save(user);
+			return userDao.save(user);
 		} catch (Exception e) {
 			getLogger().error(e.getMessage(), e);
 			throw new UserNotCreatedException();

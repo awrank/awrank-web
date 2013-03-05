@@ -2,7 +2,6 @@ package com.awrank.web.backend.controller.auth;
 
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
-import com.awrank.web.model.service.SocialAuthService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -14,16 +13,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * This class provides authentication process (request/handling callbacks) for user via
@@ -32,21 +31,15 @@ import java.io.IOException;
  * @author Andrew Stoyaltsev
  */
 @Controller
-public class FacebookAuthController {
-
-	/* TODO: refactor together with GoogleController */
-	/* authVia... and callback methods could be folded to one. */
+public class FacebookAuthController extends AbstractSocialAuthController {
 
 	private static Logger LOG = LoggerFactory.getLogger(FacebookAuthController.class);
 
-	@Autowired
-	private SocialAuthService socialAuthService;
+	//@Value("${oauth.facebook.auth.url}")
+	private String socialAuthUrl = "https://www.facebook.com/dialog/oauth";
 
-	@Value("${oauth.facebook.auth.url}")
-	private String socialAuthUrl;
-
-	@Value("${oauth.facebook.token.url}")
-	private String socialTokenUrl;
+	//@Value("${oauth.facebook.token.url}")
+	private String socialTokenUrl = "https://graph.facebook.com/oauth/access_token?";
 
 	//@Value("${oauth.facebook.appId}")
 	private String clientId = "347948558644172";
@@ -57,27 +50,15 @@ public class FacebookAuthController {
 	//@Value("${oauth.facebook.redirect.uri}")
 	private String redirectUri = "http://awrank.com:8080/awrank/facebookOAuthCallback";
 
-	@Value("${oauth.facebook.userinfo.url}")
-	private String socialUserInfoUrl;
-
-	private String authAction;
+	//@Value("${oauth.facebook.userinfo.url}")
+	private String socialUserInfoUrl = "https://graph.facebook.com/me?access_token=";
 
 	@RequestMapping(value = "/auth/facebook/{action}", method = RequestMethod.GET)
 	public String authViaFacebook(@PathVariable(value = "action") String action) throws IOException {
-		if (StringUtils.hasLength(action)) {
-			this.authAction = action;
-			return "redirect:" + getRequestAuthCodeURI();
-		} else {
-			System.out.println("Error: Google Auth action not specified!");
-		}
-		return "login";
+		return super.authViaNetwork(action);
 	}
 
-	/**
-	 * @return URI to request authentication code from Facebook.
-	 * @throws IOException
-	 */
-	private String getRequestAuthCodeURI() throws IOException {
+	protected String getRequestAuthCodeURI() throws IOException {
 		StringBuilder queryString = new StringBuilder();
 		queryString.append("client_id=").append(clientId).append("&");
 		queryString.append("redirect_uri=").append(redirectUri).append("&");
@@ -87,39 +68,13 @@ public class FacebookAuthController {
 		return uri;
 	}
 
-	@RequestMapping(value = "/facebookOAuthCallback")
-	public String facebookCallback(HttpServletRequest request) throws Exception {
-		String authCode = request.getParameter("code");
-		if (StringUtils.hasLength(authCode)) {
-			LOG.debug("Facebook response: auth code=" + authCode);
-
-			String accessToken = requestAccessToken(authCode);
-			LOG.debug("Facebook access_token: " + accessToken);
-
-			if (StringUtils.hasLength(accessToken)) {
-				UserRegistrationFormPojo userInfo = requestUserInfo(accessToken);
-				if (this.authAction.equals("login")) {
-					socialAuthService.login(userInfo, request);
-					// need check if login ok? then redirect
-					return "redirect:index.html";
-				} else if (this.authAction.equals("register")) {
-					// need check if registration ok? then redirect
-					socialAuthService.register(userInfo, request);
-					return "redirect:index.html"; // or profile page?
-				}
-			} else {
-				LOG.warn("Access token is null");
-			}
-		}
-		return null;
+	@RequestMapping(value = "/facebookOAuthCallback", produces = "application/json")
+	@ResponseBody()
+	public Map facebookCallback(HttpServletRequest request) throws Exception {
+		return super.handleNetworkCallback(request);
 	}
 
-	/**
-	 * @param authCode
-	 * @return
-	 * @throws IOException
-	 */
-	private String requestAccessToken(String authCode) throws IOException {
+	protected String requestAccessToken(String authCode) throws IOException {
 		LOG.debug("Request Facebook for access token...");
 		String token = null;
 		StringBuilder queryString = new StringBuilder();
@@ -141,13 +96,7 @@ public class FacebookAuthController {
 		return token;
 	}
 
-	/**
-	 * @param accessToken
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	private UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
+	protected UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
 		UserRegistrationFormPojo userInfo = new UserRegistrationFormPojo();
 		LOG.debug("Request Facebook for user info...");
 

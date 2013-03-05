@@ -2,11 +2,13 @@ package com.awrank.web.model.service.impl.pojos;
 
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
+import com.awrank.web.model.domain.User;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * POJO(well, actually a bean :) ) for user registration via "our" webform;
@@ -17,9 +19,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class UserRegistrationFormPojo implements Serializable {
 
-	private String firstName;
-	
 	private Long id;
+
+	private String apiKey;
+
+	private String firstName;
 
 	private String lastName;
 
@@ -28,8 +32,6 @@ public class UserRegistrationFormPojo implements Serializable {
 	private String password;
 
 	private Language language;
-
-	private String apiKey;
 
 	private String ip;
 
@@ -44,6 +46,18 @@ public class UserRegistrationFormPojo implements Serializable {
 	private boolean emailVerified;
 
 	private LocalDateTime birthday;
+
+	public User createUser() {
+		User user = new User();
+		user.setApiKey(getApiKey());
+		user.setFirstName(getFirstName());
+		user.setLastName(getLastName());
+		user.setEmail(getEmail());
+		user.setLanguage(getLanguage());
+		user.setAuthorizationFailsCount(0);
+		user.setBirthday(getBirthday());
+		return user;
+	}
 
 	public Long getId() {
 		return id;

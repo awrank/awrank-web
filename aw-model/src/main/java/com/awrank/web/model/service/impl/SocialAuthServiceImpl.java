@@ -1,6 +1,5 @@
 package com.awrank.web.model.service.impl;
 
-import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.domain.User;
@@ -13,18 +12,26 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * todo: Class description
+ * Service that provide login/registration for social network cases.
  *
  * @author Andrew Stoyaltsev
  */
@@ -32,7 +39,7 @@ import java.util.UUID;
 public class SocialAuthServiceImpl extends AbstractServiceImpl implements SocialAuthService {
 
 	@Autowired
-	private UserDao userDao;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	@Qualifier("entryPointServiceImpl")
@@ -84,11 +91,34 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		4) на выходе: token для защиты от CSRF атак - {token:"xxx"}
 		 */
 
-		User user = new User(); // ???
-//		List<EntryPoint> list = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.GOOGLE, uid);
-		// 2
+		// sometimes social network does not provide us with email data during /userinfo request
+		if (!StringUtils.hasLength(userInfo.getEmail())) {
+			return getNegativeResponseMap("Unfortunately the social network you've chosen did not provide us " +
+					"with your email. Please set email in your social account and try again or " +
+					"use the standard registration form. Thanks for understanding.");
+		}
 
-		return getNegativeResponseMap("Social Login method is not implemented yet!");
+		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(
+				userInfo.getNetworkType(),
+				userInfo.getNetworkUID());
+
+		if (entryPoint == null) {
+			return getNegativeResponseMap("Unfortunately, we could not find entry point for " +
+					"networkType=" + userInfo.getNetworkType() + "; networkUID=" + userInfo.getNetworkUID());
+		}
+
+		// log in user
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getApiKey());
+		// generate session if one doesn't exist
+		HttpSession session = request.getSession();
+		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
+		token.setDetails(details);
+
+		Authentication authenticatedUser = authenticationManager.authenticate(token);
+		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+		return getPositiveResponseMap("User has been successfully logged in via network!");
 	}
 
 	@Override
@@ -96,61 +126,62 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
 
 		/* Scenario from specification doc:
+		-----------------------------------
+		0)* check if emails exist, if no - offer user to use standard registration form.
 		1) проверка уникальности email
 		2) создается User, UserRole, EntryPoint, UserEmailActivation
 		3) запуск активации email
 		4) на выходе: пустой объект - {}
+		-----------------------------------
+		* - new plan points
 		*/
+
+		// sometimes social network does not provide us with email data during /userinfo request
+		if (!StringUtils.hasLength(userInfo.getEmail())) {
+			return getNegativeResponseMap("Unfortunately the social network you've chosen did not provide us " +
+					"with your email. Please set email in your social account and try again or " +
+					"use the standard registration form. Thanks for understanding.");
+		}
 
 		if (userService.findOneByEmail(userInfo.getEmail()) != null) {
 			return getNegativeResponseMap("This email is already registered in the system!");
 		}
 
-		// todo: borrowed from UserController
-		if (userService.findByAPIKey(userInfo.getApiKey()) != null) {
-			return getNegativeResponseMap("This apikey is already registered in the system!");
+		// avoid double generating
+		// todo: this spot of code could be an util method
+		String apiKey = UUID.randomUUID().toString();
+		while (userService.findByAPIKey(apiKey) != null) {
+			apiKey = UUID.randomUUID().toString();
 		}
+		userInfo.setApiKey(apiKey);
 
-		userInfo.setUserLocalAddress(request.getLocalAddr());
-		userInfo.setUserRemoteAddress(request.getRemoteAddr());
+		// todo: we have no password, apiKey is used as temporary solution. need to discuss
 
-		// no password when use OAuth
-		//final String plainPassword = userInfo.getPassword();
-		//userInfo.setPassword(PasswordUtils.hashPassword(userInfo.getPassword()));
+		// create user based on given user info from network
+		User user = userInfo.createUser();
+		user = userService.add(user);
 
-		//User user = userService.register(userInfo, request);
-
-		//---- create user ----
-		User user = new User();
-		user.setApiKey(UUID.randomUUID().toString());
-		user.setFirstName(userInfo.getFirstName());
-		user.setLastName(userInfo.getLastName());
-		user.setEmail(userInfo.getEmail());
-		user.setLanguage(userInfo.getLanguage());
-		user.setAuthorizationFailsCount(0); //?
-		user.setBirthday(userInfo.getBirthday());
-		userService.add(user);
-
-		//---- here we need save a role for user ----
-		UserRole role = new UserRole(user, Role.ROLE_USER);
+		// create a role
+		UserRole role = new UserRole(user);
 		userRoleService.save(role);
 
-		//---- create entrance point for him ----
+		// create an entry point
 		EntryPoint entryPoint = new EntryPoint();
 		entryPoint.setUser(user);
+		entryPoint.setPassword(PasswordUtils.hashPassword(user.getApiKey()));
 		entryPoint.setUid(userInfo.getNetworkUID());
-		// we do not know password because of using OAuth
+		// no password because of using OAuth
 		entryPoint.setType(userInfo.getNetworkType());
 		entryPointService.add(entryPoint);
 
 		if (!userInfo.isEmailVerified()) {
-			//---- sending verification email ----
+			userInfo.setUserLocalAddress(request.getLocalAddr());
+			userInfo.setUserRemoteAddress(request.getRemoteAddr());
 			String key;
 			try {
-				// instead of password - networkUID is used
 				key = SMTPAuthenticator.getHashed256(
 						userInfo.getEmail() + "." +
-								userInfo.getNetworkUID() + "." +
+								userInfo.getApiKey() + "." +
 								userInfo.getUserLocalAddress() + "." +
 								userInfo.getUserRemoteAddress());
 			} catch (Exception e1) {
@@ -167,20 +198,31 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 			try {
 				userEmailActivationService.send(params);
 			} catch (AwRankException e) {
-				// todo: add LOG
 				e.printStackTrace();
 			}
-			//---- store to db information about verification email was sent ----
+			// store to db information about verification email was sent
 			StateChangeToken stateChangeToken = new StateChangeToken();
 			stateChangeToken.setToken(key);
 			stateChangeToken.setType(StateChangeTokenType.USER_EMAIL_VERIFICATION);
 			stateChangeToken.setUser(user);
 			stateChangeToken.setValue(user.getEmail());
-			stateChangeToken.setIpAddress(userInfo.getUserRemoteAddress());//Check later if we need remote or local IP here
+			//Check later if we need remote or local IP here
+			stateChangeToken.setIpAddress(userInfo.getUserRemoteAddress());
 			userEmailActivationService.save(stateChangeToken);
 		}
 
-		return getPositiveResponseMap("Registration via Google finished successfully!");
+		// log in just registered user
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getApiKey());
+		// generate session if one doesn't exist
+		HttpSession session = request.getSession();
+		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
+		token.setDetails(details);
+
+		Authentication authenticatedUser = authenticationManager.authenticate(token);
+		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+		return getPositiveResponseMap("Registration via network finished successfully! User stored at session.");
 	}
 
 }
