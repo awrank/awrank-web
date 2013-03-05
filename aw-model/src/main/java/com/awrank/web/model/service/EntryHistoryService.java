@@ -14,7 +14,7 @@ import java.util.List;
  *         Interface for REST service working with entry histories
  */
 //@Service
-public interface EntryHistoryService extends AbstaractService {
+public interface EntryHistoryService{// extends AbstaractService {
 
 	public void add(EntryHistory ep) throws EntryHistoryNotCreatedException;
 
