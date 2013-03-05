@@ -27,8 +27,6 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 
 	public void setCurrentAuditor(EntryPoint entryPoint) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(entryPoint.getUid(), entryPoint.getPassword());
-		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
-		token.setDetails(details);
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 	}

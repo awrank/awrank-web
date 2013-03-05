@@ -23,18 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserDetailsService {
 
 	@Autowired
-//	@Qualifier("userServiceImpl")
-//	@Resource(name="userServiceImpl")
 	private UserService userService;
 
 	@Autowired
-//	@Qualifier("entryPointServiceImpl")
-//	@Resource(name="entryPointServiceImpl")
 	private EntryPointService entryPointService;
 
 	@Autowired
-//	@Qualifier("entryHistoryServiceImpl")
-//	@Resource(name="entryHistoryServiceImpl")
 	private EntryHistoryService entryHistoryService;
 
 	public UserDetailsServiceImpl() {
@@ -43,14 +37,8 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public UserDetails retrieveUser(String username, String passwordHash, String userIpAddress, String sessionId) {
-		EntryPoint entryPoint;
-		if (username.indexOf('@') > 0) {
-			entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, username);
-		} else {
-			entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.LOGIN, username);
-		}
-
 		AWRankingUserDetails detail = null;
+		EntryPoint entryPoint = entryPointService.findOneByUid(username);
 		if (entryPoint != null) {
 			User user = entryPoint.getUser();
 			EntryHistory entryHistory = new EntryHistory();
@@ -59,11 +47,10 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 			entryHistory.setIpAddress(userIpAddress);
 			entryHistory.setSessionId(sessionId);
 			entryHistory.setSigninDate(LocalDateTime.now());
-			//TODO auto date
-//			entryHistory.setCreatedDate(DateTime.now());
-//			entryHistory.setLastModifiedDate(entryHistory.getCreatedDate());
 
-			if (entryPoint.getPassword().equals(passwordHash)) {
+			if (entryPoint.getType() == EntryPointType.GOOGLE
+					|| entryPoint.getType() == EntryPointType.FACEBOOK
+					|| entryPoint.getPassword().equals(passwordHash)) {
 				detail = new AWRankingUserDetails(entryPoint);
 				entryHistory.setSuccess(true);
 				user.setAuthorizationFailsCount(0);

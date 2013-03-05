@@ -27,6 +27,12 @@ public class UserRole extends AbstractUserRelatedEntityAuditable {
 	public UserRole() {
 	}
 
+	public UserRole(User user, Role role) {
+		this.user = user;
+		user.getUserRoles().add(this);
+		this.role = role;
+	}
+
 	public Role getRole() {
 		return role;
 	}

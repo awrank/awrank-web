@@ -22,7 +22,7 @@ public class AbstractUserRelatedEntityAuditable extends DatedAbstractAuditable {
 	 */
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "user_id", nullable = false, updatable = false)
-	private User user;
+	protected User user;
 
 	public User getUser() {
 		return user;

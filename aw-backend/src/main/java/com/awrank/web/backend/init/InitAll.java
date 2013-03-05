@@ -3,7 +3,6 @@ package com.awrank.web.backend.init;
 import com.awrank.web.backend.init.dictionary.InitDictionary;
 import com.awrank.web.backend.init.product.InitProduct;
 import com.awrank.web.backend.init.user.InitUser;
-import com.awrank.web.model.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -14,9 +13,6 @@ import javax.annotation.PostConstruct;
  */
 @Controller
 public class InitAll {
-
-//	@Autowired
-//	AuditorAwareImpl auditorAware;
 
 	@Autowired
 	private InitDictionary initDictionary;
@@ -30,12 +26,9 @@ public class InitAll {
 	//	@RequestMapping("/init")
 	@PostConstruct
 	public void init() {
-		User anonymous = initUser.initAnonymous();
-
-//		SecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken());
-//		auditorAware.setAuditor(anonymous);
-		initUser.initRegularUser();
+//		initUser.initAnonymous();
 		initUser.initAdmin();
+		initUser.initRegularUser();
 		initDictionary.init();
 		initProduct.init();
 		initPaymentSystem.init();

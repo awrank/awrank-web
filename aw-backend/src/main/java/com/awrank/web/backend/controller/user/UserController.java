@@ -7,16 +7,13 @@ import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetE
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
-import com.awrank.web.model.service.*;
+import com.awrank.web.model.service.StateChangeTokenService;
+import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
-import com.awrank.web.model.service.jopos.AWRankingUserDetails;
+import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,28 +33,13 @@ import java.util.UUID;
 public class UserController extends AbstractController {
 
 	@Autowired
-//	@Qualifier("userServiceImpl")
 	private UserService userService;
 
-	@Autowired
-//	@Qualifier("userRoleServiceImpl")
-	private UserRoleService userRoleService;
-
-	@Autowired
-//	@Qualifier("entryPointServiceImpl")
-	private EntryPointService entryPointService;
-
-	//	@Autowired
-	//@Qualifier("userEmailActivationServiceImpl")
 	@Resource(name = "userEmailActivationServiceImpl")
 	private StateChangeTokenService userEmailActivationService;
 
 	@Autowired
-	//@Qualifier("authenticationManager")
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private UserDetailsService userDetailsService;
+	AuditorAwareImpl auditorAware;
 
 	private Map getPositiveResponseMap() {
 		Map<String, String> result = new HashMap<String, String>();
@@ -115,21 +97,10 @@ public class UserController extends AbstractController {
 
 		EntryPoint entryPoint = userService.register(form, request);
 
-		//---------- we need some authorization for register user + he is logged in right after it -------
-
-		// AWRankingGrantedAuthority[] grantedAuthorities = new AWRankingGrantedAuthority[] { new AWRankingGrantedAuthority(user.getId(), "ROLE_USER") };
-
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(form.getEmail(), plainPassword);
-
 		// generate session if one doesn't exist
 		request.getSession();
 
-		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
-
-		token.setDetails(details);
-
-		Authentication authenticatedUser = authenticationManager.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		auditorAware.setCurrentAuditor(entryPoint);
 
 		return getPositiveResponseMap("Verification email was sent to your email");
 	}

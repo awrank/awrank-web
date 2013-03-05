@@ -19,6 +19,9 @@ public interface EntryPointService extends AbstractService {
 
 	public void save(EntryPoint ep);
 
+	@Deprecated
 	public EntryPoint findOneByEntryPointTypeAndUid(EntryPointType type, String uid);
+
+	public EntryPoint findOneByUid(String uid);
 
 }

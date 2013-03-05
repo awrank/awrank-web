@@ -1,15 +1,15 @@
 package com.awrank.web.backend.authentication;
 
+import com.awrank.web.model.enums.Message;
 import com.awrank.web.model.service.UserDetailsService;
 import com.awrank.web.model.utils.user.PasswordUtils;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  *
  * @author Olga Korokhina
  */
-@Controller("awRankingAuthenticationProvider")
+@Component("awRankingAuthenticationProvider")
 public class AWRankingAuthenticationProviderImpl extends AbstractUserDetailsAuthenticationProvider {
 
 	@Resource(name = "userDetailsServiceImpl")
@@ -40,12 +40,23 @@ public class AWRankingAuthenticationProviderImpl extends AbstractUserDetailsAuth
 	 * @see org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider#retrieveUser(java.lang.String, org.springframework.security.authentication.UsernamePasswordAuthenticationToken)
 	 */
 	@Override
-	@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 	public UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
-
-		return userDetailsService.retrieveUser(username, PasswordUtils.hashPassword((String) authentication.getCredentials()),
-				((WebAuthenticationDetails) (authentication.getDetails())).getRemoteAddress(),
-				((WebAuthenticationDetails) (authentication.getDetails())).getSessionId());
+		String password = (String) authentication.getCredentials();
+		String userIpAddress = "";
+		String sessionId = "";
+		Object currentDetails = authentication.getDetails();
+		if (currentDetails instanceof WebAuthenticationDetails) {
+			WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) currentDetails;
+			userIpAddress = webAuthenticationDetails.getRemoteAddress();
+			sessionId = webAuthenticationDetails.getSessionId();
+			password = PasswordUtils.hashPassword(password);
+		}
+		UserDetails details = userDetailsService.retrieveUser(username, password, userIpAddress, sessionId);
+		if (details == null) {
+			// TODO ExceptionHandler
+			throw new AuthenticationServiceException(Message.ERROR_ACCESS.name());
+		}
+		return details;
 	}
 }

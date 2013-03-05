@@ -6,7 +6,7 @@ import com.awrank.web.model.dao.UserDao;
 import com.awrank.web.model.dao.UserRoleDao;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
-import com.awrank.web.model.utils.user.CurrentUserUtils;
+import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class InitUser {
 
 	@Autowired
+	AuditorAwareImpl auditorAware;
+
+	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private EntryPointDao entryPointDao;
@@ -29,33 +32,6 @@ public class InitUser {
 
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;
-
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public User initAnonymous() {
-		User user = userDao.findByEmail("anonymous@awrank.com");
-		if (user == null) {
-			user = new User();
-			user.setApiKey("ANONYMOUS");
-			user.setRefUser(null);
-			user.setEmail("anonymous@awrank.com");
-			user.setSkype(null);
-			user.setFirstName("anonymous");
-			user.setLastName("anonymous");
-			user.setBirthday(null);
-			user.setSecretQuestionDicCode(null);
-			user.setSecretAnswer(null);
-			user.setLanguage(Language.RU);
-			user.setAuthorizationFailsCount(0);
-			user.setAuthorizationFailsLastDate(null);
-			user.setBanStartedDate(null);
-//			user.setCreatedDate(new DateTime());
-			user.setCreatedBy(user);
-//			user.setLastModifiedDate(user.getCreatedDate());
-			user.setLastModifiedBy(user);
-			userDao.save(user);
-		}
-		return user;
-	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void initRegularUser() {
@@ -75,13 +51,13 @@ public class InitUser {
 			user.setAuthorizationFailsCount(0);
 			user.setAuthorizationFailsLastDate(null);
 			user.setBanStartedDate(null);
-//			user.setCreatedDate(new DateTime());
-			user.setCreatedBy(user);
-//			user.setLastModifiedDate(user.getCreatedDate());
-			user.setLastModifiedBy(user);
 			userDao.save(user);
 
+			UserRole role = new UserRole(user, Role.ROLE_USER_VERIFIED);
+			userRoleDao.save(role);
+
 			EntryPoint entryPoint = new EntryPoint();
+			user.getEntryPoints().add(entryPoint);
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.EMAIL);
 			entryPoint.setUid(user.getEmail());
@@ -90,13 +66,6 @@ public class InitUser {
 //			entryPoint.setCreatedDate(new DateTime());
 //			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
-
-			UserRole role = new UserRole();
-			role.setUser(user);
-			role.setRole(Role.ROLE_USER_VERIFIED);
-//			role.setCreatedDate(new DateTime());
-//			role.setLastModifiedDate(entryPoint.getCreatedDate());
-			userRoleDao.save(role);
 
 			LocalDateTime time = LocalDateTime.now();
 			LocalDateTime time2 = time.plusMillis(4000000);
@@ -144,25 +113,30 @@ public class InitUser {
 			user.setAuthorizationFailsCount(0);
 			user.setAuthorizationFailsLastDate(null);
 			user.setBanStartedDate(null);
-//			user.setCreatedDate(new DateTime());
 			user.setCreatedBy(user);
-//			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 
-			CurrentUserUtils.setCurrentUser(user);
+			UserRole role = new UserRole(user, Role.ROLE_ADMIN);
+			role.setCreatedBy(user);
+			role.setLastModifiedBy(user);
+			userRoleDao.save(role);
 
 			EntryPoint entryPoint = new EntryPoint();
+			user.getEntryPoints().add(entryPoint);
 			entryPoint.setUser(user);
 			entryPoint.setType(EntryPointType.LOGIN);
 			entryPoint.setUid("admin");
 			entryPoint.setPassword(PasswordUtils.hashPassword("1"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
-//			entryPoint.setCreatedDate(new DateTime());
-//			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
+			entryPoint.setCreatedBy(user);
+			entryPoint.setLastModifiedBy(user);
 			entryPointDao.save(entryPoint);
 
+			auditorAware.setCurrentAuditor(entryPoint);
+
 			EntryPoint entryPoint2 = new EntryPoint();
+			user.getEntryPoints().add(entryPoint2);
 			entryPoint2.setUser(user);
 			entryPoint2.setType(EntryPointType.EMAIL);
 			entryPoint2.setUid(user.getEmail());
@@ -173,6 +147,7 @@ public class InitUser {
 			entryPointDao.save(entryPoint2);
 
 			EntryPoint entryPoint3 = new EntryPoint();
+			user.getEntryPoints().add(entryPoint3);
 			entryPoint3.setUser(user);
 			entryPoint3.setType(EntryPointType.GOOGLE);
 			entryPoint3.setUid("113359939181883937834");
@@ -181,13 +156,6 @@ public class InitUser {
 //			entryPoint3.setCreatedDate(new DateTime());
 //			entryPoint3.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint3);
-
-			UserRole role = new UserRole();
-			role.setUser(user);
-			role.setRole(Role.ROLE_ADMIN);
-//			role.setCreatedDate(new DateTime());
-//			role.setLastModifiedDate(entryPoint.getCreatedDate());
-			userRoleDao.save(role);
 
 			LocalDateTime time = LocalDateTime.now();
 			LocalDateTime time2 = time.plusMillis(4000000);

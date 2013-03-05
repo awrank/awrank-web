@@ -16,7 +16,11 @@ import org.springframework.data.repository.query.Param;
  */
 public interface EntryPointDao extends CrudRepository<EntryPoint, Long> {
 
+	@Deprecated
 	@Query("select e from EntryPoint e where e.type = :type and e.uid = :uid and e.verifiedDate is not null and e.endedDate is NULL")
 	EntryPoint findActiveByTypeAndUid(@Param("type") EntryPointType type, @Param("uid") String uid);
+
+	@Query("select e from EntryPoint e where e.uid = :uid and e.verifiedDate is not null and e.endedDate is NULL")
+	EntryPoint findActiveByUid(@Param("uid") String uid);
 
 }

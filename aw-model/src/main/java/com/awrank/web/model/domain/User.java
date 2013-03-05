@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -112,10 +113,10 @@ public class User extends DatedAbstractAuditable {
 	private LocalDateTime banStartedDate;
 
 	@OneToMany(mappedBy = "user", cascade = {})
-	private Set<EntryPoint> entryPoints;
+	private Set<EntryPoint> entryPoints = new HashSet<EntryPoint>();
 
 	@OneToMany(mappedBy = "user", cascade = {})
-	private Set<UserRole> userRoles;
+	private Set<UserRole> userRoles = new HashSet<UserRole>();
 
 	public User() {
 	}
@@ -229,15 +230,7 @@ public class User extends DatedAbstractAuditable {
 		return entryPoints;
 	}
 
-	public void setEntryPoints(Set<EntryPoint> entryPoints) {
-		this.entryPoints = entryPoints;
-	}
-
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
-	}
-
-	public void setUserRoles(Set<UserRole> userRoles) {
-		this.userRoles = userRoles;
 	}
 }

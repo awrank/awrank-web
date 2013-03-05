@@ -11,6 +11,7 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingGrantedAuthority;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +63,8 @@ public class UserProfileController extends AbstractController {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Autowired
+	AuditorAwareImpl auditorAware;
 
 	/**
 	 * Get the access history for currently logged in user, used Principal as a param
@@ -129,15 +129,9 @@ public class UserProfileController extends AbstractController {
 
 		//-------------------------------------
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), plainpassword);
-
 		// generate session if one doesn't exist
 		request.getSession();
-		AWRankingUserDetails details2 = new AWRankingUserDetails(entryPoint);
-		token.setDetails(details2);
-
-		Authentication authenticatedUser = authenticationManager.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		auditorAware.setCurrentAuditor(entryPoint);
 
 		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
 	}
@@ -185,15 +179,11 @@ public class UserProfileController extends AbstractController {
 
 		//-------------------------------------
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), form.getPassword());
 
 		// generate session if one doesn't exist
 		request.getSession();
-		AWRankingUserDetails details2 = new AWRankingUserDetails(entryPoint);
-		token.setDetails(details2);
 
-		Authentication authenticatedUser = authenticationManager.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		auditorAware.setCurrentAuditor(entryPoint);
 
 		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
 
@@ -225,20 +215,9 @@ public class UserProfileController extends AbstractController {
 			User user = vtoken.getUser();
 
 			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-			String password = entryPoint.getPassword();
 
-			UserDetails det = userDetailsService.retrieveUser(user.getEmail(), entryPoint.getPassword(), request.getRemoteAddr(), request.getSession().getId());
-
-			//TODO: here password shall not be hashed!!! That's why we set null here and add the authority for user
-
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), null, det.getAuthorities());
-			/*
-			AWRankingUserDetails details = userDetailsService.fillUserDetails(entryPoint);
-			token.setDetails(details);
-			 */
-
-			Authentication authenticatedUser = authenticationManager.authenticate(token);
-			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+			//TODO request.getRemoteAddr(), request.getSession().getId()
+			auditorAware.setCurrentAuditor(entryPoint);
 
 			modelMap.addAttribute("params", getPositiveResponseMap());
 

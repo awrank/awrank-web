@@ -132,9 +132,7 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		userService.add(user);
 
 		//---- here we need save a role for user ----
-		UserRole role = new UserRole();
-		role.setUser(user);
-		role.setRole(Role.ROLE_USER);
+		UserRole role = new UserRole(user, Role.ROLE_USER);
 		userRoleService.save(role);
 
 		//---- create entrance point for him ----

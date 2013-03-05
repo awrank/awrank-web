@@ -38,8 +38,15 @@ public class EntryPointServiceImpl extends AbstractServiceImpl implements EntryP
 	}
 
 	@Override
+	@Deprecated
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public EntryPoint findOneByEntryPointTypeAndUid(EntryPointType type, String uid) {
 		return entryPointDao.findActiveByTypeAndUid(type, uid);
+	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public EntryPoint findOneByUid(String uid) {
+		return entryPointDao.findActiveByUid(uid);
 	}
 }
