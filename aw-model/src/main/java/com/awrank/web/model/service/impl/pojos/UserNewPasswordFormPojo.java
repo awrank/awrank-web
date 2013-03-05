@@ -9,7 +9,17 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class UserNewPasswordFormPojo implements Serializable {
-	
+
+	 private String currentPassword;
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
     private String password;
 
     public String getPassword() {

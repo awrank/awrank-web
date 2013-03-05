@@ -90,6 +90,43 @@
     <br/>
 </div>
 </p>
+<hr/>
+<p> Change password - enter current and new </p>
+<p>
+<div style="text-align: center;">
+    <table align="center" cellspacing="0" border="0">
+        <tr>
+            <td colspan="2" align="left"><h2>Change your password (you have to be logged in):</h2></td>
+        </tr>
+        
+        <form method="POST" action="<c:url value="/rest/profile/changepasswordmanual" />"  accept="application/json" enctype="application/json">
+             <tr>
+                <td colspan="2">
+                    Current password: <input type="password" name="currentPassword" style="width: 50%"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    New password: <input type="password" name="password" style="width: 50%"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Confirm: <input type="password" name="passwordConfirm" style="width: 50%"/>
+                </td>
+            </tr>
+            <tr align="right">
+                <td colspan="2" align="right" style="padding-top: 20px;">
+                    <input type="submit" id="submit" align="right"/>
+                </td>
+            </tr>
+        </form>
+        
+    </table>
+</div>
+</p>
+
+
 <h3>LOGIN</h3>
 
 <p>
