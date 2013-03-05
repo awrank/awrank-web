@@ -58,8 +58,6 @@
 
 	<jpa:auditing auditor-aware-ref="auditorAware"/>
 
-	<bean id="auditorAware" class="com.awrank.web.model.utils.user.AuditorAwareImpl"/>
-
 	<bean class="org.springframework.data.jpa.domain.support.AuditingBeanFactoryPostProcessor"/>
 
 
