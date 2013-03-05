@@ -15,6 +15,7 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.PasswordUtils;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +82,7 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 	//--------
 
 	@Override
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public Map login(UserRegistrationFormPojo userInfo, HttpServletRequest request) {
 		/* Scenario from specification doc
 		1) поиск точки входа (EntryPoint) с соответствующими параметрами:
@@ -98,9 +102,7 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 					"use the standard registration form. Thanks for understanding.");
 		}
 
-		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(
-				userInfo.getNetworkType(),
-				userInfo.getNetworkUID());
+		EntryPoint entryPoint = entryPointService.findOneByUid(userInfo.getNetworkUID());
 
 		if (entryPoint == null) {
 			return getNegativeResponseMap("Unfortunately, we could not find entry point for " +
@@ -115,13 +117,17 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
 		token.setDetails(details);
 
-		Authentication authenticatedUser = authenticationManager.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+			Authentication authenticatedUser = authenticationManager.authenticate(token);
+			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+			return getPositiveResponseMap("User has been successfully logged in via network!");
+		}
 
-		return getPositiveResponseMap("User has been successfully logged in via network!");
+		return getPositiveResponseMap("User is already authenticated!");
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public Map register(UserRegistrationFormPojo userInfo, HttpServletRequest request)
 			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
 
@@ -172,6 +178,9 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		entryPoint.setUid(userInfo.getNetworkUID());
 		// no password because of using OAuth
 		entryPoint.setType(userInfo.getNetworkType());
+		if (userInfo.isEmailVerified()) {
+			entryPoint.setVerifiedDate(LocalDateTime.now());
+		}
 		entryPointService.add(entryPoint);
 
 		if (!userInfo.isEmailVerified()) {
