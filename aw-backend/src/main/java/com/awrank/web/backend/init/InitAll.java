@@ -31,6 +31,8 @@ public class InitAll {
 	@PostConstruct
 	public void init() {
 		User anonymous = initUser.initAnonymous();
+
+//		SecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken());
 //		auditorAware.setAuditor(anonymous);
 		initUser.initRegularUser();
 		initUser.initAdmin();
