@@ -5,18 +5,13 @@ import com.awrank.web.model.domain.*;
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
-import com.awrank.web.model.service.EntryHistoryService;
-import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserDetailsService;
-import com.awrank.web.model.service.UserPasswordChangingService;
-import com.awrank.web.model.service.UserService;
+import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingGrantedAuthority;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.PasswordUtils;
-
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,7 +57,7 @@ public class UserProfileController extends AbstractController {
 
 	@Autowired
 	private UserPasswordChangingService userPasswordChangingService;
-	
+
 	@Autowired
 	//@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
@@ -100,6 +95,7 @@ public class UserProfileController extends AbstractController {
 
 	/**
 	 * Here user goes after clicking on reset password email link
+	 *
 	 * @param form
 	 * @param model
 	 * @param request
@@ -121,9 +117,9 @@ public class UserProfileController extends AbstractController {
 
 		String plainpassword = form.getPassword();
 		String password = PasswordUtils.hashPassword(form.getPassword());
-		
+
 		//--------- create new entry point --------
-		
+
 		EntryPoint entryPoint = new EntryPoint();
 		entryPoint.setUser(user);
 		entryPoint.setUid(user.getEmail());
@@ -132,22 +128,23 @@ public class UserProfileController extends AbstractController {
 		entryPointService.add(entryPoint);
 
 		//-------------------------------------
-		
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken( user.getEmail(), plainpassword);
-		
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), plainpassword);
+
 		// generate session if one doesn't exist
 		request.getSession();
-		AWRankingUserDetails details2 = userDetailsService.fillUserDetails(entryPoint);
+		AWRankingUserDetails details2 = new AWRankingUserDetails(entryPoint);
 		token.setDetails(details2);
 
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-		
+
 		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
 	}
 
 	/**
 	 * Simple manual change oif password - user shall be logged in and enter current password
+	 *
 	 * @param form
 	 * @param model
 	 * @param request
@@ -162,21 +159,22 @@ public class UserProfileController extends AbstractController {
 	@ResponseBody()
 	Map setUserNewPasswordManual(@ModelAttribute UserNewPasswordFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws Exception {
 
-		if(principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
-		
+		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
+
 		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 		User user = details.getUser();
 		((DatedAbstractAuditable) user).getId();
 		user.getFirstName();
 		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-		
-		if(!PasswordUtils.hashPassword(form.getCurrentPassword()).equals(entryPoint.getPassword())) return getNegativeResponseMap("The password you entered as current is not the password you're logged in now");
-		
+
+		if (!PasswordUtils.hashPassword(form.getCurrentPassword()).equals(entryPoint.getPassword()))
+			return getNegativeResponseMap("The password you entered as current is not the password you're logged in now");
+
 		//--------- current entry point is no longer valid ----------
-		
+
 		entryPoint.setEndedDate(LocalDateTime.now());
 		entryPointService.save(entryPoint);
-	
+
 		//------------- create new entry point --------------------
 		EntryPoint entryPoint2 = new EntryPoint();
 		entryPoint2.setUser(user);
@@ -186,19 +184,19 @@ public class UserProfileController extends AbstractController {
 		entryPointService.add(entryPoint2);
 
 		//-------------------------------------
-		
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken( user.getEmail(), form.getPassword());
-		
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), form.getPassword());
+
 		// generate session if one doesn't exist
 		request.getSession();
-		AWRankingUserDetails details2 = userDetailsService.fillUserDetails(entryPoint);
+		AWRankingUserDetails details2 = new AWRankingUserDetails(entryPoint);
 		token.setDetails(details2);
 
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-		
+
 		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
-		
+
 	}
 
 	/**
@@ -218,37 +216,37 @@ public class UserProfileController extends AbstractController {
 
 			modelMap.addAttribute("params", getNegativeResponseMap("not found password changing token"));
 			return "403";
-			
+
 		} else {
-			
+
 			//-------- here we log user in with current credentials for Principal can be used in newpassword
-			
+
 			StateChangeToken vtoken = userPasswordChangingService.findByCode(key);
 			User user = vtoken.getUser();
-			
+
 			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
 			String password = entryPoint.getPassword();
-			
+
 			UserDetails det = userDetailsService.retrieveUser(user.getEmail(), entryPoint.getPassword(), request.getRemoteAddr(), request.getSession().getId());
-			
+
 			//TODO: here password shall not be hashed!!! That's why we set null here and add the authority for user
-			
+
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), null, det.getAuthorities());
 			/*
 			AWRankingUserDetails details = userDetailsService.fillUserDetails(entryPoint);
 			token.setDetails(details);
 			 */
-			
+
 			Authentication authenticatedUser = authenticationManager.authenticate(token);
 			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-			
+
 			modelMap.addAttribute("params", getPositiveResponseMap());
 
 			//--------- current entry point is no longer valid ----------
-			
+
 			entryPoint.setEndedDate(LocalDateTime.now());
 			entryPointService.save(entryPoint);
-			
+
 			return "passwordchangingform";//here we shall create new entry point
 		}
 	}

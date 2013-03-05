@@ -17,7 +17,7 @@ import java.util.List;
  * @author Olga Korokhina
  */
 @Service
-public class EntryHistoryServiceImpl implements EntryHistoryService {
+public class EntryHistoryServiceImpl extends AbstarctServiceImpl implements EntryHistoryService {
 
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;

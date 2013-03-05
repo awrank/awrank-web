@@ -13,8 +13,7 @@ import java.util.Set;
  * @author Olga Korokhina
  *         Interface for REST service working with user roles
  */
-//@Service
-public interface UserRoleService {
+public interface UserRoleService extends AbstarctService {
 
 	public void add(UserRole ep) throws UserRoleNotCreatedException;
 

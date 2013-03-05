@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain.support;
 
 import com.awrank.web.model.domain.User;
+import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
@@ -20,4 +21,23 @@ import javax.persistence.*;
 })
 @MappedSuperclass
 public class ExtendedAbstractAuditable extends AbstractAuditable<User, Long> {
+
+	public void prePrePersist() {
+		setCreatedDate(DateTime.now());
+		setLastModifiedDate(getCreatedDate());
+	}
+
+	@PrePersist
+	public final void prePersist() {
+		prePrePersist();
+	}
+
+	public final void prePreUpdate() {
+		setLastModifiedDate(DateTime.now());
+	}
+
+	@PreUpdate
+	public final void preUpdate() {
+		prePreUpdate();
+	}
 }

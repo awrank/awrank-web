@@ -18,8 +18,7 @@ import java.util.List;
  *
  * @author Olga Korokhina
  */
-//@Service
-public interface UserService {
+public interface UserService extends AbstarctService {
 
 	/**
 	 * Persist new user, throw exception in case of was not done

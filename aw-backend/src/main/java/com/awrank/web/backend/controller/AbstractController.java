@@ -1,6 +1,7 @@
 package com.awrank.web.backend.controller;
 
 import com.awrank.web.backend.exception.UnauthorizedException;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,10 +35,11 @@ public abstract class AbstractController {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, Object>> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		getLogger().error(e.getMessage(), e);
 		final Map jsonObject = new HashMap();
 		jsonObject.put("result", "failure");
 		final Map jsonException = new HashMap();
-		
+
 		jsonException.put("message", e.getMessage());
 		jsonException.put("handler", this.getClass().getCanonicalName());
 		jsonException.put("exception", e.getClass().getCanonicalName());
@@ -50,5 +52,9 @@ public abstract class AbstractController {
 			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<Map<String, Object>>(jsonObject, status);
+	}
+
+	public Logger getLogger() {
+		return Logger.getLogger(this.getClass());
 	}
 }

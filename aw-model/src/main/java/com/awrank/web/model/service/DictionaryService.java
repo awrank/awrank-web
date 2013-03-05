@@ -7,7 +7,7 @@ import com.awrank.web.model.exception.ObjectNotUniqueException;
 /**
  * Dictionary Service
  */
-public interface DictionaryService {
+public interface DictionaryService extends AbstarctService {
 	/**
 	 * Returns paginated list of dictionary entries
 	 */

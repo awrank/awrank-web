@@ -4,7 +4,6 @@ import com.awrank.web.model.dao.DictionaryDao;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.enums.Message;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -185,8 +184,8 @@ public class InitDictionary {
 					dictionaryDao.save(oldItem);
 				}
 			} else {
-				item.setCreatedDate(DateTime.now());
-				item.setLastModifiedDate(item.getCreatedDate());
+//				item.setCreatedDate(DateTime.now());
+//				item.setLastModifiedDate(item.getCreatedDate());
 				dictionaryDao.save(item);
 			}
 		}

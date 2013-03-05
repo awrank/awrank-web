@@ -97,22 +97,22 @@ public class UserController extends AbstractController {
 	@ResponseBody()
 	Map addUser(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
 			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
-		
+
 		if (userService.findOneByEmail(form.getEmail()) != null) {
 			return getNegativeResponseMap("This email is already registered in the system!");
 		}
-		
+
 		//and here we generate the API key
-		
+
 		String apiKey = UUID.randomUUID().toString();
-		while(userService.findByAPIKey(apiKey) != null) apiKey = UUID.randomUUID().toString();
+		while (userService.findByAPIKey(apiKey) != null) apiKey = UUID.randomUUID().toString();
 		form.setApiKey(apiKey);
-		
+
 		form.setUserLocalAddress(request.getLocalAddr());
 		form.setUserRemoteAddress(request.getRemoteAddr());
 		final String plainPassword = form.getPassword();
 		form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
-		
+
 		EntryPoint entryPoint = userService.register(form, request);
 
 		//---------- we need some authorization for register user + he is logged in right after it -------
@@ -123,7 +123,9 @@ public class UserController extends AbstractController {
 
 		// generate session if one doesn't exist
 		request.getSession();
-		AWRankingUserDetails details = userDetailsService.fillUserDetails(entryPoint);
+
+		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
+
 		token.setDetails(details);
 
 		Authentication authenticatedUser = authenticationManager.authenticate(token);

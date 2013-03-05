@@ -3,7 +3,6 @@ package com.awrank.web.backend.init;
 import com.awrank.web.model.dao.PaymentSystemDao;
 import com.awrank.web.model.domain.PaymentSystem;
 import com.awrank.web.model.domain.PaymentSystemType;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,8 +32,8 @@ public class InitPaymentSystem {
 			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
 
-			paymentSystem.setCreatedDate(DateTime.now());
-			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
+//			paymentSystem.setCreatedDate(DateTime.now());
+//			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
 
 			paymentSystemDao.save(paymentSystem);
 		}
@@ -50,8 +49,8 @@ public class InitPaymentSystem {
 			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
 
-			paymentSystem.setCreatedDate(DateTime.now());
-			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
+//			paymentSystem.setCreatedDate(DateTime.now());
+//			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
 
 			paymentSystemDao.save(paymentSystem);
 		}

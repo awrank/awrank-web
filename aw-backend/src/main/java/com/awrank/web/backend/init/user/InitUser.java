@@ -8,7 +8,6 @@ import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.utils.user.CurrentUserUtils;
 import com.awrank.web.model.utils.user.PasswordUtils;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,9 +48,9 @@ public class InitUser {
 			user.setAuthorizationFailsCount(0);
 			user.setAuthorizationFailsLastDate(null);
 			user.setBanStartedDate(null);
-			user.setCreatedDate(new DateTime());
+//			user.setCreatedDate(new DateTime());
 			user.setCreatedBy(user);
-			user.setLastModifiedDate(user.getCreatedDate());
+//			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 		}
@@ -76,9 +75,9 @@ public class InitUser {
 			user.setAuthorizationFailsCount(0);
 			user.setAuthorizationFailsLastDate(null);
 			user.setBanStartedDate(null);
-			user.setCreatedDate(new DateTime());
+//			user.setCreatedDate(new DateTime());
 			user.setCreatedBy(user);
-			user.setLastModifiedDate(user.getCreatedDate());
+//			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 
@@ -88,15 +87,15 @@ public class InitUser {
 			entryPoint.setUid(user.getEmail());
 			entryPoint.setPassword(PasswordUtils.hashPassword("user"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
-			entryPoint.setCreatedDate(new DateTime());
-			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryPoint.setCreatedDate(new DateTime());
+//			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
 
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_USER_VERIFIED);
-			role.setCreatedDate(new DateTime());
-			role.setLastModifiedDate(entryPoint.getCreatedDate());
+//			role.setCreatedDate(new DateTime());
+//			role.setLastModifiedDate(entryPoint.getCreatedDate());
 			userRoleDao.save(role);
 
 			LocalDateTime time = LocalDateTime.now();
@@ -110,8 +109,8 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setSessionId("init session ruser 1");
-			entryHistory.setCreatedDate(new DateTime());
-			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryHistory.setCreatedDate(new DateTime());
+//			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
 
 			EntryHistory entryHistory2 = new EntryHistory();
@@ -121,8 +120,8 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session ruser 2");
 			entryHistory2.setIpAddress("127.0.0.1");
-			entryHistory2.setCreatedDate(new DateTime());
-			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryHistory2.setCreatedDate(new DateTime());
+//			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}
@@ -145,9 +144,9 @@ public class InitUser {
 			user.setAuthorizationFailsCount(0);
 			user.setAuthorizationFailsLastDate(null);
 			user.setBanStartedDate(null);
-			user.setCreatedDate(new DateTime());
+//			user.setCreatedDate(new DateTime());
 			user.setCreatedBy(user);
-			user.setLastModifiedDate(user.getCreatedDate());
+//			user.setLastModifiedDate(user.getCreatedDate());
 			user.setLastModifiedBy(user);
 			userDao.save(user);
 
@@ -159,8 +158,8 @@ public class InitUser {
 			entryPoint.setUid("admin");
 			entryPoint.setPassword(PasswordUtils.hashPassword("1"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
-			entryPoint.setCreatedDate(new DateTime());
-			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryPoint.setCreatedDate(new DateTime());
+//			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
 
 			EntryPoint entryPoint2 = new EntryPoint();
@@ -169,8 +168,8 @@ public class InitUser {
 			entryPoint2.setUid(user.getEmail());
 			entryPoint2.setPassword(PasswordUtils.hashPassword("1"));
 			entryPoint2.setVerifiedDate(new LocalDateTime(0));
-			entryPoint2.setCreatedDate(new DateTime());
-			entryPoint2.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryPoint2.setCreatedDate(new DateTime());
+//			entryPoint2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint2);
 
 			EntryPoint entryPoint3 = new EntryPoint();
@@ -179,15 +178,15 @@ public class InitUser {
 			entryPoint3.setUid("113359939181883937834");
 			entryPoint3.setPassword(null);
 			entryPoint3.setVerifiedDate(new LocalDateTime(0));
-			entryPoint3.setCreatedDate(new DateTime());
-			entryPoint3.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryPoint3.setCreatedDate(new DateTime());
+//			entryPoint3.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint3);
 
 			UserRole role = new UserRole();
 			role.setUser(user);
 			role.setRole(Role.ROLE_ADMIN);
-			role.setCreatedDate(new DateTime());
-			role.setLastModifiedDate(entryPoint.getCreatedDate());
+//			role.setCreatedDate(new DateTime());
+//			role.setLastModifiedDate(entryPoint.getCreatedDate());
 			userRoleDao.save(role);
 
 			LocalDateTime time = LocalDateTime.now();
@@ -201,8 +200,8 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setEntryPoint(entryPoint);
-			entryHistory.setCreatedDate(new DateTime());
-			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryHistory.setCreatedDate(new DateTime());
+//			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
 
 			EntryHistory entryHistory2 = new EntryHistory();
@@ -212,8 +211,8 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session admin 2");
 			entryHistory2.setSuccess(true);
-			entryHistory2.setCreatedDate(new DateTime());
-			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
+//			entryHistory2.setCreatedDate(new DateTime());
+//			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}

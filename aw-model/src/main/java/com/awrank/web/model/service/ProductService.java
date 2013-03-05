@@ -4,6 +4,6 @@ import com.awrank.web.model.dao.pojos.PricingFormProductProfilePojo;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductService extends AbstarctService {
 	public List<PricingFormProductProfilePojo> selectAvailable();
 }

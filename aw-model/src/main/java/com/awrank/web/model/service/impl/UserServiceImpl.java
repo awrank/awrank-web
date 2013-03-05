@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ import java.util.Map;
  */
 @Service
 //@PropertySource("/WEB-INF/properties/application.properties")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstarctServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 //	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 
-	@Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@Override
 	public EntryPoint register(UserRegistrationFormPojo form, HttpServletRequest request) throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException {
 
@@ -64,7 +65,11 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(form.getFirstName());
 		user.setLastName(form.getLastName());
 		user.setEmail(form.getEmail());
-		//user.setLanguage(form.getLanguage());
+		if (form.getLanguage() != null) {
+			user.setLanguage(form.getLanguage());
+		} else {
+			user.setLanguage(Language.EN);
+		}
 		user.setAuthorizationFailsCount(0);
 		add(user);
 
@@ -97,7 +102,7 @@ public class UserServiceImpl implements UserService {
 			userEmailActivationService.send(params);
 		} catch (AwRankException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			getLogger().error(e.getMessage(), e);
 		}
 
 //-------------- store to db information about verification email was sent -------------------------------------------
@@ -110,7 +115,7 @@ public class UserServiceImpl implements UserService {
 		stateChangeToken.setIpAddress(form.getUserRemoteAddress());//Check later if we need remote or local IP here
 		userEmailActivationService.save(stateChangeToken);
 
-//-------------- here we need save a role for user -------------	
+//-------------- here we need save a role for user -------------
 
 		UserRole role = new UserRole();
 		role.setUser(user);
@@ -124,23 +129,13 @@ public class UserServiceImpl implements UserService {
 	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
 	 */
 	@Override
-	//@Transactional
 	public void add(User user) throws UserNotCreatedException {
-
-		try { //can be thrown javax.persistence.PersistenceException etc.
-
-			//Session session = sessionFactory.getCurrentSession();
-			//session.save(user);
+		try {
 			userDao.save(user);
-
-			//session.flush();
-
 		} catch (Exception e) {
-
+			getLogger().error(e.getMessage(), e);
 			throw new UserNotCreatedException();
-
 		}
-
 	}
 
 	/* (non-Javadoc)

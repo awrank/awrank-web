@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * User: a_polyakov
  */
-public interface PaymentSystemService {
+public interface PaymentSystemService extends AbstarctService {
 	public List<PaymentFormPaymentSystemPojo> selectAvailable();
 }

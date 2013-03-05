@@ -29,7 +29,7 @@ import java.util.UUID;
  * @author Andrew Stoyaltsev
  */
 @Service
-public class SocialAuthServiceImpl implements SocialAuthService {
+public class SocialAuthServiceImpl extends AbstarctServiceImpl implements SocialAuthService {
 
 	@Autowired
 	private UserDao userDao;
