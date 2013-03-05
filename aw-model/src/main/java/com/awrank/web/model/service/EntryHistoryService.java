@@ -24,6 +24,8 @@ public interface EntryHistoryService {
 
 	public  List<EntryHistory> findByIP(String ipAddress);
 	
+	public  List<EntryHistory> findBySessionId(String sessionId);
+	
 	public  List<EntryHistory> findAllByUser(User user);
 	
 	public  List<String> findAllIPByUser(User user);

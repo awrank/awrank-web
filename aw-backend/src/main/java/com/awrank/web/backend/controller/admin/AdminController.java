@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Hibernate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -23,14 +24,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.model.domain.Diary;
+import com.awrank.web.model.domain.DiaryEvent;
 import com.awrank.web.model.domain.EntryHistory;
+import com.awrank.web.model.domain.EntryPoint;
+import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
+import com.awrank.web.model.service.DiaryService;
 import com.awrank.web.model.service.EntryHistoryService;
+import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 
 /**
  * @author Olga Korokhina
@@ -48,6 +56,14 @@ public class AdminController extends AbstractController {
 	@Qualifier("entryHistoryServiceImpl")
 	private EntryHistoryService entryHistoryService;
 	
+	@Autowired
+	@Qualifier("entryPointServiceImpl")
+	private EntryPointService entryPointService;
+	
+	@Autowired
+	@Qualifier("diaryServiceImpl")
+	private DiaryService diaryService;
+
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public 
     @ResponseBody()
@@ -96,6 +112,102 @@ public class AdminController extends AbstractController {
     return allUsers;
     }
     
+    
+    /**
+     * Blocking one user by email in form.getEmail()
+     * @param form
+     * @param request
+     * @return
+     */
+    @RequestMapping(
+			value = "/blockuserbyemail",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+	User blockUserByEmail(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request, Principal principal)
+		{
+    	
+    	User user = userService.findOneByEmail(form.getEmail());
+    	user.setBanStartedDate(LocalDateTime.now());
+    	userService.save(user);
+    	
+    	// Shall we introduce the "enabled" to EntryPoint and set it here to false? 
+    	//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+    	
+    	AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+		User admin = details.getUser();
+		
+    	//------ here add record in Diary about user was blocked
+		
+		Diary drec = new Diary();
+		drec.setEvent(DiaryEvent.BLOCKED);
+		drec.setUser(user);
+		drec.setCreatedBy(admin);
+		
+		//---------- find/create EntryHistory ------------
+		
+		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
+		EntryHistory entryHistory;
+		
+		if(entryHistoryList.size() == 0){//create one if not found
+			
+			entryHistory = new EntryHistory();
+			entryHistory.setUser(admin);//associated with Admin's entry history record
+			entryHistory.setSessionId(request.getSession().getId());
+			entryHistory.setIpAddress(request.getRemoteAddr());
+			entryHistoryService.save(entryHistory);
+		}
+		else entryHistory = entryHistoryList.get(0);
+		
+		drec.setEntryHistory(entryHistory);
+		
+		diaryService.save(drec);
+    	
+    	return user;	
+	}
+    
+    /**
+     * Blocking one user by id
+     * @param form
+     * @param request
+     * @return
+     */
+    @RequestMapping(
+			value = "/blockuserbyid",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+	User blockUserByID(@ModelAttribute UserRegistrationFormPojo form, HttpServletRequest request)
+		{
+    	
+    	User user = userService.findOneByEmail(form.getEmail());
+    	user.setBanStartedDate(LocalDateTime.now());
+    	userService.save(user);
+    	
+    	// Shall we introduce the "enabled" to EntryPoint and set it here to false? 
+    	//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+    	
+    	//------ here add record in Diary about user was blocked
+		
+		Diary drec = new Diary();
+		drec.setEvent(DiaryEvent.BLOCKED);
+		drec.setUser(user);
+		
+		diaryService.save(drec);
+    	
+    	return user;	
+	}
+    
+    /**
+     * Finding one user by email in form.getEmail()
+     * @param form
+     * @param request
+     * @return
+     */
     @RequestMapping(
 			value = "/user",
 			method = {RequestMethod.POST, RequestMethod.GET},

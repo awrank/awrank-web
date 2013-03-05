@@ -56,4 +56,10 @@ public class EntryHistoryServiceImpl implements EntryHistoryService {
 	public List<String> findAllIPByUser(User user) {
 		return entryHistoryDao.findAllIPByUser(user);
 	}
+
+	@Override
+	public List<EntryHistory> findBySessionId(String sessionId) {
+
+		return entryHistoryDao.findBySessionId(sessionId);
+	}
 }

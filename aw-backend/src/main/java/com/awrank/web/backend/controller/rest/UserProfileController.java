@@ -229,7 +229,7 @@ public class UserProfileController extends AbstractController {
 			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
 			String password = entryPoint.getPassword();
 			
-			UserDetails det = userDetailsService.retrieveUser(user.getEmail(), entryPoint.getPassword(), request.getRemoteAddr(), request.getSession().getId());
+			UserDetails det = userDetailsService.retrieveUser(user.getEmail(), entryPoint.getPassword(), request.getLocalAddr(), request.getSession().getId());
 			
 			//TODO: here password shall not be hashed!!! That's why we set null here and add the authority for user
 			
