@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderServiceImpl implements OrderService {
-    @Autowired
-    public OrderDao orderDao;
+public class OrderServiceImpl extends AbstarctServiceImpl implements OrderService {
+	@Autowired
+	public OrderDao orderDao;
 
 }

@@ -9,7 +9,6 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserDetailsService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Olga Korokhina
  */
 @Service()
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl extends AbstarctServiceImpl implements UserDetailsService {
 
 	@Autowired
 //	@Qualifier("userServiceImpl")
@@ -61,8 +60,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			entryHistory.setSessionId(sessionId);
 			entryHistory.setSigninDate(LocalDateTime.now());
 			//TODO auto date
-			entryHistory.setCreatedDate(DateTime.now());
-			entryHistory.setLastModifiedDate(entryHistory.getCreatedDate());
+//			entryHistory.setCreatedDate(DateTime.now());
+//			entryHistory.setLastModifiedDate(entryHistory.getCreatedDate());
 
 			if (entryPoint.getPassword().equals(passwordHash)) {
 				detail = new AWRankingUserDetails(entryPoint);
@@ -76,13 +75,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			entryHistoryService.save(entryHistory);
 			userService.save(user);
 		}
-		return detail;
-	}
-
-	@Override
-	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public AWRankingUserDetails fillUserDetails(EntryPoint entryPoint) {
-		AWRankingUserDetails detail = new AWRankingUserDetails(entryPoint);
 		return detail;
 	}
 }

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Olga Korokhina
  */
 @Service
-public class EntryPointServiceImpl implements EntryPointService {
+public class EntryPointServiceImpl extends AbstarctServiceImpl implements EntryPointService {
 
 	@Autowired
 	private EntryPointDao entryPointDao;

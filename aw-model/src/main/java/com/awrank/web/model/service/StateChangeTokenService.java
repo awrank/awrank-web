@@ -1,18 +1,19 @@
 package com.awrank.web.model.service;
 
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.AwRankException;
 
-public interface StateChangeTokenService {
-	
-	 	void send(Map params) throws AwRankException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
-	    Boolean verify(String key, HttpServletRequest request) throws AwRankException;
+public interface StateChangeTokenService extends AbstarctService {
 
-	    void save(StateChangeToken act);
+	void send(Map params) throws AwRankException;
 
-	    StateChangeToken findByCode(String code);
+	Boolean verify(String key, HttpServletRequest request) throws AwRankException;
+
+	void save(StateChangeToken act);
+
+	StateChangeToken findByCode(String code);
 
 }

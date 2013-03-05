@@ -15,7 +15,7 @@ import java.util.List;
  * User: a_polyakov
  */
 @Service
-public class PaymentSystemServiceImpl implements PaymentSystemService {
+public class PaymentSystemServiceImpl extends AbstarctServiceImpl implements PaymentSystemService {
 	@Autowired
 	public PaymentSystemDao paymentSystemDao;
 	@Autowired

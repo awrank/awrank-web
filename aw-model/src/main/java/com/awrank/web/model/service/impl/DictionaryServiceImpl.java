@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DictionaryServiceImpl implements DictionaryService {
+public class DictionaryServiceImpl extends AbstarctServiceImpl implements DictionaryService {
 	@Autowired
 	private DictionaryDao dictionaryDao;
 
