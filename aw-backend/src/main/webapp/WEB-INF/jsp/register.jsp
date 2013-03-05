@@ -74,11 +74,6 @@
                 <td><input type="password" name="password"/></td>
             </tr>
             <tr>
-                <%-- todo: not correct, should be removed --%>
-                <td align="right">API Key*</td>
-                <td><input type="apiKey" name="apiKey"/></td>
-            </tr>
-            <tr>
                 <td align="right">Language(EN, RU)</td>
                 <td><input type="language" name="language"/></td>
             </tr>
