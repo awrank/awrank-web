@@ -11,7 +11,7 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
  * @author Olga Korokhina
  *         Interface for REST service working with entry points
  */
-public interface EntryPointService extends AbstarctService {
+public interface EntryPointService extends AbstractService {
 
 	public void add(EntryPoint ep) throws EntryPointNotCreatedException;
 

@@ -1,7 +1,9 @@
 package com.awrank.web.model.utils.user;
 
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Dummy implementation of {@link AuditorAware}. It will return the configured {@link User} as auditor on every
@@ -12,20 +14,8 @@ import org.springframework.data.domain.AuditorAware;
  */
 public class AuditorAwareImpl implements AuditorAware<User> {
 
-    private User auditor;
-
-    /**
-     * @param auditor the auditor to set
-     */
-    public void setAuditor(User auditor) {
-        this.auditor = auditor;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.AuditorAware#getCurrentAuditor()
-     */
-    public User getCurrentAuditor() {
-        return auditor;
-    }
+	public User getCurrentAuditor() {
+		AWRankingUserDetails details = (AWRankingUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+		return details.getUser();
+	}
 }

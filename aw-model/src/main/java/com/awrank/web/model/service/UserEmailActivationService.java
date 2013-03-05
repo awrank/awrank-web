@@ -3,7 +3,7 @@ package com.awrank.web.model.service;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
-import com.awrank.web.model.service.impl.AbstarctServiceImpl;
+import com.awrank.web.model.service.impl.AbstractServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Olga Korokhina
  */
-public abstract class UserEmailActivationService extends AbstarctServiceImpl implements StateChangeTokenService {
+public abstract class UserEmailActivationService extends AbstractServiceImpl implements StateChangeTokenService {
 
 	public abstract void send(Map params) throws UserActivationEmailNotSetException;
 

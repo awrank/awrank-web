@@ -19,7 +19,7 @@ import java.util.Set;
  * @author Olga Korokhina
  */
 @Service
-public class UserRoleServiceImpl extends AbstarctServiceImpl implements UserRoleService {
+public class UserRoleServiceImpl extends AbstractServiceImpl implements UserRoleService {
 
 	@Autowired
 	@Qualifier("userRoleDao")

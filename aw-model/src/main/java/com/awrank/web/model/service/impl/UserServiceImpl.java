@@ -36,7 +36,7 @@ import java.util.Map;
  */
 @Service
 //@PropertySource("/WEB-INF/properties/application.properties")
-public class UserServiceImpl extends AbstarctServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;

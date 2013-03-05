@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Olga Korokhina
  */
 @Service()
-public class UserDetailsServiceImpl extends AbstarctServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserDetailsService {
 
 	@Autowired
 //	@Qualifier("userServiceImpl")
