@@ -121,6 +121,10 @@ public class User extends DatedAbstractAuditable {
 	public User() {
 	}
 
+	public User(Long id) {
+		setId(id);
+	}
+
 	public String getApiKey() {
 		return apiKey;
 	}

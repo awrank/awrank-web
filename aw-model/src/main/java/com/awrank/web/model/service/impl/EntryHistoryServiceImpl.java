@@ -43,8 +43,8 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 		return entryHistoryDao.findByIP(ipAddress);
 	}
 
-	public Page<EntryHistory> getPageByUser(User user, Pageable pageable) {
-		return (Page<EntryHistory>) entryHistoryDao.findByUser(user, pageable);
+	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable) {
+		return (Page<EntryHistory>) entryHistoryDao.findByUserId(userId, pageable);
 	}
 
 	@Override

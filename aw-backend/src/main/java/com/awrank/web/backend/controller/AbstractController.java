@@ -48,7 +48,7 @@ public abstract class AbstractController {
 		jsonException.put("stack_trace", writer.toString());
 		jsonObject.put("error", jsonException);
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-		if (e instanceof UnauthorizedException) {
+		if (e instanceof UnauthorizedException || e.getCause() instanceof UnauthorizedException) {
 			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<Map<String, Object>>(jsonObject, status);

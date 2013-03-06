@@ -30,6 +30,6 @@ public interface EntryHistoryService extends AbstractService {
 
 	public List<String> findAllIPByUser(User user);
 
-	public Page<EntryHistory> getPageByUser(User user, Pageable pageable);
+	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable);
 
 }

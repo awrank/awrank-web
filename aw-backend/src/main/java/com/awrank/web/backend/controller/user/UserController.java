@@ -12,7 +12,6 @@ import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
-import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
@@ -95,8 +94,8 @@ public class UserController extends AbstractController {
 
 		form.setUserLocalAddress(request.getLocalAddr());
 		form.setUserRemoteAddress(request.getRemoteAddr());
-		final String plainPassword = form.getPassword();
-		form.setPassword(PasswordUtils.hashPassword(form.getPassword()));
+//		final String plainPassword = form.getPassword();
+//		form.setPassword(PasswordUtils.hashPassword(plainPassword));
 
 		EntryPoint entryPoint = userService.register(form, request);
 

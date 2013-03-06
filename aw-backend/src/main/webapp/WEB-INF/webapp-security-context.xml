@@ -20,9 +20,9 @@
 		<!--  hasRole('ROLE_ADMIN') -->
 		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
 
-		<form-login login-page="/login"
-					default-target-url="/welcome"
-					authentication-failure-url="/loginFailed"/>
+		<!--<form-login login-page="/login"-->
+		<!--default-target-url="/welcome"-->
+		<!--authentication-failure-url="/loginFailed"/>-->
 		<logout logout-url="/logout" logout-success-url="/index.jsp"/>
 		<!--     <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/> -->
 		<session-management session-fixation-protection="newSession">

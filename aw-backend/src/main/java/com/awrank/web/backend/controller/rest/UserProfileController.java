@@ -1,36 +1,31 @@
 package com.awrank.web.backend.controller.rest;
 
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.domain.*;
-import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
-import com.awrank.web.model.exception.AwRankException;
-import com.awrank.web.model.exception.user.UserNotCreatedException;
-import com.awrank.web.model.service.*;
-import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
+import com.awrank.web.model.exception.entrypoint.EntryPointByEmailNotFoundException;
+import com.awrank.web.model.service.EntryHistoryService;
+import com.awrank.web.model.service.EntryPointService;
+import com.awrank.web.model.service.UserPasswordChangingService;
+import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingGrantedAuthority;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
-import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -58,23 +53,10 @@ public class UserProfileController extends AbstractController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
-	
-	@Autowired
-	private StateChangeTokenService stateChangeTokenService;
 
 	@Autowired
 	private UserPasswordChangingService userPasswordChangingService;
 
-	@Autowired
-	//@Qualifier("authenticationManager")
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private UserDetailsService userDetailsService;
-
-	@Resource(name = "userEmailActivationServiceImpl")
-	private StateChangeTokenService userEmailActivationService;
-	
 	@Autowired
 	AuditorAwareImpl auditorAware;
 
@@ -86,7 +68,6 @@ public class UserProfileController extends AbstractController {
 	 * @param principal
 	 * @return
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/accesshistory",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -95,112 +76,50 @@ public class UserProfileController extends AbstractController {
 	Page<EntryHistory> getUserLoginHistory(ModelMap model, @PageableDefaults(pageNumber = 0, value = 100) Pageable pageable, Principal principal) {
 
 		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		User user = details.getUser();
-		((DatedAbstractAuditable) user).getId();
-		user.getFirstName();
-		Page<EntryHistory> allEntryHistory = entryHistoryService.getPageByUser(user, pageable);
+		Page<EntryHistory> allEntryHistory = entryHistoryService.getPageByUserId(details.getUserId(), pageable);
 
 		model.addAttribute("result", allEntryHistory.getContent());
 
 		return allEntryHistory;
 	}
 
-
 	/**
 	 * Here user goes after clicking on reset password email link
 	 *
-	 * @param form
-	 * @param model
 	 * @param request
-	 * @param principal
+	 * @param inMap
 	 * @return
-	 * @throws Exception
+	 * @throws EntryPointByEmailNotFoundException
+	 *
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/newpassword",
-			method = {RequestMethod.POST, RequestMethod.GET},
-			produces = "application/json")
-	public
-	@ResponseBody()
-	Map setUserNewPassword(@ModelAttribute UserNewPasswordFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws Exception {
-
-		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		User user = details.getUser();
-		((DatedAbstractAuditable) user).getId();
-		user.getFirstName();
-
-		String plainpassword = form.getPassword();
-		String password = PasswordUtils.hashPassword(form.getPassword());
-
-		//--------- create new entry point --------
-
-		EntryPoint entryPoint = new EntryPoint();
-		entryPoint.setUser(user);
-		entryPoint.setUid(user.getEmail());
-		entryPoint.setPassword(password);//here password shall be already hashed
-		entryPoint.setType(EntryPointType.EMAIL);//on registration we demand User to have email
-		entryPointService.add(entryPoint);
-
-		//-------------------------------------
-
-		// generate session if one doesn't exist
-		request.getSession();
-		auditorAware.setCurrentAuditor(entryPoint);
-
-		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
+	@RequestMapping(value = "/password/new", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	public Map recoveryPasswordIntoEmail(HttpServletRequest request, @RequestBody Map<String, String> inMap) throws EntryPointByEmailNotFoundException {
+		String email = inMap.get("email");
+		userService.recoveryPasswordIntoEmail(email, request.getLocalAddr(), request.getRemoteAddr());
+		return getPositiveResponseMap();
 	}
 
 	/**
-	 * Simple manual change of password - user shall be logged in and enter current password
+	 * Simple manual change oif password - user shall be logged in and enter current password
 	 *
-	 * @param form
-	 * @param model
 	 * @param request
-	 * @param principal
+	 * @param inMap
 	 * @return
 	 * @throws Exception
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/changepasswordmanual",
-			method = {RequestMethod.POST, RequestMethod.GET},
-			produces = "application/json")
+	@RequestMapping(value = "/password/change", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody()
-	Map setUserNewPasswordManual(@ModelAttribute UserNewPasswordFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws Exception {
+	Map changePassword(HttpServletRequest request, @ModelAttribute Map<String, String> inMap) throws Exception {
+		String old_password = inMap.get("old_password");
+		String new_password = inMap.get("new_password");
 
-		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
+		AWRankingUserDetails details = auditorAware.getCurrentUserDetails();
+		userService.changePassword(details.getUid(), old_password, new_password);
 
-		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		User user = details.getUser();
-		((DatedAbstractAuditable) user).getId();
-		user.getFirstName();
-		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-
-		if (!PasswordUtils.hashPassword(form.getCurrentPassword()).equals(entryPoint.getPassword()))
-			return getNegativeResponseMap("The password you entered as current is not the password you're logged in now");
-
-		//--------- current entry point is no longer valid ----------
-
-		entryPoint.setEndedDate(LocalDateTime.now());
-		entryPointService.save(entryPoint);
-
-		//------------- create new entry point --------------------
-		EntryPoint entryPoint2 = new EntryPoint();
-		entryPoint2.setUser(user);
-		entryPoint2.setUid(user.getEmail());
-		entryPoint2.setPassword(PasswordUtils.hashPassword(form.getPassword()));//here password shall be already hashed
-		entryPoint2.setType(EntryPointType.EMAIL);//on registration we demand User to have email
-		entryPointService.add(entryPoint2);
-
-		//-------------------------------------
-
-		// generate session if one doesn't exist
-		request.getSession();
-
-		auditorAware.setCurrentAuditor(entryPoint);
-
-		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
+		throw UnauthorizedException.getInstance();
 	}
+
 	/**
 	 * Simple manual change of email - user shall be logged in, on new email verification link will be sent
 	 *
@@ -211,7 +130,6 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/changeemailmanual",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -221,49 +139,50 @@ public class UserProfileController extends AbstractController {
 
 		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
 
-		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		User user = details.getUser();
-		((DatedAbstractAuditable) user).getId();
-		user.getFirstName();
-		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-		
+		// TODO a_polyakov 20130306 Уже поздно подченить не успею
+
+//		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+//		User user = details.getUser();
+//		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+
 		//---------------- sending verification email --------------------
 
-		String key;
-		try {
-			key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + entryPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			throw new UserNotCreatedException();
-		}
+//		String key;
+//		try {
+//			key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + entryPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//			throw new UserNotCreatedException();
+//		}
 
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("localAddr", request.getLocalAddr());
-		params.put("remoteAddr", request.getRemoteAddr());
-		params.put("testactivation_email", user.getEmail());
-		params.put("testactivation_password", entryPoint.getPassword());
+//		Map<String, Object> params = new HashMap<String, Object>();
+//		params.put("localAddr", request.getLocalAddr());
+//		params.put("remoteAddr", request.getRemoteAddr());
+//		params.put("testactivation_email", user.getEmail());
+//		params.put("testactivation_password", entryPoint.getPassword());
+//
+//		try {
+//			userEmailActivationService.send(params);
+//		} catch (AwRankException e) {
+//			TODO Auto-generated catch block
+//			getLogger().error(e.getMessage(), e);
+//		}
 
-		try {
-			userEmailActivationService.send(params);
-		} catch (AwRankException e) {
-			// TODO Auto-generated catch block
-			getLogger().error(e.getMessage(), e);
-		}
-		
 		//-------------- saving to db -----------------------------
-				
-		StateChangeToken token = new StateChangeToken();
-		token.setToken(key);
-		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
-		token.setCreatedBy(user);
-		token.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
-		token.setNewValue(form.getEmail());
-		token.setValue(user.getEmail());
-		
-		userEmailActivationService.save(token);	
-		
+
+//		StateChangeToken token = new StateChangeToken();
+//		token.setToken(key);
+//		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
+//		token.setCreatedBy(user);
+//		token.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
+//		token.setNewValue(form.getEmail());
+//		token.setValue(user.getEmail());
+
+//		userEmailActivationService.save(token);
+
 		return getPositiveResponseMap("Verification link sent to new email, untill it will be verifird current email is valid");
 	}
+
 	/**
 	 * Handler for password changing - if token found redirect to passwrd changing form
 	 *
@@ -334,7 +253,6 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/resetpassword",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -344,7 +262,6 @@ public class UserProfileController extends AbstractController {
 		//---------- check if we are logged in user ----------
 		if (principal != null) {
 			AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-			User user = details.getUser();
 			ArrayList<AWRankingGrantedAuthority> list = (ArrayList<AWRankingGrantedAuthority>) details.getAuthorities();
 
 			Boolean isAdmin = false;

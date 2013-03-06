@@ -2,6 +2,7 @@ package com.awrank.web.backend.init.dictionary;
 
 import com.awrank.web.model.dao.DictionaryDao;
 import com.awrank.web.model.domain.Dictionary;
+import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.enums.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,191 +27,190 @@ public class InitDictionary {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void init() {
 		final List<Dictionary> list = new ArrayList<Dictionary>();
+//        ERROR
+		list.add(new Dictionary(null, Language.RU, Message.ERROR.name(), "Ошибка: "));
+		list.add(new Dictionary(null, Language.RU, Message.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
+		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
+//
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
+		list.add(new Dictionary(null, Language.RU, Message.OBJECT_NOT_UNIQUE.name(), "Обект должен быть уникален"));
 
-		/* Errors */
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык"));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
 
-		list.addAll(Dictionary.createItems(Message.ERROR.name(), "Error: ", "Ошибка: "));
+		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "Указанный адрес электронной почты отсутствует"));
+		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "The email not found"));
+		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль"));
+		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password"));
 
-		list.addAll(Dictionary.createItems(
-				Message.ERROR_ACCESS.name(),
-				"You're not permitted to do this action.",
-				"У вас нет прав на выполнение операции."));
+//        simple words
+		list.add(new Dictionary(null, Language.RU, "COUNTRY", "Страна"));
+		list.add(new Dictionary(null, Language.EN, "COUNTRY", "Country"));
+		list.add(new Dictionary(null, Language.RU, "DELETE", "Удалить"));
+		list.add(new Dictionary(null, Language.EN, "DELETE", "Delete"));
+		list.add(new Dictionary(null, Language.RU, "DICTIONARY", "Словарь"));
+		list.add(new Dictionary(null, Language.EN, "DICTIONARY", "Dictionary"));
+		list.add(new Dictionary(null, Language.RU, "INSERT", "Добавить"));
+		list.add(new Dictionary(null, Language.EN, "INSERT", "Insert"));
+		list.add(new Dictionary(null, Language.RU, "IP_ADDRESS", "IP адрес"));
+		list.add(new Dictionary(null, Language.EN, "IP_ADDRESS", "IP-address"));
+		list.add(new Dictionary(null, Language.RU, "LANGUAGE", "Язык"));
+		list.add(new Dictionary(null, Language.EN, "LANGUAGE", "Language"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN", "Вход"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN", "Login"));
+		list.add(new Dictionary(null, Language.RU, "LOGOUT", "Выход"));
+		list.add(new Dictionary(null, Language.EN, "LOGOUT", "Logout"));
+		list.add(new Dictionary(null, Language.RU, "PASSWORD", "Пароль"));
+		list.add(new Dictionary(null, Language.EN, "PASSWORD", "Password"));
+		list.add(new Dictionary(null, Language.RU, "PASSWORD_CONFIRM", "Подтвердите пароль"));
+		list.add(new Dictionary(null, Language.EN, "PASSWORD_CONFIRM", "Password confirm"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT", "Оплата"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT", "Payment"));
+		list.add(new Dictionary(null, Language.RU, "SITE", "САЙТ"));
+		list.add(new Dictionary(null, Language.EN, "SITE", "SITE"));
+		list.add(new Dictionary(null, Language.RU, "UPDATE", "Обновить"));
+		list.add(new Dictionary(null, Language.EN, "UPDATE", "Update"));
+		list.add(new Dictionary(null, Language.RU, "ORDER", "Заказ"));
+		list.add(new Dictionary(null, Language.EN, "ORDER", "Order"));
+		list.add(new Dictionary(null, Language.RU, "MORE", "еще"));
+		list.add(new Dictionary(null, Language.EN, "MORE", "more"));
+//      ENTITY
+		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));
+		list.add(new Dictionary(null, Language.EN, "DICTIONARY_CODE", "Code"));
+		list.add(new Dictionary(null, Language.RU, "DICTIONARY_TEXT", "Текст"));
+		list.add(new Dictionary(null, Language.EN, "DICTIONARY_TEXT", "Text"));
 
-		list.addAll(Dictionary.createItems(
-				Message.ERROR_NETWORK.name(),
-				"No connection with the server, try later.",
-				"Cоединение с сервером отсутствует, попробуйте позже."));
+//      UI
+		list.add(new Dictionary(null, Language.RU, "MY_ACCOUNT", " Учетная запись"));
+		list.add(new Dictionary(null, Language.EN, "MY_ACCOUNT", "My account"));
 
-		list.addAll(Dictionary.createItems(
-				Message.MISSING_OBJECT_ID.name(),
-				"Missing object identifier.",
-				"Отсутствует идентификатор объекта."));
+		list.add(new Dictionary(null, Language.RU, "FORGET_PASSWORD", "Забыли пароль?"));
+		list.add(new Dictionary(null, Language.EN, "FORGET_PASSWORD", "Forgotten your password?"));
 
-		list.addAll(Dictionary.createItems(
-				Message.OBJECT_NOT_UNIQUE.name(),
-				"The object must be unique.",
-				"Объект должен быть уникален."));
+		list.add(new Dictionary(null, Language.RU, "REGISTRATION", "Регистрация"));
+		list.add(new Dictionary(null, Language.EN, "REGISTRATION", "Registration"));
+		list.add(new Dictionary(null, Language.RU, "PER_MONTH", "в месяц"));
+		list.add(new Dictionary(null, Language.EN, "PER_MONTH", "per month"));
+		list.add(new Dictionary(null, Language.RU, "WITH_SOCIAL_NETWORK", "с помощью социальных сетей:"));
+		list.add(new Dictionary(null, Language.EN, "WITH_SOCIAL_NETWORK", "with social network:"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_WITH_GOOGLE", "Вход через Google"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_WITH_GOOGLE", "Log in with Google"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_WITH_FACEBOOK", "Вход через Facebook"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_WITH_FACEBOOK", "Log in with Facebook"));
 
-		list.addAll(Dictionary.createItems(
-				Message.MISSING_DICTIONARY_LANGUAGE.name(),
-				"Missing dictionary language.",
-				"Словарь выбранного языка отсутствует."));
+		list.add(new Dictionary(null, Language.RU, "HOME", "Главная"));
+		list.add(new Dictionary(null, Language.EN, "HOME", "Home"));
+		list.add(new Dictionary(null, Language.RU, "ACCOUNT", "Учетная запись"));
+		list.add(new Dictionary(null, Language.EN, "ACCOUNT", "ACCOUNT"));
+		list.add(new Dictionary(null, Language.RU, "PROFILE", "Профиль"));
+		list.add(new Dictionary(null, Language.EN, "PROFILE", "Profile"));
+		list.add(new Dictionary(null, Language.RU, "ACTIVITY", "ДЕЯТЕЛЬНОСТЬ"));
+		list.add(new Dictionary(null, Language.EN, "ACTIVITY", "ACTIVITY"));
+		list.add(new Dictionary(null, Language.RU, "REQUEST_HISTORY", "История запросов"));
+		list.add(new Dictionary(null, Language.EN, "REQUEST_HISTORY", "Request history"));
+		list.add(new Dictionary(null, Language.RU, "ADMINISTRATION", "Администрирование"));
+		list.add(new Dictionary(null, Language.EN, "ADMINISTRATION", "Administration"));
 
-		list.addAll(Dictionary.createItems(
-				Message.MISSING_DICTIONARY_CODE.name(),
-				"Missing dictionary code",
-				"Код словаря отсутствует."));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_EMAIL", "Email адрес"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_EMAIL", "Email address"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_TITLE_SECURITY_QUESTION", "мы рекомендуем установить секретный вопрос и ответ для увеличения безопасности:"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_TITLE_SECURITY_QUESTION", "we do recommend to set security question and input answer to make account more secure:"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_ANSWER", "Введите ответ здесь..."));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_ANSWER", "Input answer here..."));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_TERMS_TITLE", "Я согласен с"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_TERMS_TITLE", "I agree with the"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_TERMS_ANCHOR", "Условия использования"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_TERMS_ANCHOR", "Terms of Service"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FOOTER", "У вас есть учетная запись?"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FOOTER", "Do you have an account?"));
 
-		list.addAll(Dictionary.createItems(
-				Message.MISSING_DICTIONARY_TEXT.name(),
-				"Missing dictionary text",
-				"Отсутствует текст сообщения."));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_DESCRIPTION", "or with registered details:"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_FIELD_LOGIN", "Email адрес или логин"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_FIELD_LOGIN", "Email address or login"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_FOOTER", "У вас нет учетной записи?"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_FOOTER", "Don't have an account?"));
 
+		list.add(new Dictionary(null, Language.RU, "FORGET_DESCRIPTION", "Введите адрес электронной почты ниже, и мы вышлем вам инструкцию востановления пароля."));
+		list.add(new Dictionary(null, Language.EN, "FORGET_DESCRIPTION", "Enter your email address below and we'll send you password reset instructions."));
+		list.add(new Dictionary(null, Language.RU, "FORGET_FIELD_EMAIL", "Email адрес"));
+		list.add(new Dictionary(null, Language.EN, "FORGET_FIELD_EMAIL", "Email address"));
+		list.add(new Dictionary(null, Language.RU, "FORGET_BUTTON_SUBMIT", "Востановить пароль"));
+		list.add(new Dictionary(null, Language.EN, "FORGET_BUTTON_SUBMIT", "Reset password"));
+		list.add(new Dictionary(null, Language.RU, "FORGET_FOOTER", "или перейти на"));
+		list.add(new Dictionary(null, Language.EN, "FORGET_FOOTER", "or return to"));
 
-		/* Common words and phrases */
+		list.add(new Dictionary(null, Language.RU, "TARIFF_CHOOSE", "Выбрать"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_CHOOSE", "Choose plan"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_STARTED_NAME", "Стартовый"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_STARTED_NAME", "Started"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_STARTED_DESCRIPTION", "Отлично подходит для веб-мастера, чтобы начать работу"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_STARTED_DESCRIPTION", "Great for web master to get started"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_BASIC_NAME", "Базовый"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_BASIC_NAME", "Basic"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_BASIC_DESCRIPTION", "Отлично подходит для веб-мастера, чтобы начать работу2"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_BASIC_DESCRIPTION", "Great for web master to get started2"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_PRO_NAME", "Профессиональный"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_PRO_NAME", "Pro"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_PRO_DESCRIPTION", "Отлично подходит для веб-мастера, чтобы начать работу3"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_PRO_DESCRIPTION", "Great for web master to get started"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_PER", "за"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_PER", "per"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_DAYS", "дней"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_DAYS", "days"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_COUNT_DAILY_REQUEST_TITLE", "Количество запросов доступное в день"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_COUNT_DAILY_REQUEST_TITLE", "The number of requests available per day"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_COUNT_MONTHLY_REQUEST_TITLE", "Количество запросов доступное на месяц"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_COUNT_MONTHLY_REQUEST_TITLE", "The number of requests available per month"));
+		list.add(new Dictionary(null, Language.RU, "TARIFF_DISCOUNT_TITLE", "Скидка"));
+		list.add(new Dictionary(null, Language.EN, "TARIFF_DISCOUNT_TITLE", "Discount"));
 
-		list.addAll(Dictionary.createItems("DICTIONARY", "Dictionary", "Словарь"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_HISTORY", "История посещений"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_HISTORY", "Session history"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_PAGING_ALL", "все"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_PAGING_ALL", "all"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_BROWSE", "Браузер"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_BROWSE", "Browse"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Дата последнего действия"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Most recent activity"));
 
-		list.addAll(Dictionary.createItems("COUNTRY", "Country", "Страна"));
-		list.addAll(Dictionary.createItems("IP_ADDRESS", "IP-address", "IP-адрес"));
-		list.addAll(Dictionary.createItems("LANGUAGE", "Language", "Язык"));
-
-		list.addAll(Dictionary.createItems("LOGIN", "Login", "Вход"));
-		list.addAll(Dictionary.createItems("LOGOUT", "Logout", "Выход"));
-		list.addAll(Dictionary.createItems("INSERT", "Insert", "Добавить"));
-		list.addAll(Dictionary.createItems("DELETE", "Delete", "Удалить"));
-		list.addAll(Dictionary.createItems("UPDATE", "Update", "Обновить"));
-
-		list.addAll(Dictionary.createItems("PASSWORD", "Password", "Пароль"));
-		list.addAll(Dictionary.createItems("PASSWORD_CONFIRM", "Password confirm", "Подтвердите пароль"));
-		list.addAll(Dictionary.createItems("PAYMENT", "Payment", "Оплата"));
-		list.addAll(Dictionary.createItems("SITE", "SITE", "САЙТ"));
-
-		list.addAll(Dictionary.createItems("ORDER", "Order", "Заказ"));
-		list.addAll(Dictionary.createItems("MORE", "more", "еще"));
-
-		/* ENTITY */
-		list.addAll(Dictionary.createItems("DICTIONARY_CODE", "Code", "Код"));
-		list.addAll(Dictionary.createItems("DICTIONARY_TEXT", "Text", "Текст"));
-
-		/* UI */
-		list.addAll(Dictionary.createItems("MY_ACCOUNT", "My account", "Учетная запись"));
-		list.addAll(Dictionary.createItems("FORGET_PASSWORD", "Forgotten your password?", "Забыли пароль?"));
-
-		// Registration form
+		// TODO check
+		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));
 		list.addAll(Dictionary.createItems("CREATE_A_NEW_ACCOUNT", "Create a new account", "Создайте учетную запись"));
-		list.addAll(Dictionary.createItems("WITH_SOCIAL_NETWORK", "with social network:", "с помощью социальной сети:"));
-		list.addAll(Dictionary.createItems("SIGNUP_WITH_GOOGLE", "Sign up with Google", "Рег-я через Google"));
-		list.addAll(Dictionary.createItems("SIGNUP_WITH_FACEBOOK", "Sign up with Facebook", "Рег-я через Facebook"));
-		list.addAll(Dictionary.createItems("OR_WITH_EMAIL", "or with email:", "или введите email:"));
-
-		list.addAll(Dictionary.createItems("REGISTRATION", "Registration", "Регистрация"));
-		list.addAll(Dictionary.createItems("PER_MONTH", "per month", "в месяц"));
-
-		list.addAll(Dictionary.createItems("LOGIN_WITH_GOOGLE", "Log in with Google", "Вход через Google"));
-		list.addAll(Dictionary.createItems("LOGIN_WITH_FACEBOOK", "Log in with Facebook", "Вход через Facebook"));
-
-		list.addAll(Dictionary.createItems("HOME", "Home", "Главная"));
-		list.addAll(Dictionary.createItems("ACCOUNT", "ACCOUNT", "Учетная запись"));
-		list.addAll(Dictionary.createItems("PROFILE", "Profile", "Профиль"));
-		list.addAll(Dictionary.createItems("ACTIVITY", "ACTIVITY", "ДЕЯТЕЛЬНОСТЬ"));
-		list.addAll(Dictionary.createItems("REQUEST_HISTORY", "Request history", "История запросов"));
-		list.addAll(Dictionary.createItems("ADMINISTRATION", "Administration", "Администрирование"));
-
+		list.addAll(Dictionary.createItems("DO_YOU_HAVE_AN_ACCOUNT", "Do you have an account?", "У вас есть учетная запись?"));
 		list.addAll(Dictionary.createItems("EMAIL_ADDRESS", "Email address", "Email адрес"));
-
 		list.addAll(Dictionary.createItems(
-				"WE_RECOMMEND_SECRET_QUESTION",
-				"We do recommend to set secret question and input answer to make account more secure:",
-				"Мы рекомендуем установить секретный вопрос и ответ для большей безопасности:"));
-
+				"INPUT_ANSWER_HERE", "Input answer here...",
+				"Введите ответ здесь..."));
+		list.addAll(Dictionary.createItems("OR_WITH_EMAIL", "or with email:", "или введите email:"));
 		list.addAll(Dictionary.createItems(
 				"SECRET_QUESTION_1",
 				"What is your first pet's name?",
 				"Кличка вашего первого домашнего животного?"));
-
 		list.addAll(Dictionary.createItems(
 				"SECRET_QUESTION_2",
 				"What is your mother's maiden name?",
 				"Девичья фамилия вашей матери?"));
-
 		list.addAll(Dictionary.createItems(
 				"SECRET_QUESTION_3",
 				"Your favourite dish?",
 				"Ваше любимое блюдо?"));
-
 		list.addAll(Dictionary.createItems(
 				"SECRET_QUESTION_4",
 				"The most unforgettable event in your life?",
 				"Самое незабываемое событие в вашей жизни?"));
-
-		list.addAll(Dictionary.createItems(
-				"INPUT_ANSWER_HERE", "Input answer here...",
-				"Введите ответ здесь..."));
-
-		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));
+		list.addAll(Dictionary.createItems("SIGNUP_WITH_GOOGLE", "Sign up with Google", "Рег-я через Google"));
+		list.addAll(Dictionary.createItems("SIGNUP_WITH_FACEBOOK", "Sign up with Facebook", "Рег-я через Facebook"));
 		list.addAll(Dictionary.createItems("TERMS_OF_SERVICE", "Terms of Service", "Условия использования"));
-		list.addAll(Dictionary.createItems("DO_YOU_HAVE_AN_ACCOUNT", "Do you have an account?", "У вас есть учетная запись?"));
-
-		// Login form
-		list.addAll(Dictionary.createItems("LOGIN_TITLE", "Log in to your account", "Вход под своей учетной записью"));
-		list.addAll(Dictionary.createItems("LOGIN_DESCRIPTION", "or with registered details:", "или введите свои данные:"));
-		list.addAll(Dictionary.createItems("LOGIN_FIELD_LOGIN", "Email address or login", "Email адрес или логин"));
-		list.addAll(Dictionary.createItems("LOGIN_FOOTER", "Don't have an account?", "У вас нет учетной записи?"));
-
 		list.addAll(Dictionary.createItems(
-				"FORGET_DESCRIPTION",
-				"Enter your email address below and we'll send you password reset instructions.",
-				"Введите адрес электронной почты ниже, и мы вышлем вам инструкцию востановления пароля."
-		));
-		list.addAll(Dictionary.createItems("FORGET_FIELD_EMAIL", "Email address", "Email адрес"));
-		list.addAll(Dictionary.createItems("FORGET_BUTTON_SUBMIT", "Reset password", "Востановить пароль"));
-		list.addAll(Dictionary.createItems("FORGET_FOOTER", "or return to", "или перейти на"));
-
-		list.addAll(Dictionary.createItems("TARIFF_CHOOSE", "Choose plan", "Выбрать"));
-		list.addAll(Dictionary.createItems("TARIFF_STARTED_NAME", "Started", "Стартовый"));
-		list.addAll(Dictionary.createItems(
-				"TARIFF_STARTED_DESCRIPTION",
-				"Great for web master to get started",
-				"Отлично подходит для веб-мастера, чтобы начать работу"));
-
-		list.addAll(Dictionary.createItems("TARIFF_BASIC_NAME", "Basic", "Базовый"));
-
-		list.addAll(Dictionary.createItems(
-				"TARIFF_BASIC_DESCRIPTION",
-				"Great for web master to get started2",
-				"Отлично подходит для веб-мастера, чтобы начать работу2"));
-
-		list.addAll(Dictionary.createItems("TARIFF_PRO_NAME", "Pro", "Профессиональный"));
-
-		list.addAll(Dictionary.createItems(
-				"TARIFF_PRO_DESCRIPTION",
-				"Great for web master to get started",
-				"Отлично подходит для веб-мастера, чтобы начать работу3"));
-
-		list.addAll(Dictionary.createItems("TARIFF_PER", "per", "за"));
-		list.addAll(Dictionary.createItems("TARIFF_DAYS", "days", "дней"));
-
-		list.addAll(Dictionary.createItems(
-				"TARIFF_COUNT_DAILY_REQUEST_TITLE",
-				"The number of requests available per day",
-				"Количество запросов доступное в день"));
-
-		list.addAll(Dictionary.createItems(
-				"TARIFF_COUNT_MONTHLY_REQUEST_TITLE",
-				"The number of requests available per month",
-				"Количество запросов доступное на месяц"));
-
-		list.addAll(Dictionary.createItems("TARIFF_DISCOUNT_TITLE", "Discount", "Скидка"));
-
-		list.addAll(Dictionary.createItems("SESSION_HISTORY", "Session history", "История посещений"));
-		list.addAll(Dictionary.createItems("SESSION_PAGING_ALL", "all", "все"));
-		list.addAll(Dictionary.createItems("SESSION_TABLE_COLUMN_BROWSE", "Browse", "Браузер")); // обзор?
-
-		list.addAll(Dictionary.createItems(
-				"SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE",
-				"Most recent activity",
-				"Дата последнего действия"));
+				"WE_RECOMMEND_SECRET_QUESTION",
+				"We do recommend to set secret question and input answer to make account more secure:",
+				"Мы рекомендуем установить секретный вопрос и ответ для большей безопасности:"));
 
 
 //		Query query = em.createQuery("select d from Dictionary d where d.code = :code and d.language = :language");

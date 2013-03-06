@@ -5,7 +5,6 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserRole;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.exception.userrole.UserRoleNotCreatedException;
-import com.awrank.web.model.exception.userrole.UserRoleNotDeletedException;
 import com.awrank.web.model.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +32,7 @@ public class UserRoleServiceImpl extends AbstractServiceImpl implements UserRole
 	}
 
 	@Override
-	public void delete(UserRole ur) throws UserRoleNotDeletedException {
+	public void delete(UserRole ur) {
 		userRoleDao.delete(ur);
 
 	}

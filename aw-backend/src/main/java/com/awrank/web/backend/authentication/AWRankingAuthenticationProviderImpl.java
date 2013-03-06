@@ -1,6 +1,6 @@
 package com.awrank.web.backend.authentication;
 
-import com.awrank.web.model.enums.Message;
+import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.service.UserDetailsService;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -55,7 +55,7 @@ public class AWRankingAuthenticationProviderImpl extends AbstractUserDetailsAuth
 		UserDetails details = userDetailsService.retrieveUser(username, password, userIpAddress, sessionId);
 		if (details == null) {
 			// TODO ExceptionHandler
-			throw new AuthenticationServiceException(Message.ERROR_ACCESS.name());
+			throw new AuthenticationServiceException("", UnauthorizedException.getInstance());
 		}
 		return details;
 	}

@@ -4,7 +4,6 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserRole;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.exception.userrole.UserRoleNotCreatedException;
-import com.awrank.web.model.exception.userrole.UserRoleNotDeletedException;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ public interface UserRoleService extends AbstractService {
 
 	public void add(UserRole ep) throws UserRoleNotCreatedException;
 
-	public void delete(UserRole ep) throws UserRoleNotDeletedException;
+	public void delete(UserRole ep);
 
 	public void save(UserRole ep);
 

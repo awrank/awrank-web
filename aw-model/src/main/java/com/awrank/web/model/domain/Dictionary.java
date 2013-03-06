@@ -53,12 +53,12 @@ public class Dictionary extends ExtendedAbstractAuditable {
 	}
 
 	/**
-	 *
-	 * @param code {@code lngt} attribute in HTML element.
+	 * @param code   {@code lngt} attribute in HTML element.
 	 * @param enText English translation
 	 * @param ruText Russian translation
 	 * @return instance of {@link ArrayList} with couple of {@code Dictionary} objects.
 	 */
+	@Deprecated
 	public static List<Dictionary> createItems(String code, String enText, String ruText) {
 		List<Dictionary> dicList = new ArrayList<Dictionary>();
 		dicList.add(new Dictionary(null, Language.EN, code, enText));
