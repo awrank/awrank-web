@@ -15,6 +15,8 @@ import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -70,6 +72,7 @@ public class UserController extends AbstractController {
 	 * @throws UserActivationEmailNotSetException
 	 *
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(
 			value = "/add",
 			method = {RequestMethod.POST, RequestMethod.GET},

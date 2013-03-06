@@ -68,7 +68,6 @@
 </p>
 <hr/>
 <p>
-
 <div height="100">
     <form method="POST" action="<c:url value="rest/profile/resetpassword" />" accept="application/json"
           enctype="application/json">
@@ -91,10 +90,34 @@
 </div>
 </p>
 <hr/>
+<p> Change email - enter new, you have to be logged in </p>
+<p>
+<div height="100">
+    <form method="POST" action="<c:url value="rest/profile/changeemailmanual" />" accept="application/json"
+          enctype="application/json">
+        <table align="left">
+
+            <tr>
+                <td align="right">New Email*</td>
+                <td><input type="text" name="email" value="okorokhina@gmail.com"/></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><input type="submit" value="Reset current email with new one"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+</p>
+<hr/>
 <p> Change password - enter current and new </p>
 <p>
 <div style="text-align: center;">
-    <table align="center" cellspacing="0" border="0">
+    <table align="left" cellspacing="0" border="0">
         <tr>
             <td colspan="2" align="left"><h2>Change your password (you have to be logged in):</h2></td>
         </tr>

@@ -100,44 +100,84 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 
 		//------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
 		StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_EMAIL_VERIFICATION);
-
-		if (stateChangeToken == null) return false;
-
-		//-------------- we found and we activate -----------
-
-		LocalDateTime today = LocalDateTime.now();
-		LocalDateTime ended = stateChangeToken.getEndedDate();
-		if (ended.isAfter(today)) { //found and fresh
-
-			//---------------  find entry point ----------------
-
-			User user = stateChangeToken.getUser();
-			Set<EntryPoint> points = user.getEntryPoints();
-			EntryPoint thePoint = null;
-
-			for (EntryPoint point : points) {
-
-				if (point.getType() == EntryPointType.EMAIL) thePoint = point;
+		
+		if(stateChangeToken != null){//first activation
+		
+			//-------------- we found and we activate -----------
+	
+			LocalDateTime today = LocalDateTime.now();
+			LocalDateTime ended = stateChangeToken.getEndedDate();
+			if (ended.isAfter(today)) { //found and fresh
+	
+				//---------------  find entry point ----------------
+	
+				User user = stateChangeToken.getUser();
+				Set<EntryPoint> points = user.getEntryPoints();
+				EntryPoint thePoint = null;
+	
+				for (EntryPoint point : points) {
+	
+					if (point.getType() == EntryPointType.EMAIL) thePoint = point;
+				}
+	
+				if (thePoint == null) return false;//not found proper entry point - can't activate
+	
+	
+				//------------ we have found point and activation record ----------
+	
+				stateChangeToken.setTokenUsedAtDate(today);
+				stateChangeTokenDao.save(stateChangeToken);
+	
+				thePoint.setVerifiedDate(today);
+				entryPointService.save(thePoint);
+	
+				//---------- we add record concerning user role to user_roles ----
+	
+				UserRole role = new UserRole();
+				role.setUser(user);
+				role.setRole(Role.ROLE_USER_VERIFIED);
+				userRoleService.save(role);
+				return true;
 			}
-
-			if (thePoint == null) return false;//not found proper entry point - can't activate
-
-
-			//------------ we have found point and activation record ----------
-
-			stateChangeToken.setTokenUsedAtDate(today);
-			stateChangeTokenDao.save(stateChangeToken);
-
-			thePoint.setVerifiedDate(today);
-			entryPointService.save(thePoint);
-
-			//---------- we add record concerning user role to user_roles ----
-
-			UserRole role = new UserRole();
-			role.setUser(user);
-			role.setRole(Role.ROLE_USER_VERIFIED);
-			userRoleService.save(role);
-			return true;
+		}
+		
+		 stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_EMAIL_CHANGE);
+		 if(stateChangeToken != null){//email change
+				
+				//-------------- we found and we activate new -----------
+		
+				LocalDateTime today = LocalDateTime.now();
+				LocalDateTime ended = stateChangeToken.getEndedDate();
+				if (ended.isAfter(today)) { //found and fresh
+		
+				//----------  find current entry point and set expired ----------------
+	
+				User user = stateChangeToken.getUser();
+				Set<EntryPoint> points = user.getEntryPoints();
+				EntryPoint oldPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, stateChangeToken.getValue());
+				
+				if (oldPoint == null) return false;//not found proper entry point - can't activate
+	
+				oldPoint.setEndedDate(today);
+				entryPointService.save(oldPoint);
+				
+				//-------------- create new entry point -------------
+				
+				EntryPoint newPoint = new EntryPoint();
+				newPoint.setUser(user);
+				newPoint.setUid(stateChangeToken.getNewValue());
+				newPoint.setType(EntryPointType.EMAIL);
+				newPoint.setVerifiedDate(today);
+				
+				entryPointService.save(newPoint);
+				
+				//------------ we have found point and activation record ----------
+	
+				stateChangeToken.setTokenUsedAtDate(today);
+				stateChangeTokenDao.save(stateChangeToken);
+	
+				return true;
+			}
 		}
 
 		return false;

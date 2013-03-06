@@ -10,6 +10,11 @@ public enum StateChangeTokenType {
      * email verification.
      */
     USER_EMAIL_VERIFICATION,
+    
+    /**
+     * email change- new email verification.
+     */
+    USER_EMAIL_CHANGE,
 
     /**
      * password change

@@ -5,6 +5,8 @@ import com.awrank.web.model.domain.*;
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
+import com.awrank.web.model.exception.AwRankException;
+import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
@@ -21,10 +23,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -52,6 +58,9 @@ public class UserProfileController extends AbstractController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
+	
+	@Autowired
+	private StateChangeTokenService stateChangeTokenService;
 
 	@Autowired
 	private UserPasswordChangingService userPasswordChangingService;
@@ -63,6 +72,9 @@ public class UserProfileController extends AbstractController {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Resource(name = "userEmailActivationServiceImpl")
+	private StateChangeTokenService userEmailActivationService;
+	
 	@Autowired
 	AuditorAwareImpl auditorAware;
 
@@ -137,7 +149,7 @@ public class UserProfileController extends AbstractController {
 	}
 
 	/**
-	 * Simple manual change oif password - user shall be logged in and enter current password
+	 * Simple manual change of password - user shall be logged in and enter current password
 	 *
 	 * @param form
 	 * @param model
@@ -179,16 +191,75 @@ public class UserProfileController extends AbstractController {
 
 		//-------------------------------------
 
-
 		// generate session if one doesn't exist
 		request.getSession();
 
 		auditorAware.setCurrentAuditor(entryPoint);
 
 		return getPositiveResponseMap("Password was changed successfully, you're logged in with new now");
-
 	}
+	/**
+	 * Simple manual change of email - user shall be logged in, on new email verification link will be sent
+	 *
+	 * @param form
+	 * @param model
+	 * @param request
+	 * @param principal
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/changeemailmanual",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody()
+	Map setUserNewEmaildManual(@ModelAttribute UserRegistrationFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws Exception {
 
+		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
+
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+		User user = details.getUser();
+		((DatedAbstractAuditable) user).getId();
+		user.getFirstName();
+		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+		
+		//---------------- sending verification email --------------------
+
+		String key;
+		try {
+			key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + entryPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw new UserNotCreatedException();
+		}
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("localAddr", request.getLocalAddr());
+		params.put("remoteAddr", request.getRemoteAddr());
+		params.put("testactivation_email", user.getEmail());
+		params.put("testactivation_password", entryPoint.getPassword());
+
+		try {
+			userEmailActivationService.send(params);
+		} catch (AwRankException e) {
+			// TODO Auto-generated catch block
+			getLogger().error(e.getMessage(), e);
+		}
+		
+		//-------------- saving to db -----------------------------
+				
+		StateChangeToken token = new StateChangeToken();
+		token.setToken(key);
+		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
+		token.setCreatedBy(user);
+		token.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
+		token.setNewValue(form.getEmail());
+		token.setValue(user.getEmail());
+		
+		userEmailActivationService.save(token);	
+		
+		return getPositiveResponseMap("Verification link sent to new email, untill it will be verifird current email is valid");
+	}
 	/**
 	 * Handler for password changing - if token found redirect to passwrd changing form
 	 *
@@ -259,6 +330,7 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/resetpassword",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")

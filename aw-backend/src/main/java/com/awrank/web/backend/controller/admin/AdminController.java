@@ -54,9 +54,6 @@ import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 @RequestMapping(value = "/admin")
 public class AdminController extends AbstractController {
 
-	@Value("#{emailProps[blocked_xsmtp_header_category]}")
-	private String blocked_xsmtp_header_category;
-	
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;

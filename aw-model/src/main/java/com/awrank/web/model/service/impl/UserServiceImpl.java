@@ -134,6 +134,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 //-------------- store to db information about verification email was sent -------------------------------------------
 
 		StateChangeToken stateChangeToken = new StateChangeToken();
+		
 		stateChangeToken.setToken(key);
 		stateChangeToken.setType(StateChangeTokenType.USER_EMAIL_VERIFICATION);
 		stateChangeToken.setUser(user);
