@@ -4,6 +4,8 @@ import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The <b>Dictionary</b> class represents an dictionary entry.
@@ -48,6 +50,20 @@ public class Dictionary extends ExtendedAbstractAuditable {
 		this.language = language;
 		this.code = code;
 		this.text = text;
+	}
+
+	/**
+	 *
+	 * @param code {@code lngt} attribute in HTML element.
+	 * @param enText English translation
+	 * @param ruText Russian translation
+	 * @return instance of {@link ArrayList} with couple of {@code Dictionary} objects.
+	 */
+	public static List<Dictionary> createItems(String code, String enText, String ruText) {
+		List<Dictionary> dicList = new ArrayList<Dictionary>();
+		dicList.add(new Dictionary(null, Language.EN, code, enText));
+		dicList.add(new Dictionary(null, Language.RU, code, ruText));
+		return dicList;
 	}
 
 	public Language getLanguage() {
