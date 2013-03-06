@@ -86,6 +86,7 @@ public class UserProfileController extends AbstractController {
 	 * @param principal
 	 * @return
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/accesshistory",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -115,6 +116,7 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/newpassword",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -158,6 +160,7 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/changepasswordmanual",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -208,6 +211,7 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/changeemailmanual",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
