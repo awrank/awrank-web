@@ -1,3 +1,4 @@
+<!--<div id="divLogin">-->
 <style type="text/css">
 
 	#divLogin {
@@ -17,11 +18,7 @@
 		<div class="span6">
 			<br>
 
-			<div class="alert alert-error">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<h4>Error</h4>
-				Text
-			</div>
+			<div name="alert-error"></div>
 			<div class="alert alert-block">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
 				<h4>Warning</h4>
@@ -35,7 +32,8 @@
 							lngt="LOGIN_WITH_GOOGLE">Log in
 						with Google
 					</button>
-					<button id="loginFacebookButton" type="button" class="btn btn-large btn-primary pull-right"
+					<button id="loginFacebookButton" type="button"
+							class="btn btn-large btn-primary pull-right"
 							lngt="LOGIN_WITH_FACEBOOK">Log in with Facebook
 					</button>
 					<br>
@@ -44,15 +42,18 @@
 
 					<div class="input-prepend">
 						<span class="add-on"><i class="icon-envelope"></i></span>
-						<input type="text" id="uid" class="span5" lngp="LOGIN_FIELD_LOGIN"
+						<input type="text" id="login_uid" class="span5" lngp="LOGIN_FIELD_LOGIN"
 							   placeholder="Email address or login">
 					</div>
 					<div class="input-prepend">
 						<span class="add-on"><i class="icon-lock"></i></span>
-						<input type="password" id="password" class="span5" lngp="PASSWORD" placeholder="Password">
+						<input type="password" id="login_password" class="span5" lngp="PASSWORD"
+							   placeholder="Password">
 					</div>
 					<br>
-					<button class="btn btn-large btn-primary pull-right" type="submit" lngt="LOGIN">Sign in</button>
+					<button class="btn btn-large btn-primary pull-right" type="submit" lngt="LOGIN">Sign
+						in
+					</button>
 				</fieldset>
 				<hr>
 				<a href="#forget_password" lngt="FORGET_PASSWORD">Forgotten your password?</a>
@@ -67,12 +68,18 @@
 
 <script type="text/javascript" language="JavaScript">
 	function fLoginSubmit() {
-		$('#divLogin').addClass('hidden');
-		$("loginGoogleButton").click(function () {
-			alert("Google");
-		});
-		$("loginFacebookButton").click(function () {
-			alert("Facebook");
-		});
+		var uid = $('#login_uid').val();
+		var password = $('#login_password').val();
+		awrankPost("/login", {uid: uid, password: password}, function (data) {
+			//TODO
+			$('#divLogin').addClass('hidden');
+		})
 	}
+	$("loginGoogleButton").click(function () {
+		alert("Google");
+	});
+	$("loginFacebookButton").click(function () {
+		alert("Facebook");
+	});
 </script>
+<!--</div>-->
