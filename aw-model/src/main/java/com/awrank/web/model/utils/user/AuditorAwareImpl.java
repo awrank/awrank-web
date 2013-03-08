@@ -42,13 +42,17 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 //		return authenticatedUser.getPrincipal();
 	}
 
-	public AWRankingUserDetails getCurrentUserDetails() {
+	public static AWRankingUserDetails getCurrentUserDetails() {
 		AWRankingUserDetails details = null;
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		if (securityContext != null) {
 			Authentication authentication = securityContext.getAuthentication();
 			if (authentication != null) {
 				Object o = authentication.getDetails();
+				if (o instanceof AWRankingUserDetails) {
+					details = (AWRankingUserDetails) o;
+				}
+				o = authentication.getPrincipal();
 				if (o instanceof AWRankingUserDetails) {
 					details = (AWRankingUserDetails) o;
 				}

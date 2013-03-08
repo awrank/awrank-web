@@ -1,6 +1,7 @@
 package com.awrank.web.backend.controller.auth;
 
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public class LoginController extends AbstractController {
 		return "hello";
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
 	Map<String, String> login(HttpServletRequest request, @RequestBody Map<String, String> in) {
@@ -54,26 +56,20 @@ public class LoginController extends AbstractController {
 		return map;
 	}
 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(/*ModelMap model,*/HttpServletRequest request) {
+	@RequestMapping(value = "/user/login/google")
+	public void loginGoogle(HttpServletRequest request, HttpServletResponse response) {
+		String code = request.getParameter("code");
+		//TODO GoogleAuthController
+
+	}
+
+	@RequestMapping(value = "/user/logout", method = RequestMethod.GET, headers = "Accept=application/json", produces = "application/json")
+	public void logout(HttpServletRequest request) throws UnauthorizedException {
 		SecurityContextHolder.clearContext();
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
-		return "logout";
+		throw UnauthorizedException.getInstance();
 	}
-
-	/**
-	 * Unsuccessful attempt - we log it down and increment attempts info for user entry point
-	 *
-	 * @param model
-	 * @param principal
-	 * @return
-	 */
-	@RequestMapping(value = "/loginFailed", method = RequestMethod.GET)
-	public String loginFailed(ModelMap model, Principal principal) {
-		return "login";
-	}
-
 }

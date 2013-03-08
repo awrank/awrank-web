@@ -5,13 +5,11 @@ import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
+import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.entrypoint.EntryPointByEmailNotFoundException;
-import com.awrank.web.model.service.EntryHistoryService;
-import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserPasswordChangingService;
-import com.awrank.web.model.service.UserService;
+import com.awrank.web.model.exception.user.UserNotCreatedException;
+import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
-import com.awrank.web.model.service.jopos.AWRankingGrantedAuthority;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
@@ -22,10 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -59,6 +59,9 @@ public class UserProfileController extends AbstractController {
 
 	@Autowired
 	AuditorAwareImpl auditorAware;
+
+	@Resource(name = "userEmailActivationServiceImpl")
+	private StateChangeTokenService userEmailActivationService;
 
 	/**
 	 * Get the access history for currently logged in user, used Principal as a param
@@ -139,46 +142,42 @@ public class UserProfileController extends AbstractController {
 
 		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
 
-		// TODO a_polyakov 20130306 Уже поздно подченить не успею
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
-//		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-//		User user = details.getUser();
-//		EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+//		---------------- sending verification email --------------------
 
-		//---------------- sending verification email --------------------
+		String key;
+		try {
+			key = SMTPAuthenticator.getHashed256(details.getUserEmail() + "." + details.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw new UserNotCreatedException();
+		}
 
-//		String key;
-//		try {
-//			key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + entryPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//			throw new UserNotCreatedException();
-//		}
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("localAddr", request.getLocalAddr());
+		params.put("remoteAddr", request.getRemoteAddr());
+		params.put("testactivation_email", details.getUserEmail());
+		params.put("testactivation_password", details.getPassword());
 
-//		Map<String, Object> params = new HashMap<String, Object>();
-//		params.put("localAddr", request.getLocalAddr());
-//		params.put("remoteAddr", request.getRemoteAddr());
-//		params.put("testactivation_email", user.getEmail());
-//		params.put("testactivation_password", entryPoint.getPassword());
-//
-//		try {
-//			userEmailActivationService.send(params);
-//		} catch (AwRankException e) {
+		try {
+			userEmailActivationService.send(params);
+		} catch (AwRankException e) {
 //			TODO Auto-generated catch block
-//			getLogger().error(e.getMessage(), e);
-//		}
+			getLogger().error(e.getMessage(), e);
+		}
 
-		//-------------- saving to db -----------------------------
+//		-------------- saving to db -----------------------------
 
-//		StateChangeToken token = new StateChangeToken();
-//		token.setToken(key);
-//		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
-//		token.setCreatedBy(user);
-//		token.setIpAddress(((WebAuthenticationDetails)((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
-//		token.setNewValue(form.getEmail());
-//		token.setValue(user.getEmail());
+		StateChangeToken token = new StateChangeToken();
+		token.setToken(key);
+		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
+		token.setCreatedBy(new User(details.getUserId()));
+		token.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
+		token.setNewValue(form.getEmail());
+		token.setValue(details.getUserEmail());
 
-//		userEmailActivationService.save(token);
+		userEmailActivationService.save(token);
 
 		return getPositiveResponseMap("Verification link sent to new email, untill it will be verifird current email is valid");
 	}
@@ -262,15 +261,15 @@ public class UserProfileController extends AbstractController {
 		//---------- check if we are logged in user ----------
 		if (principal != null) {
 			AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-			ArrayList<AWRankingGrantedAuthority> list = (ArrayList<AWRankingGrantedAuthority>) details.getAuthorities();
+			ArrayList<Role> list = (ArrayList<Role>) details.getAuthorities();
 
 			Boolean isAdmin = false;
 			Boolean isUserEmailVerified = false;
 
-			for (AWRankingGrantedAuthority auth : list) {
+			for (Role auth : list) {
 
-				if (auth.getAuthority() == String.valueOf(Role.ROLE_ADMIN)) isAdmin = true;
-				if (auth.getAuthority() == String.valueOf(Role.ROLE_USER_VERIFIED)) isUserEmailVerified = true;
+				if (auth == Role.ROLE_ADMIN) isAdmin = true;
+				if (auth == Role.ROLE_USER_VERIFIED) isUserEmailVerified = true;
 
 			}
 

@@ -71,7 +71,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#">Action</a></li>
 							<li class="divider"></li>
-							<li><a href="#login" onclick="fIndexLogout();" lngt="LOGOUT">Log out</a></li>
+							<li><a onclick="send_user_logout();" lngt="LOGOUT">Log out</a></li>
 						</ul>
 					</li>
 					<li class="dropdown" style="z-index: 10000">
@@ -132,116 +132,12 @@
 
 <script type="text/javascript" language="JavaScript">
 
-	var CRouter = Backbone.Router.extend({
-		routes: {
-			"login": "login",
-			"register": "register",
-			"forget_password": "forget_password",
-			"pricing": "pricing",
-			"session": "session",
-			"dictionary": "dictionary",
-			'*path': 'defaultRoute'
-		},
-		login: function () {
-			$('#divRegister').addClass('hidden');
-			$('#divForgetPassword').addClass('hidden');
-			var div = fIndexLoad('body', 'divLogin');
-			div.removeClass('hidden');
-		},
-		register: function () {
-			$('#divLogin').addClass('hidden');
-			$('#divForgetPassword').addClass('hidden');
-			var div = fIndexLoad('body', 'divRegister');
-			div.removeClass('hidden');
-		},
-		forget_password: function () {
-			$('#divLogin').addClass('hidden');
-			$('#divRegister').addClass('hidden');
-			var div = fIndexLoad('body', 'divForgetPassword');
-			div.removeClass('hidden');
-		},
-		pricing: function () {
-			fIndexMenuActive('menuItemPricing');
-			fIndexRightContentSelectDiv('divPricing');
-		},
-		session: function () {
-			fIndexMenuActive('menuItemSession');
-			fIndexRightContentSelectDiv('divSession');
-		},
-		dictionary: function () {
-			fIndexMenuActive('menuItemDictionary');
-			fIndexRightContentSelectDiv('divDictionary');
-		},
-		defaultRoute: function () {
-			workspace.navigate('pricing', {trigger: true});
-		}
-	});
-	var workspace = new CRouter();
-
-	Backbone.history.start();
-
 	function fIndexBodyOnload() {
 //		setContextPath('http://localhost:8080/awrank');
 //		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
+		awrankRouter.navigate('pricing', {trigger: true});
 		activeAjaxListener();
-	}
-
-	function fIndexLogout() {
-		// TODO exit
-		return false;
-	}
-	// GLOBAL
-
-	/**
-	 * select menu item (other deselect)
-	 * @param menuItemId
-	 */
-	function fIndexMenuActive(menuItemId) {
-		$('#menu li.active').removeClass('active');
-		$('#' + menuItemId).addClass('active');
-	}
-
-	/**
-	 * find div by id if not exist load from file (append div to target by targetSelector)
-	 * @param targetSelector
-	 * @param divId
-	 * @return div
-	 */
-	function fIndexLoad(targetSelector, divId) {
-		var div = $('#' + divId);
-		if (div[0] == null) {
-			div = $('<div id="' + divId + '"/>');
-			div.load(divId + '.html', function () {
-				localizeLoadContent(div);
-				$(targetSelector).append(div);
-			});
-		}
-		return div;
-	}
-	/**
-	 * find div by id if not exist load from file (append div to rightContent)
-	 * set div visible (other hide)
-	 * @param divId
-	 * @return div
-	 */
-	function fIndexRightContentSelectDiv(divId) {
-		$('#rightContent>:not(.hidden)').addClass('hidden');
-		var div = fIndexLoad('#rightContent', divId);
-		div.removeClass('hidden');
-		return div;
-	}
-
-	function showLogin() {
-		workspace.navigate('login', {trigger: true});
-	}
-
-	function showRegister() {
-		workspace.navigate('register', {trigger: true});
-	}
-
-	function showForgetPassword() {
-		workspace.navigate('forget_password', {trigger: true});
 	}
 
 </script>

@@ -187,13 +187,15 @@
 	});
 
 	var productPojoList = new CProductPojoList();
-	productPojoList.fetch({async: false});
-	var productPojoListView = new CProductPojoListView({collection: productPojoList,
-		productPojoView: new CProductPojoView()});
-	productPojoListView.render();
-	var paymentSystemPojoList = new CPaymentSystemPojoList();
-	paymentSystemPojoList.fetch({async: false});
-	var paymentSystemPojoListView = new CPaymentSystemPojoListView({collection: paymentSystemPojoList});
-	paymentSystemPojoListView.render();
+	productPojoList.fetch({success: function () {
+		var productPojoListView = new CProductPojoListView({collection: productPojoList,
+			productPojoView: new CProductPojoView()});
+		productPojoListView.render();
+		var paymentSystemPojoList = new CPaymentSystemPojoList();
+		paymentSystemPojoList.fetch({success: function () {
+			var paymentSystemPojoListView = new CPaymentSystemPojoListView({collection: paymentSystemPojoList});
+			paymentSystemPojoListView.render();
+		}});
+	}});
 
 </script>

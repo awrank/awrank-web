@@ -7,14 +7,13 @@ package com.awrank.web.backend.exception;
  */
 public class UnauthorizedException extends AwRankControllerException {
 
-    private static UnauthorizedException instance = new UnauthorizedException();
+	private static UnauthorizedException instance = new UnauthorizedException();
 
-    private UnauthorizedException() {
-        super("Unauthorized");
-    }
+	private UnauthorizedException() {
+		super("Unauthorized");
+	}
 
-    public static UnauthorizedException getInstance() {
-        return instance;
-    }
-
+	public static UnauthorizedException getInstance() {
+		return instance;
+	}
 }

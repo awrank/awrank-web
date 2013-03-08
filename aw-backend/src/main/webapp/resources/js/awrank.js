@@ -34,19 +34,23 @@ function awrankAjax(type, url, data, success, disableElementId) {
 }
 
 // save query to execute them after authentication
-var oldPost = [];
+var oldRequest = [];
 
 $(document).ajaxError(function (event, request, settings, exception) {
 	switch (request.status) {
 		case 401:
-			oldPost.push(settings);
-			//TODO
-			alert('401');
-//              loginShow();
-
+			if (settings.url != contextPath + 'user/login' && settings.url != contextPath + 'user/logout') {
+				oldRequest.push(settings);
+			}
+			if ($('#divLogin').length <= 0 || $('#divLogin').hasClass('hidden')) {
+				awrankRouter.navigate('login', {trigger: true});
+			}
+			else {
+				alertError(getMessage('ERROR'), getMessage('LOGIN_WRONG_UID_OR_PASSWORD'))
+			}
 			break;
 		case 403:
-			alertError(getMessage('ERROR'), +getMessage('ERROR_ACCESS'));
+			alertError(getMessage('ERROR'), getMessage('ERROR_ACCESS'));
 			break;
 		case 500:
 			var text = request.responseText
@@ -78,11 +82,30 @@ function activeAjaxListener() {
 }
 
 function alertError(title, text) {
-	$('div[name=alert-error]').append('<div class="alert alert-error">' +
-		'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-		'<h4>' + title + '</h4>' +
-		text +
-		'</div>');
+	$('div[name=alert-error]').each(function () {
+		var divError = $(this);
+		if (divError.closest('div.hidden').length <= 0) {
+			divError.append('<div class="alert alert-error">' +
+				'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+				'<h4>' + title + '</h4>' +
+				text +
+				'</div>')
+		}
+	});
+	awrankDebug(title + text);
+}
+
+function alertWarning(title, text) {
+	$('div[name=alert-warning]').each(function () {
+		var divError = $(this);
+		if (divError.closest('div.hidden').length <= 0) {
+			divError.append('<div class="alert alert-block">' +
+				'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+				'<h4>' + title + '</h4>' +
+				text +
+				'</div>')
+		}
+	});
 	awrankDebug(title + text);
 }
 
@@ -148,3 +171,112 @@ function dateTimeToString(date) {
 		f00(date.getMinutes()) + ':' +
 		f00(date.getSeconds());
 }
+
+// =========================== SEND REQUEST ===================================
+
+function send_user_login(uid, password) {
+	awrankPost("user/login", {uid: uid, password: password}, function (data) {
+		$('#divLogin').addClass('hidden');
+		awrankRouter.navigate('', {trigger: true});
+		var options;
+		while ((options = oldRequest.shift()) != null) {
+			$.ajax(options);
+		}
+	})
+}
+
+function send_user_logout() {
+	awrankGet('user/logout');
+}
+
+
+// =============================== UI =========================================
+/**
+ * find div by id if not exist load from file (append div to target by targetSelector)
+ * @param targetSelector
+ * @param divId
+ * @return div
+ */
+function fIndexLoad(targetSelector, divId) {
+	var div = $('#' + divId);
+	if (div[0] == null) {
+		div = $('<div id="' + divId + '"/>');
+		div.load(divId + '.html', function () {
+			localizeLoadContent(div);
+			$(targetSelector).append(div);
+		});
+	}
+	div.find('[name=alert-error]').empty();
+	div.find('[name=alert-warning]').empty();
+	return div;
+}
+/**
+ * find div by id if not exist load from file (append div to rightContent)
+ * set div visible (other hide)
+ * @param divId
+ * @return div
+ */
+function fIndexRightContentSelectDiv(divId) {
+	$('#rightContent>:not(.hidden)').addClass('hidden');
+	var div = fIndexLoad('#rightContent', divId);
+	div.removeClass('hidden');
+	return div;
+}
+/**
+ * select menu item (other deselect)
+ * @param menuItemId
+ */
+function fIndexMenuActive(menuItemId) {
+	$('#menu li.active').removeClass('active');
+	$('#' + menuItemId).addClass('active');
+}
+
+// ============================== ROUTING =====================================
+Backbone.history.start();
+var CRouter = Backbone.Router.extend({
+	routes: {
+		"login": "login",
+		"register": "register",
+		"forget_password": "forget_password",
+		"pricing": "pricing",
+		"session": "session",
+		"dictionary": "dictionary",
+		'*path': 'defaultRoute'
+	},
+	login: function () {
+		$('#divRegister').addClass('hidden');
+		$('#divForgetPassword').addClass('hidden');
+		var div = fIndexLoad('body', 'divLogin');
+		div.removeClass('hidden');
+	},
+	register: function () {
+		$('#divLogin').addClass('hidden');
+		$('#divForgetPassword').addClass('hidden');
+		var div = fIndexLoad('body', 'divRegister');
+		div.removeClass('hidden');
+	},
+	forget_password: function () {
+		$('#divLogin').addClass('hidden');
+		$('#divRegister').addClass('hidden');
+		var div = fIndexLoad('body', 'divForgetPassword');
+		div.removeClass('hidden');
+	},
+	pricing: function () {
+		fIndexMenuActive('menuItemPricing');
+		fIndexRightContentSelectDiv('divPricing');
+	},
+	session: function () {
+		fIndexMenuActive('menuItemSession');
+		fIndexRightContentSelectDiv('divSession');
+	},
+	dictionary: function () {
+		fIndexMenuActive('menuItemDictionary');
+		fIndexRightContentSelectDiv('divDictionary');
+	},
+	defaultRoute: function () {
+//		awrankRouter.navigate('pricing', {trigger: true});
+	}
+});
+var awrankRouter = new CRouter();
+
+

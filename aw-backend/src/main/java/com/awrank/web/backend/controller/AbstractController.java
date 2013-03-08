@@ -1,6 +1,10 @@
 package com.awrank.web.backend.controller;
 
+import com.awrank.web.backend.exception.ForbiddenException;
 import com.awrank.web.backend.exception.UnauthorizedException;
+import com.awrank.web.model.enums.Role;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
+import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,11 +54,37 @@ public abstract class AbstractController {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		if (e instanceof UnauthorizedException || e.getCause() instanceof UnauthorizedException) {
 			status = HttpStatus.UNAUTHORIZED;
+		} else if (e instanceof ForbiddenException || e.getCause() instanceof ForbiddenException) {
+			status = HttpStatus.FORBIDDEN;
 		}
+
 		return new ResponseEntity<Map<String, Object>>(jsonObject, status);
 	}
 
 	public Logger getLogger() {
 		return Logger.getLogger(this.getClass());
+	}
+
+	protected AWRankingUserDetails getUserDetails() throws UnauthorizedException {
+		AWRankingUserDetails userDetails = AuditorAwareImpl.getCurrentUserDetails();
+		if (userDetails == null)
+			throw UnauthorizedException.getInstance();
+		return userDetails;
+	}
+
+	protected void checkHasRole(Role role) throws ForbiddenException, UnauthorizedException {
+//      @PreAuthorize("hasRole('ROLE_USER')") not work
+//		request.isUserInRole()
+//		SecurityContextHolderAwareRequestWrapper.isUserInRole(role.name());
+		if (getUserDetails().hasRole(role))
+			throw ForbiddenException.getInstance();
+	}
+
+	protected void checkHasAnyRole(Role... roles) throws ForbiddenException, UnauthorizedException {
+		for (Role role : roles) {
+			if (getUserDetails().hasRole(role))
+				return;
+		}
+		throw ForbiddenException.getInstance();
 	}
 }

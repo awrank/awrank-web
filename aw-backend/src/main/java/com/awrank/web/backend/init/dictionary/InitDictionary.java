@@ -29,15 +29,23 @@ public class InitDictionary {
 		final List<Dictionary> list = new ArrayList<Dictionary>();
 //        ERROR
 		list.add(new Dictionary(null, Language.RU, Message.ERROR.name(), "Ошибка: "));
+		list.add(new Dictionary(null, Language.EN, Message.ERROR.name(), "Error: "));
 		list.add(new Dictionary(null, Language.RU, Message.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
+		list.add(new Dictionary(null, Language.EN, Message.ERROR_ACCESS.name(), "You're not permitted to do this action."));
 		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
+		list.add(new Dictionary(null, Language.EN, Message.ERROR_NETWORK.name(), "No connection with the server, try later."));
 //
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_OBJECT_ID.name(), "Missing object identifier."));
 		list.add(new Dictionary(null, Language.RU, Message.OBJECT_NOT_UNIQUE.name(), "Обект должен быть уникален"));
+		list.add(new Dictionary(null, Language.EN, Message.OBJECT_NOT_UNIQUE.name(), "The object must be unique."));
 
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык"));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Missing language."));
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_CODE.name(), "Missing dictionary code"));
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_TEXT.name(), "Missing dictionary text"));
 
 		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "Указанный адрес электронной почты отсутствует"));
 		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "The email not found"));
@@ -75,6 +83,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "ORDER", "Order"));
 		list.add(new Dictionary(null, Language.RU, "MORE", "еще"));
 		list.add(new Dictionary(null, Language.EN, "MORE", "more"));
+		list.add(new Dictionary(null, Language.RU, "WARNING", "Предупреждение"));
+		list.add(new Dictionary(null, Language.EN, "WARNING", "Warning"));
 //      ENTITY
 		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));
 		list.add(new Dictionary(null, Language.EN, "DICTIONARY_CODE", "Code"));
@@ -135,6 +145,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "LOGIN_FIELD_LOGIN", "Email address or login"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_FOOTER", "У вас нет учетной записи?"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_FOOTER", "Don't have an account?"));
+		list.add(new Dictionary(null, Language.EN, "LOGIN_WRONG_UID_OR_PASSWORD", "Wrong login or email or password"));
+		list.add(new Dictionary(null, Language.RU, "LOGIN_WRONG_UID_OR_PASSWORD", "Неправильный адресс электроной почты или логин или пароль"));
 
 		list.add(new Dictionary(null, Language.RU, "FORGET_DESCRIPTION", "Введите адрес электронной почты ниже, и мы вышлем вам инструкцию востановления пароля."));
 		list.add(new Dictionary(null, Language.EN, "FORGET_DESCRIPTION", "Enter your email address below and we'll send you password reset instructions."));
@@ -184,40 +196,19 @@ public class InitDictionary {
 		list.addAll(Dictionary.createItems("CREATE_A_NEW_ACCOUNT", "Create a new account", "Создайте учетную запись"));
 		list.addAll(Dictionary.createItems("DO_YOU_HAVE_AN_ACCOUNT", "Do you have an account?", "У вас есть учетная запись?"));
 		list.addAll(Dictionary.createItems("EMAIL_ADDRESS", "Email address", "Email адрес"));
-		list.addAll(Dictionary.createItems(
-				"INPUT_ANSWER_HERE", "Input answer here...",
-				"Введите ответ здесь..."));
+		list.addAll(Dictionary.createItems("INPUT_ANSWER_HERE", "Input answer here...", "Введите ответ здесь..."));
 		list.addAll(Dictionary.createItems("OR_WITH_EMAIL", "or with email:", "или введите email:"));
-		list.addAll(Dictionary.createItems(
-				"SECRET_QUESTION_1",
-				"What is your first pet's name?",
-				"Кличка вашего первого домашнего животного?"));
-		list.addAll(Dictionary.createItems(
-				"SECRET_QUESTION_2",
-				"What is your mother's maiden name?",
-				"Девичья фамилия вашей матери?"));
-		list.addAll(Dictionary.createItems(
-				"SECRET_QUESTION_3",
-				"Your favourite dish?",
-				"Ваше любимое блюдо?"));
-		list.addAll(Dictionary.createItems(
-				"SECRET_QUESTION_4",
-				"The most unforgettable event in your life?",
-				"Самое незабываемое событие в вашей жизни?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_1", "What is your first pet's name?", "Кличка вашего первого домашнего животного?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_2", "What is your mother's maiden name?", "Девичья фамилия вашей матери?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_3", "Your favourite dish?", "Ваше любимое блюдо?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_4", "The most unforgettable event in your life?", "Самое незабываемое событие в вашей жизни?"));
 		list.addAll(Dictionary.createItems("SIGNUP_WITH_GOOGLE", "Sign up with Google", "Рег-я через Google"));
 		list.addAll(Dictionary.createItems("SIGNUP_WITH_FACEBOOK", "Sign up with Facebook", "Рег-я через Facebook"));
 		list.addAll(Dictionary.createItems("TERMS_OF_SERVICE", "Terms of Service", "Условия использования"));
-		list.addAll(Dictionary.createItems(
-				"WE_RECOMMEND_SECRET_QUESTION",
-				"We do recommend to set secret question and input answer to make account more secure:",
-				"Мы рекомендуем установить секретный вопрос и ответ для большей безопасности:"));
+		list.addAll(Dictionary.createItems("WE_RECOMMEND_SECRET_QUESTION", "We do recommend to set secret question and input answer to make account more secure:", "Мы рекомендуем установить секретный вопрос и ответ для большей безопасности:"));
 
 
-//		Query query = em.createQuery("select d from Dictionary d where d.code = :code and d.language = :language");
-
-//        ObjectMapper objectMapper=new ObjectMapper();
 		for (final Dictionary item : list) {
-//            System.out.println("awrankPost('rest/dictionary', "+ objectMapper.valueToTree(item).toString()+");");
 			Dictionary oldItem = dictionaryDao.findByCodeAndLanguage(item.getCode(), item.getLanguage());
 			if (oldItem != null) {
 				if (!oldItem.getText().equals(item.getText())) {
@@ -225,8 +216,6 @@ public class InitDictionary {
 					dictionaryDao.save(oldItem);
 				}
 			} else {
-//				item.setCreatedDate(DateTime.now());
-//				item.setLastModifiedDate(item.getCreatedDate());
 				dictionaryDao.save(item);
 			}
 		}

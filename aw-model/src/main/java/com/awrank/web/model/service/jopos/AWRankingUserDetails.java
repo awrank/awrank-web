@@ -4,6 +4,7 @@ import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.enums.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -28,7 +29,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	private final boolean isEnabled;
 	//	private final User user;
 	private final String password;
-	private final List<AWRankingGrantedAuthority> authorities = new ArrayList<AWRankingGrantedAuthority>();
+	private final List<Role> authorities = new ArrayList<Role>();
 
 	public AWRankingUserDetails(EntryPoint entryPoint) {
 		this.uid = entryPoint.getUid();
@@ -39,7 +40,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 		this.userId = user.getId();
 		this.userEmail = user.getEmail();
 		for (UserRole userRole : user.getUserRoles()) {
-			authorities.add(new AWRankingGrantedAuthority(userRole.getRole()));
+			authorities.add(userRole.getRole());
 		}
 		// TODO
 		this.isAccountNonExpired = user.getBanStartedDate() == null;
@@ -72,9 +73,17 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 		return entryPointType;
 	}
 
+	public boolean hasRole(Role role) {
+		boolean has = false;
+		for (int i = 0; has == false && i < authorities.size(); i++) {
+			has = (authorities.get(i) == role);
+		}
+		return has;
+	}
+
 	/* (non-Javadoc)
-			 * @see org.springframework.security.core.userdetails.UserDetails#getUsername()
-			 */
+	 * @see org.springframework.security.core.userdetails.UserDetails#getUsername()
+	 */
 	@Override
 	public String getUsername() {
 		return uid;
@@ -92,7 +101,7 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 	* @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
 	*/
 	@Override
-	public List<AWRankingGrantedAuthority> getAuthorities() {
+	public List<Role> getAuthorities() {
 		return authorities;
 	}
 

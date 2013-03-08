@@ -67,8 +67,10 @@
 	});
 	var languageList = new CLanguageList();
 	var languageListView = new CLanguageListView({collection: languageList});
-	languageList.fetch({async: false});
-	languageListView.render();
+	languageList.fetch({success: function () {
+		languageListView.render();
+	}});
+
 
 	var CDictionary = Backbone.Model.extend({
 	});
@@ -127,8 +129,9 @@
 	var selectDictionary = null;
 	var dictionaryList = new CDictionaryList();
 	var dictionaryListView = new CDictionaryListView({collection: dictionaryList});
-	dictionaryList.fetch({async: false});
-	dictionaryListView.render();
+	dictionaryList.fetch({success: function () {
+		dictionaryListView.render();
+	}});
 
 	var CDictionaryFormView = Backbone.View.extend({
 		el: $('#dictionaryForm'),
