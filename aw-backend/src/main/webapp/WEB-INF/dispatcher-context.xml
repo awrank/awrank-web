@@ -37,6 +37,8 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/rest/**" />
+            <mvc:mapping path="/admin/**" />
+
             <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
                 <property name="entityManagerFactory" ref="entityManagerFactory" />
             </bean>
