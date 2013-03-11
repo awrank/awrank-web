@@ -9,8 +9,6 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd
-
-
             http://www.springframework.org/schema/mvc
             http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
@@ -35,6 +33,15 @@
 			<bean class="org.springframework.data.web.PageableArgumentResolver"/>
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/rest/**" />
+            <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+                <property name="entityManagerFactory" ref="entityManagerFactory" />
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="favorPathExtension" value="false"/>
