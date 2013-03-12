@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain.support;
 
 import com.awrank.web.model.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -24,6 +25,7 @@ public class AbstractUserRelatedEntityAuditable extends DatedAbstractAuditable {
 	@JoinColumn(name = "user_id", nullable = false, updatable = false)
 	protected User user;
 
+	@JsonIgnore
 	public User getUser() {
 		return user;
 	}

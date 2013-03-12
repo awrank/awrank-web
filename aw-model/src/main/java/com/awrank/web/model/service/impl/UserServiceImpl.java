@@ -236,6 +236,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public List<User> getAll() {
 		return (List<User>) userDao.findAll();
 	}

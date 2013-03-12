@@ -122,11 +122,6 @@
 <p>
 
 <div style="text-align: center;">
-	<table align="left" cellspacing="0" border="0">
-		<tr>
-			<td colspan="2" align="left"><h2>Change your password (you have to be logged in):</h2></td>
-		</tr>
-
 		<form method="POST" action="<c:url value="/rest/profile/changepasswordmanual" />" accept="application/json"
 			  enctype="application/json">
 			<tr>
@@ -150,8 +145,10 @@
 				</td>
 			</tr>
 		</form>
-
-	</table>
+<br/>
+	<br/>
+	<br/>
+	<br/>
 </div>
 </p>
 
@@ -159,6 +156,7 @@
 <h3>LOGIN</h3>
 
 <p>
+	<a href="<c:url value="login"/>">Login</a> |
 	<a href="<c:url value="register"/>">Register</a> |
 	<a href="<c:url value="logout"/>">Logout</a> <br/>
 </p>
