@@ -49,6 +49,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	@Value("#{emailProps[blocked_xsmtp_header_category]}")
 	private String blocked_xsmtp_header_category;
 
+	@Value("#{emailProps[unblocked_xsmtp_header_category]}")
+	private String unblocked_xsmtp_header_category;
+	
 	@Autowired
 	private UserDao userDao;
 
@@ -197,6 +200,58 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		return user;
 	}
 
+	public User unblockUser(User user, Principal principal) {
+		
+		user.setBanStartedDate(null);
+		save(user);
+
+		//Shall we introduce the "enabled" to EntryPoint and set it here to false?
+		//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+
+		//------ here add record in Diary about user was blocked
+
+		Diary drec = new Diary();
+		drec.setEvent(DiaryEvent.UNBLOCKED);
+		drec.setUser(user);
+
+		//---------- find/create EntryHistory ------------
+
+		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+		EntryHistory entryHistory;
+
+		if (entryHistoryList.size() == 0) {//create one if not found
+
+			entryHistory = new EntryHistory();
+			entryHistory.setUser(user);//associated with Admin's entry history record
+
+			entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+			entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+
+			EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
+			entryHistory.setEntryPoint(entryPoint);
+			entryHistory.setSigninDate(LocalDateTime.now());
+			entryHistoryService.save(entryHistory);
+		} else entryHistory = entryHistoryList.get(0);
+
+		drec.setEntryHistory(entryHistory);
+		diaryService.save(drec);
+
+		//----------send email to user about he was blocked -------------
+
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("testactivation_email", user.getEmail());
+		try {
+			sendGridEmailSender.send(unblocked_xsmtp_header_category, params);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return user;
+	}
 	/* (non-Javadoc)
 	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
 	 */

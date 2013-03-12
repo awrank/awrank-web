@@ -87,6 +87,8 @@ public interface UserService extends AbstractService {
 	Page<User> getPage(Pageable pageable);
 
 	User blockUser(User user, Principal principal);
+	
+	User unblockUser(User user, Principal principal);
 
 	/**
 	 * Recovery access account by email, generate and send new password to email

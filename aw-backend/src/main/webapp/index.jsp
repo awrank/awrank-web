@@ -325,6 +325,53 @@
 </p>
 <br/>
 
+<div height="100">
+	<form method="POST" action="<c:url value="admin/unblockuserbyemail" />" accept="application/json"
+		  enctype="application/json">
+		<table align="left">
+
+			<tr>
+				<td align="right">Email*</td>
+				<td><input type="text" name="email" value="okorokhina@gmail.com"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"><input type="submit" value="Unblock user by email"/>
+					<input type="reset" value="Reset"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</p>
+<p>
+
+<div height="100">
+	<form method="POST" action="<c:url value="admin/unblockuserbyid" />" accept="application/json"
+		  enctype="application/json">
+		<table align="left">
+
+			<tr>
+				<td align="right">Id*</td>
+				<td><input type="text" name="id" value="4"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"><input type="submit" value="Unblock user by id"/>
+					<input type="reset" value="Reset"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</p>
+<br/>
 <h3>Session scope</h3>
 ${sessionScope}
 <br/>

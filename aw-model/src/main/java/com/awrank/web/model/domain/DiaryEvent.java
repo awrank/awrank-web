@@ -54,6 +54,11 @@ public enum DiaryEvent {
     /**
      * When user is blocked
      */
-    BLOCKED
+    BLOCKED,
+    
+    /**
+     * User unblocked
+     */
+    UNBLOCKED
 
 }

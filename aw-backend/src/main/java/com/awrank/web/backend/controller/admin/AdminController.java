@@ -171,6 +171,54 @@ public class AdminController extends AbstractController {
 	}
     
     /**
+     * Blocking one user by email in form.getEmail()
+     * @param form
+     * @param request
+     * @return
+     */
+    @RequestMapping(
+			value = "/unblockuserbyemail",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+	User unblockUserByEmail(@ModelAttribute UserRegistrationFormPojo form, Principal principal)
+		{
+    	
+    	if(principal == null) return null;
+    	
+    	User user = userService.findOneByEmail(form.getEmail());
+    	if(user != null) userService.unblockUser(user, principal);
+		
+    	return user;	
+	}
+    
+    /**
+     * Blocking one user by id
+     * @param form
+     * @param request
+     * @return
+     */
+    @RequestMapping(
+			value = "/unblockuserbyid",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json",
+			headers = "content-type=application/x-www-form-urlencoded")
+	public
+	@ResponseBody()
+	User unblockUserByID(@ModelAttribute UserRegistrationFormPojo form, Principal principal)
+		{
+    	
+    	if(principal == null) return null;
+    	
+    	User user = userService.findOne(form.getId());
+    	if(user != null) userService.unblockUser(user, principal);
+		
+    	return user;	
+	}
+    
+    /**
      * Finding one user by email in form.getEmail()
      * @param form
      * @param request
