@@ -1,5 +1,6 @@
 package com.awrank.web.model.service;
 
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.AwRankException;
 
@@ -10,7 +11,7 @@ public interface StateChangeTokenService extends AbstractService {
 
 	void send(Map params) throws AwRankException;
 
-	Boolean verify(String key, HttpServletRequest request) throws AwRankException;
+	EntryPoint verify(String key, HttpServletRequest request) throws AwRankException;
 
 	void save(StateChangeToken act);
 

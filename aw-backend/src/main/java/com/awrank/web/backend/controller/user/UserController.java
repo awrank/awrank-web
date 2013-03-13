@@ -7,12 +7,14 @@ import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetE
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
+import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.StateChangeTokenService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.impl.UserServiceImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,10 @@ public class UserController extends AbstractController {
 	@Resource(name = "userEmailActivationServiceImpl")
 	private StateChangeTokenService userEmailActivationService;
 
+	@Autowired
+	@Qualifier("entryPointServiceImpl")
+	private EntryPointService entryPointService;
+	
 	@Autowired
 	AuditorAwareImpl auditorAware;
 
@@ -133,8 +139,17 @@ public class UserController extends AbstractController {
 	public
 	@ResponseBody
 	Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
-		boolean response = userEmailActivationService.verify(key, request);
-		return response ? getPositiveResponseMap() : getNegativeResponseMap("not verified");
+		
+		//---- if verified we have to relogin user - with new roles ----
+		
+		EntryPoint entryPoint = userEmailActivationService.verify(key, request);
+
+		if(entryPoint == null) return  getNegativeResponseMap("not verified");
+		// generate session if one doesn't exist
+		request.getSession();
+
+		auditorAware.setCurrentAuditor(entryPoint);
+		return getPositiveResponseMap();
 	}
 
 	//------------------- refactor out it not needed ---------------

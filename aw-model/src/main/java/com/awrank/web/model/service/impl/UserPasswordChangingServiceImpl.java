@@ -112,12 +112,12 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 		}
 	}
 
-	public Boolean verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException {
+	public EntryPoint verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException {
 
 		//------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
 		StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_PASSWORD_CHANGE);
 
-		if (stateChangeToken == null) return false;
+		if (stateChangeToken == null) return null;
 
 		//-------------- we found and we activate -----------
 
@@ -136,7 +136,7 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 				if (point.getType() == EntryPointType.EMAIL) thePoint = point;
 			}
 
-			if (thePoint == null) return false;//not found proper entry point - can't change
+			if (thePoint == null) return null;//not found proper entry point - can't change
 
 
 			//------------ we have found point and activation record ----------
@@ -169,10 +169,10 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 			drec.setEntryHistory(entryHistory);
 			diaryService.save(drec);
 
-			return true;
+			return thePoint;
 		}
 
-		return false;
+		return null;
 	}
 
 	public void save(StateChangeToken act) {

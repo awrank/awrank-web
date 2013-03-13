@@ -1,5 +1,6 @@
 package com.awrank.web.model.service;
 
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangeWasNotVerifiedException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
@@ -17,7 +18,7 @@ public abstract class UserPasswordChangingService extends AbstractServiceImpl im
 
 	public abstract void send(Map params) throws PasswordChangingEmailNotSetException;
 
-	public abstract Boolean verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException;//in case some technical problems only!
+	public abstract EntryPoint verify(String key, HttpServletRequest request) throws PasswordChangeWasNotVerifiedException;//in case some technical problems only!
 
 	public abstract void save(StateChangeToken act);
 

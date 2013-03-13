@@ -1,5 +1,6 @@
 package com.awrank.web.model.service;
 
+import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
@@ -17,7 +18,7 @@ public abstract class UserEmailActivationService extends AbstractServiceImpl imp
 
 	public abstract void send(Map params) throws UserActivationEmailNotSetException;
 
-	public abstract Boolean verify(String key, HttpServletRequest request) throws UserActivationWasNotVerifiedException;//in case some technical problems only!
+	public abstract EntryPoint verify(String key, HttpServletRequest request) throws UserActivationWasNotVerifiedException;//in case some technical problems only!
 
 	public abstract void save(StateChangeToken act);
 

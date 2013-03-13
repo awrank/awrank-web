@@ -108,7 +108,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		entryPointService.add(entryPoint);
 
 		//---------------- sending verification email --------------------
-		if (!sendingVerificationEmail(user, form.getEmail(), form.getPassword(), form.getUserLocalAddress(), form.getUserRemoteAddress()))
+		if (!sendingVerificationEmail(user, form.getEmail(), entryPoint.getPassword(), form.getUserLocalAddress(), form.getUserRemoteAddress()))
 			throw new UserNotCreatedException();
 
 		//-------------- here we need save a role for user -------------
@@ -121,7 +121,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	private boolean sendingVerificationEmail(User user, String email, String password, String localAddress, String remoteAddress) {
 		boolean success = false;
 		try {
-			String key = SMTPAuthenticator.getHashed256(email + "." + PasswordUtils.hashPassword(password) + "." + localAddress + "." + remoteAddress);
+			String key = SMTPAuthenticator.getHashed256(email + "." + password + "." + localAddress + "." + remoteAddress);
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("localAddr", localAddress);
 			params.put("remoteAddr", remoteAddress);

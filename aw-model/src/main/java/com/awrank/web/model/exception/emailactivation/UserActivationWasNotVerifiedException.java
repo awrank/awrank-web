@@ -10,7 +10,8 @@ import com.awrank.web.model.exception.AwRankException;
  */
 public class UserActivationWasNotVerifiedException extends AwRankException {
 
-    private final String message = "User email activation was not verified";
+    public final static String message = "User email activation was not verified";
+    public final static String message_key_not_built = "Compare verification key was not built ok";
 
     public UserActivationWasNotVerifiedException() {
         super();

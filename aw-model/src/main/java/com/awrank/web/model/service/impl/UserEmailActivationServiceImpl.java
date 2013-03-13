@@ -10,6 +10,9 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
+import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.user.PasswordUtils;
+
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,7 +99,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 
 	@Override
 	@Transactional
-	public Boolean verify(String key, HttpServletRequest request) throws UserActivationWasNotVerifiedException {
+	public EntryPoint verify(String key, HttpServletRequest request) throws UserActivationWasNotVerifiedException {
 
 		//------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
 		StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_EMAIL_VERIFICATION);
@@ -120,9 +123,25 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 					if (point.getType() == EntryPointType.EMAIL) thePoint = point;
 				}
 	
-				if (thePoint == null) return false;//not found proper entry point - can't activate
+				if (thePoint == null) return null;//not found proper entry point - can't activate
 	
+				//--------- check if activation made from same IP it was requested: build second key following same rule -------
+				
+				String builtKey;
+				System.out.println(request.getLocalAddr());
+				System.out.println(request.getRemoteAddr());
+				try {
+					
+					 builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + thePoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+					
+				} catch (Exception e) {
+					
+					throw new UserActivationWasNotVerifiedException(UserActivationWasNotVerifiedException.message_key_not_built);
+					
+				}
 	
+				if(key.compareTo(builtKey) != 0) throw new UserActivationWasNotVerifiedException();
+				
 				//------------ we have found point and activation record ----------
 	
 				stateChangeToken.setTokenUsedAtDate(today);
@@ -137,10 +156,10 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				role.setUser(user);
 				role.setRole(Role.ROLE_USER_VERIFIED);
 				userRoleService.save(role);
-				return true;
+				return thePoint;
 			}
 		}
-		
+		//----------- check if this is email changing ----
 		 stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_EMAIL_CHANGE);
 		 if(stateChangeToken != null){//email change
 				
@@ -156,8 +175,27 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				Set<EntryPoint> points = user.getEntryPoints();
 				EntryPoint oldPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, stateChangeToken.getValue());
 				
-				if (oldPoint == null) return false;//not found proper entry point - can't activate
+				if (oldPoint == null) return null;//not found proper entry point - can't activate
 	
+				//--------- check if activation made from same IP it was requested: build second key following same rule -------
+				
+				String builtKey;
+				System.out.println(request.getLocalAddr());
+				System.out.println(request.getRemoteAddr());
+				try {
+					
+					 builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + oldPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+					
+				} catch (Exception e) {
+					
+					throw new UserActivationWasNotVerifiedException(UserActivationWasNotVerifiedException.message_key_not_built);
+					
+				}
+	
+				if(key.compareTo(builtKey) != 0) throw new UserActivationWasNotVerifiedException();
+				
+				
+				
 				oldPoint.setEndedDate(today);
 				entryPointService.save(oldPoint);
 				
@@ -167,6 +205,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				newPoint.setUser(user);
 				newPoint.setUid(stateChangeToken.getNewValue());
 				newPoint.setType(EntryPointType.EMAIL);
+				newPoint.setPassword(oldPoint.getPassword());
 				newPoint.setVerifiedDate(today);
 				
 				entryPointService.save(newPoint);
@@ -176,11 +215,11 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				stateChangeToken.setTokenUsedAtDate(today);
 				stateChangeTokenDao.save(stateChangeToken);
 	
-				return true;
+				return newPoint;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	@Override

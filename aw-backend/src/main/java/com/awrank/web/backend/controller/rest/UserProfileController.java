@@ -193,9 +193,9 @@ public class UserProfileController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET, value = "/changepassword/{key}")
 	public String verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request, ModelMap modelMap) throws Exception {
 
-		Boolean response = userPasswordChangingService.verify(key, request);
+		EntryPoint entryPoint  = userPasswordChangingService.verify(key, request);
 
-		if (response == false) {
+		if (entryPoint == null) {
 
 			modelMap.addAttribute("params", getNegativeResponseMap("not found password changing token"));
 			return "403";
@@ -203,12 +203,7 @@ public class UserProfileController extends AbstractController {
 		} else {
 
 			//-------- here we log user in with current credentials for Principal can be used in newpassword
-
-			StateChangeToken vtoken = userPasswordChangingService.findByCode(key);
-			User user = vtoken.getUser();
-
-			EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-
+			
 			//TODO request.getRemoteAddr(), request.getSession().getId()
 			auditorAware.setCurrentAuditor(entryPoint);
 

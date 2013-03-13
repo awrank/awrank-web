@@ -52,7 +52,7 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 				if (o instanceof AWRankingUserDetails) {
 					details = (AWRankingUserDetails) o;
 				}
-				o = authentication.getPrincipal();
+				o = authentication.getPrincipal();//"anonymousUser"
 				if (o instanceof AWRankingUserDetails) {
 					details = (AWRankingUserDetails) o;
 				}
