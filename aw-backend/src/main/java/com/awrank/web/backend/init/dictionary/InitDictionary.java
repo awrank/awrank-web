@@ -209,7 +209,7 @@ public class InitDictionary {
 
 
 		for (final Dictionary item : list) {
-			Dictionary oldItem = dictionaryDao.findByCodeAndLanguage(item.getCode(), item.getLanguage());
+			Dictionary oldItem = dictionaryDao.findOneByLanguageAndCode(item.getLanguage(), item.getCode());
 			if (oldItem != null) {
 				if (!oldItem.getText().equals(item.getText())) {
 					oldItem.setText(item.getText());

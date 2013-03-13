@@ -4,7 +4,8 @@ import com.awrank.web.model.enums.Message;
 
 /**
  * User not have role
- * User: a_polyakov
+ *
+ * @author Alex Polyakov
  */
 public class ForbiddenException extends AwRankControllerException {
 	private static ForbiddenException instance = new ForbiddenException();

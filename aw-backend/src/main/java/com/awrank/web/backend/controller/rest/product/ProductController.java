@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @Controller
 @RequestMapping(value = "/rest/product")

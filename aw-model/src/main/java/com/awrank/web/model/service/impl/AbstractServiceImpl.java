@@ -4,7 +4,7 @@ import com.awrank.web.model.service.AbstractService;
 import org.apache.log4j.Logger;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class AbstractServiceImpl implements AbstractService {
 	@Override

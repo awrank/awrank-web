@@ -16,7 +16,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface DictionaryDao extends PagingAndSortingRepository<Dictionary, Long> {
 
-    @Query("select d from Dictionary d where d.code = :code and d.language = :language")
-    Dictionary findByCodeAndLanguage(@Param("code") String code, @Param("language") Language language);
+	@Query("select d from Dictionary d where d.language = :language and d.code = :code")
+	public Dictionary findOneByLanguageAndCode(@Param("language") Language language, @Param("code") String code);
 
+	@Query("select d.text from Dictionary d where d.language = :language and d.code = :code")
+	public String getTextByLanguageAndCode(@Param("language") Language language, @Param("code") String code);
 }

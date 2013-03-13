@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class PasswordUtils {
 
@@ -25,7 +25,7 @@ public class PasswordUtils {
 		try {
 			MessageDigest sha2 = MessageDigest.getInstance("SHA-512");
 			byte messageDigest[] = sha2.digest(password.getBytes("UTF-8"));
-			result = base64(messageDigest);
+			result = base16(messageDigest);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,19 +37,19 @@ public class PasswordUtils {
 		try {
 			MessageDigest md5 = MessageDigest.getInstance("md5");
 			byte messageDigest[] = md5.digest(password.getBytes("UTF-8"));
-			result = base64(messageDigest);
+			result = base16(messageDigest);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 
-	public static String base64(byte messageDigest[]) {
+	public static String base16(byte messageDigest[]) {
 		final StringBuilder hexString = new StringBuilder();
 		for (int i = 0; i < messageDigest.length; i++) {
 			String currentByte = Integer.toHexString(0xFF & messageDigest[i]);
 			if (currentByte.length() == 1) {
-				currentByte = "0" + currentByte;
+				hexString.append('0');
 			}
 			hexString.append(currentByte);
 		}

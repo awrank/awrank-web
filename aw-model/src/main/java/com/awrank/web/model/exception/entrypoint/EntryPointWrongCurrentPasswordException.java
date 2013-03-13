@@ -5,7 +5,8 @@ import com.awrank.web.model.exception.AwRankException;
 
 /**
  * wrong current password
- * User: a_polyakov
+ *
+ * @author Alex Polyakov
  */
 public class EntryPointWrongCurrentPasswordException extends AwRankException {
 	private EntryPointWrongCurrentPasswordException() {

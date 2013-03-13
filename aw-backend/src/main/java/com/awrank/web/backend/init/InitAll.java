@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @Controller
 public class InitAll {

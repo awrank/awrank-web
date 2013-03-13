@@ -2,6 +2,7 @@ package com.awrank.web.model.service.impl;
 
 import com.awrank.web.model.dao.DictionaryDao;
 import com.awrank.web.model.domain.Dictionary;
+import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.enums.Message;
 import com.awrank.web.model.exception.ObjectFieldException;
 import com.awrank.web.model.exception.ObjectNotUniqueException;
@@ -18,11 +19,25 @@ public class DictionaryServiceImpl extends AbstractServiceImpl implements Dictio
 	@Autowired
 	private DictionaryDao dictionaryDao;
 
+	@Override
 	@Transactional(readOnly = true)
 	public Iterable<Dictionary> findAll() {
 		return dictionaryDao.findAll(new Sort("code"/*DictionaryConst.H_CODE*/, "language"/*DictionaryConst.H_LANGUAGE*/));
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Dictionary findOneByLanguageAndCode(Language language, String code) {
+		return dictionaryDao.findOneByLanguageAndCode(language, code);
+	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public String getTextByLanguageAndCode(Language language, String code) {
+		return dictionaryDao.getTextByLanguageAndCode(language, code);
+	}
+
+	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public Dictionary create(Dictionary dictionary) throws ObjectNotUniqueException, ObjectFieldException {
 		if (dictionary.getLanguage() == null)
@@ -32,7 +47,7 @@ public class DictionaryServiceImpl extends AbstractServiceImpl implements Dictio
 		if (StringUtils.isEmptyOrWhitespaceOnly(dictionary.getText()))
 			throw new ObjectFieldException(Message.MISSING_DICTIONARY_TEXT, Dictionary.class,/*EObjectType.DICTIONARY,*/ null, dictionary.getId(), "text"/*DictionaryConst.S_TEXT*/);
 
-		Dictionary existing = dictionaryDao.findByCodeAndLanguage(dictionary.getCode(), dictionary.getLanguage());
+		Dictionary existing = dictionaryDao.findOneByLanguageAndCode(dictionary.getLanguage(), dictionary.getCode());
 
 		if (existing != null)
 			throw new ObjectNotUniqueException(Dictionary.class,/*EObjectType.DICTIONARY, */null, dictionary.getId(), null, existing.getId());
@@ -40,6 +55,7 @@ public class DictionaryServiceImpl extends AbstractServiceImpl implements Dictio
 		return dictionaryDao.save(dictionary);
 	}
 
+	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public Dictionary update(Long id, Dictionary dictionary) throws ObjectFieldException, ObjectNotUniqueException {
 		if (dictionary.getLanguage() == null)
@@ -49,7 +65,7 @@ public class DictionaryServiceImpl extends AbstractServiceImpl implements Dictio
 		if (StringUtils.isEmptyOrWhitespaceOnly(dictionary.getText()))
 			throw new ObjectFieldException(Message.MISSING_DICTIONARY_TEXT, Dictionary.class,/*EObjectType.DICTIONARY, */null, id, "text"/*DictionaryConst.S_TEXT*/);
 
-		Dictionary existing = dictionaryDao.findByCodeAndLanguage(dictionary.getCode(), dictionary.getLanguage());
+		Dictionary existing = dictionaryDao.findOneByLanguageAndCode(dictionary.getLanguage(), dictionary.getCode());
 		if (existing != null && !existing.getId().equals(id))
 			throw new ObjectNotUniqueException(Dictionary.class,/*EObjectType.DICTIONARY,*/ null, id, null, existing.getId());
 
@@ -63,6 +79,7 @@ public class DictionaryServiceImpl extends AbstractServiceImpl implements Dictio
 		return dictionaryDao.save(existing);
 	}
 
+	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void delete(Long id) throws ObjectFieldException {
 		if (id == null)

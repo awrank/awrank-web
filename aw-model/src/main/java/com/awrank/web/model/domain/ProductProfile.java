@@ -1,6 +1,7 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
+import com.awrank.web.model.enums.Currency;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
@@ -29,6 +30,13 @@ public class ProductProfile extends DatedAbstractAuditable {
 	private BigDecimal price;
 
 	/**
+	 * Currency
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency", nullable = false)
+	private Currency currency;
+
+	/**
 	 * Discount of the product in certain moment.
 	 */
 	@Column(name = "discount", columnDefinition = "DECIMAL(8,2)", nullable = true)
@@ -55,6 +63,14 @@ public class ProductProfile extends DatedAbstractAuditable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	public BigDecimal getDiscount() {

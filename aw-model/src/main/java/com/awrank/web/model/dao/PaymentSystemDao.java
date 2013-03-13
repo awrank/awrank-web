@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public interface PaymentSystemDao extends CrudRepository<PaymentSystem, Long> {
 	@Query("select o from PaymentSystem o where o." + PaymentSystemConst.H_EXTERNAL_ID + " = :externalId")

@@ -5,7 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class PriceUtils {
 	public static final int PRICE_CAPACITY = 2;

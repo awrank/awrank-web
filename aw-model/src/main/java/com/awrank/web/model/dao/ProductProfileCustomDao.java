@@ -5,7 +5,7 @@ import com.awrank.web.model.dao.pojos.PricingFormProductProfilePojo;
 import java.util.List;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public interface ProductProfileCustomDao {
 	public List<PricingFormProductProfilePojo> selectAvailable();

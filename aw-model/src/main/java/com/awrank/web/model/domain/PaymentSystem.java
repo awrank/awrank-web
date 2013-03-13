@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 /**
  * PaymentSystem
- * User: a_polyakov
+ *
+ * @author Alex Polyakov
  */
 @Entity
 @Table(name = "payment_system")

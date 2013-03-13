@@ -1,3 +1,4 @@
+<!--<div id="divPricing">-->
 <div name="alert-error"></div>
 <div id="divPricingRow" class="row-fluid">
 	<script type="text/template">
@@ -37,7 +38,7 @@
 
 	<div class="modal-body">
 		<div name="alert-error"></div>
-		<div id="divPaymentProductInfo">
+		<div id="divPaymentProductInfo" product_id="">
 			<script type="text/template">
 				<h2 lngt="<%=productName%>">productName</h2>
 
@@ -65,12 +66,12 @@
 			</script>
 		</div>
 		<div id="divPaymentPaymentSystemChoice" class="row-fluid pagination-centered">
-			<div id="divPaymentPaymentSystem2checkout" class="span6 hidden">
+			<div id="divPaymentPaymentSystem2checkout" class="span6 hidden" payment_system_id="">
 				<a class="btn">
 					<img src="resources/img/logo_2checkout.png" width="210" height="80">
 				</a>
 			</div>
-			<div id="divPaymentPaymentSystemWebmoney" class="span6 hidden">
+			<div id="divPaymentPaymentSystemWebmoney" class="span6 hidden" payment_system_id="">
 				<a class="btn">
 					<img src="resources/img/logo_webmoney.png" width="210" height="80">
 				</a>
@@ -124,7 +125,6 @@
 			this.options.productPojoView.model = this.collection.get(product_id);
 			this.options.productPojoView.render();
 			$('#divPayment').modal();
-			//TODO
 		}
 	});
 	var CProductPojoView = Backbone.View.extend({
@@ -137,6 +137,7 @@
 		render: function () {
 			this.$el.html(this.template(this.model.toJSON()));
 			localizeLoadContent(this.$el);
+			this.$el.attr('product_id', this.model.get('id'));
 			return this;
 		}
 	});
@@ -157,10 +158,12 @@
 				var testMode = model.get("testMode");
 				if (paymentSystemType == 'TWO_CHECKOUT') {
 					$('#divPaymentPaymentSystem2checkout').removeClass('hidden');
+					$('#divPaymentPaymentSystem2checkout').attr('payment_system_id', paymentSystemId);
 				} else if (paymentSystemType == 'WEB_MONEY') {
 
 					if (l_dic_language == 'RU') {
 						$('#divPaymentPaymentSystemWebmoney').removeClass('hidden');
+						$('#divPaymentPaymentSystemWebmoney').attr('payment_system_id', paymentSystemId);
 					} else {
 						this.hidePaymentSystem.push($('#divPaymentPaymentSystemWebmoney'));
 						$('#divPaymentPaymentMore').removeClass('hidden');
@@ -171,12 +174,10 @@
 			return this;
 		},
 		payment: function (event) {
-			var product_id = $(event.target).closest('div').attr("product_id");
-			alertError("test");
-//					alert("payment" + product_id);
-			//TODO
-//			var tr = $(event.target).closest('tr');
-//			selectDictionary = this.collection.get(tr.attr('id'));
+			var product_id = $('#divPaymentProductInfo').attr("product_id");
+			var payment_system_id = $(event.target).closest('div').attr("payment_system_id");
+			// TODO new window
+			window.location = 'wm/order?payment_system_id=' + payment_system_id + '&product_id=' + product_id;
 		},
 		showHidePaymentSystem: function () {
 			for (i in this.hidePaymentSystem) {
@@ -199,3 +200,4 @@
 	}});
 
 </script>
+<!--</div>-->

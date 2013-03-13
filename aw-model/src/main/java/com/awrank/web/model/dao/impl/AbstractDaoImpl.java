@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class AbstractDaoImpl {
 	@PersistenceContext
