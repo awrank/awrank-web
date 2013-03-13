@@ -32,7 +32,7 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.ERROR.name(), "Error: "));
 		list.add(new Dictionary(null, Language.RU, Message.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_ACCESS.name(), "You're not permitted to do this action."));
-		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Cоединение с сервером отсутствует попробуйте позже"));
+		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Соединение с сервером отсутствует попробуйте позже"));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_NETWORK.name(), "No connection with the server, try later."));
 //
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));

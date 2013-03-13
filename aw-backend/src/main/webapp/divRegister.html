@@ -21,8 +21,9 @@
                 <fieldset>
                     <legend lngt="CREATE_A_NEW_ACCOUNT"></legend>
                     <label lngt="WITH_SOCIAL_NETWORK"></label>
-                    <button type="button" class="btn btn-large btn-primary" lngt="SIGNUP_WITH_GOOGLE"></button>
-                    <button type="button" class="btn btn-large btn-primary pull-right"
+                    <button type="button" onclick="fRegisterGoogleSubmit()" class="btn btn-large btn-primary"
+                            lngt="SIGNUP_WITH_GOOGLE"></button>
+                    <button type="button" onclick="fRegisterFacebookSubmit()" class="btn btn-large btn-primary pull-right"
                             lngt="SIGNUP_WITH_FACEBOOK"></button>
                     <br/>
                     <br/>
@@ -76,14 +77,34 @@
                     <span lngt="DO_YOU_HAVE_AN_ACCOUNT"></span> <a href="#login" lngt="LOGIN"></a>
                 </span>
                 <br/>
+
+                <!-- todo: just for debug, remove later -->
+                <span>
+                    <fieldset>
+                        <legend>* Debug section *</legend>
+                        <a href="auth/google/register">Log In with Google </a><br/>
+                        <a href="auth/facebook/register">Log In with Facebook</a>
+                    </fieldset>
+                </span>
             </form>
         </div>
         <div class="span3"></div>
+
+
     </div>
 </div>
 
 <script type="text/javascript" language="JavaScript">
+
     function fRegisterSubmit() {
         $('#divRegister').addClass('hidden');
+    }
+
+    function fRegisterGoogleSubmit() {
+        awrankGet("auth/google/register");
+    }
+
+    function fRegisterFacebookSubmit() {
+        awrankGet("auth/facebook/register");
     }
 </script>
