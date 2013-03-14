@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class JsonUtils {
 
@@ -76,7 +76,7 @@ public class JsonUtils {
 	}
 
 	//---- Thought project we changed Date to joda's LocalDateTime, put attention here!
-	
+
 	public static Date getDate(final ObjectNode jsonObject, final String key) {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())

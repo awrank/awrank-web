@@ -8,7 +8,7 @@ import com.awrank.web.model.utils.select.annotation.SelectFrom;
 import java.math.BigDecimal;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class PricingFormProductProfilePojo {
 	private final Long id;

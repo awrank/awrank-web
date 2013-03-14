@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @Controller
 @RequestMapping(value = "/rest/payment_system")

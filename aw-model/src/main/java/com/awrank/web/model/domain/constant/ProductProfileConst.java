@@ -1,7 +1,7 @@
 package com.awrank.web.model.domain.constant;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public interface ProductProfileConst extends DatedAbstractAuditableConst {
 	public static final String H_PRODUCT = "product";

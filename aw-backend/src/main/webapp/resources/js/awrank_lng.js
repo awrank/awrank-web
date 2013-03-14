@@ -1,5 +1,5 @@
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  * localize ui
  */
 var l_dic_language = null;

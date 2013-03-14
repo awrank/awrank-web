@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Initialization of payment systems for the application
- * User: a_polyakov
+ *
+ * @author Alex Polyakov
  */
 @Service
 public class InitPaymentSystem {
@@ -31,10 +32,6 @@ public class InitPaymentSystem {
 			paymentSystem.setSecretWord("19D2303F-0FF6-498F-B6D1-050E5258BFC5");
 			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
-
-//			paymentSystem.setCreatedDate(DateTime.now());
-//			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
-
 			paymentSystemDao.save(paymentSystem);
 		}
 
@@ -48,10 +45,6 @@ public class InitPaymentSystem {
 			paymentSystem.setSecretWord("tango");
 			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
-
-//			paymentSystem.setCreatedDate(DateTime.now());
-//			paymentSystem.setLastModifiedDate(paymentSystem.getCreatedDate());
-
 			paymentSystemDao.save(paymentSystem);
 		}
 	}

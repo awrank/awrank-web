@@ -5,18 +5,18 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @WebListener
 public class HttpSessionListenerImpl implements HttpSessionListener {
 
-    @Override
-    public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        //TODO
-    }
+	@Override
+	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+		//TODO
+	}
 
-    @Override
-    public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        //TODO
-    }
+	@Override
+	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+		//TODO
+	}
 }

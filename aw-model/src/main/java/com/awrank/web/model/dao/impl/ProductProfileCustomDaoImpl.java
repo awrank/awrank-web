@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @Repository
 public class ProductProfileCustomDaoImpl extends AbstractDaoImpl implements ProductProfileCustomDao {

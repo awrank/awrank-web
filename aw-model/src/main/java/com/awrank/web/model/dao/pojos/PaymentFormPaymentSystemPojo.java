@@ -7,7 +7,7 @@ import com.awrank.web.model.utils.select.annotation.SelectField;
 import com.awrank.web.model.utils.select.annotation.SelectFrom;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class PaymentFormPaymentSystemPojo {
 	private final Long id;

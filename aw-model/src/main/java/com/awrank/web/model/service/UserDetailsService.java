@@ -3,7 +3,7 @@ package com.awrank.web.model.service;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public interface UserDetailsService extends AbstractService {
 

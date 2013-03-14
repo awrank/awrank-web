@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 @Service
 public class InitUser {
@@ -63,8 +63,6 @@ public class InitUser {
 			entryPoint.setUid(user.getEmail());
 			entryPoint.setPassword(PasswordUtils.hashPassword("user"));
 			entryPoint.setVerifiedDate(new LocalDateTime(0));
-//			entryPoint.setCreatedDate(new DateTime());
-//			entryPoint.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint);
 
 			LocalDateTime time = LocalDateTime.now();
@@ -78,8 +76,6 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setSessionId("init session ruser 1");
-//			entryHistory.setCreatedDate(new DateTime());
-//			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
 
 			EntryHistory entryHistory2 = new EntryHistory();
@@ -89,8 +85,6 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session ruser 2");
 			entryHistory2.setIpAddress("127.0.0.1");
-//			entryHistory2.setCreatedDate(new DateTime());
-//			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}
@@ -142,8 +136,6 @@ public class InitUser {
 			entryPoint2.setUid(user.getEmail());
 			entryPoint2.setPassword(PasswordUtils.hashPassword("1"));
 			entryPoint2.setVerifiedDate(new LocalDateTime(0));
-//			entryPoint2.setCreatedDate(new DateTime());
-//			entryPoint2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint2);
 
 			EntryPoint entryPoint3 = new EntryPoint();
@@ -153,8 +145,6 @@ public class InitUser {
 			entryPoint3.setUid("113359939181883937834");
 			entryPoint3.setPassword(null);
 			entryPoint3.setVerifiedDate(new LocalDateTime(0));
-//			entryPoint3.setCreatedDate(new DateTime());
-//			entryPoint3.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryPointDao.save(entryPoint3);
 
 			LocalDateTime time = LocalDateTime.now();
@@ -168,8 +158,6 @@ public class InitUser {
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
 			entryHistory.setEntryPoint(entryPoint);
-//			entryHistory.setCreatedDate(new DateTime());
-//			entryHistory.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory);
 
 			EntryHistory entryHistory2 = new EntryHistory();
@@ -179,8 +167,6 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session admin 2");
 			entryHistory2.setSuccess(true);
-//			entryHistory2.setCreatedDate(new DateTime());
-//			entryHistory2.setLastModifiedDate(entryPoint.getCreatedDate());
 			entryHistoryDao.save(entryHistory2);
 		}
 	}

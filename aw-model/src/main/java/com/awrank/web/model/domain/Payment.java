@@ -1,7 +1,10 @@
 package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.ExtendedAbstractAuditable;
+import com.awrank.web.model.enums.Currency;
 import com.awrank.web.model.utils.price.PriceUtils;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,23 +27,38 @@ public class Payment extends ExtendedAbstractAuditable {
 	private Order order;
 
 	/**
-	 * Type of payment.
+	 * Select payment system which created payment.
 	 */
-	@Enumerated(EnumType.STRING)
-	@Column(name = "payment_type", nullable = false, updatable = false)
-	private PaymentSystemType paymentSystemType;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "payment_system_id", nullable = false, updatable = false)
+	private PaymentSystem paymentSystem;
 
 	/**
-	 * Payable amount.
+	 * Payable amount in product currency.
 	 */
 	@Column(name = "amount", columnDefinition = PriceUtils.SQL_PRICE_COLUMN_DEFINITION, nullable = false)
 	private BigDecimal amount;
 
 	/**
-	 * Payable amount in local currency.
+	 * Product currency
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency", nullable = false)
+	private Currency currency;
+
+	/**
+	 * Payable amount in original payment currency.
 	 */
 	@Column(name = "amount_currency", columnDefinition = PriceUtils.SQL_PRICE_COLUMN_DEFINITION, nullable = false)
 	private BigDecimal amountCurrency;
+
+
+	/**
+	 * Original payment currency
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "original_currency", nullable = false)
+	private Currency originalCurrency;
 
 	/**
 	 * Status of the payment.
@@ -54,6 +72,13 @@ public class Payment extends ExtendedAbstractAuditable {
 	 */
 	@Column(name = "transaction_ref", nullable = true, length = 128)
 	private String transactionRef;
+
+	/**
+	 * Transaction date of the payment.
+	 */
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	@Column(name = "transaction_date", nullable = true)
+	private LocalDateTime transactionDate;
 
 	/**
 	 * Reference of the payment.
@@ -84,16 +109,24 @@ public class Payment extends ExtendedAbstractAuditable {
 		this.order = order;
 	}
 
-	public PaymentSystemType getPaymentSystemType() {
-		return paymentSystemType;
+	public PaymentSystem getPaymentSystem() {
+		return paymentSystem;
 	}
 
-	public void setPaymentSystemType(PaymentSystemType paymentSystemType) {
-		this.paymentSystemType = paymentSystemType;
+	public void setPaymentSystem(PaymentSystem paymentSystem) {
+		this.paymentSystem = paymentSystem;
 	}
 
 	public BigDecimal getAmount() {
 		return amount;
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	public void setAmount(BigDecimal amount) {
@@ -106,6 +139,14 @@ public class Payment extends ExtendedAbstractAuditable {
 
 	public void setAmountCurrency(BigDecimal amountCurrency) {
 		this.amountCurrency = amountCurrency;
+	}
+
+	public Currency getOriginalCurrency() {
+		return originalCurrency;
+	}
+
+	public void setOriginalCurrency(Currency originalCurrency) {
+		this.originalCurrency = originalCurrency;
 	}
 
 	public PaymentStatus getStatus() {
@@ -122,6 +163,14 @@ public class Payment extends ExtendedAbstractAuditable {
 
 	public void setTransactionRef(String transactionRef) {
 		this.transactionRef = transactionRef;
+	}
+
+	public LocalDateTime getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(LocalDateTime transactionDate) {
+		this.transactionDate = transactionDate;
 	}
 
 	public String getPaymentRef() {

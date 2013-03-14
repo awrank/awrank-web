@@ -6,6 +6,7 @@ import com.awrank.web.model.domain.Product;
 import com.awrank.web.model.domain.ProductProfile;
 import com.awrank.web.model.domain.ProductType;
 import com.awrank.web.model.domain.ProductVisibility;
+import com.awrank.web.model.enums.Currency;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,22 +42,15 @@ public class InitProduct {
 			product.setCountDailyRequest(10);
 			product.setCountMonthlyRequest(0);
 			product.setActive(Boolean.TRUE);
-
-//            product.setCreatedDate(DateTime.now());
-//            product.setLastModifiedDate(product.getCreatedDate());
-
 			productDao.save(product);
 
 			ProductProfile profile = new ProductProfile();
 			profile.setProduct(product);
 			profile.setPrice(new BigDecimal(9.99));
+			profile.setCurrency(Currency.UAH);
 			profile.setDiscount(BigDecimal.ZERO);
 			profile.setStartedDate(LocalDateTime.now());
 			profile.setEndedDate(new LocalDateTime(2099, 12, 31, 23, 59, 59, 999));
-
-//            profile.setCreatedDate(DateTime.now());
-//            profile.setLastModifiedDate(profile.getCreatedDate());
-
 			productProfileDao.save(profile);
 		}
 
@@ -71,22 +65,15 @@ public class InitProduct {
 			product.setCountDailyRequest(100);
 			product.setCountMonthlyRequest(0);
 			product.setActive(Boolean.TRUE);
-
-//            product.setCreatedDate(DateTime.now());
-//            product.setLastModifiedDate(product.getCreatedDate());
-
 			productDao.save(product);
 
 			ProductProfile profile = new ProductProfile();
 			profile.setProduct(product);
 			profile.setPrice(new BigDecimal(14.99));
+			profile.setCurrency(Currency.UAH);
 			profile.setDiscount(BigDecimal.ZERO);
 			profile.setStartedDate(LocalDateTime.now());
 			profile.setEndedDate(new LocalDateTime(2099, 12, 31, 23, 59, 59, 999));
-
-//            profile.setCreatedDate(DateTime.now());
-//            profile.setLastModifiedDate(profile.getCreatedDate());
-
 			productProfileDao.save(profile);
 		}
 
@@ -101,22 +88,15 @@ public class InitProduct {
 			product.setCountDailyRequest(1000);
 			product.setCountMonthlyRequest(0);
 			product.setActive(Boolean.TRUE);
-
-//            product.setCreatedDate(DateTime.now());
-//            product.setLastModifiedDate(product.getCreatedDate());
-
 			productDao.save(product);
 
 			ProductProfile profile = new ProductProfile();
 			profile.setProduct(product);
 			profile.setPrice(new BigDecimal(24.99));
+			profile.setCurrency(Currency.UAH);
 			profile.setDiscount(BigDecimal.ZERO);
 			profile.setStartedDate(LocalDateTime.now());
 			profile.setEndedDate(new LocalDateTime(2099, 12, 31, 23, 59, 59, 999));
-
-//            profile.setCreatedDate(DateTime.now());
-//            profile.setLastModifiedDate(profile.getCreatedDate());
-
 			productProfileDao.save(profile);
 		}
 	}

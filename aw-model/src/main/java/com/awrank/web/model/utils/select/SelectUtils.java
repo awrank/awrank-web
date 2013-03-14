@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: a_polyakov
+ * @author Alex Polyakov
  */
 public class SelectUtils {
 	private static Map<Class, String> select_from = new HashMap<Class, String>();
