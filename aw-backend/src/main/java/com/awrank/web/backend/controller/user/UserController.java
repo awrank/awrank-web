@@ -1,12 +1,15 @@
 package com.awrank.web.backend.controller.user;
 
 import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.model.domain.Diary;
+import com.awrank.web.model.domain.DiaryEvent;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
+import com.awrank.web.model.service.DiaryService;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.StateChangeTokenService;
 import com.awrank.web.model.service.UserService;
@@ -47,7 +50,7 @@ public class UserController extends AbstractController {
 	
 	@Autowired
 	AuditorAwareImpl auditorAware;
-
+	
 	private Map getPositiveResponseMap() {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("result", "ok");
@@ -149,6 +152,7 @@ public class UserController extends AbstractController {
 		request.getSession();
 
 		auditorAware.setCurrentAuditor(entryPoint);
+		
 		return getPositiveResponseMap();
 	}
 

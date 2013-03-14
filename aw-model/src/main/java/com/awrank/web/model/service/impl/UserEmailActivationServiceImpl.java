@@ -6,6 +6,7 @@ import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
+import com.awrank.web.model.service.DiaryService;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
@@ -88,6 +89,10 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
 
+	@Autowired
+	@Qualifier("diaryServiceImpl")
+	private DiaryService diaryService;
+	
 	@Override
 	public void send(Map params) throws UserActivationEmailNotSetException {
 		try {
@@ -152,6 +157,15 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	
 				//---------- we add record concerning user role to user_roles ----
 	
+				//---------------------- save to Diary ----------------------------
+				Diary dr = new Diary();
+				dr.setUser(user);
+				dr.setCreatedBy(user);
+				dr.setEvent(DiaryEvent.VERIFY_EMAIL);
+				dr.setNewValue(user.getEmail());
+				
+				this.diaryService.save(dr);
+			
 				UserRole role = new UserRole();
 				role.setUser(user);
 				role.setRole(Role.ROLE_USER_VERIFIED);
@@ -215,6 +229,16 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				stateChangeToken.setTokenUsedAtDate(today);
 				stateChangeTokenDao.save(stateChangeToken);
 	
+				//---------------------- save to Diary ----------------------------
+				Diary dr = new Diary();
+				dr.setUser(user);
+				dr.setCreatedBy(user);
+				dr.setEvent(DiaryEvent.CHANGE_EMAIL);
+				dr.setOldValue(stateChangeToken.getValue());
+				dr.setNewValue(stateChangeToken.getNewValue());
+				
+				this.diaryService.save(dr);
+				
 				return newPoint;
 			}
 		}

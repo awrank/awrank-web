@@ -6,7 +6,13 @@ package com.awrank.web.model.domain;
  * @author Eugene Solomka
  */
 public enum DiaryEvent {
-    /**
+   
+	 /**
+     * When user verifies his/her email address (once, after registration)
+     */
+    VERIFY_EMAIL,
+    
+	/**
      * When user changes his/her email address
      */
     CHANGE_EMAIL,
