@@ -122,10 +122,17 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		token.setToken(key);
 		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
 		token.setCreatedBy(new User(details.getUserId()));
-		token.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
+		try{
+			token.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
+		}catch(Exception ex){
+			
+			token.setIpAddress(request.getRemoteAddr());
+		}
 		token.setNewValue(form.getEmail());//new email
 		token.setValue(details.getUserEmail());//current email
-
+		
+		User user = this.userService.findOne(details.getUserId());
+		token.setUser(user);
 		userEmailActivationService.save(token);
 	}
 	

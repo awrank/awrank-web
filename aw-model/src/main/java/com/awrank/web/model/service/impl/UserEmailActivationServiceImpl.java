@@ -184,7 +184,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				System.out.println(request.getRemoteAddr());
 				try {
 					
-					 builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + oldPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
+					 builtKey = SMTPAuthenticator.getHashed256(stateChangeToken.getNewValue() + "." + oldPoint.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
 					
 				} catch (Exception e) {
 					
