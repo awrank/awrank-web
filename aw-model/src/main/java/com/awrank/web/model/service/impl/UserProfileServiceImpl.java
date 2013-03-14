@@ -198,6 +198,29 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 	}
 	
+	public  Map updateProfileData(UserProfileDataFormPojo form, Principal principal){
+		
+		if(principal == null) return getNegativeResponseMap("You have to be logged in to change profile data");
+		
+		AWRankingUserDetails details  = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+		
+		Long pId = details.getUserId();
+		Long id = form.getUserId();
+		
+		if(pId != id) return getNegativeResponseMap("You are logged in as a different user as for what you try to change the data");
+		
+		User user = this.userService.findOne(pId);
+		
+		if(form.getFirstName() != null) user.setFirstName(form.getFirstName());
+		if(form.getLastName() != null) user.setLastName(form.getLastName());
+		if(form.getLanguage() != null) user.setLanguage(form.getLanguage());
+		if(form.getBirthday() != null) user.setBirthday(form.getBirthday());
+		
+		this.userService.save(user);
+		 
+		return getPositiveResponseMap("Your profile data was updated successfully");
+		
+	}
 	private Map getPositiveResponseMap() {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("result", "ok");

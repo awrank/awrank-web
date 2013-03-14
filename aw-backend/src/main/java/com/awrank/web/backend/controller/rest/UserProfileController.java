@@ -140,7 +140,6 @@ public class UserProfileController extends AbstractController {
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
 	public
-	@ResponseBody()
 	String getUserDataInForm(ModelMap modelMap, Principal principal) throws Exception {
 
 		if (principal == null) return "403";
@@ -148,6 +147,18 @@ public class UserProfileController extends AbstractController {
 
 		return "userdata";
 	}
+	
+	
+	@RequestMapping(value = "/userdata/update",
+			method = RequestMethod.POST,
+			produces = "application/json")
+	public
+	@ResponseBody()
+	Map updateUserData(@ModelAttribute UserProfileDataFormPojo userdata, Principal principal) throws Exception {
+		
+		return this.userProfileService.updateProfileData(userdata, principal);
+	}
+
 	/**
 	 * Simple manual change of email - user shall be logged in, on new email verification link will be sent
 	 *

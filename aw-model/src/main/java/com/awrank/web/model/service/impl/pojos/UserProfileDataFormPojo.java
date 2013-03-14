@@ -18,6 +18,7 @@ import java.util.UUID;
 @SuppressWarnings("serial")
 public class UserProfileDataFormPojo implements Serializable {
 
+	public static String DATE_FORMAT_STRING = "yyyy-MM-dd";
 	private Long userId;
 
 	private String apiKey;
@@ -37,6 +38,7 @@ public class UserProfileDataFormPojo implements Serializable {
 	private EntryPointType networkType;
 
 	private LocalDateTime birthday;
+	private String birthdayAsFormattedString;
 
 	public void fillWithUserData(User user){
 		
@@ -113,19 +115,37 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.networkUID = networkUID;
 	}
 
+	public void setBirthday(LocalDateTime birthday) {
+		this.birthday = birthday;
+	}
+	
 	public LocalDateTime getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(LocalDateTime birthday) {
-		this.birthday = birthday;
+	public String getBirthdayAsFormattedString(){
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(UserProfileDataFormPojo.DATE_FORMAT_STRING);
+		if(birthday != null) return birthday.toString(formatter);
+		else return "0000-00-00";
+	}
+	
+	public void setBirthdayAsFormattedString(String date){
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(UserProfileDataFormPojo.DATE_FORMAT_STRING);
+		LocalDateTime data = formatter.parseLocalDateTime(date); 
+		this.birthday = data;
 	}
 
+	
+/*
 	public void setBirthday(String date, String format) {
+		
+		if(format == null) format = UserProfileDataFormPojo.DATE_FORMAT_STRING;
 		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
 		setBirthday(formatter.parseLocalDateTime(date));
 	}
-
+*/
 	public EntryPointType getNetworkType() {
 		return networkType;
 	}
