@@ -54,6 +54,10 @@
 <h3>User Profile</h3>
 
 <p>
+	<a href="<c:url value="rest/profile/userdata/get"/>">Go to "Change my data" form (name etc. you have to be logged in)</a>
+</p>
+
+<p>
 	<a href="<c:url value="rest/profile/accesshistory"/>">My last 100 login (you have to be logged in)</a>
 </p>
 

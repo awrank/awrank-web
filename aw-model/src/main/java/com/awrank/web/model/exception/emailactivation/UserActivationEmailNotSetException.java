@@ -19,7 +19,7 @@ public class UserActivationEmailNotSetException extends AwRankException {
 
     @Override
     public String getMessage() {
-        return "User actuvation email was not sent";
+        return "User activation email was not sent";
     }
 
 }

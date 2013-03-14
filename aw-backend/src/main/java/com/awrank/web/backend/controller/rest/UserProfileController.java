@@ -6,9 +6,11 @@ import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.AwRankException;
+import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointByEmailNotFoundException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.service.*;
+import com.awrank.web.model.service.impl.pojos.UserProfileDataFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
@@ -55,6 +57,9 @@ public class UserProfileController extends AbstractController {
 	private UserService userService;
 
 	@Autowired
+	private UserProfileService userProfileService;
+	
+	@Autowired
 	private UserPasswordChangingService userPasswordChangingService;
 
 	@Autowired
@@ -62,6 +67,7 @@ public class UserProfileController extends AbstractController {
 
 	@Resource(name = "userEmailActivationServiceImpl")
 	private StateChangeTokenService userEmailActivationService;
+	
 
 	/**
 	 * Get the access history for currently logged in user, used Principal as a param
@@ -77,15 +83,15 @@ public class UserProfileController extends AbstractController {
 	public
 	@ResponseBody()
 	Page<EntryHistory> getUserLoginHistory(ModelMap model, @PageableDefaults(pageNumber = 0, value = 100) Pageable pageable, Principal principal) {
-
-		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-		Page<EntryHistory> allEntryHistory = entryHistoryService.getPageByUserId(details.getUserId(), pageable);
-
+		
+		Page<EntryHistory> allEntryHistory = userProfileService.getUserLoginHistory(pageable, principal);
 		model.addAttribute("result", allEntryHistory.getContent());
 
 		return allEntryHistory;
 	}
 
+	
+	
 	/**
 	 * Here user goes after clicking on reset password email link
 	 *
@@ -124,6 +130,25 @@ public class UserProfileController extends AbstractController {
 	}
 
 	/**
+	 * Filld ModelMap instance with currently logged in user data (in getUserDataInForm userdata) and redirects to "userdata" page
+	 * @param modelMap
+	 * @param principal
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/userdata/get",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody()
+	String getUserDataInForm(ModelMap modelMap, Principal principal) throws Exception {
+
+		if (principal == null) return "403";
+		modelMap.addAttribute("userdata", userProfileService.getUserProfileDataForPrincipal(principal));
+
+		return "userdata";
+	}
+	/**
 	 * Simple manual change of email - user shall be logged in, on new email verification link will be sent
 	 *
 	 * @param form
@@ -138,46 +163,11 @@ public class UserProfileController extends AbstractController {
 			produces = "application/json")
 	public
 	@ResponseBody()
-	Map setUserNewEmaildManual(@ModelAttribute UserRegistrationFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws Exception {
+	Map setUserNewEmaildManual(@ModelAttribute UserRegistrationFormPojo form, ModelMap model, HttpServletRequest request, Principal principal) throws UserActivationEmailNotSetException {
 
 		if (principal == null) return getNegativeResponseMap("You have to be logged in to perform this operation");
-
-		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-
-//		---------------- sending verification email --------------------
-
-		String key;
-		try {
-			key = SMTPAuthenticator.getHashed256(details.getUserEmail() + "." + details.getPassword() + "." + request.getLocalAddr() + "." + request.getRemoteAddr());
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			throw new UserNotCreatedException();
-		}
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("localAddr", request.getLocalAddr());
-		params.put("remoteAddr", request.getRemoteAddr());
-		params.put("testactivation_email", details.getUserEmail());
-		params.put("testactivation_password", details.getPassword());
-
-		try {
-			userEmailActivationService.send(params);
-		} catch (AwRankException e) {
-//			TODO Auto-generated catch block
-			getLogger().error(e.getMessage(), e);
-		}
-
-//		-------------- saving to db -----------------------------
-
-		StateChangeToken token = new StateChangeToken();
-		token.setToken(key);
-		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
-		token.setCreatedBy(new User(details.getUserId()));
-		token.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());//or use taken from request one here?
-		token.setNewValue(form.getEmail());
-		token.setValue(details.getUserEmail());
-
-		userEmailActivationService.save(token);
+		
+		this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, request, principal);
 
 		return getPositiveResponseMap("Verification link sent to new email, untill it will be verifird current email is valid");
 	}
@@ -191,7 +181,7 @@ public class UserProfileController extends AbstractController {
 	 * @throws Exception
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/changepassword/{key}")
-	public String verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request, ModelMap modelMap) throws Exception {
+	public String verifyPasswordChangingFromEmailLink(@PathVariable("key") String key, HttpServletRequest request, ModelMap modelMap) throws Exception {
 
 		EntryPoint entryPoint  = userPasswordChangingService.verify(key, request);
 
@@ -214,6 +204,7 @@ public class UserProfileController extends AbstractController {
 			entryPoint.setEndedDate(LocalDateTime.now());
 			entryPointService.save(entryPoint);
 
+			//---- redirect user to form where he can enter new password -------
 			return "passwordchangingform";//here we shall create new entry point
 		}
 	}
@@ -253,66 +244,7 @@ public class UserProfileController extends AbstractController {
 	public
 	@ResponseBody()
 	Map sendUserResetPasswordLink(@ModelAttribute UserRegistrationFormPojo form, ModelMap model, Principal principal, HttpServletRequest request) throws Exception {
-		//---------- check if we are logged in user ----------
-		if (principal != null) {
-			AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-			ArrayList<Role> list = (ArrayList<Role>) details.getAuthorities();
-
-			Boolean isAdmin = false;
-			Boolean isUserEmailVerified = false;
-
-			for (Role auth : list) {
-
-				if (auth == Role.ROLE_ADMIN) isAdmin = true;
-				if (auth == Role.ROLE_USER_VERIFIED) isUserEmailVerified = true;
-
-			}
-
-			String email = details.getUsername();//actually this is an email
-
-			if (!isAdmin) {
-
-				if ((email.compareTo(form.getEmail()) != 0) || !isUserEmailVerified) {//if user is not an admin, enter not his email or email is his but not verified
-
-					return getNegativeResponseMap("You are not autorized to change password for user with given email");
-				}
-			}
-		}
-
-		//-------- not logged in or an admin so send the link -------------------
-
-		User user = userService.findOneByEmail(form.getEmail());
-		String testactivation_password = null;
-		for (EntryPoint entryPoint : user.getEntryPoints()) {
-			if (entryPoint.getType() == EntryPointType.EMAIL) {
-				testactivation_password = entryPoint.getPassword();
-				break;
-			}
-		}
-		if (testactivation_password == null) return getNegativeResponseMap("No current password");
-
-		StateChangeToken stateChangeToken = new StateChangeToken();
-
-		String key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + testactivation_password + "." + request.getLocalAddr());
-
-		stateChangeToken.setToken(key);
-		stateChangeToken.setType(StateChangeTokenType.USER_PASSWORD_CHANGE);
-		stateChangeToken.setUser(user);
-		stateChangeToken.setValue(user.getEmail());
-		stateChangeToken.setIpAddress(request.getLocalAddr());//Check later if we need remote or local IP here
-
-		userPasswordChangingService.save(stateChangeToken);
-
-		//-------------- and send link via email -----------------------
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		params.put("localAddr", request.getLocalAddr());
-		params.put("testactivation_password", testactivation_password);
-		params.put("testactivation_email", form.getEmail());
-
-		userPasswordChangingService.send(params);
-
-		return getPositiveResponseMap("password changing link sent to " + form.getEmail());
+		
+		return this.userProfileService.sendPasswordChangingLinkToEmail(form, request, principal);
 	}
 }
