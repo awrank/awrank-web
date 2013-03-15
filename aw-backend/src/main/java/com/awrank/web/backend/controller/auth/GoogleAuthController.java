@@ -1,8 +1,10 @@
 package com.awrank.web.backend.controller.auth;
 
+import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -54,7 +56,8 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 	//@Value("${oauth.google.userinfo.url}")
 	private String socialUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
-	@RequestMapping(value = "/auth/google/{action}", method = RequestMethod.GET)
+	//@RequestMapping(value = "/auth/google/{action}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{action}/google", method = RequestMethod.GET)
 	public String authViaGoogle(@PathVariable(value = "action") String action) throws IOException {
 		return super.authViaNetwork(action);
 	}
@@ -125,8 +128,10 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 		return token;
 	}
 
-	protected UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
-		UserRegistrationFormPojo userInfo = new UserRegistrationFormPojo();
+	protected UserSocialRegistrationFormPojo requestUserInfo(String accessToken)
+			throws IOException, JSONException {
+
+		UserSocialRegistrationFormPojo userInfo = new UserSocialRegistrationFormPojo();
 		LOG.debug("Request Google for user info...");
 		HttpClient httpClient = new HttpClient();
 		GetMethod getMethod = new GetMethod(socialUserInfoUrl + accessToken);
@@ -147,7 +152,7 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 			// todo: move out date format to constants
 			String birthday = jsonObject.optString("birthday");
 			if (StringUtils.hasLength(birthday)) {
-				userInfo.setBirthday(birthday, "yyyy-MM-dd");
+				userInfo.setBirthday(birthday, AppConstants.DateFormat.DF_yyyyMMdd_minus);
 			}
 		} else {
 			LOG.warn("Get Google userinfo request failed");

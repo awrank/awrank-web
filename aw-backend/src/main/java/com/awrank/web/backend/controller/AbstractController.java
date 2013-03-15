@@ -72,6 +72,13 @@ public abstract class AbstractController {
 		return userDetails;
 	}
 
+	/**
+	 * Checks if user has a specified role.
+	 *
+	 * @param role
+	 * @throws ForbiddenException
+	 * @throws UnauthorizedException
+	 */
 	protected void checkHasRole(Role role) throws ForbiddenException, UnauthorizedException {
 //      @PreAuthorize("hasRole('ROLE_USER')") not work
 //		request.isUserInRole()
@@ -80,6 +87,13 @@ public abstract class AbstractController {
 			throw ForbiddenException.getInstance();
 	}
 
+	/**
+	 * Checks if user has any of listed roles
+	 *
+	 * @param roles
+	 * @throws ForbiddenException
+	 * @throws UnauthorizedException
+	 */
 	protected void checkHasAnyRole(Role... roles) throws ForbiddenException, UnauthorizedException {
 		for (Role role : roles) {
 			if (getUserDetails().hasRole(role))

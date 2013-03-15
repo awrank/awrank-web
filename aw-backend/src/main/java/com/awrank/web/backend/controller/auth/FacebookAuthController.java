@@ -1,8 +1,10 @@
 package com.awrank.web.backend.controller.auth;
 
+import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -53,7 +55,8 @@ public class FacebookAuthController extends AbstractSocialAuthController {
 	//@Value("${oauth.facebook.userinfo.url}")
 	private String socialUserInfoUrl = "https://graph.facebook.com/me?access_token=";
 
-	@RequestMapping(value = "/auth/facebook/{action}", method = RequestMethod.GET)
+	//@RequestMapping(value = "/auth/facebook/{action}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{action}/facebook", method = RequestMethod.GET)
 	public String authViaFacebook(@PathVariable(value = "action") String action) throws IOException {
 		return super.authViaNetwork(action);
 	}
@@ -96,8 +99,10 @@ public class FacebookAuthController extends AbstractSocialAuthController {
 		return token;
 	}
 
-	protected UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException {
-		UserRegistrationFormPojo userInfo = new UserRegistrationFormPojo();
+	protected UserSocialRegistrationFormPojo requestUserInfo(String accessToken)
+			throws IOException, JSONException {
+
+		UserSocialRegistrationFormPojo userInfo = new UserSocialRegistrationFormPojo();
 		LOG.debug("Request Facebook for user info...");
 
 		HttpClient httpClient = new HttpClient();
@@ -120,7 +125,7 @@ public class FacebookAuthController extends AbstractSocialAuthController {
 			userInfo.setEmailVerified(jsonObject.optBoolean("verified"));
 			if (StringUtils.hasLength(jsonObject.optString("birthday"))) {
 				// todo: move out date format to constants
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+				DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_ddMMyyyy_slash);
 				LocalDateTime birthday = LocalDateTime.parse(jsonObject.optString("birthday"), formatter);
 				userInfo.setBirthday(birthday);
 			}

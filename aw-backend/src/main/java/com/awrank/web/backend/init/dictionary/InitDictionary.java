@@ -52,6 +52,33 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль"));
 		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password"));
 
+		// social
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
+				"Unfortunately the social network you've chosen did not provide us " +
+						"with your email. Please set email in your social account and try again or " +
+						"use the standard registration form. Thanks for understanding."));
+
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
+				"К сожалению, социальная сеть, которую вы выбрали не может предоставить нам ваш email. " +
+						"Пожалуйста, укажите ваш email в профиле социальной сети и попробуйте снова. " +
+						"Либо вы можете использовать стандартную форму регистрации." +
+						"Спасибо за понимание."));
+
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.ENTRY_POINT_NOT_FOUND_BY_UID.name(), "К сожалению, мы не смогли найти запись entry-point."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.ENTRY_POINT_NOT_FOUND_BY_UID.name(), "Unfortunately, we could not find entry point."));
+
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.EMAIL_ALREADY_EXISTS.name(), "Указанный email уже зарегистрирован в системе."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.EMAIL_ALREADY_EXISTS.name(), "This email is already registered in the system!"));
+
+
 //        simple words
 		list.add(new Dictionary(null, Language.RU, "COUNTRY", "Страна"));
 		list.add(new Dictionary(null, Language.EN, "COUNTRY", "Country"));

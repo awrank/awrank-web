@@ -9,9 +9,13 @@ import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointNotCreatedException;
+import com.awrank.web.model.exception.entrypoint.EntryPointNotFoundByUID;
+import com.awrank.web.model.exception.user.EmailAlreadyExistsException;
+import com.awrank.web.model.exception.user.SocialEmailNotProvidedException;
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
@@ -64,61 +68,26 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 	@Autowired
 	private AuditorAwareImpl auditorAware;
 
-	// TODO: Duplicate from UserController. Should be refactored in both places
-	private Map getPositiveResponseMap() {
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", "ok");
-		return result;
-	}
-
-	private Map getPositiveResponseMap(String resultStr) {
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", resultStr);
-		return result;
-	}
-
-	private Map getNegativeResponseMap(String reason) {
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", "failure");
-		result.put("reason", reason);
-		return result;
-	}
-	//--------
-
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS)
-	public Map login(UserRegistrationFormPojo userInfo, HttpServletRequest request) {
-		/* Scenario from specification doc
-		1) поиск точки входа (EntryPoint) с соответствующими параметрами:
-		-- точка входа должна быть подтверждена verifiedDate not null,
-		-- type== google
-		-- uid==${id}
-		2) определение пользователя в сессии, иначе - ошибка
-		3) записать сессию текущего пользователя в список залогиненых пользователей;
-		если в этом списке уже есть данный пользователь, старую сессию необходимо закрыть
-		4) на выходе: token для защиты от CSRF атак - {token:"xxx"}
-		 */
+	public Map login(UserSocialRegistrationFormPojo userInfo)
+            throws SocialEmailNotProvidedException, EntryPointNotFoundByUID {
 
 		// todo: нужны ли записи в entry_history?
 
 		// sometimes social network does not provide us with email data during /userinfo request
 		if (!StringUtils.hasLength(userInfo.getEmail())) {
-			return getNegativeResponseMap("Unfortunately the social network you've chosen did not provide us " +
-					"with your email. Please set email in your social account and try again or " +
-					"use the standard registration form. Thanks for understanding.");
+			throw new SocialEmailNotProvidedException();
 		}
 
 		EntryPoint entryPoint = entryPointService.findOneByUid(userInfo.getNetworkUID());
-
 		if (entryPoint == null) {
-			return getNegativeResponseMap("Unfortunately, we could not find entry point for " +
-					"networkType=" + userInfo.getNetworkType() + "; networkUID=" + userInfo.getNetworkUID());
+            throw new EntryPointNotFoundByUID();
 		}
-
-
 
 		// log in user
 		auditorAware.setCurrentAuditor(entryPoint);
+
 		/*
 		UsernamePasswordAuthenticationToken token =
 				new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getApiKey());
@@ -134,34 +103,22 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		}
 		*/
 
-		return getPositiveResponseMap("User is already authenticated!");
+		return null; //getPositiveResponseMap("User is already authenticated!");
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS)
-	public Map register(UserRegistrationFormPojo userInfo, HttpServletRequest request)
-			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
-
-		/* Scenario from specification doc:
-		-----------------------------------
-		0)* check if emails exist, if no - offer user to use standard registration form.
-		1) проверка уникальности email
-		2) создается User, UserRole, EntryPoint, UserEmailActivation
-		3) запуск активации email
-		4) на выходе: пустой объект - {}
-		-----------------------------------
-		* - new plan points
-		*/
+	public Map register(UserSocialRegistrationFormPojo userInfo)
+            throws EntryPointNotCreatedException, UserActivationEmailNotSetException,
+            UserNotCreatedException, SocialEmailNotProvidedException, EmailAlreadyExistsException {
 
 		// sometimes social network does not provide us with email data during /userinfo request
 		if (!StringUtils.hasLength(userInfo.getEmail())) {
-			return getNegativeResponseMap("Unfortunately the social network you've chosen did not provide us " +
-					"with your email. Please set email in your social account and try again or " +
-					"use the standard registration form. Thanks for understanding.");
+            throw new SocialEmailNotProvidedException();
 		}
 
 		if (userService.findOneByEmail(userInfo.getEmail()) != null) {
-			return getNegativeResponseMap("This email is already registered in the system!");
+            throw new EmailAlreadyExistsException();
 		}
 
 		// avoid double generating
@@ -195,8 +152,8 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		entryPointService.add(entryPoint);
 
 		if (!userInfo.isEmailVerified()) {
-			userInfo.setUserLocalAddress(request.getLocalAddr());
-			userInfo.setUserRemoteAddress(request.getRemoteAddr());
+			userInfo.setUserLocalAddress(/*request.getLocalAddr()*/null);
+			userInfo.setUserRemoteAddress(/*request.getRemoteAddr()*/null);
 			String key;
 			try {
 				key = SMTPAuthenticator.getHashed256(
@@ -235,14 +192,14 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		UsernamePasswordAuthenticationToken token =
 				new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getApiKey());
 		// generate session if one doesn't exist
-		HttpSession session = request.getSession();
+		//HttpSession session = request.getSession();
 		AWRankingUserDetails details = new AWRankingUserDetails(entryPoint);
 		token.setDetails(details);
 
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 
-		return getPositiveResponseMap("Registration via network finished successfully! User stored at session.");
+		return null;//getPositiveResponseMap("Registration via network finished successfully! User stored at session.");
 	}
 
 }

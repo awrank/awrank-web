@@ -1,7 +1,7 @@
 package com.awrank.web.backend.controller.auth;
 
 import com.awrank.web.model.service.SocialAuthService;
-import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,11 +65,11 @@ public abstract class AbstractSocialAuthController {
 
 
 			if (StringUtils.hasLength(accessToken)) {
-				UserRegistrationFormPojo userInfo = requestUserInfo(accessToken);
+				UserSocialRegistrationFormPojo userInfo = requestUserInfo(accessToken);
 				if (isActionLogin()) {
-					return socialAuthService.login(userInfo, request);
+					return socialAuthService.login(userInfo);
 				} else if (isActionRegister()) {
-					return socialAuthService.register(userInfo, request);
+					return socialAuthService.register(userInfo);
 				} else {
 					message = "No auth action specified!";
 				}
@@ -84,7 +84,6 @@ public abstract class AbstractSocialAuthController {
 	}
 
 	/**
-	 *
 	 * @param authCode
 	 * @return
 	 * @throws IOException
@@ -93,13 +92,13 @@ public abstract class AbstractSocialAuthController {
 	protected abstract String requestAccessToken(String authCode) throws IOException, JSONException;
 
 	/**
-	 *
 	 * @param accessToken
 	 * @return
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	protected abstract UserRegistrationFormPojo requestUserInfo(String accessToken) throws IOException, JSONException;
+	protected abstract UserSocialRegistrationFormPojo
+	requestUserInfo(String accessToken) throws IOException, JSONException;
 
 	public boolean isActionLogin() {
 		return this.action.equals(AUTH_ACTION_LOGIN);

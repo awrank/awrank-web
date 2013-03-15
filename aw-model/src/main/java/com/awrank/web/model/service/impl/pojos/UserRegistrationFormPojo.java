@@ -40,6 +40,8 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	private String userRemoteAddress;
 
+    // todo: probably the fields below should be deleted if not used.
+
 	private String networkUID;
 
 	private EntryPointType networkType;
@@ -48,19 +50,6 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	private LocalDateTime birthday;
 
-	public User createUser() {
-		User user = new User();
-		user.setApiKey(getApiKey());
-		user.setFirstName(getFirstName());
-		user.setLastName(getLastName());
-		user.setEmail(getEmail());
-		user.setLanguage(getLanguage());
-		user.setAuthorizationFailsCount(0);
-		user.setBirthday(getBirthday());
-		return user;
-	}
-
-	
 	public Long getId() {
 		return id;
 	}
@@ -178,11 +167,6 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	public void setBirthday(LocalDateTime birthday) {
 		this.birthday = birthday;
-	}
-
-	public void setBirthday(String date, String format) {
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-		setBirthday(formatter.parseLocalDateTime(date));
 	}
 
 	public EntryPointType getNetworkType() {

@@ -32,6 +32,7 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 
 	/**
 	 * Saves a current {@code User} instance to session, based on its entry point data.
+	 *
 	 * @param entryPoint {@code EntryPoint} instance connected to current {@code User}.
 	 */
 	public void setCurrentAuditor(EntryPoint entryPoint) {
@@ -44,8 +45,9 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 	/**
 	 * Saves a current {@code User} instance to session, based on servlet request instance and its credentials:
 	 * {@code uid} and {@code password}.
-	 * @param request servlet request
-	 * @param uid unique identifier of entry point (e.g. email, uid in social network)
+	 *
+	 * @param request  servlet request
+	 * @param uid      unique identifier of entry point (e.g. email, uid in social network)
 	 * @param password user password (todo: what it should be for social network? currently apiKey is used)
 	 */
 	public void setCurrentAuditor(HttpServletRequest request, String uid, String password) {

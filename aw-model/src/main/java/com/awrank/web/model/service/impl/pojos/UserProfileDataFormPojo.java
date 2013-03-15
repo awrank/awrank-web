@@ -18,6 +18,7 @@ import java.util.UUID;
 @SuppressWarnings("serial")
 public class UserProfileDataFormPojo implements Serializable {
 
+	// todo: move out to constants
 	public static String DATE_FORMAT_STRING = "yyyy-MM-dd";
 	private Long userId;
 
