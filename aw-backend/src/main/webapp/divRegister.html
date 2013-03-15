@@ -17,7 +17,7 @@
         <div class="span6">
             <br>
 
-            <form action="#" onsubmit="fRegisterSubmit(); return false;" class="well">
+            <form action="#" id="regform" onsubmit="fRegisterSubmit();" class="well"  accept="application/json" enctype="application/json">
                 <fieldset>
                     <legend lngt="CREATE_A_NEW_ACCOUNT"></legend>
                     <label lngt="WITH_SOCIAL_NETWORK"></label>
@@ -28,10 +28,17 @@
                     <br/>
                     <br/>
                     <label lngt="OR_WITH_EMAIL"></label>
-
+					<div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input type="text" id="firstName" class="span5" lngp="REGISTER_FIELD_FIRST_NAME"/>
+                    </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-envelope"></i></span>
-                        <input type="text" id="uid" class="span5" lngp="EMAIL_ADDRESS"/>
+                        <input type="text" id="lastName" class="span5" lngp="REGISTER_FIELD_LAST_NAME"/>
+                    </div>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input type="text" id="email" class="span5" lngp="REGISTER_FIELD_EMAIL"/>
                     </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-lock"></i></span>
@@ -40,6 +47,10 @@
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-lock"></i></span>
                         <input type="password" id="passwordConfirm" class="span5" lngp="PASSWORD_CONFIRM"/>
+                    </div>
+                     <div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input type="language" id="language" class="span5" lngp="REGISTER_FIELD_LANGUAGE"/>
                     </div>
                     <br>
                     <label lngt="WE_RECOMMEND_SECRET_QUESTION"></label>
@@ -96,8 +107,47 @@
 
 <script type="text/javascript" language="JavaScript">
 
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
     function fRegisterSubmit() {
-        $('#divRegister').addClass('hidden');
+       // $('#divRegister').addClass('hidden');
+        //awrankGet("user/add");
+       
+    	//send_user_register($('regform').serializeObject());
+    	
+    	 var email = $('#email').val();
+         var password = $('#password').val();
+         var firstname = $('#firstName').val();
+         var lastname = $('#lastName').val();
+         var language = $('#language').val();
+    	
+    	send_user_register({email: email, password : password, firstName: firstname, lastName: lastname, language: language });
+    	/*
+            if ($('#email').val().length > 0 && $('#password').val().length > 0) {
+                
+            	alert("sending "+$('#login_password').serializeObject());
+            	send_user_register($('#login_password').serializeObject());
+            }
+            else {
+                alertWarning(getMessage('WARNING'), getMessage('REGISTER_WRONG_UID_OR_PASSWORD'));
+            }
+    	*/
+        
     }
 
     function fRegisterGoogleSubmit() {

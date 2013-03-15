@@ -80,7 +80,42 @@ public class UserController extends AbstractController {
 	 * @throws UserActivationEmailNotSetException
 	 *
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	
+	@RequestMapping(value = "/add2", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	public
+	@ResponseBody()
+	Map addUser2(@RequestBody Map<String, String> in, HttpServletRequest request)
+			throws EntryPointNotCreatedException, UserActivationEmailNotSetException, UserNotCreatedException {
+
+		UserRegistrationFormPojo form = new UserRegistrationFormPojo();
+		
+		form.fillWith(in);
+		
+		if (userService.findOneByEmail(form.getEmail()) != null) {
+			return getNegativeResponseMap("This email is already registered in the system!");
+		}
+		
+		//and here we generate the API key
+
+		String apiKey = UUID.randomUUID().toString();
+		while (userService.findByAPIKey(apiKey) != null) apiKey = UUID.randomUUID().toString();
+		form.setApiKey(apiKey);
+
+		form.setUserLocalAddress(request.getLocalAddr());
+		form.setUserRemoteAddress(request.getRemoteAddr());
+
+		EntryPoint entryPoint = userService.register(form, request);
+
+		// generate session if one doesn't exist
+		request.getSession();
+
+		auditorAware.setCurrentAuditor(entryPoint);
+
+		return getPositiveResponseMap("Verification email was sent to your email");
+	}
+	
+	
+	
 	@RequestMapping(
 			value = "/add",
 			method = {RequestMethod.POST, RequestMethod.GET},

@@ -124,6 +124,12 @@ public class InitDictionary {
 
 		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_FIRST_NAME", "Имя"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_FIRST_NAME", "First Name"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_LAST_NAME", "Фамилия"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_LAST_NAME", "Last Name"));
+		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_LANGUAGE", "Язык (RU, EN)"));
+		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_LANGUAGE", "Language (RU, EN)"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_EMAIL", "Email адрес"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_EMAIL", "Email address"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_TITLE_SECURITY_QUESTION", "мы рекомендуем установить секретный вопрос и ответ для увеличения безопасности:"));

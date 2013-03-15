@@ -8,6 +8,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -59,6 +60,7 @@ public class UserRegistrationFormPojo implements Serializable {
 		return user;
 	}
 
+	
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +101,16 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.password = password;
 	}
 
+	/**
+	 * stubs, for make this POJO work with divRegister.html. If password and confirmation are equal shall be checked on frontend page
+	 */
+	public String getPasswordConfirm() {
+		return password;
+	}
+
+	public void setPasswordConfirm(String password) {
+	
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -179,5 +191,15 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	public void setNetworkType(EntryPointType networkType) {
 		this.networkType = networkType;
+	}
+	
+	public void fillWith(Map<String, String> in){
+		
+		this.setEmail(in.get("email"));
+		this.setFirstName(in.get("firstName"));
+		this.setLastName(in.get("lastName"));
+		this.setPassword(in.get("password"));
+		this.setLanguage(Language.valueOf(in.get("language")));
+		
 	}
 }
