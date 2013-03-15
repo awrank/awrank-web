@@ -7,6 +7,7 @@ import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
 import com.awrank.web.model.service.DiaryService;
+import com.awrank.web.model.service.EntryHistoryService;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
@@ -93,6 +94,10 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	@Qualifier("diaryServiceImpl")
 	private DiaryService diaryService;
 	
+	@Autowired
+	@Qualifier("entryHistoryServiceImpl")
+	private EntryHistoryService entryHistoryService;
+	
 	@Override
 	public void send(Map params) throws UserActivationEmailNotSetException {
 		try {
@@ -158,14 +163,25 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				//---------- we add record concerning user role to user_roles ----
 	
 				//---------------------- save to Diary ----------------------------
+				
+				/*
+				EntryHistory entryHistory = new EntryHistory();
+				entryHistory.setUser(user);
+				entryHistory.setEntryPoint(thePoint);
+				entryHistory.setSigninDate(LocalDateTime.now());
+				entryHistory.setSessionId("mock history on user verification email by link - needed for Diary record");
+				entryHistory.setIpAddress(request.getRemoteAddr());
+				this.entryHistoryService.save(entryHistory);
+				
 				Diary dr = new Diary();
 				dr.setUser(user);
 				dr.setCreatedBy(user);
 				dr.setEvent(DiaryEvent.VERIFY_EMAIL);
+				dr.setEntryHistory(entryHistory);//cannot be null
 				dr.setNewValue(user.getEmail());
 				
 				this.diaryService.save(dr);
-			
+				*/
 				UserRole role = new UserRole();
 				role.setUser(user);
 				role.setRole(Role.ROLE_USER_VERIFIED);
@@ -230,15 +246,24 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				stateChangeTokenDao.save(stateChangeToken);
 	
 				//---------------------- save to Diary ----------------------------
+				/*
+				EntryHistory entryHistory = new EntryHistory();
+				entryHistory.setUser(user);
+				entryHistory.setEntryPoint(newPoint);
+				entryHistory.setIpAddress(request.getRemoteAddr());
+				entryHistory.setSigninDate(LocalDateTime.now());
+				entryHistory.setSessionId("mock histpry on user verification email by link - needed for Diary record");
+				this.entryHistoryService.save(entryHistory);
+				
+				
 				Diary dr = new Diary();
 				dr.setUser(user);
 				dr.setCreatedBy(user);
 				dr.setEvent(DiaryEvent.CHANGE_EMAIL);
 				dr.setOldValue(stateChangeToken.getValue());
 				dr.setNewValue(stateChangeToken.getNewValue());
-				
 				this.diaryService.save(dr);
-				
+				*/
 				return newPoint;
 			}
 		}

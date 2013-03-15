@@ -238,6 +238,11 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		drec.setEntryHistory(entryHistory);
 		diaryService.save(drec);
 
+		//--------- unlock the closed entry point record ----------------
+		
+		EntryPoint point = entryPointService.findOneByUid(user.getEmail());
+		point.setEndedDate(null);
+		
 		//----------send email to user about he was blocked -------------
 
 		Map<String, Object> params = new HashMap<String, Object>();
