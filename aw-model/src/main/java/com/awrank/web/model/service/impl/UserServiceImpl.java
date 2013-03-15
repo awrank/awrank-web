@@ -165,23 +165,25 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 		//---------- find/create EntryHistory ------------
 
-		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-		EntryHistory entryHistory;
-
-		if (entryHistoryList.size() == 0) {//create one if not found
-
-			entryHistory = new EntryHistory();
-			entryHistory.setUser(user);//associated with Admin's entry history record
-
-			entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-			entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
-
-			EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
-			entryHistory.setEntryPoint(entryPoint);
-			entryHistory.setSigninDate(LocalDateTime.now());
-			entryHistoryService.save(entryHistory);
-		} else entryHistory = entryHistoryList.get(0);
-
+		EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+		
+		if(entryHistory == null) {
+			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+			if (entryHistoryList.size() == 0) {//create one if not found
+	
+				entryHistory = new EntryHistory();
+				entryHistory.setUser(user);//associated with Admin's entry history record
+	
+				entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+				entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+	
+				EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
+				entryHistory.setEntryPoint(entryPoint);
+				entryHistory.setSigninDate(LocalDateTime.now());
+				entryHistoryService.save(entryHistory);
+			} else entryHistory = entryHistoryList.get(0);
+		}
+		
 		drec.setEntryHistory(entryHistory);
 		diaryService.save(drec);
 
@@ -218,23 +220,24 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 		//---------- find/create EntryHistory ------------
 
-		List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-		EntryHistory entryHistory;
-
-		if (entryHistoryList.size() == 0) {//create one if not found
-
-			entryHistory = new EntryHistory();
-			entryHistory.setUser(user);//associated with Admin's entry history record
-
-			entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-			entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
-
-			EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
-			entryHistory.setEntryPoint(entryPoint);
-			entryHistory.setSigninDate(LocalDateTime.now());
-			entryHistoryService.save(entryHistory);
-		} else entryHistory = entryHistoryList.get(0);
-
+		EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+		
+		if(entryHistory == null){
+			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+	
+			if (entryHistoryList.size() == 0) {//create one if not found
+	
+				entryHistory = new EntryHistory();
+				entryHistory.setUser(user);//associated with Admin's entry history record
+				entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
+				entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
+	
+				EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
+				entryHistory.setEntryPoint(entryPoint);
+				entryHistory.setSigninDate(LocalDateTime.now());
+				entryHistoryService.save(entryHistory);
+			} else entryHistory = entryHistoryList.get(0);
+		}
 		drec.setEntryHistory(entryHistory);
 		diaryService.save(drec);
 

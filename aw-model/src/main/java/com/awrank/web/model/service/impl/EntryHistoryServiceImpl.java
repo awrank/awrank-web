@@ -62,4 +62,9 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 		return entryHistoryDao.findBySessionId(sessionId);
 	}
+	
+	public EntryHistory getLatestForUser(User user){
+		
+		return (entryHistoryDao.findLatestForUser(user)).get(0);
+	}
 }

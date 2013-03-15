@@ -31,5 +31,7 @@ public interface EntryHistoryService extends AbstractService {
 	public List<String> findAllIPByUser(User user);
 
 	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable);
+	
+	public EntryHistory getLatestForUser(User user);
 
 }

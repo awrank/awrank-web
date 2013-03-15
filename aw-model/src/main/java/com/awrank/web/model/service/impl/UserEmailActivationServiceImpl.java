@@ -160,18 +160,9 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				thePoint.setVerifiedDate(today);
 				entryPointService.save(thePoint);
 	
-				//---------- we add record concerning user role to user_roles ----
-	
 				//---------------------- save to Diary ----------------------------
 				
-				/*
-				EntryHistory entryHistory = new EntryHistory();
-				entryHistory.setUser(user);
-				entryHistory.setEntryPoint(thePoint);
-				entryHistory.setSigninDate(LocalDateTime.now());
-				entryHistory.setSessionId("mock history on user verification email by link - needed for Diary record");
-				entryHistory.setIpAddress(request.getRemoteAddr());
-				this.entryHistoryService.save(entryHistory);
+				EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
 				
 				Diary dr = new Diary();
 				dr.setUser(user);
@@ -179,13 +170,14 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				dr.setEvent(DiaryEvent.VERIFY_EMAIL);
 				dr.setEntryHistory(entryHistory);//cannot be null
 				dr.setNewValue(user.getEmail());
-				
 				this.diaryService.save(dr);
-				*/
+	
+				//---------- we add record concerning user role to user_roles ----
 				UserRole role = new UserRole();
 				role.setUser(user);
 				role.setRole(Role.ROLE_USER_VERIFIED);
 				userRoleService.save(role);
+				
 				return thePoint;
 			}
 		}
@@ -246,24 +238,18 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				stateChangeTokenDao.save(stateChangeToken);
 	
 				//---------------------- save to Diary ----------------------------
-				/*
-				EntryHistory entryHistory = new EntryHistory();
-				entryHistory.setUser(user);
-				entryHistory.setEntryPoint(newPoint);
-				entryHistory.setIpAddress(request.getRemoteAddr());
-				entryHistory.setSigninDate(LocalDateTime.now());
-				entryHistory.setSessionId("mock histpry on user verification email by link - needed for Diary record");
-				this.entryHistoryService.save(entryHistory);
 				
+				EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
 				
 				Diary dr = new Diary();
 				dr.setUser(user);
 				dr.setCreatedBy(user);
+				dr.setEntryHistory(entryHistory);
 				dr.setEvent(DiaryEvent.CHANGE_EMAIL);
 				dr.setOldValue(stateChangeToken.getValue());
 				dr.setNewValue(stateChangeToken.getNewValue());
 				this.diaryService.save(dr);
-				*/
+				
 				return newPoint;
 			}
 		}
