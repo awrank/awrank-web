@@ -14,6 +14,7 @@ import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,9 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 
+	@Autowired
+	private AuditorAwareImpl auditorAware;
+
 	// TODO: Duplicate from UserController. Should be refactored in both places
 	private Map getPositiveResponseMap() {
 		Map<String, String> result = new HashMap<String, String>();
@@ -95,6 +99,8 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 		4) на выходе: token для защиты от CSRF атак - {token:"xxx"}
 		 */
 
+		// todo: нужны ли записи в entry_history?
+
 		// sometimes social network does not provide us with email data during /userinfo request
 		if (!StringUtils.hasLength(userInfo.getEmail())) {
 			return getNegativeResponseMap("Unfortunately the social network you've chosen did not provide us " +
@@ -109,7 +115,11 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 					"networkType=" + userInfo.getNetworkType() + "; networkUID=" + userInfo.getNetworkUID());
 		}
 
+
+
 		// log in user
+		auditorAware.setCurrentAuditor(entryPoint);
+		/*
 		UsernamePasswordAuthenticationToken token =
 				new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getApiKey());
 		// generate session if one doesn't exist
@@ -122,6 +132,7 @@ public class SocialAuthServiceImpl extends AbstractServiceImpl implements Social
 			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 			return getPositiveResponseMap("User has been successfully logged in via network!");
 		}
+		*/
 
 		return getPositiveResponseMap("User is already authenticated!");
 	}

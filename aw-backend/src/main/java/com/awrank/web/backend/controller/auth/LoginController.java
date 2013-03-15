@@ -32,7 +32,7 @@ import java.util.Map;
 public class LoginController extends AbstractController {
 
 	@Autowired
-	AuditorAwareImpl auditorAware;
+	/*todo: access modifier?*/ AuditorAwareImpl auditorAware;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)

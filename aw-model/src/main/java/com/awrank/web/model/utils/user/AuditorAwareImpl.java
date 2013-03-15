@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
  * call to {@link #getCurrentAuditor()}. Normally you would access the applications security subsystem to return the
  * current user.
  *
- * @author Oliver Gierke
+ * @author Eugene Solomka
+ * @author Alex Polyakov
+ * @author Olga Korokhina
  */
 @Component("auditorAware")
 public class AuditorAwareImpl implements AuditorAware<User> {
@@ -28,12 +30,24 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	/**
+	 * Saves a current {@code User} instance to session, based on its entry point data.
+	 * @param entryPoint {@code EntryPoint} instance connected to current {@code User}.
+	 */
 	public void setCurrentAuditor(EntryPoint entryPoint) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(entryPoint.getUid(), entryPoint.getPassword());
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(entryPoint.getUid(), entryPoint.getPassword());
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 	}
 
+	/**
+	 * Saves a current {@code User} instance to session, based on servlet request instance and its credentials:
+	 * {@code uid} and {@code password}.
+	 * @param request servlet request
+	 * @param uid unique identifier of entry point (e.g. email, uid in social network)
+	 * @param password user password (todo: what it should be for social network? currently apiKey is used)
+	 */
 	public void setCurrentAuditor(HttpServletRequest request, String uid, String password) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(uid, password);
 		token.setDetails(new WebAuthenticationDetails(request));
