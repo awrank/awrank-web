@@ -1,10 +1,10 @@
-package com.awrank.web.model.exception.user;
+package com.awrank.web.model.exception.social;
 
 import com.awrank.web.model.enums.Message;
 import com.awrank.web.model.exception.AwRankException;
 
 /**
- * TODO: Description
+ * Thrown when social network did not provide us with user email during request of getting user profile info.
  *
  * @author Andrew Stoyaltsev
  */

@@ -1,10 +1,10 @@
-package com.awrank.web.model.exception.user;
+package com.awrank.web.model.exception.email;
 
 import com.awrank.web.model.enums.Message;
 import com.awrank.web.model.exception.AwRankException;
 
 /**
- * TODO: Description
+ * Should be thrown in cases when identical email was found in DB.
  *
  * @author Andrew Stoyaltsev
  */

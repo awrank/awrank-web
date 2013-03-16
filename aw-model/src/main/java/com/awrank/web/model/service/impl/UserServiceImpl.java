@@ -32,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Implementation of {@link UserService} interface.
@@ -118,6 +115,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		return entryPoint;
 	}
 
+	// todo: !
+	// Andrew: this method was coppied out to EmailHelper util class since it's used in several places.
+	// all invocation of this method should be connected to EmailHelper::sendVerificationEmail()
 	private boolean sendingVerificationEmail(User user, String email, String password, String localAddress, String remoteAddress) {
 		boolean success = false;
 		try {
@@ -361,4 +361,12 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		// TODO send email
 	}
 
+	@Override
+	public String getNewApiKey() {
+		String apiKey = UUID.randomUUID().toString();
+		while (findByAPIKey(apiKey) != null) {
+			apiKey = UUID.randomUUID().toString();
+		}
+		return apiKey;
+	}
 }

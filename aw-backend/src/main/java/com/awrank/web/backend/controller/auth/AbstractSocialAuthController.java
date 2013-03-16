@@ -1,5 +1,9 @@
 package com.awrank.web.backend.controller.auth;
 
+import com.awrank.web.backend.controller.AbstractController;
+import com.awrank.web.model.enums.Message;
+import com.awrank.web.model.exception.social.SocialCallbackFailedException;
+import com.awrank.web.model.exception.social.SocialNetworkRequestFailedException;
 import com.awrank.web.model.service.SocialAuthService;
 import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.json.JSONException;
@@ -11,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +23,7 @@ import java.util.Map;
  * @author Andrew Stoyaltsev
  */
 @Controller("abstractSocialAuthController")
-public abstract class AbstractSocialAuthController {
+public abstract class AbstractSocialAuthController extends AbstractController {
 
 	private static Logger LOG = LoggerFactory.getLogger(AbstractSocialAuthController.class);
 
@@ -31,14 +34,10 @@ public abstract class AbstractSocialAuthController {
 	@Autowired
 	private SocialAuthService socialAuthService;
 
+	/**
+	 * Authentication action: login or registration
+	 */
 	private String action;
-
-	protected Map getNegativeResponseMap(String reason) {
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", "failure");
-		result.put("reason", reason);
-		return result;
-	}
 
 	public String authViaNetwork(String action) throws IOException {
 		this.action = action;
@@ -56,31 +55,33 @@ public abstract class AbstractSocialAuthController {
 
 	protected Map handleNetworkCallback(HttpServletRequest request) throws Exception {
 		String authCode = request.getParameter("code");
-		String message;
+		Message message;
 		if (StringUtils.hasLength(authCode)) {
 			LOG.debug("Network response: auth code=" + authCode);
 
 			String accessToken = requestAccessToken(authCode);
 			LOG.debug("Network access_token: " + accessToken);
 
-
 			if (StringUtils.hasLength(accessToken)) {
 				UserSocialRegistrationFormPojo userInfo = requestUserInfo(accessToken);
+				userInfo.setUserLocalAddress(request.getLocalAddr());
+				userInfo.setUserRemoteAddress(request.getRemoteAddr());
+
 				if (isActionLogin()) {
-					return socialAuthService.login(userInfo);
+					return socialAuthService.login(userInfo, request);
 				} else if (isActionRegister()) {
-					return socialAuthService.register(userInfo);
+					return socialAuthService.register(userInfo, request);
 				} else {
-					message = "No auth action specified!";
+					message = Message.SOCIAL_NO_AUTH_ACTION_SPECIFIED;
 				}
 			} else {
-				message = "Access token is null!";
+				message = Message.SOCIAL_ACCESS_TOKEN_IS_NULL;
 			}
 		} else {
-			message = "Auth code is null";
+			message = Message.SOCIAL_AUTH_CODE_IS_NULL;
 		}
-		LOG.warn(message);
-		return getNegativeResponseMap(message);
+		LOG.warn("Social callback handling failed: " + message.name());
+		throw new SocialCallbackFailedException(message);
 	}
 
 	/**
@@ -89,7 +90,7 @@ public abstract class AbstractSocialAuthController {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	protected abstract String requestAccessToken(String authCode) throws IOException, JSONException;
+	protected abstract String requestAccessToken(String authCode) throws IOException, JSONException, SocialNetworkRequestFailedException;
 
 	/**
 	 * @param accessToken
@@ -98,7 +99,7 @@ public abstract class AbstractSocialAuthController {
 	 * @throws JSONException
 	 */
 	protected abstract UserSocialRegistrationFormPojo
-	requestUserInfo(String accessToken) throws IOException, JSONException;
+	requestUserInfo(String accessToken) throws IOException, JSONException, SocialNetworkRequestFailedException;
 
 	public boolean isActionLogin() {
 		return this.action.equals(AUTH_ACTION_LOGIN);

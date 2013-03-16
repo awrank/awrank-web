@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
@@ -42,7 +41,8 @@ public class LoginController extends AbstractController {
 		return "hello";
 	}
 
-	@RequestMapping(value = "/user/login", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST,
+			headers = "Accept=application/json", produces = "application/json")
 	public
 	@ResponseBody
 	Map<String, String> login(HttpServletRequest request, @RequestBody Map<String, String> in) {
@@ -56,14 +56,8 @@ public class LoginController extends AbstractController {
 		return map;
 	}
 
-	@RequestMapping(value = "/user/login/google")
-	public void loginGoogle(HttpServletRequest request, HttpServletResponse response) {
-		String code = request.getParameter("code");
-		//TODO GoogleAuthController
-
-	}
-
-	@RequestMapping(value = "/user/logout", method = RequestMethod.GET, headers = "Accept=application/json", produces = "application/json")
+	@RequestMapping(value = "/user/logout", method = RequestMethod.GET,
+			headers = "Accept=application/json", produces = "application/json")
 	public void logout(HttpServletRequest request) throws UnauthorizedException {
 		SecurityContextHolder.clearContext();
 		HttpSession session = request.getSession(false);

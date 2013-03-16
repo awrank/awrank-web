@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interface for REST service working with users
@@ -100,4 +101,10 @@ public interface UserService extends AbstractService {
 	public void recoveryPasswordIntoEmail(String email, String localAddress, String remoteAddress) throws EntryPointByEmailNotFoundException;
 
 	public void changePassword(String uid, String oldPassword, String newPassword) throws EntryPointByEmailNotFoundException, EntryPointWrongCurrentPasswordException;
+
+	/**
+	 * Generates new {@code apiKey} which is not stored in DB yet.
+	 * @return {@code apiKey} string value based on {@link UUID}.
+	 */
+	String getNewApiKey();
 }

@@ -3,7 +3,8 @@ package com.awrank.web.backend.controller.auth;
 import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
-import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.enums.Message;
+import com.awrank.web.model.exception.social.SocialNetworkRequestFailedException;
 import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -56,7 +56,6 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 	//@Value("${oauth.google.userinfo.url}")
 	private String socialUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
-	//@RequestMapping(value = "/auth/google/{action}", method = RequestMethod.GET)
 	@RequestMapping(value = "/user/{action}/google", method = RequestMethod.GET)
 	public String authViaGoogle(@PathVariable(value = "action") String action) throws IOException {
 		return super.authViaNetwork(action);
@@ -80,27 +79,29 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 	@ResponseBody()
 	public Map googleCallback(HttpServletRequest request) throws Exception {
 		String state = request.getParameter("state");
-		String message;
+		Message message;
 		if (StringUtils.hasLength(state)) {
 			if (state.equals("code")) {
 				String error = request.getParameter("error");
 				if (StringUtils.hasLength(error)) {
 					LOG.debug("Negative response from Google: " + error);
-					return getNegativeResponseMap(error);
+					throw new SocialNetworkRequestFailedException(Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED);
 				}
 				return super.handleNetworkCallback(request);
 			} else {
-				message = "Custom 'state' param does not correspond initial request value! state=" + state;
+				message = Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE;
 			}
 		} else {
-			message = "'state' parameter is not specified!";
+			message = Message.SOCIAL_MISSING_GOOGLE_STATE_PARAM;
 		}
-		LOG.warn(message);
-		return getNegativeResponseMap(message);
+		LOG.warn("Google callback failed: " + message.name());
+		throw new SocialNetworkRequestFailedException(message);
 	}
 
-	protected String requestAccessToken(String authCode) throws IOException, JSONException {
-		String token = null;
+	protected String requestAccessToken(String authCode)
+			throws IOException, JSONException, SocialNetworkRequestFailedException {
+
+		String token;
 		LOG.debug("Request Google for access token...");
 		HttpClient httpClient = new HttpClient();
 		PostMethod postMethod = new PostMethod(socialTokenUrl);
@@ -124,12 +125,13 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 			LOG.debug("Google access_token: " + token);
 		} else {
 			LOG.warn("Google request for access_token request failed!");
+			throw new SocialNetworkRequestFailedException(Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED);
 		}
 		return token;
 	}
 
 	protected UserSocialRegistrationFormPojo requestUserInfo(String accessToken)
-			throws IOException, JSONException {
+			throws IOException, JSONException, SocialNetworkRequestFailedException {
 
 		UserSocialRegistrationFormPojo userInfo = new UserSocialRegistrationFormPojo();
 		LOG.debug("Request Google for user info...");
@@ -149,13 +151,13 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 			userInfo.setNetworkType(EntryPointType.GOOGLE);
 			userInfo.setNetworkUID(jsonObject.optString("id"));
 			userInfo.setEmailVerified(jsonObject.optBoolean("verified_email"));
-			// todo: move out date format to constants
 			String birthday = jsonObject.optString("birthday");
 			if (StringUtils.hasLength(birthday)) {
 				userInfo.setBirthday(birthday, AppConstants.DateFormat.DF_yyyyMMdd_minus);
 			}
 		} else {
 			LOG.warn("Get Google userinfo request failed");
+			throw new SocialNetworkRequestFailedException(Message.SOCIAL_REQUEST_USER_PROFILE_FAILED);
 		}
 		return userInfo;
 	}

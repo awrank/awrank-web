@@ -55,16 +55,77 @@ public class InitDictionary {
 		// social
 		list.add(new Dictionary(null, Language.RU,
 				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
-				"Unfortunately the social network you've chosen did not provide us " +
-						"with your email. Please set email in your social account and try again or " +
-						"use the standard registration form. Thanks for understanding."));
-
-		list.add(new Dictionary(null, Language.EN,
-				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
 				"К сожалению, социальная сеть, которую вы выбрали не может предоставить нам ваш email. " +
 						"Пожалуйста, укажите ваш email в профиле социальной сети и попробуйте снова. " +
 						"Либо вы можете использовать стандартную форму регистрации." +
 						"Спасибо за понимание."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
+				"Unfortunately the social network you've chosen did not provide us " +
+						"with your email. Please set email in your social account and try again or " +
+						"use the standard registration form. Thanks for understanding."));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
+				"К сожалению, социальная сеть, вернула негативный результат."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
+				"Unfortunately the social network returned a negative response."));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE.name(),
+				"Значения параметра 'state' в ответе не соотвествует значению в запросе!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE.name(),
+				"Custom 'state' param value does not correspond initial request value!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_MISSING_GOOGLE_STATE_PARAM.name(),
+				"Параметр 'state' не определен!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_MISSING_GOOGLE_STATE_PARAM.name(),
+				"Parameter 'state' is not specified!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(),
+				"Запрос на получение access_token провалился!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(),
+				"Request for getting access_token value has failed!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(),
+				"Запрос на получение user_profile провалился!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(),
+				"Request for getting user_profile has failed!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_NO_AUTH_ACTION_SPECIFIED.name(),
+				"Не задан тип действия для аутентификации пользователя."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NO_AUTH_ACTION_SPECIFIED.name(),
+				"No auth action specified!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_ACCESS_TOKEN_IS_NULL.name(),
+				"Access token равен NULL."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_ACCESS_TOKEN_IS_NULL.name(),
+				"Access token is null."));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_AUTH_CODE_IS_NULL.name(),
+				"Auth code равен NULL."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_AUTH_CODE_IS_NULL.name(),
+				"Auth code is null."));
+
+
+
+
+
+
 
 
 		list.add(new Dictionary(null, Language.RU,

@@ -93,8 +93,8 @@
                 <span>
                     <fieldset>
                         <legend>* Debug section *</legend>
-                        <a href="auth/google/register">Sign up with Google </a><br/>
-                        <a href="auth/facebook/register">Sign up with Facebook</a>
+                        <a href="user/register/google">Sign up with Google </a><br/>
+                        <a href="user/register/facebook">Sign up with Facebook</a>
                     </fieldset>
                 </span>
             </form>
@@ -151,10 +151,10 @@ $.fn.serializeObject = function()
     }
 
     function fRegisterGoogleSubmit() {
-        awrankGet("auth/google/register");
+        awrankGet("user/register/google");
     }
 
     function fRegisterFacebookSubmit() {
-        awrankGet("auth/facebook/register");
+        awrankGet("user/register/facebook");
     }
 </script>

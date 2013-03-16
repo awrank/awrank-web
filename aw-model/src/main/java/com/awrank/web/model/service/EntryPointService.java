@@ -9,19 +9,23 @@ import com.awrank.web.model.exception.entrypoint.EntryPointNotDeletedException;
  * Interface for REST service working with entry points
  *
  * @author Olga Korokhina
- *         Interface for REST service working with entry points
  */
 public interface EntryPointService extends AbstractService {
 
-	public void add(EntryPoint ep) throws EntryPointNotCreatedException;
+	void add(EntryPoint ep) throws EntryPointNotCreatedException;
 
-	public void delete(EntryPoint ep) throws EntryPointNotDeletedException;
+	void delete(EntryPoint ep) throws EntryPointNotDeletedException;
 
-	public void save(EntryPoint ep);
+	void save(EntryPoint ep);
 
 	@Deprecated
-	public EntryPoint findOneByEntryPointTypeAndUid(EntryPointType type, String uid);
+	EntryPoint findOneByEntryPointTypeAndUid(EntryPointType type, String uid);
 
-	public EntryPoint findOneByUid(String uid);
+	/**
+	 * Looks for {@code entry_point} record matching given {@code uid} value.
+	 * @param uid unique identifier of user.
+	 * @return Single instance or null.
+	 */
+	EntryPoint findOneByUid(String uid);
 
 }
