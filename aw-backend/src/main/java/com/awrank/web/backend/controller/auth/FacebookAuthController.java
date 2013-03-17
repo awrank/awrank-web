@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -73,7 +74,8 @@ public class FacebookAuthController extends AbstractSocialAuthController {
 
 	@RequestMapping(value = "/facebookOAuthCallback", produces = "application/json")
 	@ResponseBody()
-	public Map facebookCallback(HttpServletRequest request) throws Exception {
+	//public Map facebookCallback(HttpServletRequest request) throws Exception {
+	public ModelAndView facebookCallback(HttpServletRequest request) throws Exception {
 		return super.handleNetworkCallback(request);
 	}
 

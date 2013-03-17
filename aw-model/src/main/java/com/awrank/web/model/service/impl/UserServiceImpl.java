@@ -2,6 +2,7 @@ package com.awrank.web.model.service.impl;
 
 
 import com.awrank.web.model.dao.UserDao;
+import com.awrank.web.model.dao.impl.AdminDaoImpl;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
@@ -14,8 +15,10 @@ import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.select.SelectUtils;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private AdminDaoImpl adminDao;
 
 	@Autowired
 	@Qualifier("entryHistoryServiceImpl")
@@ -369,4 +375,18 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		}
 		return apiKey;
 	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public List<User> getAllUsers() {
+		List<User> userList = new ArrayList<User>();
+		List<UserSocialRegistrationFormPojo> list = adminDao.getAllUsers();
+		if (list != null) {
+			for (UserSocialRegistrationFormPojo pojo : list) {
+				userList.add(pojo.createUser());
+			}
+		}
+		return userList;
+	}
+
 }

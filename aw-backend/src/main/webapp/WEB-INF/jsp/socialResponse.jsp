@@ -1,8 +1,12 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>AwRank</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Awrank : Social network response</title>
 
 	<!-- Fav and touch icons -->
 	<!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">-->
@@ -10,7 +14,22 @@
 	<!--<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
 	<link rel="shortcut icon" href="resources/img/favicon.ico">
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- CSS styles -->
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
+	<link href="resources/css/awrank.css" rel="stylesheet">
+
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+
+		.sidebar-nav {
+			padding: 9px 0;
+		}
+	</style>
 
 	<!-- JS -->
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
@@ -38,49 +57,26 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
-	<!-- Le styles -->
-	<link href="resources/css/bootstrap.css" rel="stylesheet">
-	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
-	<link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
-	<link href="resources/css/awrank.css" rel="stylesheet">
-
-	<style type="text/css">
-		body {
-			padding-top: 60px;
-			padding-bottom: 40px;
-		}
-
-		.sidebar-nav {
-			padding: 9px 0;
-		}
-	</style>
 </head>
+
 
 <body onload="fIndexBodyOnload()">
 
+<c:set var="context" value="<%=request.getContextPath()%>"/>
+
 <div class="container-fluid">
 
+	<%-- Top navigation bar --%>
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container-fluid">
 				<a class="brand" href="#">AwRank</a>
-				<ul class="nav pull-right">
-					<li class="text-info span2">
-						<!--<span lngt="HELLO_USERNAME"></span>-->
-						<a href="#profile">$Username</a>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i>
-							<span lngt="MY_ACCOUNT">My account</span> <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li class="divider"></li>
-							<li><a onclick="send_user_logout();" lngt="LOGOUT">Log out</a></li>
-						</ul>
-					</li>
+				<ul class="nav pull-right" >
 					<li class="dropdown" style="z-index: 10000">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i>
-							<span id="languageLabel">RU</span> <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-globe icon-white"></i>
+							<span id="languageLabel">RU</span> <b class="caret"></b>
+						</a>
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="$('#languageLabel').text('EN');setLanguage('EN')"><i
 									class="icon-flag-GB"></i>EN</a></li>
@@ -94,97 +90,72 @@
 	</div>
 
 	<div class="row-fluid">
-		<div class="span3">
+		<div class="span2">
 			<div class="well sidebar-nav">
 				<ul id="menu" class="nav nav-list">
 					<li class="nav-header" lngt="SITE">SITE</li>
 					<li id="menuItemHome">
-						<a href="#">
-							<i class="icon-home"></i> <span lngt="HOME">Home</span>
+						<a href="${context}/index.html">
+							<i class="icon-home"></i><span lngt="HOME">Home</span>
 						</a>
 					</li>
-					<li id="menuItemOrder">
-						<a href="#order">
-							<i class="icon-shopping-cart"></i> <span lngt="ORDER">Order</span>
-						</a>
-					</li>
-
-					<!-- ACCOUNT -->
-					<li class="nav-header" lngt="ACCOUNT">ACCOUNT</li>
-					<li id="menuItemProfile">
-						<a href="#profile">
-							<i class="icon-user"></i> <span lngt="PROFILE">Profile</span>
-						</a>
-					</li>
-					<li id="menuItemApplication">
-						<a href="#application">
-							<i class="icon-folder-open"></i> <span lngt="APPLICATION"></span>
-						</a></li>
-
-					<!-- ACTIVITY -->
-					<li class="nav-header" lngt="ACTIVITY">ACTIVITY</li>
-					<li id="menuItemRequestHistory">
-						<a href="#requestHistory">
-							<i class="icon-eye-open"></i> <span lngt="REQUEST_HISTORY"></span>
-						</a>
-					</li>
-					<li id="menuItemSessionHistory">
-						<a href="#sessionHistory">
-							<i class="icon-time"></i> <span lngt="SESSION_HISTORY"></span>
+					<li id="menuItemIndexJsp">
+						<a href="${context}">
+							<i class="icon-shopping-cart"></i><span>index.jsp</span>
 						</a>
 					</li>
 
-					<!-- ADMINISTRATION-->
-					<li class="nav-header" lngt="ADMINISTRATION">Administration</li>
-					<li id="menuItemDictionary">
-						<a href="#dictionary">
-							<i class="icon-book"></i> <span lngt="DICTIONARY">Dictionary</span>
-						</a>
-					</li>
-					<li id="menuItemUserList">
-						<a href="#userList">
-							<i class="icon-list"></i> <span lngt="USER_LIST"></span>
-						</a>
-					</li>
-					<li id="menuItemManageUsers">
-						<a href="#manageUsers">
-							<i class="icon-edit"></i> <span lngt="MANAGE_USERS"></span>
-						</a>
-					</li>
-					<li id="menuItemLogs">
-						<a href="#logs">
-							<i class="icon-pencil"></i> <span lngt="LOGS"></span>
-						</a>
-					</li>
 				</ul>
 			</div>
-			<!--/.well -->
 		</div>
-		<!--/span-->
-		<div id="rightContent" class="span9">
 
+		<div class="span10">
+			<c:choose>
+				<c:when test="${responseMap['result'] eq 'failure'}">
+					<h2 class="text-error"><span lngt="AUTH_ERROR"></span></h2>
+					<h4>
+						<span lngt="MESSAGE"></span>
+						<p class="text-warning">
+							<span lngt="${responseMap['errorTitle']}"></span>
+						</p>
+						<br/>
+						<span lngt="DESCRIPTION"></span>
+						<p class="text-info">
+							<span lngt="${responseMap['errorCode']}"></span>
+						</p>
+						<br/>
+					</h4>
+					<p class="muted"><span lngt="ERROR_CODE"></span>${responseMap['errorCode']}</p>
+				</c:when>
+				<c:otherwise>
+					<h2>
+						<p class="text-success">
+							<span lngt="${responseMap['successTitle']}"></span>
+						</p>
+					</h2>
+					<p class="text-info">
+						<a href="${context}/index.html">
+							<span lngt="CONTINUE"></span>
+						</a>
+					</p>
+				</c:otherwise>
+			</c:choose>
 		</div>
-		<!--/span-->
 	</div>
-	<!--/row-->
 
 	<footer>
-		<p>&copy; AwRank 2013</p>
+		<p >&copy; AwRank 2013</p>
 	</footer>
 
 </div>
 
-
 <script type="text/javascript" language="JavaScript">
 
 	function fIndexBodyOnload() {
-//		setContextPath('http://localhost:8080/awrank');
-//		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
-		awrankRouter.navigate('order', {trigger: true});
-		activeAjaxListener();
 	}
 
 </script>
+
 </body>
 </html>

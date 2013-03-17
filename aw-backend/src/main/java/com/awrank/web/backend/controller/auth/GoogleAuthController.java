@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -77,7 +78,8 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 
 	@RequestMapping(value = "/googleOAuthCallback", produces = "application/json")
 	@ResponseBody()
-	public Map googleCallback(HttpServletRequest request) throws Exception {
+	//public Map googleCallback(HttpServletRequest request) throws Exception {
+	public ModelAndView googleCallback(HttpServletRequest request) throws Exception {
 		String state = request.getParameter("state");
 		Message message;
 		if (StringUtils.hasLength(state)) {

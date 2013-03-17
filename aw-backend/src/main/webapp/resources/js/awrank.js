@@ -186,17 +186,17 @@ function send_user_login(uid, password) {
 }
 
 function send_user_register(dataform) {
-	alert("in send_user_register "+JSON.stringify(dataform));
-	awrankPost("user/add2", dataform , function (data) {
+	alert("in send_user_register " + JSON.stringify(dataform));
+	awrankPost("user/add2", dataform, function (data) {
 		$('#divRegister').addClass('hidden');
 		alert(JSON.stringify(data));
 		/*
-		awrankRouter.navigate('', {trigger: true});
-		var options;
-		while ((options = oldRequest.shift()) != null) {
-			$.ajax(options);
-		}
-		*/
+		 awrankRouter.navigate('', {trigger: true});
+		 var options;
+		 while ((options = oldRequest.shift()) != null) {
+		 $.ajax(options);
+		 }
+		 */
 	})
 }
 
@@ -252,10 +252,16 @@ var CRouter = Backbone.Router.extend({
 	routes: {
 		"login": "login",
 		"register": "register",
-		"forget_password": "forget_password",
-		"pricing": "pricing",
-		"session": "session",
+		"forgot_password": "forgot_password",
+		"order": "order",
+		"profile": "profile",
+		"application": "application",
+		"requestHistory": "requestHistory",
+		"sessionHistory": "sessionHistory",
 		"dictionary": "dictionary",
+		"userList": "userList",
+		"manageUsers": "manageUsers",
+		"logs": "logs",
 		'*path': 'defaultRoute'
 	},
 	login: function () {
@@ -270,26 +276,50 @@ var CRouter = Backbone.Router.extend({
 		var div = fIndexLoad('body', 'divRegister');
 		div.removeClass('hidden');
 	},
-	forget_password: function () {
+	forgot_password: function () {
 		$('#divLogin').addClass('hidden');
 		$('#divRegister').addClass('hidden');
 		var div = fIndexLoad('body', 'divForgetPassword');
 		div.removeClass('hidden');
 	},
-	pricing: function () {
-		fIndexMenuActive('menuItemPricing');
-		fIndexRightContentSelectDiv('divPricing');
+	order: function () {
+		fIndexMenuActive('menuItemOrder');
+		fIndexRightContentSelectDiv('divOrder');
 	},
-	session: function () {
-		fIndexMenuActive('menuItemSession');
-		fIndexRightContentSelectDiv('divSession');
+	profile: function () {
+		fIndexMenuActive('menuItemProfile');
+		fIndexRightContentSelectDiv('divProfile');
+	},
+	application: function () {
+		fIndexMenuActive('menuItemApplication');
+		fIndexRightContentSelectDiv('divApplication');
+	},
+	requestHistory: function () {
+		fIndexMenuActive('menuItemRequestHistory');
+		fIndexRightContentSelectDiv('divRequestHistory');
+	},
+	sessionHistory: function () {
+		fIndexMenuActive('menuItemSessionHistory');
+		fIndexRightContentSelectDiv('divSessionHistory');
 	},
 	dictionary: function () {
 		fIndexMenuActive('menuItemDictionary');
 		fIndexRightContentSelectDiv('divDictionary');
 	},
+	userList: function () {
+		fIndexMenuActive('menuItemUserList');
+		fIndexRightContentSelectDiv('divUserList');
+	},
+	manageUsers: function () {
+		fIndexMenuActive('menuItemManageUsers');
+		fIndexRightContentSelectDiv('divManageUsers');
+	},
+	logs: function () {
+		fIndexMenuActive('menuItemLogs');
+		fIndexRightContentSelectDiv('divLogs');
+	},
 	defaultRoute: function () {
-//		awrankRouter.navigate('pricing', {trigger: true});
+		//awrankRouter.navigate('pricing', {trigger: true});
 	}
 });
 var awrankRouter = new CRouter();

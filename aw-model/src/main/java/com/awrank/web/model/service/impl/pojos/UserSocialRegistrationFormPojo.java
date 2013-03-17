@@ -3,6 +3,8 @@ package com.awrank.web.model.service.impl.pojos;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.utils.select.annotation.SelectField;
+import com.awrank.web.model.utils.select.annotation.SelectFrom;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,7 +44,22 @@ public class UserSocialRegistrationFormPojo implements Serializable {
 
     private String userRemoteAddress;
 
-    public User createUser() {
+	public UserSocialRegistrationFormPojo() {
+	}
+
+	@SelectFrom(User.class)
+	public UserSocialRegistrationFormPojo(
+			@SelectField("id") Long id,
+			@SelectField("email") String email,
+			@SelectField("firstName") String firstName,
+			@SelectField("lastName") String lastName) {
+		this.id = id;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public User createUser() {
         User user = new User();
         user.setApiKey(getApiKey());
         user.setFirstName(getFirstName());

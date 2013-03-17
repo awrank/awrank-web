@@ -52,20 +52,11 @@
                     </button>
                 </fieldset>
                 <hr>
-                <a href="#forget_password" lngt="FORGET_PASSWORD">Forgotten your password?</a>
-				<span class="pull-right"><span lngt="LOGIN_FOOTER">Don't have an account?</span> <a href="#register"
-                                                                                                    lngt="REGISTRATION"></a></span>
-                <br>
-                <br/>
-
-                <!-- todo: just for debug, remove later -->
-                <span>
-                    <fieldset>
-                        <legend>* Debug section *</legend>
-                        <a href="user/login/google">Log In with Google </a><br/>
-                        <a href="user/login/facebook">Log In with Facebook</a>
-                    </fieldset>
-                </span>
+                <a href="#forget_password" lngt="FORGOT_PASSWORD">Forgot your password?</a>
+				<span class="pull-right">
+					<span lngt="LOGIN_FOOTER">Don't have an account?</span>
+					<a href="#register" lngt="REGISTRATION"></a>
+				</span>
             </form>
         </div>
         <div class="span3"></div>
@@ -91,11 +82,11 @@
     }
 
     function fLoginGoogleSubmit() {
-        awrankGet("user/login/google");
+		window.location = "user/login/google";
     }
 
     function fLoginFacebookSubmit() {
-        awrankGet("user/login/facebook");
+		window.location = "user/login/facebook";
     }
 
 </script>
