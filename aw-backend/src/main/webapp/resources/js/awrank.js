@@ -188,10 +188,10 @@ function send_user_login(uid, password) {
 function send_user_register(dataform) {
 
 	//alert("in send_user_register "+JSON.stringify(dataform));
-	awrankPost("user/add2", dataform , function (data) {
+	awrankPost("user/add2", dataform, function (data) {
 		$('#divRegister').addClass('hidden');
 		alert(JSON.stringify(data));
-	
+
 		awrankRouter.navigate('', {trigger: true});
 		var options;
 		while ((options = oldRequest.shift()) != null) {
@@ -247,7 +247,7 @@ function fIndexMenuActive(menuItemId) {
 }
 
 // ============================== ROUTING =====================================
-Backbone.history.start();
+
 var CRouter = Backbone.Router.extend({
 	routes: {
 		"login": "login",
@@ -258,6 +258,7 @@ var CRouter = Backbone.Router.extend({
 		"application": "application",
 		"requestHistory": "requestHistory",
 		"sessionHistory": "sessionHistory",
+		"payment_history": "payment_history",
 		"dictionary": "dictionary",
 		"userList": "userList",
 		"manageUsers": "manageUsers",
@@ -302,6 +303,10 @@ var CRouter = Backbone.Router.extend({
 		fIndexMenuActive('menuItemSessionHistory');
 		fIndexRightContentSelectDiv('divSessionHistory');
 	},
+	payment_history: function () {
+		fIndexMenuActive('menuPaymentHistory');
+		fIndexRightContentSelectDiv('divPaymentHistory');
+	},
 	dictionary: function () {
 		fIndexMenuActive('menuItemDictionary');
 		fIndexRightContentSelectDiv('divDictionary');
@@ -319,9 +324,9 @@ var CRouter = Backbone.Router.extend({
 		fIndexRightContentSelectDiv('divLogs');
 	},
 	defaultRoute: function () {
-		//awrankRouter.navigate('pricing', {trigger: true});
+//		awrankRouter.navigate('pricing', {trigger: true});
 	}
 });
-var awrankRouter = new CRouter();
+//var awrankRouter = new CRouter();
 
 

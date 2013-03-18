@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.math.BigDecimal;
 
 /**
@@ -83,37 +81,40 @@ public class WebMoneyController extends AbstractController {
 	public void wmResult(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			PaymentWMFormPojo conf = new PaymentWMFormPojo();
-			conf.setLMI_PAYER_WM(request.getParameter("LMI_PAYER_WM"));
-			conf.setLMI_LANG(request.getParameter("LMI_LANG"));
+			conf.setLMI_DBLCHK(request.getParameter("LMI_DBLCHK"));
 			conf.setLMI_HASH(request.getParameter("LMI_HASH"));
+			conf.setLMI_LANG(request.getParameter("LMI_LANG"));
 			conf.setLMI_MODE(request.getParameter("LMI_MODE"));
 			conf.setLMI_PAYMENT_NO(request.getParameter("LMI_PAYMENT_NO"));
+			conf.setLMI_PAYMENT_AMOUNT(request.getParameter("LMI_PAYMENT_AMOUNT"));
 			conf.setLMI_PAYMENT_DESC(request.getParameter("LMI_PAYMENT_DESC"));
 			conf.setLMI_PAYEE_PURSE(request.getParameter("LMI_PAYEE_PURSE"));
 			conf.setLMI_PAYER_PURSE(request.getParameter("LMI_PAYER_PURSE"));
+			conf.setLMI_PAYER_WM(request.getParameter("LMI_PAYER_WM"));
 			conf.setLMI_SYS_TRANS_DATE(request.getParameter("LMI_SYS_TRANS_DATE"));
 			conf.setLMI_SYS_INVS_NO(request.getParameter("LMI_SYS_INVS_NO"));
 			conf.setLMI_SYS_TRANS_NO(request.getParameter("LMI_SYS_TRANS_NO"));
-			conf.setLMI_DBLCHK(request.getParameter("LMI_DBLCHK"));
-			conf.setLMI_PAYMENT_AMOUNT(request.getParameter("LMI_PAYMENT_AMOUNT"));
 			getLogger().debug("action \"/wm/result\" " + conf);
 
 			boolean paymentSuccess = orderService.paymentMW(conf);
-			Writer writer = new BufferedWriter(response.getWriter());
+//			Writer writer = new BufferedWriter(response.getWriter());
 			if (paymentSuccess) {
-				try {
-					writer.append("YES");
-				} finally {
-					writer.flush();
-					writer.close();
-				}
+//				try {
+//					writer.append("YES");
+//				} finally {
+//					writer.flush();
+//					writer.close();
+//				}
 			} else {
-				try {
-					writer.append("NO");
-				} finally {
-					writer.flush();
-					writer.close();
-				}
+//				response.sendError(HttpServletResponse.SC_BAD_GATEWAY);
+				// TODO не работаеет отказ платежа с нашей стороны
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//				try {
+//					writer.append("NO");
+//				} finally {
+//					writer.flush();
+//					writer.close();
+//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -120,7 +120,9 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 //                                        " WMInvoiceNO:" + confirmation.getLMI_SYS_INVS_NO() +
 //                                        " OrderID:" + order.getId());
 //
+//						TODO TEST negative
 						result = true;
+
 					} else {
 						// TODO Diary
 //                        accountDiaryAccessor.createRecord(order.getOwner(), AccountDiaryEvent.WM_CHECK_FAILED,

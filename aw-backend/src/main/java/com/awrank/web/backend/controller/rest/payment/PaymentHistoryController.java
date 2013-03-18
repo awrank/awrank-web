@@ -3,9 +3,10 @@ package com.awrank.web.backend.controller.rest.payment;
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.backend.exception.ForbiddenException;
 import com.awrank.web.backend.exception.UnauthorizedException;
-import com.awrank.web.model.dao.pojos.PaymentFormPaymentSystemPojo;
+import com.awrank.web.model.dao.pojos.PaymentHistoryFormPaymentPojo;
 import com.awrank.web.model.enums.Role;
-import com.awrank.web.model.service.PaymentSystemService;
+import com.awrank.web.model.service.PaymentService;
+import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,21 +17,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Alex Polyakov
  */
 @Controller
-@RequestMapping(value = "/rest/payment_system")
-public class PaymentSystemController extends AbstractController {
+@RequestMapping(value = "/rest/payment_history")
+public class PaymentHistoryController extends AbstractController {
 	@Autowired
-	private PaymentSystemService paymentSystemService;
+	private PaymentService paymentService;
 
 	/**
-	 * Returns list of payment system pojo
+	 * Returns payment history
 	 */
-	//@PreAuthorize("permitAll")
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public
 	@ResponseBody
-	Iterable<PaymentFormPaymentSystemPojo> list() throws UnauthorizedException, ForbiddenException {
+	Iterable<PaymentHistoryFormPaymentPojo> list() throws UnauthorizedException, ForbiddenException {
+		AWRankingUserDetails details = getUserDetails();
 		checkHasAnyRole(Role.ROLE_ADMIN, Role.ROLE_USER);
-		return paymentSystemService.selectAvailable();
+		return paymentService.getPaymentHistory(details.getUserId());
 	}
-
 }
