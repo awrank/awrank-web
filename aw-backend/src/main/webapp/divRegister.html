@@ -16,7 +16,8 @@
         <div class="span3"></div>
         <div class="span6">
             <br>
-
+  			<div name="alert-error"></div>
+            <div name="alert-warning"></div>
             <form action="#" id="regform" onsubmit="fRegisterSubmit();" class="well"  accept="application/json" enctype="application/json">
                 <fieldset>
                     <legend lngt="CREATE_A_NEW_ACCOUNT"></legend>
@@ -114,9 +115,7 @@ $.fn.serializeObject = function()
 };
 
     function fRegisterSubmit() {
-       // $('#divRegister').addClass('hidden');
-        //awrankGet("user/add");
-       
+      
     	//send_user_register($('regform').serializeObject());
     	
     	 var email = $('#email').val();
