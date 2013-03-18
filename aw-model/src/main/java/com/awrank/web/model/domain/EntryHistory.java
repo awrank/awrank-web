@@ -1,10 +1,15 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.support.AbstractUserRelatedEntityAuditable;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@code EntryHistory} class describes one record in history table related to specified user.
@@ -121,6 +126,28 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 
 	public void setEntryPoint(EntryPoint entryPoint) {
 		this.entryPoint = entryPoint;
+	}
+
+	public Object[] toArray() {
+		List<Object> values = new ArrayList<Object>();
+		values.add(getUser().getFullName());
+		values.add(getEntryPoint().getEntryTypeUID());
+		values.add(getSessionId());
+		values.add(getIpAddress());
+		values.add(isSuccess());
+		values.add(getSpentRequests());
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_ddMMyyyy_slash);
+		if (getCreatedDate() != null) {
+			values.add(getCreatedDate().toString(formatter));
+		} else {
+			values.add("-");
+		}
+		if (getEndedDate() != null) {
+			values.add(getEndedDate().toString(formatter));
+		} else {
+			values.add("-");
+		}
+        return values.toArray();
 	}
 
 }

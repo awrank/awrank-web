@@ -17,6 +17,7 @@ import java.util.List;
  * plus some methods to perform searches (extends {@link PagingAndSortingRepository}).
  *
  * @author Eugene Solomka
+ * @author Olga Korokhina
  */
 public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory, Long> {
 	/**
@@ -39,5 +40,5 @@ public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory
 	List<String> findAllIPByUser(@Param("user") User user);
 	
 	@Query("select e from EntryHistory e where e.user = :user order by 'sign_in_date' desc limit 1")
-	List<EntryHistory> findLatestForUser(@Param("user") User user);
+	List<EntryHistory> findLatestEntryForUser(@Param("user") User user);
 }

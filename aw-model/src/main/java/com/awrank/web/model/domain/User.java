@@ -2,11 +2,14 @@ package com.awrank.web.model.domain;
 
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.SecretQuestion;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -237,4 +240,28 @@ public class User extends DatedAbstractAuditable {
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
 	}
+
+	public String getFullName() {
+		StringBuilder builder = new StringBuilder();
+		if (StringUtils.isNotEmpty(getFirstName())) {
+			builder.append(getFirstName());
+		}
+		if (StringUtils.isNotEmpty(getLastName())) {
+			builder.append(" ");
+			builder.append(getLastName());
+		}
+		return builder.toString().trim();
+	}
+
+	public Object[] toArray() {
+		List<Object> values = new ArrayList<Object>();
+		values.add(getFirstName());
+		values.add(getLastName());
+		values.add(getEmail());
+		values.add(getApiKey());
+		values.add(getSkype());
+		values.add(getCreatedDate());
+		return values.toArray();
+	}
+
 }

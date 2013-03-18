@@ -81,4 +81,8 @@ public class EntryPoint extends AbstractUserRelatedEntityAuditable {
 		this.type = type;
 	}
 
+	public String getEntryTypeUID() {
+		return getType().name() + " / " + getUid();
+	}
+
 }

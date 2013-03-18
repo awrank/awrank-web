@@ -172,7 +172,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 		//---------- find/create EntryHistory ------------
 
-		EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+		EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
 		
 		if(entryHistory == null) {
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
@@ -227,7 +227,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 		//---------- find/create EntryHistory ------------
 
-		EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+		EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
 		
 		if(entryHistory == null){
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());

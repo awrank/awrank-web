@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * TODO: JavaDoc
+ *
  * @author Olga Korokhina
  */
 @Service
@@ -23,19 +25,18 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	private EntryHistoryDao entryHistoryDao;
 
 	@Override
-	public void add(EntryHistory ep) throws EntryHistoryNotCreatedException {
-		entryHistoryDao.save(ep);
+	public void add(EntryHistory entryHistory) throws EntryHistoryNotCreatedException {
+		entryHistoryDao.save(entryHistory);
 	}
 
 	@Override
-	public void delete(EntryHistory ep) throws EntryHistoryNotDeletedException {
-		entryHistoryDao.delete(ep);
+	public void delete(EntryHistory entryHistory) throws EntryHistoryNotDeletedException {
+		entryHistoryDao.delete(entryHistory);
 	}
 
 	@Override
-	public void save(EntryHistory ep) {
-		entryHistoryDao.save(ep);
-
+	public void save(EntryHistory entryHistory) {
+		entryHistoryDao.save(entryHistory);
 	}
 
 	@Override
@@ -45,6 +46,11 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable) {
 		return (Page<EntryHistory>) entryHistoryDao.findByUserId(userId, pageable);
+	}
+
+	@Override
+	public List<EntryHistory> findAll() {
+		return (List<EntryHistory>) entryHistoryDao.findAll();
 	}
 
 	@Override
@@ -59,12 +65,11 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 	@Override
 	public List<EntryHistory> findBySessionId(String sessionId) {
-
 		return entryHistoryDao.findBySessionId(sessionId);
 	}
-	
-	public EntryHistory getLatestForUser(User user){
-		
-		return (entryHistoryDao.findLatestForUser(user)).get(0);
+
+	@Override
+	public EntryHistory getLatestEntryForUser(User user){
+		return (entryHistoryDao.findLatestEntryForUser(user)).get(0);
 	}
 }

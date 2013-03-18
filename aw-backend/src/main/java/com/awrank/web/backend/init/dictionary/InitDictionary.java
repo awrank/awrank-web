@@ -178,8 +178,10 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "CONTINUE", "Continue"));
 		list.add(new Dictionary(null, Language.RU, "UNDER_CONSTRUCTION", "В разработке."));
 		list.add(new Dictionary(null, Language.EN, "UNDER_CONSTRUCTION", "Under construction."));
-		list.add(new Dictionary(null, Language.RU, "CREATED_AT", "Дата создания"));
+		list.add(new Dictionary(null, Language.RU, "CREATED_AT", "Создано"));
 		list.add(new Dictionary(null, Language.EN, "CREATED_AT", "Created at"));
+		list.add(new Dictionary(null, Language.RU, "ENDED_AT", "Ликвидировано"));
+		list.add(new Dictionary(null, Language.EN, "ENDED_AT", "Ended at"));
 		list.add(new Dictionary(null, Language.RU, "SEARCH", "Искать"));
 		list.add(new Dictionary(null, Language.RU, "SEARCH", "Search"));
 		list.add(new Dictionary(null, Language.RU, "ALL", "Все"));
@@ -188,6 +190,16 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "WELCOME", "Welcome!"));
 		list.add(new Dictionary(null, Language.RU, "HELLO_USERNAME", "Привет, "));
 		list.add(new Dictionary(null, Language.EN, "HELLO_USERNAME", "Hello, "));
+		list.add(new Dictionary(null, Language.RU, "USER", "Пользователь"));
+		list.add(new Dictionary(null, Language.EN, "USER", "User"));
+		list.add(new Dictionary(null, Language.RU, "ENTRY_POINT", "Точка входа"));
+		list.add(new Dictionary(null, Language.EN, "ENTRY_POINT", "Entry point"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_ID", "ID Сессии"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_ID", "Session ID"));
+		list.add(new Dictionary(null, Language.RU, "SUCCESS", "Успешно"));
+		list.add(new Dictionary(null, Language.EN, "SUCCESS", "Success"));
+		list.add(new Dictionary(null, Language.RU, "SPENT_REQUESTS", "Запросов"));
+		list.add(new Dictionary(null, Language.EN, "SPENT_REQUESTS", "Requests"));
 
 		// CURRENCY
 		list.add(new Dictionary(null, Language.RU, Currency.USD.name(), "Доллар"));
@@ -353,7 +365,7 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "MANAGE_USERS", "Управление пользователями"));
 		list.add(new Dictionary(null, Language.EN, "MANAGE_USERS", "Manage users"));
 		list.add(new Dictionary(null, Language.RU, "LOGS", "Логи"));
-		list.add(new Dictionary(null, Language.RU, "LOGS", "Logs"));
+		list.add(new Dictionary(null, Language.EN, "LOGS", "Logs"));
 
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY", "История заказов"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY", "Payment history"));

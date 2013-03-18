@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<table class="table table-striped" id="userListTable">
+	<table class="table table-striped table-bordered" id="userListTable">
 		<thead>
 		<tr>
 			<th lngt="FIRST_NAME"></th>
@@ -31,87 +31,19 @@
 			<th lngt="CREATED_AT"></th>
 		</tr>
 		</thead>
-		<tbody id="tableBodyUserList">
-		<script type="text/template">
-			<tr id="<%=id%>">
-				<td><a href="#userList" class="text"><%=firstName%></a></td>
-				<td><a href="#userList" class="text"><%=lastName%></a></td>
-				<td><a href="#userList" class="text"><%=email%></a></td>
-				<td><a href="#userList" class="text"><%=apiKey%></a></td>
-				<td><a href="#userList" class="text"><%=skype%></a></td>
-				<td><a href="#userList" class="ui-datepicker-title"><%=createdDate%></a></td>
-				<!-- edit -->
-				<!--<td><input type="button" class="btn btn-danger" lngv="DELETE" value="Delete"></td>-->
-			</tr>
-		</script>
-		</tbody>
 	</table>
 
 </div>
 
 <script type="text/javascript" language="JavaScript">
-	var CUser = Backbone.Model.extend({
+
+	/* Table initialisation */
+	$(document).ready(function () {
+		$('#userListTable').dataTable({
+			"bProcessing":true,
+			"bServerSide":true,
+			"sAjaxSource":"admin/userListDT"
+		});
 	});
-
-	var CUserList = Backbone.Collection.extend({
-		url: 'admin/userlist2',
-		model: CUser
-//		comparator: function (user) {
-//			return user.get("firstName") + user.get("lastName");
-//		}
-	});
-
-	var CUserListView = Backbone.View.extend({
-		el: $('#tableBodyUserList'),
-		initialize: function () {
-			var o = $('#tableBodyUserList script');
-			this.template = _.template(o.html());
-			o.remove();
-		},
-		events: {
-			"click a": "selectRow",
-			"click input": "deleteRow"
-		},
-
-		render: function () {
-			this.$el.empty();
-			for (var i = 0; i < this.collection.size(); i++) {
-				var attr = this.collection.at(i).toJSON();
-				attr.index = i + 1;
-				this.$el.append(this.template(attr));
-			}
-			localizeLoadContent(this.$el);
-			return this;
-		},
-		selectRow: function (event) {
-//			var tr = $(event.target).closest('tr');
-//			selectDictionary = this.collection.get(tr.attr('id'));
-//			$('#dictionary_language').val(selectDictionary.get(""));
-//			$('#dictionary_code').val(selectDictionary.get("code"));
-//			$('#dictionary_text').val(selectDictionary.get("text"));
-//
-//			$('#dictionaryForm>input[name=update]').removeClass('disabled');
-		},
-		deleteRow: function (event) {
-//			var tr = $(event.target).closest('tr');
-//			loadingShow('tableBodyUserList');
-//			this.collection.get(tr.attr('id')).destroy({
-//				success: function (model, response) {
-//					dictionaryListView.render();
-////									tr.remove();
-//				},
-//				complete: function () {
-//					loadingHide();
-//				}});
-		}
-	});
-
-	var selectedUser = null;
-	var userList = new CUserList();
-	var userListView = new CUserListView({collection: userList});
-	userList.fetch({success: function () {
-		userListView.render();
-	}});
-
 
 </script>

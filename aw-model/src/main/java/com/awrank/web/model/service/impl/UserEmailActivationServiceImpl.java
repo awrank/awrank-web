@@ -13,7 +13,6 @@ import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
-import com.awrank.web.model.utils.user.PasswordUtils;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +161,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	
 				//---------------------- save to Diary ----------------------------
 				
-				EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+				EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
 				
 				Diary dr = new Diary();
 				dr.setUser(user);
@@ -239,7 +238,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	
 				//---------------------- save to Diary ----------------------------
 				
-				EntryHistory entryHistory = entryHistoryService.getLatestForUser(user);
+				EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
 				
 				Diary dr = new Diary();
 				dr.setUser(user);

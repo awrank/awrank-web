@@ -10,28 +10,76 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
+ * TODO: JavaDocs
+ * Interface for REST service working with entry histories.
+ *
  * @author Olga Korokhina
- *         Interface for REST service working with entry histories
+ *
  */
-//@Service
 public interface EntryHistoryService extends AbstractService {
 
-	public void add(EntryHistory ep) throws EntryHistoryNotCreatedException;
+	/**
+	 *
+	 * @param entryHistory
+	 * @throws EntryHistoryNotCreatedException
+	 */
+	void add(EntryHistory entryHistory) throws EntryHistoryNotCreatedException;
 
-	public void delete(EntryHistory ep) throws EntryHistoryNotDeletedException;
+	/**
+	 *
+	 * @param entryHistory
+	 * @throws EntryHistoryNotDeletedException
+	 */
+	void delete(EntryHistory entryHistory) throws EntryHistoryNotDeletedException;
 
-	public void save(EntryHistory ep);
+	/**
+	 *
+	 * @param entryHistory
+	 */
+	void save(EntryHistory entryHistory);
 
-	public List<EntryHistory> findByIP(String ipAddress);
+	/**
+	 *
+	 * @param ipAddress
+	 * @return
+	 */
+	List<EntryHistory> findByIP(String ipAddress);
 
-	public List<EntryHistory> findBySessionId(String sessionId);
+	/**
+	 *
+	 * @param sessionId
+	 * @return
+	 */
+	List<EntryHistory> findBySessionId(String sessionId);
 
-	public List<EntryHistory> findAllByUser(User user);
+	List<EntryHistory> findAll();
+	/**
+	 *
+	 * @param user
+	 * @return
+	 */
+	List<EntryHistory> findAllByUser(User user);
 
-	public List<String> findAllIPByUser(User user);
+	/**
+	 *
+	 * @param user
+	 * @return
+	 */
+	List<String> findAllIPByUser(User user);
 
-	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable);
-	
-	public EntryHistory getLatestForUser(User user);
+	/**
+	 *
+	 * @param userId
+	 * @param pageable
+	 * @return
+	 */
+	Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable);
+
+	/**
+	 *
+	 * @param user
+	 * @return
+	 */
+	EntryHistory getLatestEntryForUser(User user);
 
 }

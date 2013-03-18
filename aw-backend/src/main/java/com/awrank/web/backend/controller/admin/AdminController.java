@@ -82,18 +82,22 @@ public class AdminController extends AbstractController {
 		return allUsers;
 	}
 
-	// todo: temporary
-	@RequestMapping(value = "/userlist2", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/userListDT", method = RequestMethod.GET, produces = "application/json")
 	public
 	@ResponseBody()
 	Map<String, Object> getAllUsers(ModelMap model) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		List<User> allUsers = userService.getAllUsers();
 		response.put("result", "ok");
-		response.put("sEcho", 5);
-		response.put("iTotalRecords", 2);
+		response.put("sEcho", 1); // param from request?
+		response.put("iTotalRecords", allUsers.size());
 		response.put("iTotalDisplayRecords", 2);
-		response.put("aaData", allUsers);
+
+		Object[][] aData = new Object[allUsers.size()][];
+		for (int i = 0; i < allUsers.size(); i++) {
+			aData[i] = allUsers.get(i).toArray();
+		}
+		response.put("aaData", aData);
 		return response;
 	}
 
@@ -294,6 +298,25 @@ public class AdminController extends AbstractController {
 
 		model.addAttribute("result", entryHistoryList);
 		return entryHistoryList;
+	}
+
+	@RequestMapping(value = "/allEntryHistoryDT", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody()
+	public Map<String, Object> getAllEntryHistory() {
+		List<EntryHistory> list = entryHistoryService.findAll();
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("result", "ok");
+		response.put("sEcho", 1); // param from request?
+		int size = list.size();
+		response.put("iTotalRecords", size);
+		response.put("iTotalDisplayRecords", 3);
+
+		Object[][] aData = new Object[size][];
+		for (int i = 0; i < size; i++) {
+			aData[i] = list.get(i).toArray();
+		}
+		response.put("aaData", aData);
+		return response;
 	}
 
 	/**
