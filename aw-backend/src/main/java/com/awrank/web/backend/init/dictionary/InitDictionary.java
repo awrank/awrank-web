@@ -181,6 +181,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "SEARCH", "Search"));
 		list.add(new Dictionary(null, Language.RU, "ALL", "Все"));
 		list.add(new Dictionary(null, Language.EN, "ALL", "All"));
+		list.add(new Dictionary(null, Language.RU, "WELCOME", "Добро пожаловать!"));
+		list.add(new Dictionary(null, Language.EN, "WELCOME", "Welcome!"));
 		list.add(new Dictionary(null, Language.RU, "HELLO_USERNAME", "Привет, "));
 		list.add(new Dictionary(null, Language.EN, "HELLO_USERNAME", "Hello, "));
 
@@ -245,8 +247,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "REGISTER_TERMS_ANCHOR", "Terms of Service"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FOOTER", "У вас есть учетная запись?"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_FOOTER", "Do you have an account?"));
-		list.add(new Dictionary(null, Language.RU, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "Регистрация прошла успешно."));
-		list.add(new Dictionary(null, Language.EN, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "You've registered successfully."));
+		list.add(new Dictionary(null, Language.RU, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "Регистрация прошла успешно, на указанный почтовый ящик выслана ссылка для верификации- пожалуйста, верифицируйтесь!"));
+		list.add(new Dictionary(null, Language.EN, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "You've registered successfully, verification link is sent on the mailbox you specified- please verivy!"));
 
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));

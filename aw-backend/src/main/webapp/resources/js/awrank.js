@@ -109,6 +109,20 @@ function alertWarning(title, text) {
 	awrankDebug(title + text);
 }
 
+function alertSuccess(title, text) {
+	$('div[name=alert-success]').each(function () {
+		var divError = $(this);
+		if (divError.closest('div.hidden').length <= 0) {
+			divError.append('<div class="alert alert-success">' +
+				'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+				'<h4>' + title + '</h4>' +
+				text +
+				'</div>')
+		}
+	});
+	awrankDebug(title + text);
+}
+
 var loadingIndex = 0;
 
 function loadingShow(id) {
@@ -176,11 +190,14 @@ function dateTimeToString(date) {
 
 function send_user_login(uid, password) {
 	awrankPost("user/login", {uid: uid, password: password}, function (data) {
+		
+		alertSuccess(getMessage('WELCOME'), getMessage('YOU_LOGGED_IN_SUCCESSFULLY'));
+		
 		$('#divLogin').addClass('hidden');
 		awrankRouter.navigate('', {trigger: true});
 		var options;
 		while ((options = oldRequest.shift()) != null) {
-			$.ajax(options);
+			//$.ajax(options);//no need to show them again - just push out
 		}
 	})
 }
@@ -188,15 +205,31 @@ function send_user_login(uid, password) {
 function send_user_register(dataform) {
 
 	//alert("in send_user_register "+JSON.stringify(dataform));
-	awrankPost("user/add2", dataform, function (data) {
-		$('#divRegister').addClass('hidden');
-		alert(JSON.stringify(data));
-
-		awrankRouter.navigate('', {trigger: true});
-		var options;
-		while ((options = oldRequest.shift()) != null) {
-			$.ajax(options);
+	awrankPost("user/add2", dataform , function (data) {
+		
+		//if(data.error != null)
+		//alert(JSON.stringify(data));
+		//alert(data.result);
+	
+		if(data.result == "failure") {
+		
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+			
 		}
+		else if (data.result == "ok"){
+			
+			$('#divRegister').addClass('hidden');
+			
+			alertSuccess(getMessage('WELCOME'), getMessage(data.reason));
+			
+			awrankRouter.navigate('', {trigger: true});
+			var options;
+			while ((options = oldRequest.shift()) != null) {
+				//$.ajax(options);//no need to show them again - just push out
+			}
+		}
+		
+		
 	})
 }
 
@@ -223,6 +256,7 @@ function fIndexLoad(targetSelector, divId) {
 	}
 	div.find('[name=alert-error]').empty();
 	div.find('[name=alert-warning]').empty();
+	div.find('[name=alert-success]').empty();
 	return div;
 }
 /**
@@ -324,9 +358,9 @@ var CRouter = Backbone.Router.extend({
 		fIndexRightContentSelectDiv('divLogs');
 	},
 	defaultRoute: function () {
-//		awrankRouter.navigate('pricing', {trigger: true});
+		//awrankRouter.navigate('pricing', {trigger: true});
 	}
 });
-//var awrankRouter = new CRouter();
+
 
 

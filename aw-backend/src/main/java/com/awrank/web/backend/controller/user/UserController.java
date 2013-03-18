@@ -59,7 +59,8 @@ public class UserController extends AbstractController {
 
 	private Map getPositiveResponseMap(String resultStr) {
 		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", resultStr);
+		result.put("result", "ok");
+		result.put("reason", resultStr);
 		return result;
 	}
 
@@ -92,7 +93,7 @@ public class UserController extends AbstractController {
 		form.fillWith(in);
 		
 		if (userService.findOneByEmail(form.getEmail()) != null) {
-			return getNegativeResponseMap("This email is already registered in the system!");
+			return getNegativeResponseMap("EMAIL_ALREADY_EXISTS");
 		}
 		
 		//and here we generate the API key
@@ -111,7 +112,7 @@ public class UserController extends AbstractController {
 
 		auditorAware.setCurrentAuditor(entryPoint);
 
-		return getPositiveResponseMap("Verification email was sent to your email");
+		return getPositiveResponseMap("YOU_REGISTERED_SUCCESSFULLY");
 	}
 	
 	
