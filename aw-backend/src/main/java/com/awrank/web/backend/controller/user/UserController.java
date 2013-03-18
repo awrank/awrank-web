@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -177,19 +178,23 @@ public class UserController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET, value = "/verifyemail/{key}")
 	public
 	@ResponseBody
-	Map verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+	ModelAndView verifyTestEmail(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+		
+		ModelAndView mav = new ModelAndView("emailVerificationResponse");
 		
 		//---- if verified we have to relogin user - with new roles ----
 		
 		EntryPoint entryPoint = userEmailActivationService.verify(key, request);
 
-		if(entryPoint == null) return  getNegativeResponseMap("not verified");
-		// generate session if one doesn't exist
-		request.getSession();
-
+		if(entryPoint == null){
+			mav.addObject("responseMap", getNegativeResponseMap("EMAIL_NOT_VERIFIED"));
+			return  mav;
+		}
+		
 		auditorAware.setCurrentAuditor(entryPoint);
 		
-		return getPositiveResponseMap();
+		mav.addObject("responseMap", getPositiveResponseMap("EMAIL_VERIFIED_SUCCESSFULLY"));
+		return mav;
 	}
 
 	//------------------- refactor out it not needed ---------------

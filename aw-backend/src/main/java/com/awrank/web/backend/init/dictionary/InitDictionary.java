@@ -281,6 +281,11 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "Регистрация прошла успешно."));
 		list.add(new Dictionary(null, Language.EN, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "You've registered successfully."));
 
+		list.add(new Dictionary(null, Language.RU, Message.EMAIL_VERIFIED_SUCCESSFULLY.name(), "Почтовый ящик успешно верифицирован."));
+		list.add(new Dictionary(null, Language.EN, Message.EMAIL_VERIFIED_SUCCESSFULLY.name(), "Email box verified successfully."));
+		list.add(new Dictionary(null, Language.RU, Message.EMAIL_NOT_VERIFIED.name(), "Почтовый ящик НЕ верифицирован!"));
+		list.add(new Dictionary(null, Language.EN, Message.EMAIL_NOT_VERIFIED.name(), "Email box NOT verified!"));
+
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));
