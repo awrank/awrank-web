@@ -18,31 +18,31 @@ import java.io.Serializable;
  */
 public class UserSocialRegistrationFormPojo implements Serializable {
 
-    private Long id;
+	private Long id;
 
-    private String apiKey;
+	private String apiKey;
 
-    private String firstName;
+	private String firstName;
 
-    private String lastName;
+	private String lastName;
 
-    private String email;
+	private String email;
 
-    private Language language;
+	private Language language;
 
-    private String networkUID;
+	private String networkUID;
 
-    private EntryPointType networkType;
+	private EntryPointType networkType;
 
-    private boolean emailVerified;
+	private boolean emailVerified;
 
-    private LocalDateTime birthday;
+	private LocalDateTime birthday;
 
-    private String ip;
+	private String ip;
 
-    private String userLocalAddress;
+	private String userLocalAddress;
 
-    private String userRemoteAddress;
+	private String userRemoteAddress;
 
 	public UserSocialRegistrationFormPojo() {
 	}
@@ -60,123 +60,124 @@ public class UserSocialRegistrationFormPojo implements Serializable {
 	}
 
 	public User createUser() {
-        User user = new User();
-        user.setApiKey(getApiKey());
-        user.setFirstName(getFirstName());
-        user.setLastName(getLastName());
-        user.setEmail(getEmail());
-        user.setLanguage(getLanguage());
-        user.setAuthorizationFailsCount(0);
-        user.setBirthday(getBirthday());
-        return user;
-    }
+		User user = new User();
+		user.setApiKey(getApiKey());
+		user.setFirstName(getFirstName());
+		user.setLastName(getLastName());
+		user.setEmail(getEmail());
+		user.setLanguage(getLanguage());
+		user.setAuthorizationFailsCount(0);
+		user.setBirthday(getBirthday());
+		return user;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getNetworkUID() {
-        return networkUID;
-    }
+	public String getNetworkUID() {
+		return networkUID;
+	}
 
-    public void setNetworkUID(String networkUID) {
-        this.networkUID = networkUID;
-    }
+	public void setNetworkUID(String networkUID) {
+		this.networkUID = networkUID;
+	}
 
-    public EntryPointType getNetworkType() {
-        return networkType;
-    }
+	public EntryPointType getNetworkType() {
+		return networkType;
+	}
 
-    public void setNetworkType(EntryPointType networkType) {
-        this.networkType = networkType;
-    }
+	public void setNetworkType(EntryPointType networkType) {
+		this.networkType = networkType;
+	}
 
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
+	public boolean isEmailVerified() {
+		return emailVerified;
+	}
 
-    public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
+	public void setEmailVerified(boolean emailVerified) {
+		this.emailVerified = emailVerified;
+	}
 
-    public LocalDateTime getBirthday() {
-        return birthday;
-    }
+	public LocalDateTime getBirthday() {
+		return birthday;
+	}
 
-    public void setBirthday(LocalDateTime birthday) {
-        this.birthday = birthday;
-    }
+	public void setBirthday(LocalDateTime birthday) {
+		this.birthday = birthday;
+	}
 
-    public void setBirthday(String date, String format) {
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-        setBirthday(formatter.parseLocalDateTime(date));
-    }
+	public void setBirthday(String date, String format) {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
+		setBirthday(formatter.parseLocalDateTime(date));
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public Language getLanguage() {
-        return language;
-    }
+	public Language getLanguage() {
+		return language;
+	}
 
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getApiKey() {
-        return apiKey;
-    }
+	public String getApiKey() {
+		return apiKey;
+	}
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
 
-    public String getIp() {
-        return ip;
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public String getUserLocalAddress() {
-        return userLocalAddress;
-    }
+	public String getUserLocalAddress() {
+		return userLocalAddress;
+	}
 
-    public void setUserLocalAddress(String userLocalAddress) {
-        this.userLocalAddress = userLocalAddress;
-    }
+	public void setUserLocalAddress(String userLocalAddress) {
+		this.userLocalAddress = userLocalAddress;
+	}
 
-    public String getUserRemoteAddress() {
-        return userRemoteAddress;
-    }
+	public String getUserRemoteAddress() {
+		return userRemoteAddress;
+	}
 
-    public void setUserRemoteAddress(String userRemoteAddress) {
-        this.userRemoteAddress = userRemoteAddress;
-    }
+	public void setUserRemoteAddress(String userRemoteAddress) {
+		this.userRemoteAddress = userRemoteAddress;
+	}
+
 }

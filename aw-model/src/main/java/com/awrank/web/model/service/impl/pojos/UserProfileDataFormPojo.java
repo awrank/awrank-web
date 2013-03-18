@@ -1,10 +1,9 @@
 package com.awrank.web.model.service.impl.pojos;
 
-import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.enums.SecretQuestion;
-
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -12,18 +11,15 @@ import org.joda.time.format.DateTimeFormatter;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
- * POJO(well, actually a bean :) ) for user profile data (user name etc.);
+ * POJO bean for user profile data (firstName, lastName etc.).
  *
  * @author Olga Korokhina
  */
 @SuppressWarnings("serial")
 public class UserProfileDataFormPojo implements Serializable {
 
-	// todo: move out to constants
-	public static String DATE_FORMAT_STRING = "yyyy-MM-dd";
 	private Long userId;
 
 	private String apiKey;
@@ -31,45 +27,24 @@ public class UserProfileDataFormPojo implements Serializable {
 	private String firstName;
 
 	private String lastName;
-	
+
+	private String networkUID;
+
 	private Language language;
 
 	private String userLocalAddress;
 
 	private String userRemoteAddress;
 
-	private String networkUID;
-
-	private EntryPointType networkType;
-
 	private LocalDateTime birthday;
+
 	private String birthdayAsFormattedString;
-	
+
 	private String secretAnswer;
-	
-	public String getSecretAnswer() {
-		return secretAnswer;
-	}
-
-
-	public void setSecretAnswer(String secretAnswer) {
-		this.secretAnswer = secretAnswer;
-	}
 
 	private SecretQuestion secretQuestion;
 
-	public SecretQuestion getSecretQuestion() {
-		return secretQuestion;
-	}
-
-
-	public void setSecretQuestion(SecretQuestion secretQuestion) {
-		this.secretQuestion = secretQuestion;
-	}
-
-
-	public void fillWithUserData(User user){
-		
+	public void fillWithUserData(User user) {
 		this.setUserId(user.getId());
 		this.setApiKey(user.getApiKey());
 		this.setBirthday(user.getBirthday());
@@ -78,14 +53,11 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.setLastName(user.getLastName());
 		this.setSecretAnswer(user.getSecretAnswer());
 		this.setSecretQuestion(user.getSecretQuestionDicCode());
-		
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public Map toMap(){
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		map.put("apiKey", apiKey);
 		map.put("birthdayAsFormattedString", birthdayAsFormattedString);
 		map.put("firstName", firstName);
@@ -93,18 +65,48 @@ public class UserProfileDataFormPojo implements Serializable {
 		map.put("networkUID", networkUID);
 		map.put("secretAnswer", secretAnswer);
 		map.put("secretQuestion", secretQuestion);
-		
 		return map;
 	}
-	
+
+	public String getBirthdayAsFormattedString() {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_yyyyMMdd_minus);
+		if (birthday != null) {
+			return birthday.toString(formatter);
+		} else {
+			return "0000-00-00";
+		}
+	}
+
+	public void setBirthdayAsFormattedString(String date) {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_yyyyMMdd_minus);
+		this.birthday = formatter.parseLocalDateTime(date);
+	}
+
+	/*
+	 public void setBirthday(String date, String format) {
+
+		 if(format == null) format = UserProfileDataFormPojo.DATE_FORMAT_STRING;
+		 DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
+		 setBirthday(formatter.parseLocalDateTime(date));
+	 }
+	 */
+
 	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long id) {
-		this.userId = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
-	
+
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -121,12 +123,12 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getApiKey() {
-		return apiKey;
+	public String getNetworkUID() {
+		return networkUID;
 	}
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public void setNetworkUID(String networkUID) {
+		this.networkUID = networkUID;
 	}
 
 	public Language getLanguage() {
@@ -136,7 +138,7 @@ public class UserProfileDataFormPojo implements Serializable {
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
-	
+
 	public String getUserLocalAddress() {
 		return userLocalAddress;
 	}
@@ -153,50 +155,27 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.userRemoteAddress = userRemoteAddress;
 	}
 
-	public String getNetworkUID() {
-		return networkUID;
-	}
-
-	public void setNetworkUID(String networkUID) {
-		this.networkUID = networkUID;
+	public LocalDateTime getBirthday() {
+		return birthday;
 	}
 
 	public void setBirthday(LocalDateTime birthday) {
 		this.birthday = birthday;
 	}
-	
-	public LocalDateTime getBirthday() {
-		return birthday;
+
+	public String getSecretAnswer() {
+		return secretAnswer;
 	}
 
-	public String getBirthdayAsFormattedString(){
-		
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(UserProfileDataFormPojo.DATE_FORMAT_STRING);
-		if(birthday != null) return birthday.toString(formatter);
-		else return "0000-00-00";
-	}
-	
-	public void setBirthdayAsFormattedString(String date){
-		
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(UserProfileDataFormPojo.DATE_FORMAT_STRING);
-		LocalDateTime data = formatter.parseLocalDateTime(date); 
-		this.birthday = data;
+	public void setSecretAnswer(String secretAnswer) {
+		this.secretAnswer = secretAnswer;
 	}
 
-	
-/*
-	public void setBirthday(String date, String format) {
-		
-		if(format == null) format = UserProfileDataFormPojo.DATE_FORMAT_STRING;
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-		setBirthday(formatter.parseLocalDateTime(date));
-	}
-*/
-	public EntryPointType getNetworkType() {
-		return networkType;
+	public SecretQuestion getSecretQuestion() {
+		return secretQuestion;
 	}
 
-	public void setNetworkType(EntryPointType networkType) {
-		this.networkType = networkType;
+	public void setSecretQuestion(SecretQuestion secretQuestion) {
+		this.secretQuestion = secretQuestion;
 	}
 }

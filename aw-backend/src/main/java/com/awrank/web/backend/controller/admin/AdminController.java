@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * todo: description
@@ -84,10 +86,15 @@ public class AdminController extends AbstractController {
 	@RequestMapping(value = "/userlist2", method = RequestMethod.GET, produces = "application/json")
 	public
 	@ResponseBody()
-	List<User> getAllUsers(ModelMap model) {
+	Map<String, Object> getAllUsers(ModelMap model) {
+		Map<String, Object> response = new HashMap<String, Object>();
 		List<User> allUsers = userService.getAllUsers();
-		model.addAttribute("result", allUsers);
-		return allUsers;
+		response.put("result", "ok");
+		response.put("sEcho", 5);
+		response.put("iTotalRecords", 2);
+		response.put("iTotalDisplayRecords", 2);
+		response.put("aaData", allUsers);
+		return response;
 	}
 
 	/**
@@ -110,7 +117,7 @@ public class AdminController extends AbstractController {
 	 * Blocking one user by email in form.getEmail()
 	 *
 	 * @param form
-	 * @param request
+	 * @param principal
 	 * @return
 	 */
 	@RequestMapping(

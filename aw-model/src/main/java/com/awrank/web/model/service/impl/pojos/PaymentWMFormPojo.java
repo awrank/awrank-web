@@ -1,5 +1,10 @@
 package com.awrank.web.model.service.impl.pojos;
 
+/**
+ * POJO bean for <a href="http://webmoney.ru">WebMoney</a> payment service.
+ *
+ * @author Alex Polyakov
+ */
 public class PaymentWMFormPojo {
 	/**
 	 * Индикатор предварительного запроса (1)

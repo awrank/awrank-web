@@ -9,7 +9,6 @@ import com.awrank.web.model.exception.entrypoint.EntryPointWrongCurrentPasswordE
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
-import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,9 +18,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Interface for REST service working with users
+ * Interface for REST service working with users.
  *
  * @author Olga Korokhina
+ * @author Andrew Stoyaltsev
  */
 public interface UserService extends AbstractService {
 
@@ -86,12 +86,33 @@ public interface UserService extends AbstractService {
 
 	List<User> getAll();
 
+	/**
+	 * Method for REST URI: /admin/userlist2
+	 * @return list of user.
+	 */
 	List<User> getAllUsers();
 
+	/**
+	 *
+	 * @param pageable
+	 * @return
+	 */
 	Page<User> getPage(Pageable pageable);
 
+	/**
+	 *
+	 * @param user
+	 * @param principal
+	 * @return
+	 */
 	User blockUser(User user, Principal principal);
-	
+
+	/**
+	 *
+	 * @param user
+	 * @param principal
+	 * @return
+	 */
 	User unblockUser(User user, Principal principal);
 
 	/**
@@ -101,13 +122,24 @@ public interface UserService extends AbstractService {
 	 * @throws EntryPointByEmailNotFoundException
 	 *
 	 */
-	public void recoveryPasswordIntoEmail(String email, String localAddress, String remoteAddress) throws EntryPointByEmailNotFoundException;
+	public void recoveryPasswordIntoEmail(String email, String localAddress, String remoteAddress)
+			throws EntryPointByEmailNotFoundException;
 
-	public void changePassword(String uid, String oldPassword, String newPassword) throws EntryPointByEmailNotFoundException, EntryPointWrongCurrentPasswordException;
+	/**
+	 *
+	 * @param uid
+	 * @param oldPassword
+	 * @param newPassword
+	 * @throws EntryPointByEmailNotFoundException
+	 * @throws EntryPointWrongCurrentPasswordException
+	 */
+	public void changePassword(String uid, String oldPassword, String newPassword)
+			throws EntryPointByEmailNotFoundException, EntryPointWrongCurrentPasswordException;
 
 	/**
 	 * Generates new {@code apiKey} which is not stored in DB yet.
 	 * @return {@code apiKey} string value based on {@link UUID}.
 	 */
 	String getNewApiKey();
+
 }

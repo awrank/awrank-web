@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Base abstract implementation for services.
+ * Basic abstract implementation for services.
  *
  * @author Alex Polyakov
  * @author Andrew Stoyaltsev
@@ -20,7 +20,7 @@ public abstract class AbstractServiceImpl implements AbstractService {
 	}
 
 	/**
-	 * Minimal base map for creation json response. You can add to this map
+	 * Minimal base map for creation JSON (positive) response. You can add to this map
 	 * your specific fields.
 	 * @return {@link HashMap} instance with at least 'result' field.
 	 */

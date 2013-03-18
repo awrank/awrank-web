@@ -1,20 +1,13 @@
 package com.awrank.web.model.service.impl.pojos;
 
-import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
-import com.awrank.web.model.domain.User;
 import com.awrank.web.model.enums.SecretQuestion;
-
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
 
 /**
- * POJO(well, actually a bean :) ) for user registration via "our" webform;
+ * POJO bean for user registration form.
  *
  * @author Olga Korokhina
  * @author Andrew Stoyaltsev
@@ -42,7 +35,7 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	private String userRemoteAddress;
 
-    // todo: probably the fields below should be deleted if not used.
+	private SecretQuestion secretQuestionCode;
 
 	private String secretQuestionAnswer;
 
@@ -54,14 +47,6 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.secretQuestionAnswer = secretQuestionAnswer;
 	}
 
-	private EntryPointType networkType;
-
-	private boolean emailVerified;
-	
-	private SecretQuestion secretQuestionCode;
-	
-	private String networkUID;
-
 	public SecretQuestion getSecretQuestionCode() {
 		return secretQuestionCode;
 	}
@@ -70,8 +55,6 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.secretQuestionCode = secretQuestionCode;
 	}
 
-	private LocalDateTime birthday;
-
 	public Long getId() {
 		return id;
 	}
@@ -79,7 +62,7 @@ public class UserRegistrationFormPojo implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getIp() {
 		return ip;
 	}
@@ -120,8 +103,9 @@ public class UserRegistrationFormPojo implements Serializable {
 	}
 
 	public void setPasswordConfirm(String password) {
-	
+
 	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -167,40 +151,8 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.userRemoteAddress = userRemoteAddress;
 	}
 
-	public String getNetworkUID() {
-		return networkUID;
-	}
+	public void fillWith(Map<String, String> in) {
 
-	public void setNetworkUID(String networkUID) {
-		this.networkUID = networkUID;
-	}
-
-	public boolean isEmailVerified() {
-		return emailVerified;
-	}
-
-	public void setEmailVerified(boolean emailVerified) {
-		this.emailVerified = emailVerified;
-	}
-
-	public LocalDateTime getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(LocalDateTime birthday) {
-		this.birthday = birthday;
-	}
-
-	public EntryPointType getNetworkType() {
-		return networkType;
-	}
-
-	public void setNetworkType(EntryPointType networkType) {
-		this.networkType = networkType;
-	}
-	
-	public void fillWith(Map<String, String> in){
-		
 		this.setEmail(in.get("email"));
 		this.setFirstName(in.get("firstName"));
 		this.setLastName(in.get("lastName"));
@@ -209,4 +161,5 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.setSecretQuestionCode(SecretQuestion.valueOf(in.get("questionDicCode")));
 		this.setSecretQuestionAnswer(in.get("answer"));
 	}
+
 }

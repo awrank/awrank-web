@@ -15,8 +15,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author Eugene Solomka
  */
 public interface DiaryDao extends PagingAndSortingRepository<Diary, Long> {
-    /**
-     * Returns a {@link org.springframework.data.domain.Page} of {@link Diary}s belongs to specified user.
-     */
-    Page<Diary> findByUser(User user, Pageable pageable);
+	/**
+	 * Returns a {@link org.springframework.data.domain.Page} of {@link Diary}s belongs to specified user.
+	 */
+	Page<Diary> findByUser(User user, Pageable pageable);
+
 }

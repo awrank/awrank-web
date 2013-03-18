@@ -4,8 +4,11 @@ package com.awrank.web.model.enums;
  * Constants which define messages keys.
  *
  * @author Alex Polyakov
+ * @author Andrew Stoyaltsev
+ * @author Olga Korokhina
  */
 public enum Message {
+
 	ERROR,
 	ERROR_ACCESS,
 	ERROR_NETWORK,
@@ -50,4 +53,6 @@ public enum Message {
 	REGISTRATION_EMAIL_MALFORMED,
 	
 	EMAIL_VERIFIED_SUCCESSFULLY,
-	EMAIL_NOT_VERIFIED}
+	EMAIL_NOT_VERIFIED
+
+}

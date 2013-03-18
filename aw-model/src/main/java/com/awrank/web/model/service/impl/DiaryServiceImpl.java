@@ -11,8 +11,9 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.service.DiaryService;
 
 /**
- * @author Olga Korokhina
+ * TODO: Description
  *
+ * @author Olga Korokhina
  */
 @Service
 public class DiaryServiceImpl implements DiaryService {
@@ -24,15 +25,13 @@ public class DiaryServiceImpl implements DiaryService {
 	 * @see com.awrank.web.model.service.DiaryService#save(com.awrank.web.model.domain.Diary)
 	 */
 	@Override
-	public void save(Diary dr) {
-		
-		diaryDao.save(dr);
+	public void save(Diary diary) {
+		diaryDao.save(diary);
 	}
 
 	@Override
 	public Page<Diary> findByUser(User user, Pageable pageable){
-		
 		return diaryDao.findByUser(user, pageable);
-		
 	}
+
 }

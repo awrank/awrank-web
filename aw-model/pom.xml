@@ -24,6 +24,12 @@
 
 	<dependencies>
 
+		<!-- AwRank -->
+		<dependency>
+			<groupId>com.awrank.webapp</groupId>
+			<artifactId>aw-common</artifactId>
+		</dependency>
+
 		<!-- JEE -->
 		<dependency>
 			<groupId>javax</groupId>
