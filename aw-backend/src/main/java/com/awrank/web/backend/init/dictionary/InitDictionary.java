@@ -3,6 +3,8 @@ package com.awrank.web.backend.init.dictionary;
 import com.awrank.web.model.dao.DictionaryDao;
 import com.awrank.web.model.domain.Dictionary;
 import com.awrank.web.model.domain.Language;
+import com.awrank.web.model.domain.PaymentSystemType;
+import com.awrank.web.model.enums.Currency;
 import com.awrank.web.model.enums.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -185,6 +187,21 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "WELCOME", "Welcome!"));
 		list.add(new Dictionary(null, Language.RU, "HELLO_USERNAME", "Привет, "));
 		list.add(new Dictionary(null, Language.EN, "HELLO_USERNAME", "Hello, "));
+
+		// CURRENCY
+		list.add(new Dictionary(null, Language.RU, Currency.USD.name(), "Доллар"));
+		list.add(new Dictionary(null, Language.EN, Currency.USD.name(), "Dollar"));
+		list.add(new Dictionary(null, Language.RU, Currency.EUR.name(), "Евро"));
+		list.add(new Dictionary(null, Language.EN, Currency.EUR.name(), "Euro"));
+		list.add(new Dictionary(null, Language.RU, Currency.RUB.name(), "Рубль"));
+		list.add(new Dictionary(null, Language.EN, Currency.RUB.name(), "Ruble"));
+		list.add(new Dictionary(null, Language.RU, Currency.EUR.name(), "Гривна"));
+		list.add(new Dictionary(null, Language.EN, Currency.EUR.name(), "Hryvnia"));
+		// PAYMENT SYSTEM
+		list.add(new Dictionary(null, Language.RU, PaymentSystemType.TWO_CHECKOUT.name(), "2CheckOut"/*"Тучекаут"*/));
+		list.add(new Dictionary(null, Language.EN, PaymentSystemType.TWO_CHECKOUT.name(), "2CheckOut"));
+		list.add(new Dictionary(null, Language.RU, PaymentSystemType.WEB_MONEY.name(), "WebMoney"/*"Вебмани"*/));
+		list.add(new Dictionary(null, Language.EN, PaymentSystemType.WEB_MONEY.name(), "WebMoney"));
 
 //      ENTITY
 		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));

@@ -135,7 +135,7 @@
 					</li>
 					<li id="menuItemPaymentHistory">
 						<a href="#payment_history">
-							<i class="icon-calendar"></i><span lngt="PAYMENT_HISTORY">Payment history</span>
+							<i class="icon-calendar"></i> <span lngt="PAYMENT_HISTORY">Payment history</span>
 						</a>
 					</li>
 
@@ -182,14 +182,14 @@
 
 <script type="text/javascript" language="JavaScript">
 
-	Backbone.history.start();
 	awrankRouter = new CRouter();
+	Backbone.history.start();
 
 	function fIndexBodyOnload() {
 //		setContextPath('http://localhost:8080/awrank');
 //		setContextPath('http://localhost:8080/aw-backend');
 		setLanguage('RU');
-		awrankRouter.navigate('order', {trigger: true});
+//		awrankRouter.navigate('order', {trigger: true});
 		activeAjaxListener();
 	}
 

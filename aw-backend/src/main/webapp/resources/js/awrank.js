@@ -169,35 +169,39 @@ function awrankDebug(o) {
 }
 
 function dateTimeToString(date) {
-	if (!(date instanceof Date)) {
-		date = new Date(date);
-	}
+	var result = '';
+	if (date != null) {
+		if (!(date instanceof Date)) {
+			date = new Date(date);
+		}
 
-	var f00 = function (i) {
-		if (i < 10)
-			i = '0' + i;
-		return i;
+		var f00 = function (i) {
+			if (i < 10)
+				i = '0' + i;
+			return i;
+		}
+		result = f00(date.getDate()) + '.' +
+			f00(date.getMonth() + 1) + '.' +
+			date.getFullYear() + ' ' +
+			f00(date.getHours()) + ':' +
+			f00(date.getMinutes()) + ':' +
+			f00(date.getSeconds());
 	}
-	return f00(date.getDate()) + '.' +
-		f00(date.getMonth() + 1) + '.' +
-		date.getFullYear() + ' ' +
-		f00(date.getHours()) + ':' +
-		f00(date.getMinutes()) + ':' +
-		f00(date.getSeconds());
+	return result;
 }
 
 // =========================== SEND REQUEST ===================================
 
 function send_user_login(uid, password) {
 	awrankPost("user/login", {uid: uid, password: password}, function (data) {
-		
+
 		alertSuccess(getMessage('WELCOME'), getMessage('YOU_LOGGED_IN_SUCCESSFULLY'));
-		
+
 		$('#divLogin').addClass('hidden');
-		awrankRouter.navigate('', {trigger: true});
+//		awrankRouter.navigate('', {trigger: true});
 		var options;
 		while ((options = oldRequest.shift()) != null) {
-			//$.ajax(options);//no need to show them again - just push out
+			$.ajax(options);
 		}
 	})
 }
@@ -205,31 +209,31 @@ function send_user_login(uid, password) {
 function send_user_register(dataform) {
 
 	//alert("in send_user_register "+JSON.stringify(dataform));
-	awrankPost("user/add2", dataform , function (data) {
-		
+	awrankPost("user/add2", dataform, function (data) {
+
 		//if(data.error != null)
 		//alert(JSON.stringify(data));
 		//alert(data.result);
-	
-		if(data.result == "failure") {
-		
+
+		if (data.result == "failure") {
+
 			alertError(getMessage('ERROR'), getMessage(data.reason));
-			
+
 		}
-		else if (data.result == "ok"){
-			
+		else if (data.result == "ok") {
+
 			$('#divRegister').addClass('hidden');
-			
+
 			alertSuccess(getMessage('WELCOME'), getMessage(data.reason));
-			
-			awrankRouter.navigate('', {trigger: true});
+
+//			awrankRouter.navigate('', {trigger: true});
 			var options;
 			while ((options = oldRequest.shift()) != null) {
-				//$.ajax(options);//no need to show them again - just push out
+				$.ajax(options);
 			}
 		}
-		
-		
+
+
 	})
 }
 
