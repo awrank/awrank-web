@@ -112,7 +112,7 @@ public class UserController extends AbstractController {
 
 		auditorAware.setCurrentAuditor(entryPoint);
 
-		return getPositiveResponseMap("YOU_REGISTERED_SUCCESSFULLY");
+		return getPositiveResponseMap("YOU_REGISTERED_SUCCESSFULLY_VERIFICATION_EMAIL_SENT");
 	}
 	
 	
