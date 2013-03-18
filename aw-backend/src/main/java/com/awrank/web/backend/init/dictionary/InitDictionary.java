@@ -34,6 +34,16 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_ACCESS.name(), "You're not permitted to do this action."));
 		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Соединение с сервером отсутствует попробуйте позже"));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_NETWORK.name(), "No connection with the server, try later."));
+
+		list.add(new Dictionary(null, Language.RU, "AUTH_ERROR", "Ошибка аутентификации"));
+		list.add(new Dictionary(null, Language.EN, "AUTH_ERROR", "Authentication error"));
+		list.add(new Dictionary(null, Language.RU, "MESSAGE", "Сообщение: "));
+		list.add(new Dictionary(null, Language.EN, "MESSAGE", "Message: "));
+		list.add(new Dictionary(null, Language.RU, "DESCRIPTION", "Описание: "));
+		list.add(new Dictionary(null, Language.EN, "DESCRIPTION", "Description: "));
+		list.add(new Dictionary(null, Language.RU, "ERROR_CODE", "Код ошибки: "));
+		list.add(new Dictionary(null, Language.EN, "ERROR_CODE", "Error code: "));
+
 //
 		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
 		list.add(new Dictionary(null, Language.EN, Message.MISSING_OBJECT_ID.name(), "Missing object identifier."));
@@ -51,6 +61,82 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "The email not found"));
 		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль"));
 		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password"));
+
+		// social
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
+				"К сожалению, социальная сеть, которую вы выбрали не может предоставить нам ваш email. " +
+						"Пожалуйста, укажите ваш email в профиле социальной сети и попробуйте снова. " +
+						"Либо вы можете использовать стандартную форму регистрации. " +
+						"Спасибо за понимание."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
+				"Unfortunately the social network you've chosen did not provide us " +
+						"with your email. Please set email in your social account and try again or " +
+						"use the standard registration form. Thanks for understanding."));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
+				"К сожалению, социальная сеть, вернула негативный результат."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
+				"Unfortunately the social network returned a negative response."));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE.name(),
+				"Значения параметра 'state' в ответе не соотвествует значению в запросе!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE.name(),
+				"Custom 'state' param value does not correspond initial request value!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_MISSING_GOOGLE_STATE_PARAM.name(),
+				"Параметр 'state' не определен!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_MISSING_GOOGLE_STATE_PARAM.name(),
+				"Parameter 'state' is not specified!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(), "Запрос на получение access_token провалился!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(), "Request for getting access_token value has failed!"));
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(), "Запрос на получение user_profile провалился!"));
+		list.add(new Dictionary(null, Language.EN,
+				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(), "Request for getting user_profile has failed!"));
+
+		list.add(new Dictionary(null, Language.RU, Message.SOCIAL_NO_AUTH_ACTION_SPECIFIED.name(), "Не задан тип действия для аутентификации пользователя."));
+		list.add(new Dictionary(null, Language.EN, Message.SOCIAL_NO_AUTH_ACTION_SPECIFIED.name(), "No auth action specified!"));
+
+		list.add(new Dictionary(null, Language.RU, Message.SOCIAL_ACCESS_TOKEN_IS_NULL.name(), "Access token равен NULL."));
+		list.add(new Dictionary(null, Language.EN, Message.SOCIAL_ACCESS_TOKEN_IS_NULL.name(), "Access token is null."));
+
+		list.add(new Dictionary(null, Language.RU, Message.SOCIAL_AUTH_CODE_IS_NULL.name(), "Auth code равен NULL."));
+		list.add(new Dictionary(null, Language.EN, Message.SOCIAL_AUTH_CODE_IS_NULL.name(), "Auth code is null."));
+
+		list.add(new Dictionary(null, Language.RU, Message.SOCIAL_LOGIN_FAILED_TITLE.name(),
+				"К сожалению, возникли ошибки при выполнении операции входа в систему."));
+		list.add(new Dictionary(null, Language.EN, Message.SOCIAL_LOGIN_FAILED_TITLE.name(),
+				"Unfortunately, errors occurred during login action to the system."));
+
+		list.add(new Dictionary(null, Language.RU, Message.SOCIAL_REGISTER_FAILED_TITLE.name(),
+				"К сожалению, возникли ошибки при выполнении операции регистрации."));
+		list.add(new Dictionary(null, Language.EN, Message.SOCIAL_REGISTER_FAILED_TITLE.name(),
+				"Unfortunately, errors occurred during registration process."));
+
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.ENTRY_POINT_NOT_FOUND_BY_UID.name(), "К сожалению, мы не смогли найти запись entry-point."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.ENTRY_POINT_NOT_FOUND_BY_UID.name(), "Unfortunately, we could not find entry point."));
+
+
+		list.add(new Dictionary(null, Language.RU,
+				Message.EMAIL_ALREADY_EXISTS.name(), "Указанный email уже зарегистрирован в системе."));
+		list.add(new Dictionary(null, Language.EN,
+				Message.EMAIL_ALREADY_EXISTS.name(), "This email is already registered in the system!"));
+
 
 //        simple words
 		list.add(new Dictionary(null, Language.RU, "COUNTRY", "Страна"));
@@ -85,6 +171,19 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "MORE", "more"));
 		list.add(new Dictionary(null, Language.RU, "WARNING", "Предупреждение"));
 		list.add(new Dictionary(null, Language.EN, "WARNING", "Warning"));
+		list.add(new Dictionary(null, Language.RU, "CONTINUE", "Продолжить"));
+		list.add(new Dictionary(null, Language.EN, "CONTINUE", "Continue"));
+		list.add(new Dictionary(null, Language.RU, "UNDER_CONSTRUCTION", "В разработке."));
+		list.add(new Dictionary(null, Language.EN, "UNDER_CONSTRUCTION", "Under construction."));
+		list.add(new Dictionary(null, Language.RU, "CREATED_AT", "Дата создания"));
+		list.add(new Dictionary(null, Language.EN, "CREATED_AT", "Created at"));
+		list.add(new Dictionary(null, Language.RU, "SEARCH", "Поиск"));
+		list.add(new Dictionary(null, Language.RU, "SEARCH", "Search"));
+		list.add(new Dictionary(null, Language.RU, "ALL", "Все"));
+		list.add(new Dictionary(null, Language.EN, "ALL", "All"));
+		list.add(new Dictionary(null, Language.RU, "HELLO_USERNAME", "Привет, "));
+		list.add(new Dictionary(null, Language.EN, "HELLO_USERNAME", "Hello, "));
+
 //      ENTITY
 		list.add(new Dictionary(null, Language.RU, "DICTIONARY_CODE", "Код"));
 		list.add(new Dictionary(null, Language.EN, "DICTIONARY_CODE", "Code"));
@@ -95,8 +194,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "MY_ACCOUNT", " Учетная запись"));
 		list.add(new Dictionary(null, Language.EN, "MY_ACCOUNT", "My account"));
 
-		list.add(new Dictionary(null, Language.RU, "FORGET_PASSWORD", "Забыли пароль?"));
-		list.add(new Dictionary(null, Language.EN, "FORGET_PASSWORD", "Forgotten your password?"));
+		list.add(new Dictionary(null, Language.RU, "FORGOT_PASSWORD", "Забыли пароль?"));
+		list.add(new Dictionary(null, Language.EN, "FORGOT_PASSWORD", "Forgot your password?"));
 
 		list.add(new Dictionary(null, Language.RU, "REGISTRATION", "Регистрация"));
 		list.add(new Dictionary(null, Language.EN, "REGISTRATION", "Registration"));
@@ -115,19 +214,23 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "ACCOUNT", "ACCOUNT"));
 		list.add(new Dictionary(null, Language.RU, "PROFILE", "Профиль"));
 		list.add(new Dictionary(null, Language.EN, "PROFILE", "Profile"));
+		list.add(new Dictionary(null, Language.RU, "APPLICATION", "Приложение"));
+		list.add(new Dictionary(null, Language.EN, "APPLICATION", "Application"));
 		list.add(new Dictionary(null, Language.RU, "ACTIVITY", "ДЕЯТЕЛЬНОСТЬ"));
 		list.add(new Dictionary(null, Language.EN, "ACTIVITY", "ACTIVITY"));
 		list.add(new Dictionary(null, Language.RU, "REQUEST_HISTORY", "История запросов"));
 		list.add(new Dictionary(null, Language.EN, "REQUEST_HISTORY", "Request history"));
 		list.add(new Dictionary(null, Language.RU, "ADMINISTRATION", "Администрирование"));
 		list.add(new Dictionary(null, Language.EN, "ADMINISTRATION", "Administration"));
+		list.add(new Dictionary(null, Language.RU, "NAME", "ФИО"));
+		list.add(new Dictionary(null, Language.EN, "NAME", "Name"));
 
 		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));
-		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_FIRST_NAME", "Имя"));
-		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_FIRST_NAME", "First Name"));
-		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_LAST_NAME", "Фамилия"));
-		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_LAST_NAME", "Last Name"));
+		list.add(new Dictionary(null, Language.RU, "FIRST_NAME", "Имя"));
+		list.add(new Dictionary(null, Language.EN, "FIRST_NAME", "First Name"));
+		list.add(new Dictionary(null, Language.RU, "LAST_NAME", "Фамилия"));
+		list.add(new Dictionary(null, Language.EN, "LAST_NAME", "Last Name"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_LANGUAGE", "Язык (RU, EN)"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_FIELD_LANGUAGE", "Language (RU, EN)"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FIELD_EMAIL", "Email адрес"));
@@ -142,6 +245,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "REGISTER_TERMS_ANCHOR", "Terms of Service"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FOOTER", "У вас есть учетная запись?"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_FOOTER", "Do you have an account?"));
+		list.add(new Dictionary(null, Language.RU, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "Регистрация прошла успешно."));
+		list.add(new Dictionary(null, Language.EN, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "You've registered successfully."));
 
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
@@ -153,12 +258,14 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "LOGIN_FOOTER", "Don't have an account?"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_WRONG_UID_OR_PASSWORD", "Wrong login or email or password"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_WRONG_UID_OR_PASSWORD", "Неправильный адресс электроной почты или логин или пароль"));
+		list.add(new Dictionary(null, Language.RU, Message.YOU_LOGGED_IN_SUCCESSFULLY.name(), "Вы успешно вошли в систему."));
+		list.add(new Dictionary(null, Language.EN, Message.YOU_LOGGED_IN_SUCCESSFULLY.name(), "You've logged in successfully."));
 
-		list.add(new Dictionary(null, Language.RU, "FORGET_DESCRIPTION", "Введите адрес электронной почты ниже, и мы вышлем вам инструкцию востановления пароля."));
+		list.add(new Dictionary(null, Language.RU, "FORGET_DESCRIPTION", "Введите адрес электронной почты ниже, и мы вышлем вам инструкцию восстановления пароля."));
 		list.add(new Dictionary(null, Language.EN, "FORGET_DESCRIPTION", "Enter your email address below and we'll send you password reset instructions."));
 		list.add(new Dictionary(null, Language.RU, "FORGET_FIELD_EMAIL", "Email адрес"));
 		list.add(new Dictionary(null, Language.EN, "FORGET_FIELD_EMAIL", "Email address"));
-		list.add(new Dictionary(null, Language.RU, "FORGET_BUTTON_SUBMIT", "Востановить пароль"));
+		list.add(new Dictionary(null, Language.RU, "FORGET_BUTTON_SUBMIT", "Восстановить пароль"));
 		list.add(new Dictionary(null, Language.EN, "FORGET_BUTTON_SUBMIT", "Reset password"));
 		list.add(new Dictionary(null, Language.RU, "FORGET_FOOTER", "или перейти на"));
 		list.add(new Dictionary(null, Language.EN, "FORGET_FOOTER", "or return to"));
@@ -196,6 +303,14 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_BROWSE", "Browse"));
 		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Дата последнего действия"));
 		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Most recent activity"));
+
+		/* Administration */
+		list.add(new Dictionary(null, Language.RU, "USER_LIST", "Список пользователей"));
+		list.add(new Dictionary(null, Language.EN, "USER_LIST", "User list"));
+		list.add(new Dictionary(null, Language.RU, "MANAGE_USERS", "Управление пользователями"));
+		list.add(new Dictionary(null, Language.EN, "MANAGE_USERS", "Manage users"));
+		list.add(new Dictionary(null, Language.RU, "LOGS", "Логи"));
+		list.add(new Dictionary(null, Language.RU, "LOGS", "Logs"));
 
 		// TODO check
 		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));

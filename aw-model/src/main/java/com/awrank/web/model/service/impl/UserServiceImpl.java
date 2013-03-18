@@ -2,6 +2,7 @@ package com.awrank.web.model.service.impl;
 
 
 import com.awrank.web.model.dao.UserDao;
+import com.awrank.web.model.dao.impl.AdminDaoImpl;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
@@ -14,8 +15,10 @@ import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.select.SelectUtils;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Implementation of {@link UserService} interface.
@@ -54,6 +54,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private AdminDaoImpl adminDao;
 
 	@Autowired
 	@Qualifier("entryHistoryServiceImpl")
@@ -118,6 +121,9 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		return entryPoint;
 	}
 
+	// todo: !
+	// Andrew: this method was coppied out to EmailHelper util class since it's used in several places.
+	// all invocation of this method should be connected to EmailHelper::sendVerificationEmail()
 	private boolean sendingVerificationEmail(User user, String email, String password, String localAddress, String remoteAddress) {
 		boolean success = false;
 		try {
@@ -359,6 +365,28 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		entryPoint.setPassword(PasswordUtils.hashPassword(newPassword));
 		entryPointService.save(entryPoint);
 		// TODO send email
+	}
+
+	@Override
+	public String getNewApiKey() {
+		String apiKey = UUID.randomUUID().toString();
+		while (findByAPIKey(apiKey) != null) {
+			apiKey = UUID.randomUUID().toString();
+		}
+		return apiKey;
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public List<User> getAllUsers() {
+		List<User> userList = new ArrayList<User>();
+		List<UserSocialRegistrationFormPojo> list = adminDao.getAllUsers();
+		if (list != null) {
+			for (UserSocialRegistrationFormPojo pojo : list) {
+				userList.add(pojo.createUser());
+			}
+		}
+		return userList;
 	}
 
 }

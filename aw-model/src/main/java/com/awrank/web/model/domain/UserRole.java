@@ -33,7 +33,7 @@ public class UserRole extends AbstractUserRelatedEntityAuditable {
 	
 	public UserRole(User user, Role role) {
 		this.user = user;
-		user.getUserRoles().add(this);
+		this.user.getUserRoles().add(this);
 		this.role = role;
 	}
 

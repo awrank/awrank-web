@@ -9,12 +9,14 @@ import com.awrank.web.model.exception.entrypoint.EntryPointWrongCurrentPasswordE
 import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.exception.user.UserNotDeletedException;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
+import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interface for REST service working with users
@@ -84,6 +86,8 @@ public interface UserService extends AbstractService {
 
 	List<User> getAll();
 
+	List<User> getAllUsers();
+
 	Page<User> getPage(Pageable pageable);
 
 	User blockUser(User user, Principal principal);
@@ -100,4 +104,10 @@ public interface UserService extends AbstractService {
 	public void recoveryPasswordIntoEmail(String email, String localAddress, String remoteAddress) throws EntryPointByEmailNotFoundException;
 
 	public void changePassword(String uid, String oldPassword, String newPassword) throws EntryPointByEmailNotFoundException, EntryPointWrongCurrentPasswordException;
+
+	/**
+	 * Generates new {@code apiKey} which is not stored in DB yet.
+	 * @return {@code apiKey} string value based on {@link UUID}.
+	 */
+	String getNewApiKey();
 }

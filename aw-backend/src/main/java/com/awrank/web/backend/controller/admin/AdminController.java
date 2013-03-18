@@ -80,6 +80,16 @@ public class AdminController extends AbstractController {
 		return allUsers;
 	}
 
+	// todo: temporary
+	@RequestMapping(value = "/userlist2", method = RequestMethod.GET, produces = "application/json")
+	public
+	@ResponseBody()
+	List<User> getAllUsers(ModelMap model) {
+		List<User> allUsers = userService.getAllUsers();
+		model.addAttribute("result", allUsers);
+		return allUsers;
+	}
+
 	/**
 	 * List of user with pagination
 	 *

@@ -52,27 +52,11 @@
                     </button>
                 </fieldset>
                 <hr>
-                <a href="#forget_password" lngt="FORGET_PASSWORD">Forgotten your password?</a>
-				<span class="pull-right"><span lngt="LOGIN_FOOTER">Don't have an account?</span> <a href="#register"
-                                                                                                    lngt="REGISTRATION"></a></span>
-                <br>
-                <br/>
-
-                <!-- todo: just for debug, remove later -->
-                <span>
-                    <fieldset>
-                        <legend>* Debug section *</legend>
-                        <a href="auth/google/login">Log In with Google </a><br/>
-                        <a href="auth/facebook/login">Log In with Facebook</a>
-                    </fieldset>
-                </span>
-                <!--
-                <a href="https://accounts.google.com/o/oauth2/auth?client_id=15292624503.apps.googleusercontent.com&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile">login
-                    Google</a>
-                <br/>
-                <a href="https://accounts.google.com/o/oauth2/auth?client_id=15292624503.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faw-backend%2Fuser%2Fregistration%2Fgoogle&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile">reg
-                    Google</a>
-                    -->
+                <a href="#forget_password" lngt="FORGOT_PASSWORD">Forgot your password?</a>
+				<span class="pull-right">
+					<span lngt="LOGIN_FOOTER">Don't have an account?</span>
+					<a href="#register" lngt="REGISTRATION"></a>
+				</span>
             </form>
         </div>
         <div class="span3"></div>
@@ -98,11 +82,11 @@
     }
 
     function fLoginGoogleSubmit() {
-        awrankGet("auth/google/login");
+		window.location = "user/login/google";
     }
 
     function fLoginFacebookSubmit() {
-        awrankGet("auth/facebook/login");
+		window.location = "user/login/facebook";
     }
 
 </script>
