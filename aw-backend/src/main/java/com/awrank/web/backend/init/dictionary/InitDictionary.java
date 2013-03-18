@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author Alex Polyakov
  * @author Andrew Stoyaltsev
+ * @author Olga Korokhina
  */
 @Service
 public class InitDictionary {
@@ -250,6 +251,10 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "SKYPE", "Skype"));
 		list.add(new Dictionary(null, Language.EN, "SKYPE", "Skype"));
 
+		
+		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_BIRTHDAY", "Дата рождения (ГГГГ-ММ-ДД"));
+		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_BIRTHDAY", "Birthday (YYYY-MM-DD)"));
+		
 		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));
 		list.add(new Dictionary(null, Language.RU, "FIRST_NAME", "Имя"));

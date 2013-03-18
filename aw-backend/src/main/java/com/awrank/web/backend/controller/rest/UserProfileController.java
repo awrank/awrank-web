@@ -148,6 +148,25 @@ public class UserProfileController extends AbstractController {
 		return "userdata";
 	}
 	
+	/**
+	 * Called from divProfile to fetch user data
+	 * @param principal
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/userdata/get2",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody Map getUserDataAsMap(Principal principal) throws Exception {
+
+		if (principal == null) return this.getNegativeResponseMap("ERROR_ACCESS");
+		
+		UserProfileDataFormPojo userdata =  userProfileService.getUserProfileDataForPrincipal(principal);
+		Map userdataMap = userdata.toMap();
+		userdataMap.put("result", "ok");
+		return userdataMap;
+	}
 	
 	@RequestMapping(value = "/userdata/update",
 			method = RequestMethod.POST,
@@ -228,7 +247,8 @@ public class UserProfileController extends AbstractController {
 
 	private Map getPositiveResponseMap(String resultStr) {
 		Map<String, String> result = new HashMap<String, String>();
-		result.put("result", resultStr);
+		result.put("result", "ok");
+		result.put("reason", resultStr);
 		return result;
 	}
 

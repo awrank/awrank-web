@@ -3,11 +3,15 @@ package com.awrank.web.model.service.impl.pojos;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.enums.SecretQuestion;
+
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,6 +44,29 @@ public class UserProfileDataFormPojo implements Serializable {
 
 	private LocalDateTime birthday;
 	private String birthdayAsFormattedString;
+	
+	private String secretAnswer;
+	
+	public String getSecretAnswer() {
+		return secretAnswer;
+	}
+
+
+	public void setSecretAnswer(String secretAnswer) {
+		this.secretAnswer = secretAnswer;
+	}
+
+	private SecretQuestion secretQuestion;
+
+	public SecretQuestion getSecretQuestion() {
+		return secretQuestion;
+	}
+
+
+	public void setSecretQuestion(SecretQuestion secretQuestion) {
+		this.secretQuestion = secretQuestion;
+	}
+
 
 	public void fillWithUserData(User user){
 		
@@ -49,7 +76,25 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.setFirstName(user.getFirstName());
 		this.setLanguage(user.getLanguage());
 		this.setLastName(user.getLastName());
+		this.setSecretAnswer(user.getSecretAnswer());
+		this.setSecretQuestion(user.getSecretQuestionDicCode());
 		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Map toMap(){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("apiKey", apiKey);
+		map.put("birthdayAsFormattedString", birthdayAsFormattedString);
+		map.put("firstName", firstName);
+		map.put("lastName", lastName);
+		map.put("networkUID", networkUID);
+		map.put("secretAnswer", secretAnswer);
+		map.put("secretQuestion", secretQuestion);
+		
+		return map;
 	}
 	
 	public Long getUserId() {
