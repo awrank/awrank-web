@@ -133,6 +133,11 @@
 							<i class="icon-time"></i> <span lngt="SESSION_HISTORY"></span>
 						</a>
 					</li>
+					<li id="menuItemPaymentHistory">
+						<a href="#payment_history">
+							<i class="icon-calendar"></i><span lngt="PAYMENT_HISTORY">Payment history</span>
+						</a>
+					</li>
 
 					<!-- ADMINISTRATION-->
 					<li class="nav-header" lngt="ADMINISTRATION">Administration</li>
@@ -176,6 +181,9 @@
 
 
 <script type="text/javascript" language="JavaScript">
+
+	Backbone.history.start();
+	awrankRouter = new CRouter();
 
 	function fIndexBodyOnload() {
 //		setContextPath('http://localhost:8080/awrank');

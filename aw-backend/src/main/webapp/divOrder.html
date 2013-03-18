@@ -160,10 +160,9 @@
 					$('#divPaymentPaymentSystem2checkout').removeClass('hidden');
 					$('#divPaymentPaymentSystem2checkout').attr('payment_system_id', paymentSystemId);
 				} else if (paymentSystemType == 'WEB_MONEY') {
-
+					$('#divPaymentPaymentSystemWebmoney').attr('payment_system_id', paymentSystemId);
 					if (l_dic_language == 'RU') {
 						$('#divPaymentPaymentSystemWebmoney').removeClass('hidden');
-						$('#divPaymentPaymentSystemWebmoney').attr('payment_system_id', paymentSystemId);
 					} else {
 						this.hidePaymentSystem.push($('#divPaymentPaymentSystemWebmoney'));
 						$('#divPaymentPaymentMore').removeClass('hidden');

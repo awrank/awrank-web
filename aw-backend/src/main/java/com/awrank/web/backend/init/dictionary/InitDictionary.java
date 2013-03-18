@@ -320,6 +320,20 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "LOGS", "Логи"));
 		list.add(new Dictionary(null, Language.RU, "LOGS", "Logs"));
 
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY", "История заказов"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY", "Payment history"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_TARIFF", "Тариф"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_TARIFF", "Tariff"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_PRICE", "Цена"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_PRICE", "Price"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM", "Платежная система"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM", "Payment system"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "С"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "Begin"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "По"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "End"));
+
+
 		// TODO check
 		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));
 		list.addAll(Dictionary.createItems("CREATE_A_NEW_ACCOUNT", "Create a new account", "Создайте учетную запись"));

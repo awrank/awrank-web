@@ -299,7 +299,7 @@ function fIndexMenuActive(menuItemId) {
 }
 
 // ============================== ROUTING =====================================
-Backbone.history.start();
+
 var CRouter = Backbone.Router.extend({
 	routes: {
 		"login": "login",
@@ -310,6 +310,7 @@ var CRouter = Backbone.Router.extend({
 		"application": "application",
 		"requestHistory": "requestHistory",
 		"sessionHistory": "sessionHistory",
+		"payment_history": "payment_history",
 		"dictionary": "dictionary",
 		"userList": "userList",
 		"manageUsers": "manageUsers",
@@ -354,6 +355,10 @@ var CRouter = Backbone.Router.extend({
 		fIndexMenuActive('menuItemSessionHistory');
 		fIndexRightContentSelectDiv('divSessionHistory');
 	},
+	payment_history: function () {
+		fIndexMenuActive('menuPaymentHistory');
+		fIndexRightContentSelectDiv('divPaymentHistory');
+	},
 	dictionary: function () {
 		fIndexMenuActive('menuItemDictionary');
 		fIndexRightContentSelectDiv('divDictionary');
@@ -374,6 +379,6 @@ var CRouter = Backbone.Router.extend({
 		//awrankRouter.navigate('pricing', {trigger: true});
 	}
 });
-var awrankRouter = new CRouter();
+
 
 
