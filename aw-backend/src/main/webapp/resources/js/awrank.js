@@ -186,6 +186,14 @@ function dateTimeToString(date) {
 		f00(date.getSeconds());
 }
 
+// ============================ VALIDATORS ===================================
+
+function validateEmail(email) { 
+   // var re = [a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return re.test(email);
+} 
+
 // =========================== SEND REQUEST ===================================
 
 function send_user_login(uid, password) {
@@ -239,6 +247,16 @@ function send_user_logout() {
 
 
 // =============================== UI =========================================
+
+function fIndexClearMessages(divId) {
+	
+	var div = $('#' + divId);
+	div.find('[name=alert-error]').empty();
+	div.find('[name=alert-warning]').empty();
+	div.find('[name=alert-success]').empty();
+	return true;
+}
+
 /**
  * find div by id if not exist load from file (append div to target by targetSelector)
  * @param targetSelector

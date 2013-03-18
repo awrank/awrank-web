@@ -247,6 +247,12 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "REGISTER_TERMS_ANCHOR", "Terms of Service"));
 		list.add(new Dictionary(null, Language.RU, "REGISTER_FOOTER", "У вас есть учетная запись?"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_FOOTER", "Do you have an account?"));
+		list.add(new Dictionary(null, Language.RU, Message.REGISTRATION_EMAIL_MALEFORMED.name(), "Неверный формат электронной почты"));
+		list.add(new Dictionary(null, Language.EN, Message.REGISTRATION_EMAIL_MALEFORMED.name(), "Wrong email format"));
+		list.add(new Dictionary(null, Language.RU, Message.REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TAC.name(), "Вы должны согласиться с Условиями Пользования"));
+		list.add(new Dictionary(null, Language.EN, Message.REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TAC.name(), "You have to agree with Terms and Conditions"));
+		list.add(new Dictionary(null, Language.RU, Message.REGISTRATION_PASSWORD_AND_CONFIRMATION_ARE_NOT_EQUAL.name(), "Пароль и его подтверджение не идентичны!"));
+		list.add(new Dictionary(null, Language.EN, Message.REGISTRATION_PASSWORD_AND_CONFIRMATION_ARE_NOT_EQUAL.name(), "Password and confirmation are not equal!"));
 		list.add(new Dictionary(null, Language.RU, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "Регистрация прошла успешно, на указанный почтовый ящик выслана ссылка для верификации- пожалуйста, верифицируйтесь!"));
 		list.add(new Dictionary(null, Language.EN, Message.YOU_REGISTERED_SUCCESSFULLY.name(), "You've registered successfully, verification link is sent on the mailbox you specified- please verivy!"));
 

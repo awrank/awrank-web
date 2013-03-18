@@ -72,7 +72,7 @@
                     <div class="row-fluid">
                         <div class="span8">
                             <label class="checkbox">
-                                <input type="checkbox"><span lngt="I_AGREE_WITH_THE"></span>
+                                <input type="checkbox" id="tacCheckbox"  /><span lngt="I_AGREE_WITH_THE"></span>
                                 <a href="#" lngt="TERMS_OF_SERVICE"></a>
                             </label>
 
@@ -118,13 +118,32 @@ $.fn.serializeObject = function()
       
     	//send_user_register($('regform').serializeObject());
     	
+    	fIndexClearMessages("divRegister");
+    	
     	 var email = $('#email').val();
          var password = $('#password').val();
+         var confirmation = $('#passwordConfirm').val();
          var firstname = $('#firstName').val();
          var lastname = $('#lastName').val();
          var language = $('#language').val();
     	
-    	send_user_register({email: email, password : password, firstName: firstname, lastName: lastname, language: language });
+         var iserrors = false;
+         
+       	 if(jQuery("#tacCheckbox").prop("checked") == false){
+       		alertError(getMessage('ERROR'), getMessage('REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TAC'));
+       		iserrors = true;
+       	 }
+         if(email.length < 3 || validateEmail(email) == false){
+        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_EMAIL_MALEFORMED'));
+        	 iserrors = true;
+         }
+         if(password.length < 3 || confirmation.length < 3 || password != confirmation){
+        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_PASSWORD_AND_CONFIRMATION_ARE_NOT_EQUAL'));
+        	 iserrors = true;
+         }
+         
+         
+    	if(iserrors == false) send_user_register({email: email, password : password, firstName: firstname, lastName: lastname, language: language });
     	/*
             if ($('#email').val().length > 0 && $('#password').val().length > 0) {
                 
