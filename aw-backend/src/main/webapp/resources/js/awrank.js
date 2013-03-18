@@ -186,17 +186,17 @@ function send_user_login(uid, password) {
 }
 
 function send_user_register(dataform) {
-	alert("in send_user_register "+JSON.stringify(dataform));
+	//alert("in send_user_register "+JSON.stringify(dataform));
 	awrankPost("user/add2", dataform , function (data) {
 		$('#divRegister').addClass('hidden');
 		alert(JSON.stringify(data));
-		/*
+	
 		awrankRouter.navigate('', {trigger: true});
 		var options;
 		while ((options = oldRequest.shift()) != null) {
 			$.ajax(options);
 		}
-		*/
+		
 	})
 }
 
