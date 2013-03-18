@@ -3,6 +3,8 @@ package com.awrank.web.model.service.impl.pojos;
 import com.awrank.web.model.domain.EntryPointType;
 import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.User;
+import com.awrank.web.model.enums.SecretQuestion;
+
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,11 +44,31 @@ public class UserRegistrationFormPojo implements Serializable {
 
     // todo: probably the fields below should be deleted if not used.
 
-	private String networkUID;
+	private String secretQuestionAnswer;
+
+	public String getSecretQuestionAnswer() {
+		return secretQuestionAnswer;
+	}
+
+	public void setSecretQuestionAnswer(String secretQuestionAnswer) {
+		this.secretQuestionAnswer = secretQuestionAnswer;
+	}
 
 	private EntryPointType networkType;
 
 	private boolean emailVerified;
+	
+	private SecretQuestion secretQuestionCode;
+	
+	private String networkUID;
+
+	public SecretQuestion getSecretQuestionCode() {
+		return secretQuestionCode;
+	}
+
+	public void setSecretQuestionCode(SecretQuestion secretQuestionCode) {
+		this.secretQuestionCode = secretQuestionCode;
+	}
 
 	private LocalDateTime birthday;
 
@@ -184,6 +206,7 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.setLastName(in.get("lastName"));
 		this.setPassword(in.get("password"));
 		this.setLanguage(Language.valueOf(in.get("language")));
-		
+		this.setSecretQuestionCode(SecretQuestion.valueOf(in.get("questionDicCode")));
+		this.setSecretQuestionAnswer(in.get("answer"));
 	}
 }

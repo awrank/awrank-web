@@ -93,6 +93,8 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		user.setFirstName(form.getFirstName());
 		user.setLastName(form.getLastName());
 		user.setEmail(form.getEmail());
+		user.setSecretQuestionDicCode(form.getSecretQuestionCode());
+		user.setSecretAnswer(form.getSecretQuestionAnswer());
 		if (form.getLanguage() != null) {
 			user.setLanguage(form.getLanguage());
 		} else {

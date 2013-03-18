@@ -366,10 +366,10 @@ public class InitDictionary {
 		list.addAll(Dictionary.createItems("EMAIL_ADDRESS", "Email address", "Email адрес"));
 		list.addAll(Dictionary.createItems("INPUT_ANSWER_HERE", "Input answer here...", "Введите ответ здесь..."));
 		list.addAll(Dictionary.createItems("OR_WITH_EMAIL", "or with email:", "или введите email:"));
-		list.addAll(Dictionary.createItems("SECRET_QUESTION_1", "What is your first pet's name?", "Кличка вашего первого домашнего животного?"));
-		list.addAll(Dictionary.createItems("SECRET_QUESTION_2", "What is your mother's maiden name?", "Девичья фамилия вашей матери?"));
-		list.addAll(Dictionary.createItems("SECRET_QUESTION_3", "Your favourite dish?", "Ваше любимое блюдо?"));
-		list.addAll(Dictionary.createItems("SECRET_QUESTION_4", "The most unforgettable event in your life?", "Самое незабываемое событие в вашей жизни?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_FIRST_PET", "What is your first pet's name?", "Кличка вашего первого домашнего животного?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_MOTHERS_MAIDEN_NAME", "What is your mother's maiden name?", "Девичья фамилия вашей матери?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_FAVOURITE_DISH", "Your favourite dish?", "Ваше любимое блюдо?"));
+		list.addAll(Dictionary.createItems("SECRET_QUESTION_UNFORGETTABLE_EVENT", "The most unforgettable event in your life?", "Самое незабываемое событие в вашей жизни?"));
 		list.addAll(Dictionary.createItems("SIGNUP_WITH_GOOGLE", "Sign up with Google", "Рег-я через Google"));
 		list.addAll(Dictionary.createItems("SIGNUP_WITH_FACEBOOK", "Sign up with Facebook", "Рег-я через Facebook"));
 		list.addAll(Dictionary.createItems("TERMS_OF_SERVICE", "Terms of Service", "Условия использования"));
