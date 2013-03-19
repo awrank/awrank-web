@@ -136,6 +136,61 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		userEmailActivationService.save(token);
 	}
 	
+	
+	public void sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException{
+		
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+
+//		---------------- sending verification email on new email--------------------
+		String principalIP = "";
+		Object currentDetails = ((UsernamePasswordAuthenticationToken) principal).getDetails();
+		if (currentDetails instanceof WebAuthenticationDetails) {
+			WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) currentDetails;
+			principalIP = webAuthenticationDetails.getRemoteAddress();
+		}
+		String key;
+		
+		try {
+			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + details.getPassword() + "." + principalIP + "." + principalIP);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw new UserActivationEmailNotSetException();
+		}
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("localAddr", principalIP);
+		params.put("remoteAddr", principalIP);
+		params.put("testactivation_email", form.getEmail());
+		params.put("testactivation_password", details.getPassword());
+
+		try {
+			userEmailActivationService.send(params);
+		} catch (AwRankException e) {
+
+			getLogger().error(e.getMessage(), e);
+			throw new UserActivationEmailNotSetException();
+		}
+
+//		-------------- saving to db -----------------------------
+
+		StateChangeToken token = new StateChangeToken();
+		token.setToken(key);
+		token.setType(StateChangeTokenType.USER_EMAIL_CHANGE);
+		token.setCreatedBy(new User(details.getUserId()));
+		try{
+			token.setIpAddress(principalIP);//or use taken from request one here?
+		}catch(Exception ex){
+			
+			token.setIpAddress("");
+		}
+		token.setNewValue(form.getEmail());//new email
+		token.setValue(details.getUserEmail());//current email
+		
+		User user = this.userService.findOne(details.getUserId());
+		token.setUser(user);
+		userEmailActivationService.save(token);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception{
 		

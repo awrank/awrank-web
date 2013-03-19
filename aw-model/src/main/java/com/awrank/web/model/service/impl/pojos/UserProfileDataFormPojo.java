@@ -24,6 +24,16 @@ public class UserProfileDataFormPojo implements Serializable {
 
 	private String apiKey;
 
+	private String email;
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	private String firstName;
 
 	private String lastName;
@@ -49,6 +59,7 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.setApiKey(user.getApiKey());
 		this.setBirthday(user.getBirthday());
 		this.setFirstName(user.getFirstName());
+		this.setEmail(user.getEmail());
 		this.setLanguage(user.getLanguage());
 		this.setLastName(user.getLastName());
 		this.setSecretAnswer(user.getSecretAnswer());
@@ -63,6 +74,7 @@ public class UserProfileDataFormPojo implements Serializable {
 		map.put("birthdayAsFormattedString", tb);
 		map.put("firstName", firstName);
 		map.put("lastName", lastName);
+		map.put("email", email);
 		map.put("networkUID", networkUID);
 		map.put("secretAnswer", secretAnswer);
 		map.put("secretQuestion", secretQuestion);
@@ -93,15 +105,6 @@ public class UserProfileDataFormPojo implements Serializable {
 		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_yyyyMMdd_minus);
 		this.birthday = formatter.parseLocalDateTime(date);
 	}
-
-	/*
-	 public void setBirthday(String date, String format) {
-
-		 if(format == null) format = UserProfileDataFormPojo.DATE_FORMAT_STRING;
-		 DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-		 setBirthday(formatter.parseLocalDateTime(date));
-	 }
-	 */
 
 	public Long getUserId() {
 		return userId;

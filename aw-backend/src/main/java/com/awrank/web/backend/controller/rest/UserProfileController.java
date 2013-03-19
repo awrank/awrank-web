@@ -33,6 +33,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller exposes basic methods to work with user profile (with user access particular)
@@ -226,6 +227,39 @@ public class UserProfileController extends AbstractController {
 		this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, request, principal);
 
 		return getPositiveResponseMap("Verification link sent to new email, untill it will be verifird current email is valid");
+	}
+	
+	/**
+	 * Called from beautiful page
+	 * @param form
+	 * @param model
+	 * @param request
+	 * @param principal
+	 * @return
+	 * @throws UserActivationEmailNotSetException
+	 */
+	@RequestMapping(value = "/changeemailmanual2",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody()
+	Map setUserNewEmaildManual2(@RequestBody Map<String, String> in, Principal principal) throws UserActivationEmailNotSetException {
+		
+		if (principal == null) return getNegativeResponseMap("ERROR_ACCESS");
+
+		//--------- user can change ONLY VERIFIED email! check it here ------
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+		User user = userService.findOne(details.getUserId());
+		
+		EntryPoint currentPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+		if(currentPoint == null)  return getNegativeResponseMap("YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST");
+		//-------------------------------
+		
+		UserRegistrationFormPojo form = new UserRegistrationFormPojo();
+		form.setEmail(in.get("email"));
+		this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, principal);
+
+		return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
 	}
 
 	/**

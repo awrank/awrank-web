@@ -247,7 +247,6 @@ function send_user_register(dataform) {
 
 function send_user_profile(dataform) {
 
-
 	awrankPost("rest/profile/userdata/update2", dataform, function (data) {
 
 		if (data.result == "failure") {
@@ -255,12 +254,26 @@ function send_user_profile(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			//$('#divProfile').addClass('hidden');
+			
 			alertSuccess(getMessage('PROFILE_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
 		}
 	})
 }
 
+function send_user_new_email(dataform) {
+
+	awrankPost("rest/profile/changeemailmanual2", dataform, function (data) {
+
+		if (data.result == "failure") {
+
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+		}
+		else if (data.result == "ok") {
+			
+			alertSuccess(getMessage('PROFILE_EMAIL_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
+		}
+	})
+}
 
 function send_user_logout() {
 	awrankGet('user/logout');

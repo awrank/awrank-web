@@ -29,6 +29,14 @@ public interface UserProfileService extends AbstractService {
 	
 	public void sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws UserActivationEmailNotSetException;
 	
+	/**
+	 * User for "beautiful" interface - no need in "request" here, we are ion same page with AJAX calls
+	 * @param form
+	 * @param principal
+	 * @throws UserActivationEmailNotSetException
+	 */
+	public void sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException;
+	
 	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception;
 	

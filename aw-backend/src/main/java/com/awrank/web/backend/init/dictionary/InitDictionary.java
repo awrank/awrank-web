@@ -37,7 +37,10 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_ACCESS.name(), "You're not permitted to do this action."));
 		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Соединение с сервером отсутствует попробуйте позже"));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_NETWORK.name(), "No connection with the server, try later."));
-
+		
+		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "Вы не можете сменить email до тех пор пока не верифицируете текущий"));
+		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "You cannot change your email before verify current one."));
+		
 		list.add(new Dictionary(null, Language.RU, "AUTH_ERROR", "Ошибка аутентификации"));
 		list.add(new Dictionary(null, Language.EN, "AUTH_ERROR", "Authentication error"));
 		list.add(new Dictionary(null, Language.RU, "MESSAGE", "Сообщение: "));
@@ -307,6 +310,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_FIRST_LAST_NAMES_TOO_SHORT.name(), "First and Last names shall be longer"));
 		list.add(new Dictionary(null, Language.RU, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Ваши данные обновлены успешно!"));
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Your profile data was updated successfully!"));
+		list.add(new Dictionary(null, Language.RU, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Почтовый ящик обновлён. На новый ящик выслан линк для верификации, до момента верификации нового ящика будет использоваться текущий."));
+		list.add(new Dictionary(null, Language.EN, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Your mail box data updated successfully. Verification link sent to new email- untill you will verify it current email is used."));
 
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));

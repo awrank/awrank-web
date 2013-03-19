@@ -164,7 +164,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		//EntryPoint entryPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
 
 		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-
+		
 		//------ here add record in Diary about user was blocked
 
 		Diary drec = new Diary();
