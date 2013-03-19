@@ -1,23 +1,13 @@
 package com.awrank.web.model.service.impl;
 
 import com.awrank.web.model.dao.StateChangeTokenDao;
-import com.awrank.web.model.domain.Diary;
-import com.awrank.web.model.domain.DiaryEvent;
-import com.awrank.web.model.domain.EntryHistory;
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.EntryPointType;
-import com.awrank.web.model.domain.StateChangeToken;
-import com.awrank.web.model.domain.User;
+import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.StateChangeTokenType;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangeWasNotVerifiedException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
-import com.awrank.web.model.service.DiaryService;
-import com.awrank.web.model.service.impl.DictionaryServiceImpl;
-import com.awrank.web.model.service.EntryHistoryService;
-import com.awrank.web.model.service.EntryPointService;
-import com.awrank.web.model.service.UserPasswordChangingService;
-import com.awrank.web.model.service.UserRoleService;
+import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
+import com.awrank.web.model.utils.externalService.WIPmania;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,7 +80,7 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 	@Autowired
 	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
-	
+
 	@Autowired
 	@Qualifier("entryHistoryServiceImpl")
 	private EntryHistoryService entryHistoryService;
@@ -103,7 +92,7 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 	@Autowired
 	//@Qualifier("diaryServiceImpl")
 	private DiaryService diaryService;
-	
+
 	public void send(Map params) throws PasswordChangingEmailNotSetException {
 		try {
 			sendGridEmailSender.send(password_xsmtp_header_category, params);
@@ -146,23 +135,24 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 
 			thePoint.setEndedDate(today);//entry point is no longer active
 			entryPointService.save(thePoint);
-			
+
 			//---------- find/create EntryHistory ------------
-			
+
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
 			EntryHistory entryHistory;
-			
-			if(entryHistoryList.size() == 0){//create one if not found
-				
+
+			if (entryHistoryList.size() == 0) {//create one if not found
+
 				entryHistory = new EntryHistory();
 				entryHistory.setUser(user);
 				entryHistory.setSessionId(request.getSession().getId());
 				entryHistory.setIpAddress(request.getRemoteAddr());
+				entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+				entryHistory.setBrowseName(request.getHeader("user-agent"));
 				entryHistoryService.save(entryHistory);
-			}
-			else entryHistory = entryHistoryList.get(0);
+			} else entryHistory = entryHistoryList.get(0);
 			//------ here add record in Diary about password changing
-			
+
 			Diary drec = new Diary();
 			drec.setEvent(DiaryEvent.CHANGE_PASSWORD);
 			drec.setUser(user);
@@ -190,11 +180,11 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 
 	//------------------- refactor out it not needed ---------------
 
-		public void setDiaryService(DiaryServiceImpl value) {
-			diaryService = value;
-		}
+	public void setDiaryService(DiaryServiceImpl value) {
+		diaryService = value;
+	}
 
-		public DiaryService getDiaryService() {
-			return diaryService;
-		}
+	public DiaryService getDiaryService() {
+		return diaryService;
+	}
 }

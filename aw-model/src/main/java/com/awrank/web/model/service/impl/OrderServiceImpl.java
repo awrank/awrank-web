@@ -67,8 +67,9 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public boolean paymentMW(PaymentWMFormPojo confirmation) {
-		boolean result = false;
+		boolean result = true;
 		if (StringUtils.isNotBlank(confirmation.getLMI_PAYMENT_NO()) && StringUtils.isNotBlank(confirmation.getLMI_PAYMENT_AMOUNT())) {
+			result = false;
 			try {
 				Long paymentId = Long.parseLong(confirmation.getLMI_PAYMENT_NO());
 				Payment payment = paymentService.findOne(paymentId);
@@ -120,9 +121,7 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 //                                        " WMInvoiceNO:" + confirmation.getLMI_SYS_INVS_NO() +
 //                                        " OrderID:" + order.getId());
 //
-//						TODO TEST negative
 						result = true;
-
 					} else {
 						// TODO Diary
 //                        accountDiaryAccessor.createRecord(order.getOwner(), AccountDiaryEvent.WM_CHECK_FAILED,

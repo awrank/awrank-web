@@ -1,160 +1,115 @@
-<div id="divPaymentHistory" class="">
+<!--<div id="divPaymentHistory" class="">-->
 
-	<div class="row">
-		<div class="span6">
-			<h4 lngt="PAYMENT_HISTORY">Payment history</h4>
-		</div>
-		<div class="span6">
-			<div class="btn-group pull-right">
-				<button id="paymentHistoryPageSize" class="btn" value="10">10</button>
-				<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<li><a onclick="paymentHistoryPageSizeChange(this)" value="10">10</a></li>
-					<li><a onclick="paymentHistoryPageSizeChange(this)" value="20">20</a></li>
-					<li><a onclick="paymentHistoryPageSizeChange(this)" value="50">50</a></li>
-					<li class="divider"></li>
-					<li><a href="#" lngt="SESSION_PAGING_ALL" onclick="paymentHistoryPageSizeChange(this)"
-						   value="0">all</a></li>
-				</ul>
-			</div>
+<div class="row">
+	<div class="span6">
+		<h4 lngt="PAYMENT_HISTORY">Payment history</h4>
+	</div>
+	<div class="span6">
+		<div class="btn-group pull-right">
+			<button id="paymentHistoryPageSize" class="btn" value="10">10</button>
+			<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a onclick="paymentHistoryPageSizeChange(this)" value="10">10</a></li>
+				<li><a onclick="paymentHistoryPageSizeChange(this)" value="20">20</a></li>
+				<li><a onclick="paymentHistoryPageSizeChange(this)" value="50">50</a></li>
+				<li class="divider"></li>
+				<li><a lngt="SESSION_PAGING_ALL" onclick="paymentHistoryPageSizeChange(this)"
+					   value="0">all</a></li>
+			</ul>
 		</div>
 	</div>
+</div>
 
-	<table id="divPaymentHistoryTable" class="table table-striped">
-		<thead>
-		<tr>
-			<th style="width: 30%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_TARIFF">Tariff</th>
-			<th style="width: 10%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PRICE">Price</th>
-			<th style="width: 5%"></th>
-			<th style="width: 25%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM">Payment system</th>
-			<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN">Begin</th>
-			<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_END">End</th>
+<table id="divPaymentHistoryTable" class="table table-striped">
+	<thead>
+	<tr>
+		<th style="width: 30%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_TARIFF">Tariff</th>
+		<th style="width: 10%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PRICE">Price</th>
+		<th style="width: 5%"></th>
+		<th style="width: 25%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM">Payment system</th>
+		<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN">Begin</th>
+		<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_END">End</th>
+	</tr>
+	</thead>
+	<tbody>
+	<script type="text/template">
+		<tr payment_id="<%=id%>">
+			<td lngt="<%=productName%>"></td>
+			<td><%=amount%></td>
+			<td lngt="<%=currency%>"></td>
+			<td lngt="<%=paymentSystemType%>"></td>
+			<td><%=dateTimeToString(date_begin)%></td>
+			<td><%=dateTimeToString(date_end)%></td>
 		</tr>
-		</thead>
-		<tbody>
-		<script type="text/template">
-			<tr payment_id="<%=id%>">
-				<td lngt="<%=productName%>"></td>
-				<td><%=amount%></td>
-				<td lngt="<%=currency%>"></td>
-				<td lngt="<%=paymentSystemType%>"></td>
-				<td><%=dateTimeToString(date_begin)%></td>
-				<td><%=dateTimeToString(date_end)%></td>
-			</tr>
-		</script>
-		</tbody>
-	</table>
+	</script>
+	</tbody>
+</table>
 
-	<div id="paymentHistoryPager" class="pagination pagination-centered">
-	</div>
-	<script type="text/javascript" language="JavaScript">
-		var CPaymentHistory = Backbone.Model.extend({
-		});
-		var CPaymentHistoryList = Backbone.Collection.extend({
-			url: 'rest/payment_history/',
-			model: CPaymentHistory
-		});
-		var CPaymentHistoryListView = Backbone.View.extend({
-			el: $('#divPaymentHistoryTable'),
-			initialize: function () {
-				var o = $('#divPaymentHistoryTable script');
-				this.template = _.template(o.html());
-				o.remove();
-			},
-			events: {
+<div id="paymentHistoryPager" class="pagination pagination-centered">
+</div>
+<script type="text/javascript" language="JavaScript">
+	var CPaymentHistory = Backbone.Model.extend({
+	});
+	var CPaymentHistoryList = Backbone.Collection.extend({
+		url: 'rest/payment_history/',
+		model: CPaymentHistory
+	});
+	var CPaymentHistoryListView = Backbone.View.extend({
+		el: $('#divPaymentHistoryTable'),
+		initialize: function () {
+			var o = $('#divPaymentHistoryTable script');
+			this.template = _.template(o.html());
+			o.remove();
+		},
+		events: {
 //							"click a": "selectRow",
 //							"click input": "deleteRow"
-			},
+		},
 
-			render: function () {
-				var tbody = this.$el.find('tbody');
-				tbody.empty();
-				for (var i = (this.page - 1) * this.pageSize; (this.pageSize == 0 || i < this.page * this.pageSize) && i < this.collection.size(); i++) {
-					var attr = this.collection.at(i).toJSON();
-					tbody.append(this.template(attr));
-				}
-				localizeLoadContent(this.$el);
-				return this;
-			},
-			onSelectPage: function (page) {
-				var pageSize = $('#paymentHistoryPageSize').attr('value');
-				var lastPage = (pageSize > 0) ? Math.ceil(this.collection.size() / pageSize) : 1;
-				if (this.page != page || this.pageSize != pageSize || this.lastPage != lastPage) {
-					this.page = page;
-					this.pageSize = pageSize;
-					this.lastPage = lastPage;
-					renderPageButton('paymentHistoryPager', this.page, this.lastPage, 'paymentHistoryListView.onSelectPage');
-					this.render();
-				}
+		render: function () {
+			var tbody = this.$el.find('tbody');
+			tbody.empty();
+			for (var i = (this.page - 1) * this.pageSize; (this.pageSize == 0 || i < this.page * this.pageSize) && i < this.collection.size(); i++) {
+				var attr = this.collection.at(i).toJSON();
+				tbody.append(this.template(attr));
 			}
-
-		});
-
-		var paymentHistoryList = new CPaymentHistoryList();
-		var paymentHistoryListView = new CPaymentHistoryListView({collection: paymentHistoryList});
-		paymentHistoryList.fetch({success: function () {
-			paymentHistoryListView.onSelectPage(1);
-		}});
-
-		function paymentHistoryPageSizeChange(o) {
-			var paymentHistoryPageSize = $('#paymentHistoryPageSize');
-			var $o = $(o);
-			paymentHistoryPageSize.text($o.text());
-			paymentHistoryPageSize.attr('value', $o.attr('value'));
-			var lngt = $o.attr('lngt');
-			if (lngt != null) {
-				paymentHistoryPageSize.attr('lngt', lngt);
+			localizeLoadContent(this.$el);
+			return this;
+		},
+		onSelectPage: function (page) {
+			var pageSize = $('#paymentHistoryPageSize').attr('value');
+			var lastPage = (pageSize > 0) ? Math.ceil(this.collection.size() / pageSize) : 1;
+			if (this.page != page || this.pageSize != pageSize || this.lastPage != lastPage) {
+				this.page = page;
+				this.pageSize = pageSize;
+				this.lastPage = lastPage;
+				renderPageButton('paymentHistoryPager', this.page, this.lastPage, 'paymentHistoryListView.onSelectPage');
+				this.render();
 			}
-			else {
-				paymentHistoryPageSize.removeAttr('lngt');
-			}
-			paymentHistoryListView.onSelectPage(1);
 		}
 
-		function renderPageButton(pagerId, page, lastPage, onSelectPage) {
-//						1 2 3 4 5 6 7 8 9
-//						1 . 4 5 6 7 8 . 11
-			var pager = $('#' + pagerId);
-			pager.empty();
-			var s = '<ul>';
-			if (lastPage > 1) {
-				if (page > 1)
-					s += '<li><a onclick="' + onSelectPage + '(' + (page - 1) + ')"><i class="icon-backward"></i></a></li>';
-				var firstViewPage;
-				if (lastPage > 9 && page > 5) {
-					s += '<li><a onclick="' + onSelectPage + '(1)">1</a></li>';
-					s += '<li class="disabled"><a>...</a></li>';
-					firstViewPage = Math.min(lastPage - 6, page - 2);
-				}
-				else {
-					firstViewPage = 1;
-				}
-				var lastViewPage = Math.min(firstViewPage + 4, lastPage);
-				if (lastPage > 9 && (lastPage - page) >= 5) {
-					lastViewPage = Math.max(7, page + 2);
-				}
-				else {
-					lastViewPage = lastPage;
-				}
-				for (var i = firstViewPage; i <= lastViewPage; i++) {
-					if (i == page) {
-						s += '<li class="active"><a>' + i + '</a></li>';
-					}
-					else {
-						s += '<li><a onclick="' + onSelectPage + '(' + i + ')">' + i + '</a></li>';
-					}
-				}
-				if (lastPage > 9 && (lastPage - page) >= 5) {
-					s += '<li class="disabled"><a>...</a></li>';
-					s += '<li><a onclick="' + onSelectPage + '(' + lastPage + ')">' + lastPage + '</a></li>';
-				}
-				if (page < lastPage) {
-					s += '<li><a onclick="' + onSelectPage + '(' + (page + 1) + ')"><i class="icon-forward"></i></a></li>';
-				}
-			}
-			s += '</ul>';
-			pager.append(s);
-		}
+	});
 
-	</script>
-</div>
+	var paymentHistoryList = new CPaymentHistoryList();
+	var paymentHistoryListView = new CPaymentHistoryListView({collection: paymentHistoryList});
+	paymentHistoryList.fetch({success: function () {
+		paymentHistoryListView.onSelectPage(1);
+	}});
+
+	function paymentHistoryPageSizeChange(o) {
+		var paymentHistoryPageSize = $('#paymentHistoryPageSize');
+		var $o = $(o);
+		paymentHistoryPageSize.text($o.text());
+		paymentHistoryPageSize.attr('value', $o.attr('value'));
+		var lngt = $o.attr('lngt');
+		if (lngt != null) {
+			paymentHistoryPageSize.attr('lngt', lngt);
+		}
+		else {
+			paymentHistoryPageSize.removeAttr('lngt');
+		}
+		paymentHistoryListView.onSelectPage(1);
+	}
+
+</script>
+<!--</div>-->

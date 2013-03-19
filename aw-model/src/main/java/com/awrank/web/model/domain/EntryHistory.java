@@ -34,6 +34,16 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 	 */
 	@Column(name = "ip_address", nullable = false, length = 64)
 	private String ipAddress;
+	/**
+	 * Country code iso3166 defined on the basis ip address
+	 */
+	@Column(name = "country_code", nullable = false, length = 2)
+	private String countryCode;
+	/**
+	 * browse or user agent
+	 */
+	@Column(name = "browse_name", nullable = false, length = 64)
+	private String browseName;
 
 	/**
 	 * Entered successfully?
@@ -78,6 +88,22 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public String getBrowseName() {
+		return browseName;
+	}
+
+	public void setBrowseName(String browseName) {
+		this.browseName = browseName;
 	}
 
 	public boolean isSuccess() {
@@ -147,7 +173,7 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 		} else {
 			values.add("-");
 		}
-        return values.toArray();
+		return values.toArray();
 	}
 
 }

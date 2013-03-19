@@ -72,6 +72,8 @@ public class InitUser {
 			entryHistory.setUser(user);
 			entryHistory.setEntryPoint(entryPoint);
 			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistory.setCountryCode("UA");
+			entryHistory.setBrowseName("undefined");
 			entryHistory.setSuccess(true);
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
@@ -85,6 +87,8 @@ public class InitUser {
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session ruser 2");
 			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistory2.setCountryCode("UA");
+			entryHistory2.setBrowseName("undefined");
 			entryHistoryDao.save(entryHistory2);
 		}
 	}
@@ -154,6 +158,8 @@ public class InitUser {
 			entryHistory.setUser(user);
 			entryHistory.setSessionId("init session admin 1");
 			entryHistory.setIpAddress("0:0:0:0:0:0:0:1%0");
+			entryHistory.setCountryCode("UA");
+			entryHistory.setBrowseName("undefined");
 			entryHistory.setSuccess(true);
 			entryHistory.setSigninDate(time);
 			entryHistory.setSignoutDate(time2);
@@ -164,6 +170,8 @@ public class InitUser {
 			entryHistory2.setUser(user);
 			entryHistory2.setEntryPoint(entryPoint);
 			entryHistory2.setIpAddress("127.0.0.1");
+			entryHistory2.setCountryCode("UA");
+			entryHistory2.setBrowseName("undefined");
 			entryHistory2.setSigninDate(time);
 			entryHistory2.setSessionId("init session admin 2");
 			entryHistory2.setSuccess(true);

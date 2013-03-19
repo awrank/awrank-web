@@ -12,8 +12,6 @@ import org.joda.time.LocalDateTime;
 
 import java.math.BigDecimal;
 
-//import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 /**
  * @author Alex Polyakov
  */
@@ -23,7 +21,6 @@ public class PaymentHistoryFormPaymentPojo {
 	private final BigDecimal amount;
 	private final Currency currency;
 	private final PaymentSystemType paymentSystemType;
-	//	@JsonProperty
 	@JsonSerialize(using = MyXmlLocalDateTimeSerializer.class)
 	private final LocalDateTime date_begin;
 	@JsonSerialize(using = MyXmlLocalDateTimeSerializer.class)
@@ -69,14 +66,10 @@ public class PaymentHistoryFormPaymentPojo {
 		return paymentSystemType;
 	}
 
-	//	@JsonSerialize(using = MyXmlLocalDateTimeSerializer.class)
 	public LocalDateTime getDate_begin() {
 		return date_begin;
 	}
 
-	//	@JsonSerialize(using = JodaSerializers.LocalDateTimeSerializer.class)
-//	@JsonSerialize(using = MyXmlLocalDateTimeSerializer.class)
-//	@JsonFormat(pattern = .)
 	public LocalDateTime getDate_end() {
 		return date_end;
 	}

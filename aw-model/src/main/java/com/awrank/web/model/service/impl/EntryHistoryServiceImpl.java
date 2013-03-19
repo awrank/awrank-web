@@ -1,6 +1,8 @@
 package com.awrank.web.model.service.impl;
 
+import com.awrank.web.model.dao.EntryHistoryCustomDao;
 import com.awrank.web.model.dao.EntryHistoryDao;
+import com.awrank.web.model.dao.pojos.SessionHistoryFormEntryHistoryPojo;
 import com.awrank.web.model.domain.EntryHistory;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.entryhistory.EntryHistoryNotCreatedException;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +27,8 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;
+	@Autowired
+	private EntryHistoryCustomDao entryHistoryCustomDao;
 
 	@Override
 	public void add(EntryHistory entryHistory) throws EntryHistoryNotCreatedException {
@@ -69,7 +75,15 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	}
 
 	@Override
-	public EntryHistory getLatestEntryForUser(User user){
+	public EntryHistory getLatestEntryForUser(User user) {
 		return (entryHistoryDao.findLatestEntryForUser(user)).get(0);
 	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public List<SessionHistoryFormEntryHistoryPojo> getSessionHistoryLast100(Long userId) {
+		List<SessionHistoryFormEntryHistoryPojo> list = entryHistoryCustomDao.getSessionHistoryLast100(userId);
+		return list;
+	}
+
 }

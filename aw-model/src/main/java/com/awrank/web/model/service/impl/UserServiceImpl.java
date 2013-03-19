@@ -18,6 +18,7 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserSocialRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.externalService.WIPmania;
 import com.awrank.web.model.utils.user.PasswordUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 	@Value("#{emailProps[unblocked_xsmtp_header_category]}")
 	private String unblocked_xsmtp_header_category;
-	
+
 	@Autowired
 	private UserDao userDao;
 
@@ -173,24 +174,27 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		//---------- find/create EntryHistory ------------
 
 		EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
-		
-		if(entryHistory == null) {
+
+		if (entryHistory == null) {
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
 			if (entryHistoryList.size() == 0) {//create one if not found
-	
+
 				entryHistory = new EntryHistory();
 				entryHistory.setUser(user);//associated with Admin's entry history record
-	
+
 				entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
 				entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
-	
+				entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+				// TODO request.getHeader("user-agent")
+				entryHistory.setBrowseName("null");
+
 				EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
 				entryHistory.setEntryPoint(entryPoint);
 				entryHistory.setSigninDate(LocalDateTime.now());
 				entryHistoryService.save(entryHistory);
 			} else entryHistory = entryHistoryList.get(0);
 		}
-		
+
 		drec.setEntryHistory(entryHistory);
 		diaryService.save(drec);
 
@@ -210,7 +214,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	}
 
 	public User unblockUser(User user, Principal principal) {
-		
+
 		user.setBanStartedDate(null);
 		save(user);
 
@@ -228,17 +232,20 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		//---------- find/create EntryHistory ------------
 
 		EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
-		
-		if(entryHistory == null){
+
+		if (entryHistory == null) {
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
-	
+
 			if (entryHistoryList.size() == 0) {//create one if not found
-	
+
 				entryHistory = new EntryHistory();
 				entryHistory.setUser(user);//associated with Admin's entry history record
 				entryHistory.setSessionId(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getSessionId());
 				entryHistory.setIpAddress(((WebAuthenticationDetails) ((UsernamePasswordAuthenticationToken) principal).getDetails()).getRemoteAddress());
-	
+				entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+				// TODO request.getHeader("user-agent")
+				entryHistory.setBrowseName("null");
+
 				EntryPoint entryPoint = entryPointService.findOneByUid(details.getUid());
 				entryHistory.setEntryPoint(entryPoint);
 				entryHistory.setSigninDate(LocalDateTime.now());
@@ -249,10 +256,10 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 		diaryService.save(drec);
 
 		//--------- unlock the closed entry point record ----------------
-		
+
 		EntryPoint point = entryPointService.findOneByUid(user.getEmail());
 		point.setEndedDate(null);
-		
+
 		//----------send email to user about he was blocked -------------
 
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -267,6 +274,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 
 		return user;
 	}
+
 	/* (non-Javadoc)
 	 * @see com.awrank.web.model.service.UserService#add(com.awrank.web.model.domain.User)
 	 */
