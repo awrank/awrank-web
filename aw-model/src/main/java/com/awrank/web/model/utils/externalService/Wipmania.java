@@ -17,6 +17,7 @@ public class WIPmania {
 
 	public static String getCountryCodeByIpAddress(String ipAddress) {
 		String result = "";
+		if(ipAddress.indexOf("%")>-1) ipAddress = ipAddress.split("[%]")[0];
 		HttpURLConnection connection = null;
 		try {
 			URL url = new URL("http://api.wipmania.com/" + ipAddress);
@@ -30,9 +31,14 @@ public class WIPmania {
 			LOG.error(e.getMessage(), e);
 		} finally {
 			if (null != connection) {
-				connection.disconnect();
+				try{
+					connection.disconnect();
+				}catch(Exception ex){
+					//so sad connection.connected is a protected field and we can't check it here! 
+				}
 			}
 		}
+		if(result.length()>2) result = result.substring(result.length()-2, result.length());
 		return result;
 	}
 }
