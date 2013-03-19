@@ -7,5 +7,5 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public interface UserDetailsService extends AbstractService {
 
-	public UserDetails retrieveUser(String username, String passwordHash, String userIpAddress, String sessionId);
+	public UserDetails retrieveUser(String username, String passwordHash, String userIpAddress, String sessionId, String browserName);
 }

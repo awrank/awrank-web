@@ -45,6 +45,8 @@ public class AWRankingAuthenticationProviderImpl extends AbstractUserDetailsAuth
 		String password = (String) authentication.getCredentials();
 		String userIpAddress = "";
 		String sessionId = "";
+		// TODO
+		String browseName = "";
 		Object currentDetails = authentication.getDetails();
 		if (currentDetails instanceof WebAuthenticationDetails) {
 			WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) currentDetails;
@@ -52,9 +54,8 @@ public class AWRankingAuthenticationProviderImpl extends AbstractUserDetailsAuth
 			sessionId = webAuthenticationDetails.getSessionId();
 			password = PasswordUtils.hashPassword(password);
 		}
-		UserDetails details = userDetailsService.retrieveUser(username, password, userIpAddress, sessionId);
+		UserDetails details = userDetailsService.retrieveUser(username, password, userIpAddress, sessionId, browseName);
 		if (details == null) {
-			// TODO ExceptionHandler
 			throw new AuthenticationServiceException("", UnauthorizedException.getInstance());
 		}
 		return details;

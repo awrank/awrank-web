@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.math.BigDecimal;
 
 /**
@@ -122,7 +124,7 @@ public class WebMoneyController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/wm/success", method = RequestMethod.POST)
-	public void wmSuccess(HttpServletRequest request, HttpServletResponse response) {
+	public void wmSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		PaymentWMFormPojo conf = new PaymentWMFormPojo();
 		conf.setLMI_SYS_TRANS_NO(request.getParameter("LMI_SYS_TRANS_NO"));
 		conf.setLMI_SYS_TRANS_DATE(request.getParameter("LMI_SYS_TRANS_DATE"));
@@ -130,10 +132,12 @@ public class WebMoneyController extends AbstractController {
 		conf.setLMI_SYS_INVS_NO(request.getParameter("LMI_SYS_INVS_NO"));
 		conf.setLMI_PAYMENT_NO(request.getParameter("LMI_PAYMENT_NO"));
 		getLogger().debug("action \"/wm/success\" " + conf);
+
+		response.sendRedirect("../index.html#payment_history");
 	}
 
 	@RequestMapping(value = "/wm/fail")
-	public void wmFail(HttpServletRequest request, HttpServletResponse response) {
+	public void wmFail(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		PaymentWMFormPojo conf = new PaymentWMFormPojo();
 		conf.setLMI_SYS_TRANS_NO(request.getParameter("LMI_SYS_TRANS_NO"));
 		conf.setLMI_SYS_TRANS_DATE(request.getParameter("LMI_SYS_TRANS_DATE"));
@@ -141,5 +145,20 @@ public class WebMoneyController extends AbstractController {
 		conf.setLMI_SYS_INVS_NO(request.getParameter("LMI_SYS_INVS_NO"));
 		conf.setLMI_PAYMENT_NO(request.getParameter("LMI_PAYMENT_NO"));
 		getLogger().debug("action \"/wm/fail\"" + conf);
+
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html");
+		Writer writer = response.getWriter();
+		writer.append("<!DOCTYPE html>");
+		writer.append("<html>");
+		writer.append("<head>");
+		writer.append("<title>Payment</title>");
+		writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\">");
+		writer.append("</head>");
+		writer.append("<body>");
+		writer.append("<script type=\"text/javascript\">history.go(-4);</script>");
+		writer.append("</body>");
+		writer.append("</html>");
+		writer.close();
 	}
 }

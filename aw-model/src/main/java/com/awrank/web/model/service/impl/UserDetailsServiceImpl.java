@@ -9,6 +9,7 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserDetailsService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
+import com.awrank.web.model.utils.externalService.WIPmania;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +37,7 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public UserDetails retrieveUser(String username, String passwordHash, String userIpAddress, String sessionId) {
+	public UserDetails retrieveUser(String username, String passwordHash, String userIpAddress, String sessionId, String browseName) {
 		AWRankingUserDetails detail = null;
 		EntryPoint entryPoint = entryPointService.findOneByUid(username);
 		if (entryPoint != null) {
@@ -45,6 +46,8 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 			entryHistory.setUser(user);
 			entryHistory.setEntryPoint(entryPoint);
 			entryHistory.setIpAddress(userIpAddress);
+			entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+			entryHistory.setBrowseName(browseName);
 			entryHistory.setSessionId(sessionId);
 			entryHistory.setSigninDate(LocalDateTime.now());
 
@@ -64,4 +67,6 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 		}
 		return detail;
 	}
+
+
 }

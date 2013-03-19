@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Repository
 public class PaymentCustomDaoImpl extends AbstractDaoImpl implements PaymentCustomDao {
+	@Override
 	public List<PaymentHistoryFormPaymentPojo> getPaymentHistory(Long userId) {
 		List<PaymentHistoryFormPaymentPojo> list = SelectUtils.getWrapperList(em, PaymentHistoryFormPaymentPojo.class,
 				"where o." + PaymentConst.H_ORDER__USER__ID + '=' + userId, 0, 0);

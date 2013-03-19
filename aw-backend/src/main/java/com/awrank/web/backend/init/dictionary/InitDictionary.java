@@ -208,8 +208,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Currency.EUR.name(), "Euro"));
 		list.add(new Dictionary(null, Language.RU, Currency.RUB.name(), "Рубль"));
 		list.add(new Dictionary(null, Language.EN, Currency.RUB.name(), "Ruble"));
-		list.add(new Dictionary(null, Language.RU, Currency.EUR.name(), "Гривна"));
-		list.add(new Dictionary(null, Language.EN, Currency.EUR.name(), "Hryvnia"));
+		list.add(new Dictionary(null, Language.RU, Currency.UAH.name(), "Гривна"));
+		list.add(new Dictionary(null, Language.EN, Currency.UAH.name(), "Hryvnia"));
 		// PAYMENT SYSTEM
 		list.add(new Dictionary(null, Language.RU, PaymentSystemType.TWO_CHECKOUT.name(), "2CheckOut"/*"Тучекаут"*/));
 		list.add(new Dictionary(null, Language.EN, PaymentSystemType.TWO_CHECKOUT.name(), "2CheckOut"));
@@ -263,10 +263,10 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, "SKYPE", "Skype"));
 		list.add(new Dictionary(null, Language.EN, "SKYPE", "Skype"));
 
-		
+
 		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_BIRTHDAY", "Дата рождения (ГГГГ-ММ-ДД"));
 		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_BIRTHDAY", "Birthday (YYYY-MM-DD)"));
-		
+
 		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));
 		list.add(new Dictionary(null, Language.RU, "FIRST_NAME", "Имя"));
@@ -307,7 +307,7 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_FIRST_LAST_NAMES_TOO_SHORT.name(), "First and Last names shall be longer"));
 		list.add(new Dictionary(null, Language.RU, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Ваши данные обновлены успешно!"));
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Your profile data was updated successfully!"));
-		
+
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));
@@ -361,8 +361,10 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "SESSION_PAGING_ALL", "all"));
 		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_BROWSE", "Браузер"));
 		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_BROWSE", "Browse"));
-		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Дата последнего действия"));
-		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_LAST_ACTIVE_DATE", "Most recent activity"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_SINGIN_DATE", "Дата входа"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_SINGIN_DATE", "Singin date"));
+		list.add(new Dictionary(null, Language.RU, "SESSION_TABLE_COLUMN_SINGOUT_DATE", "Дата последнего действия"));
+		list.add(new Dictionary(null, Language.EN, "SESSION_TABLE_COLUMN_SINGOUT_DATE", "Most recent activity"));
 
 		/* Administration */
 		list.add(new Dictionary(null, Language.RU, "USER_LIST", "Список пользователей"));
@@ -384,7 +386,6 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "Begin"));
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "По"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "End"));
-
 
 		// TODO check
 		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));
