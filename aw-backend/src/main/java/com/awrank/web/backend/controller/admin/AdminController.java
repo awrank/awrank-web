@@ -13,12 +13,15 @@ import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,10 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * todo: description
@@ -302,20 +302,46 @@ public class AdminController extends AbstractController {
 
 	@RequestMapping(value = "/allEntryHistoryDT", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody()
-	public Map<String, Object> getAllEntryHistory() {
-		List<EntryHistory> list = entryHistoryService.findAll();
+	public Map<String, Object> getAllEntryHistory(HttpServletRequest request) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("result", "ok");
-		response.put("sEcho", 1); // param from request?
-		int size = list.size();
-		response.put("iTotalRecords", size);
-		response.put("iTotalDisplayRecords", 3);
+		response.put("sEcho", request.getParameter("sEcho"));
 
-		Object[][] aData = new Object[size][];
-		for (int i = 0; i < size; i++) {
-			aData[i] = list.get(i).toArray();
+		int iDisplayStart = Integer.parseInt(request.getParameter("iDisplayStart"));
+		int iDisplayLength = Integer.parseInt(request.getParameter("iDisplayLength"));
+
+		//Sort sort = new Sort(Sort.Direction.ASC, "");
+		Pageable pageable = new PageRequest(iDisplayStart, iDisplayLength);
+
+		Page<EntryHistory> page = null;
+		String token = (request.getParameter("sSearch"));
+		String criteria = request.getParameter("sSearchCriteria");
+
+		if (StringUtils.hasLength(token) /*&& StringUtils.hasLength(criteria)*/) {
+			/*if (criteria.equals("btnUser")) {
+				page = entryHistoryService.pFindByUser(pageable);
+			} else if (criteria.equals("btnIPAddress")) {
+				page = entryHistoryService.pFindByIP(token, pageable);
+			} else if (criteria.equals("btnSessionID")) {
+				page = entryHistoryService.pFindBySessionId(token, pageable);
+			}
+			*/
+			page = entryHistoryService.pFindBySessionId(token, pageable);
 		}
-		response.put("aaData", aData);
+		if (page == null) {
+			page = entryHistoryService.pFindAll(pageable);
+		}
+
+		response.put("iTotalRecords", page.getTotalElements());
+		response.put("iTotalDisplayRecords", page.getNumberOfElements());
+
+		Iterator<EntryHistory> i = page.iterator();
+		List<Object[]> aaData = new ArrayList<Object[]>();
+		while(i.hasNext()) {
+			aaData.add(i.next().toArray());
+		}
+		response.put("aaData", aaData.toArray());
+
 		return response;
 	}
 

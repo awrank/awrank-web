@@ -80,7 +80,7 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	private UserRoleService userRoleService;
 
 	@Autowired
-	EmailSenderSendGridImpl sendGridEmailSender;
+	/*todo: access modifier?*/ EmailSenderSendGridImpl sendGridEmailSender;
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@Override
