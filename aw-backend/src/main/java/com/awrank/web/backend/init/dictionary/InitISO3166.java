@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Dictionary initialization
+ * Dictionary initialization.
+ * ISO 3611 - is international standard defining country code values.
+ * More at <a href="http://ru.wikipedia.org/wiki/ISO_3166">ru.wiki</a>
  *
  * @author Alex Polyakov
  * @author Andrew Stoyaltsev

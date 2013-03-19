@@ -1,11 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"--%>
-<%--xmlns:c="http://java.sun.com/jsp/jstl/core">--%>
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
-    <meta charset="utf-8"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
+<meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="author" content=""/>
 
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="resources" value="${contextPath}/resources"/>
@@ -15,14 +13,27 @@
 <script src="${resources}/js/html5.js"></script>
 <![endif]-->
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
-<script src="${resources}/js/jqueryui/1.9/jquery-ui-1.9.1.custom.min.js"><![CDATA[<!-- -->]]></script>
-<script src="${resources}/js/bootstrap/bootstrap.min.js"><![CDATA[<!-- -->]]></script>
-<script src="${resources}/js/form.js"><![CDATA[<!-- -->]]></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.js"></script>
 
-<!-- Le styles -->
-<link href="${resources}/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="${resources}/css/flick/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-<link href="${resources}/css/style.css" rel="stylesheet"/>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-transition.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-alert.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-scrollspy.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tab.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-tooltip.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-popover.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-button.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-collapse.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-carousel.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-typeahead.js"></script>
+<script type="text/javascript" src="resources/js/underscore.js"></script>
+<script type="text/javascript" src="resources/js/backbone.js"></script>
+<script type="text/javascript" src="resources/js/awrank.js"></script>
+<script type="text/javascript" src="resources/js/awrank_lng.js"></script>
 
-<%--</jsp:root>--%>
+<link href="resources/css/bootstrap.css" rel="stylesheet">
+<link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="resources/css/bootstrap-formhelpers-countries.flags.css" rel="stylesheet">
+<link href="resources/css/awrank.css" rel="stylesheet">
