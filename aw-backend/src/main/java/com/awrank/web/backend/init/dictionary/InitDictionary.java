@@ -303,6 +303,11 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, Message.EMAIL_NOT_VERIFIED.name(), "Почтовый ящик НЕ верифицирован!"));
 		list.add(new Dictionary(null, Language.EN, Message.EMAIL_NOT_VERIFIED.name(), "Email box NOT verified!"));
 
+		list.add(new Dictionary(null, Language.RU, Message.PROFILE_FIRST_LAST_NAMES_TOO_SHORT.name(), "Имя и фамилия должны быть длинее"));
+		list.add(new Dictionary(null, Language.EN, Message.PROFILE_FIRST_LAST_NAMES_TOO_SHORT.name(), "First and Last names shall be longer"));
+		list.add(new Dictionary(null, Language.RU, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Ваши данные обновлены успешно!"));
+		list.add(new Dictionary(null, Language.EN, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Your profile data was updated successfully!"));
+		
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));

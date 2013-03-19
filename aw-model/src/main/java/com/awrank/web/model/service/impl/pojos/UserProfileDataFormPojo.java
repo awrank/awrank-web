@@ -65,9 +65,20 @@ public class UserProfileDataFormPojo implements Serializable {
 		map.put("networkUID", networkUID);
 		map.put("secretAnswer", secretAnswer);
 		map.put("secretQuestion", secretQuestion);
+		//map.put("userId", userId);
 		return map;
 	}
 
+	public void fillWith(Map<String, String> in) {
+		
+		this.setFirstName(in.get("firstName"));
+		this.setLastName(in.get("lastName"));
+		this.setLanguage(Language.valueOf(in.get("language")));
+		this.setSecretQuestion(SecretQuestion.valueOf(in.get("questionDicCode")));
+		this.setSecretAnswer(in.get("answer"));
+		this.setBirthdayAsFormattedString(in.get("birthdayAsFormattedString"));
+	}
+	
 	public String getBirthdayAsFormattedString() {
 		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_yyyyMMdd_minus);
 		if (birthday != null) {

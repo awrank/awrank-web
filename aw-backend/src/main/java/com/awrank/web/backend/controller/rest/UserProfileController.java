@@ -168,6 +168,13 @@ public class UserProfileController extends AbstractController {
 		return userdataMap;
 	}
 	
+	/**
+	 * Old user profile form target
+	 * @param userdata
+	 * @param principal
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/userdata/update",
 			method = RequestMethod.POST,
 			produces = "application/json")
@@ -178,6 +185,25 @@ public class UserProfileController extends AbstractController {
 		return this.userProfileService.updateProfileData(userdata, principal);
 	}
 
+	
+	/**
+	 * Called from new beautiful profile
+	 * @param principal
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/userdata/update2",method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	public
+	@ResponseBody Map updateUserData2(@RequestBody Map<String, String> in, Principal principal) throws Exception {
+
+		if (principal == null) return this.getNegativeResponseMap("ERROR_ACCESS");
+		
+		UserProfileDataFormPojo userdata =  new UserProfileDataFormPojo();
+		userdata.fillWith(in);
+		
+		return this.userProfileService.updateProfileData(userdata, principal);
+	}
+	
 	/**
 	 * Simple manual change of email - user shall be logged in, on new email verification link will be sent
 	 *

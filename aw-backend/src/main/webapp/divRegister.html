@@ -136,7 +136,7 @@ $.fn.serializeObject = function()
        		iserrors = true;
        	 }
          if(email.length < 3 || validateEmail(email) == false){
-        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_EMAIL_MALEFORMED'));
+        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_EMAIL_MALFORMED'));
         	 iserrors = true;
          }
          if(password.length < 3 || confirmation.length < 3 || password != confirmation){

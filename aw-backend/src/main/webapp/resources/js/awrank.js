@@ -245,6 +245,31 @@ function send_user_register(dataform) {
 	})
 }
 
+function send_user_profile(dataform) {
+	
+	
+	awrankPost("rest/profile/userdata/update2", dataform, function (data) {
+
+		if (data.result == "failure") {
+
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+		}
+		else if (data.result == "ok") {
+
+			//$('#divProfile').addClass('hidden');
+
+			alertSuccess(getMessage('PROFILE_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
+
+//			awrankRouter.navigate('', {trigger: true});
+			var options;
+			while ((options = oldRequest.shift()) != null) {
+				$.ajax(options);
+			}
+		}
+	})
+}
+
+
 function send_user_logout() {
 	awrankGet('user/logout');
 }
