@@ -57,9 +57,10 @@ public class UserProfileDataFormPojo implements Serializable {
 
 	@SuppressWarnings("rawtypes")
 	public Map toMap(){
+		String tb = getBirthdayAsFormattedString();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("apiKey", apiKey);
-		map.put("birthdayAsFormattedString", birthdayAsFormattedString);
+		map.put("birthdayAsFormattedString", tb);
 		map.put("firstName", firstName);
 		map.put("lastName", lastName);
 		map.put("networkUID", networkUID);

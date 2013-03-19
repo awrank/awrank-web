@@ -61,11 +61,11 @@
  
     <script type="text/javascript" language="JavaScript">
 
-		window.User = Backbone.Model.extend({
+		window.UserProfile = Backbone.Model.extend({
 			url: 'rest/profile/userdata/get2/'
 		});
 		
-		window.UserView = Backbone.View.extend({
+		window.UserProfileView = Backbone.View.extend({
 		    el : $('#user_details'),
 		    template : _.template($('#user-details').html()),
 		    initialize : function() {
@@ -73,26 +73,26 @@
 		        this.model.on('change', this.render, this);
 		    },
 		    render : function(eventName) {
-		        $(this.el).html(this.template(this.model.toJSON()));
+		        localizeLoadContent( $(this.el).html(this.template(this.model.toJSON())));
 		        return this;
 		    }
 		});
 		
-		var me = new User({
+		var me = new UserProfile({
 			firstName: "Test First Name",
 			"lastName": "Test Last Name",
 			birthdayAsFormattedString : "1980-05-22",
-			language : "EN",
+			language : 'EN',
 			secretQuestion: "SECRET_QUESTION_FIRST_PET",
 			secretAnswer : "Vas'ka"
 			
 		});
-		var meView = new UserView({
+		var meView = new UserProfileView({
 		    model : me
 		});
 		
 		me.fetch({success: function (data) {
-			
+			 localizeLoadContent($('#user-details'));
 			if(data.result.toString() == "failure"){
 				
 				alertError(getMessage('ERROR'), getMessage(data.reason.toString()));
@@ -100,8 +100,7 @@
 			}
 			else{
 				me.render(data);
-				setLanguage('EN');
-				window.setLanguage('EN');
+				//localizeLoadContent($('#user-details'));
 			}
 			
 		}});

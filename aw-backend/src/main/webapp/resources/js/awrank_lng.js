@@ -38,6 +38,7 @@ function setLanguage(language_code) {
 
 function localizeLoadContent(content) {
 	// replace tag contents
+	
 	content.find('[lngt]').each(function () {
 		var o = $(this);
 		var s = getMessage(o.attr('lngt'));
