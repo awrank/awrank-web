@@ -27,6 +27,7 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;
+	
 	@Autowired
 	private EntryHistoryCustomDao entryHistoryCustomDao;
 
@@ -48,6 +49,11 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	@Override
 	public List<EntryHistory> findByIP(String ipAddress) {
 		return entryHistoryDao.findByIP(ipAddress);
+	}
+
+	@Override
+	public Page<EntryHistory> pFindByIP(String ipAddress, Pageable pageable) {
+		return entryHistoryDao.pFindByIpAddress(ipAddress, pageable);
 	}
 
 	public Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable) {
@@ -75,7 +81,12 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	}
 
 	@Override
-	public EntryHistory getLatestEntryForUser(User user) {
+	public Page<EntryHistory> pFindBySessionId(String sessionId, Pageable pageable) {
+		return entryHistoryDao.pFindBySessionId(sessionId, pageable);
+	}
+
+	@Override
+	public EntryHistory getLatestEntryForUser(User user){
 		return (entryHistoryDao.findLatestEntryForUser(user)).get(0);
 	}
 
@@ -84,6 +95,14 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	public List<SessionHistoryFormEntryHistoryPojo> getSessionHistoryLast100(Long userId) {
 		List<SessionHistoryFormEntryHistoryPojo> list = entryHistoryCustomDao.getSessionHistoryLast100(userId);
 		return list;
+	}
+	
+	
+
+
+	/*----- Pageable -----*/
+	public Page<EntryHistory> pFindAll(Pageable pageable) {
+		return entryHistoryDao.findAll(pageable);
 	}
 
 }

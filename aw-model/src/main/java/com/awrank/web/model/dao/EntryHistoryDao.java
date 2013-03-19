@@ -30,8 +30,14 @@ public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory
 	@Query("select e from EntryHistory e where e.sessionId = :sessionId")
 	List<EntryHistory> findBySessionId(@Param("sessionId") String sessionId);
 
+	@Query("select e from EntryHistory e where e.sessionId like :sessionId")
+	Page<EntryHistory> pFindBySessionId(@Param("sessionId") String sessionId, Pageable pageable);
+
 	@Query("select e from EntryHistory e where e.ipAddress = :ipAddress")
 	List<EntryHistory> findByIP(@Param("ipAddress") String ipAddress);
+
+	@Query("select e from EntryHistory e where e.ipAddress = :ipAddress")
+	Page<EntryHistory> pFindByIpAddress(@Param("ipAddress") String ipAddress, Pageable pageable);
 
 	@Query("select e from EntryHistory e where e.user = :user")
 	List<EntryHistory> findAllByUser(@Param("user") User user);
@@ -41,4 +47,5 @@ public interface EntryHistoryDao extends PagingAndSortingRepository<EntryHistory
 	
 	@Query("select e from EntryHistory e where e.user = :user order by 'sign_in_date' desc limit 1")
 	List<EntryHistory> findLatestEntryForUser(@Param("user") User user);
+
 }
