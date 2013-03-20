@@ -62,6 +62,8 @@ public interface UserService extends AbstractService {
 	 */
 	User findOneByEmail(String email);
 
+	Page<User> pFindOneByEmail(String email, Pageable pageable);
+
 	/**
 	 * Find user by email, in case of not found returns empty List - no exception thrown, put attention here!!!
 	 *
@@ -85,6 +87,8 @@ public interface UserService extends AbstractService {
 			throws UserNotCreatedException, EntryPointNotCreatedException, UserActivationEmailNotSetException;
 
 	List<User> getAll();
+
+	Page<User> pFindAllUsers(Pageable pageable);
 
 	/**
 	 * Method for REST URI: /admin/userlist2
