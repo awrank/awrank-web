@@ -400,6 +400,7 @@ var CRouter = Backbone.Router.extend({
 	routes: {
 		"login": "login",
 		"register": "register",
+        "termsOfService": "termsOfService",
 		"forgot_password": "forgot_password",
         "home": "home",
 		"order": "order",
@@ -425,9 +426,16 @@ var CRouter = Backbone.Router.extend({
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
 		$('#divForgotPassword').addClass('hidden');
+        $('#divTermsOfService').addClass('hidden');
 		var div = fIndexLoad('body', 'divRegister');
 		div.removeClass('hidden');
 	},
+    termsOfService: function () {
+        this.history.push(Backbone.history.fragment);
+        $('#divRegister').addClass('hidden');
+        var div = fIndexLoad('body', 'divTermsOfService');
+        div.removeClass('hidden');
+    },
 	forgot_password: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
