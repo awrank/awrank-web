@@ -40,7 +40,7 @@ public class UserProfileDataFormPojo implements Serializable {
 
 	private String networkUID;
 
-	private Language language;
+	private String language;
 
 	private String userLocalAddress;
 
@@ -75,12 +75,13 @@ public class UserProfileDataFormPojo implements Serializable {
 	}
 
 	public void fillWithUserData(User user) {
+		if(user == null) return;
 		this.setUserId(user.getId());
 		this.setApiKey(user.getApiKey());
 		this.setBirthday(user.getBirthday());
 		this.setFirstName(user.getFirstName());
 		this.setEmail(user.getEmail());
-		this.setLanguage(user.getLanguage());
+		this.setLanguage(user.getLanguage().name());
 		this.setLastName(user.getLastName());
 		this.setSecretAnswer(user.getSecretAnswer());
 		this.setSecretQuestion(user.getSecretQuestionDicCode());
@@ -97,6 +98,7 @@ public class UserProfileDataFormPojo implements Serializable {
 		map.put("email", email);
 		map.put("networkUID", networkUID);
 		map.put("secretAnswer", secretAnswer);
+		map.put("language", language);
 		map.put("secretQuestion", secretQuestion);
 		map.put("remoteIP", remoteIP);
 		map.put("localIP", localIP);
@@ -108,7 +110,7 @@ public class UserProfileDataFormPojo implements Serializable {
 		
 		this.setFirstName(in.get("firstName"));
 		this.setLastName(in.get("lastName"));
-		this.setLanguage(Language.valueOf(in.get("language")));
+		this.setLanguage(in.get("language"));
 		this.setSecretQuestion(SecretQuestion.valueOf(in.get("questionDicCode")));
 		this.setSecretAnswer(in.get("answer"));
 		this.setBirthdayAsFormattedString(in.get("birthdayAsFormattedString"));
@@ -171,11 +173,11 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.networkUID = networkUID;
 	}
 
-	public Language getLanguage() {
+	public String getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(String language) {
 		this.language = language;
 	}
 

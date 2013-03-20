@@ -443,17 +443,18 @@ var CRouter = Backbone.Router.extend({
 		div.removeClass('hidden');
 	},
 	logout: function () {
-		this.history.push(Backbone.history.fragment);
-		$('#divRegister').addClass('hidden');
-		$('#divLogin').addClass('hidden');
-		$('#divForgotPassword').addClass('hidden');
-		$('#divProfile').addClass('hidden');
+		//this.history.push(Backbone.history.fragment);
 		
 		 fIndexClearMessages("divLogin");
 		 fIndexClearMessages("divRegister");
 		 fIndexClearMessages("divForgotPassword");
 		 fIndexClearMessages("divProfile");
-		 
+		
+		 $('#divRegister').addClass('hidden');
+		 $('#divLogin').addClass('hidden');
+		 $('#divForgotPassword').addClass('hidden');
+		 $('#divProfile').addClass('hidden');
+			
 		 fIndexMenuActive('menuItemHome');
 	     fIndexRightContentSelectDiv('divHome');
 	},

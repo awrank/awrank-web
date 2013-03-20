@@ -135,6 +135,8 @@
 		    },
 		    render : function(eventName) {
 		        localizeLoadContent( $(this.el).html(this.template(this.model.toJSON())));
+		        $('#prof_secretQuestion').val(this.model.toJSON().secretQuestion);
+		        //alert(this.model.toJSON().secretQuestion);
 		        return this;
 		    }
 		});

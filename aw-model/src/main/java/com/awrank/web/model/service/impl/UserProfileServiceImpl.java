@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.awrank.web.model.domain.EntryHistory;
 import com.awrank.web.model.domain.EntryPoint;
 import com.awrank.web.model.domain.EntryPointType;
+import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.StateChangeToken;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.enums.Role;
@@ -78,7 +79,7 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 		UserProfileDataFormPojo userdata = new UserProfileDataFormPojo();
 		userdata.fillWithUserData(user);
-		
+		userdata.setLanguage(user.getLanguage().name());
 		return userdata;
 	}
 	
@@ -86,7 +87,7 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 		UserProfileDataFormPojo userdata = new UserProfileDataFormPojo();
 		userdata.fillWithUserData(user);
-		
+		userdata.setLanguage(user.getLanguage().name());
 		return userdata;
 	}
 	
@@ -345,7 +346,7 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 		if(form.getFirstName() != null) user.setFirstName(form.getFirstName());
 		if(form.getLastName() != null) user.setLastName(form.getLastName());
-		if(form.getLanguage() != null) user.setLanguage(form.getLanguage());
+		if(form.getLanguage() != null) user.setLanguage(Language.valueOf(form.getLanguage()));
 		if(form.getBirthday() != null) user.setBirthday(form.getBirthday());
 		if(form.getSecretAnswer() != null) user.setSecretAnswer(form.getSecretAnswer());
 		if(form.getSecretQuestion() != null) user.setSecretQuestionDicCode(form.getSecretQuestion());
