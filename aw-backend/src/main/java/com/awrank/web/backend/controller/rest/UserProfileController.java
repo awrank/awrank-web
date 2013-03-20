@@ -3,17 +3,13 @@ package com.awrank.web.backend.controller.rest;
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.backend.exception.UnauthorizedException;
 import com.awrank.web.model.domain.*;
-import com.awrank.web.model.enums.Role;
-import com.awrank.web.model.enums.StateChangeTokenType;
-import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.entrypoint.EntryPointByEmailNotFoundException;
-import com.awrank.web.model.exception.user.UserNotCreatedException;
 import com.awrank.web.model.service.*;
+import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserProfileDataFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
-import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +18,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Controller exposes basic methods to work with user profile (with user access particular)
@@ -263,7 +257,6 @@ public class UserProfileController extends AbstractController {
 		form.setRemoteIP(in.get("remoteIP"));
 		return this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, principal);
 
-		//return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
 	}
 
 	/**
@@ -274,7 +267,39 @@ public class UserProfileController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/changepassword/{key}")
+	public ModelAndView verifyPasswordChangingFromEmailLink2(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+		
+		ModelAndView mav = new ModelAndView("passwordChangeVerificationResponse");
+		
+		//---- if verified we have to relogin user - with new password ----
+		
+		EntryPoint entryPoint = userPasswordChangingService.verify(key, request);
+
+		if(entryPoint == null){
+			mav.addObject("responseMap", getNegativeResponseMap("PASSWORD_NOT_VERIFIED"));
+			return  mav;
+		}
+		
+		auditorAware.setCurrentAuditor(entryPoint);
+		
+		mav.addObject("responseMap", getPositiveResponseMap("PASSWORD_VERIFIED_SUCCESSFULLY"));
+		return mav;
+		
+	}
+	
+	
+	/**
+	 * Old
+	 * @param key
+	 * @param request
+	 * @param modelMap
+	 * @return
+	 * @throws Exception
+	 */
+	//@RequestMapping(method = RequestMethod.GET, value = "/changepassword/{key}")
 	public String verifyPasswordChangingFromEmailLink(@PathVariable("key") String key, HttpServletRequest request, ModelMap modelMap) throws Exception {
 
 		EntryPoint entryPoint  = userPasswordChangingService.verify(key, request);
@@ -323,6 +348,33 @@ public class UserProfileController extends AbstractController {
 		return result;
 	}
 
+	
+	@RequestMapping(value = "/changepasswordmanual2",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody()
+	Map setUserNewPassworddManual2(@RequestBody Map<String, String> in, HttpServletRequest request, Principal principal) throws UserActivationEmailNotSetException {
+		
+		if (principal == null) return getNegativeResponseMap("ERROR_ACCESS");
+
+		//--------- user can change password ONLY VERIFIED email! check it here ------
+		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+		User user = userService.findOne(details.getUserId());
+		
+		EntryPoint currentPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+		if(currentPoint == null)  return getNegativeResponseMap("YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD");
+		//-------------------------------
+		
+		UserNewPasswordFormPojo form = new UserNewPasswordFormPojo();
+		form.setCurrentPassword(in.get("password"));
+		form.setPassword(in.get("newpassword"));
+		form.setPasswordConfirm(in.get("newconfirmation"));
+		form.setLocalIP(in.get("localIP"));
+		form.setRemoteIP(in.get("remoteIP"));
+		return this.userProfileService.sendPasswordChangingLinkToEmail(form, principal);
+	
+	}
 	/**
 	 * Request password change. Think about if we shall also see what is in Principal and if user logged in and has no
 	 * ROLE_ADMIN and specified another email reject this request?

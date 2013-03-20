@@ -246,7 +246,7 @@ public class EmailSenderSendGridImpl implements EmailSender {
          LinkedList<String> recipients = new LinkedList<String>();
          recipients.add(testactivation_email);
          header.addTo(recipients);
-
+         //key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + form.getPassword() + "." + form.getRemoteIP());
          String key = SMTPAuthenticator.getHashed256(testactivation_email + "." + testactivation_password + "." + localAddr);
          if ((xsmtp_header_var_value != null) && String.valueOf(xsmtp_header_var_value).length() > 0)
              key = xsmtp_header_var_value;

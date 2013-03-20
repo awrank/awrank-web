@@ -275,6 +275,23 @@ function send_user_new_email(dataform) {
 	})
 }
 
+function send_user_new_password(dataform) {
+
+	awrankPost("rest/profile/changepasswordmanual2", dataform, function (data) {
+
+		if (data.result == "failure") {
+
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+		}
+		else if (data.result == "ok") {
+			
+			alertSuccess(getMessage('PROFILE_PASSWORD_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
+		}
+	})
+}
+
+
+
 function send_user_logout() {
 	awrankGet('user/logout');
 }

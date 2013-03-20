@@ -13,7 +13,7 @@ public interface StateChangeTokenService extends AbstractService {
 
 	EntryPoint verify(String key, HttpServletRequest request) throws AwRankException;
 
-	void save(StateChangeToken act);
+	void save(StateChangeToken act) throws AwRankException;
 
 	StateChangeToken findByCode(String code);
 

@@ -23,12 +23,14 @@ import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserPasswordChangingService;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
 import com.awrank.web.model.service.StateChangeTokenService;
+import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserProfileDataFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.UserProfileService;
 import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
+import com.awrank.web.model.utils.user.PasswordUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -133,7 +135,15 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 		User user = this.userService.findOne(details.getUserId());
 		token.setUser(user);
-		userEmailActivationService.save(token);
+		
+		try {
+			userEmailActivationService.save(token);
+			
+		} catch (AwRankException e) {
+			
+			throw new UserActivationEmailNotSetException();
+			//return this.getNegativeResponseMap(e.getLocalizedMessage());	
+		}
 	}
 	
 	
@@ -191,13 +201,60 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		
 		User user = this.userService.findOne(details.getUserId());
 		token.setUser(user);
-		userEmailActivationService.save(token);
+		try {
+			userEmailActivationService.save(token);
+			
+		} catch (AwRankException e) {
+			
+			return this.getNegativeResponseMap(e.getLocalizedMessage());	
+		}
 		
 		return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception{
+				
+			AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+			User user = userService.findOne(details.getUserId());
+			
+			String testactivation_password = null;
+			for (EntryPoint entryPoint : user.getEntryPoints()) {
+				if (entryPoint.getType() == EntryPointType.EMAIL) {
+					testactivation_password = entryPoint.getPassword();
+					break;
+				}
+			}
+			if (testactivation_password == null) return getNegativeResponseMap("No current password");
+
+			StateChangeToken stateChangeToken = new StateChangeToken();
+
+			String key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + testactivation_password + "." + request.getLocalAddr());
+
+			stateChangeToken.setToken(key);
+			stateChangeToken.setType(StateChangeTokenType.USER_PASSWORD_CHANGE);
+			stateChangeToken.setUser(user);
+			stateChangeToken.setValue(details.getPassword());
+			stateChangeToken.setIpAddress(request.getLocalAddr());//Check later if we need remote or local IP here
+
+			userPasswordChangingService.save(stateChangeToken);
+
+			//-------------- and send link via email -----------------------
+
+			Map<String, Object> params = new HashMap<String, Object>();
+
+			params.put("localAddr", request.getLocalAddr());
+			params.put("testactivation_password", testactivation_password);
+			params.put("testactivation_email", form.getEmail());
+
+			userPasswordChangingService.send(params);
+
+			return getPositiveResponseMap("password changing link sent to " + form.getEmail());
+		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Map sendPasswordChangingLinkToEmail(UserNewPasswordFormPojo form,Principal principal){
 		
 		//---------- check if we are logged in user ----------
 		
@@ -215,12 +272,10 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 						if (auth == Role.ROLE_USER_VERIFIED) isUserEmailVerified = true;
 
 					}
-
-					String email = details.getUsername();//actually this is an email
-
+					
 					if (!isAdmin) {
 
-						if ((email.compareTo(form.getEmail()) != 0) || !isUserEmailVerified) {//if user is not an admin, enter not his email or email is his but not verified
+						if (!isUserEmailVerified) {//if user is not an admin, enter not his email or email is his but not verified
 
 							return getNegativeResponseMap("You are not autorized to change password for user with given email");
 						}
@@ -229,42 +284,52 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 
 				//-------- not logged in or an admin so send the link -------------------
 
-				User user = userService.findOneByEmail(form.getEmail());
-				String testactivation_password = null;
-				for (EntryPoint entryPoint : user.getEntryPoints()) {
-					if (entryPoint.getType() == EntryPointType.EMAIL) {
-						testactivation_password = entryPoint.getPassword();
-						break;
-					}
-				}
-				if (testactivation_password == null) return getNegativeResponseMap("No current password");
+				User user = userService.findOne(details.getUserId());
 
 				StateChangeToken stateChangeToken = new StateChangeToken();
 
-				String key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + testactivation_password + "." + request.getLocalAddr());
+				String key;
+				try {
+					key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + PasswordUtils.hashPassword(form.getPassword()) + "." + form.getRemoteIP());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return getNegativeResponseMap("You are not autorized to change password for user with given email");
+				}
 
 				stateChangeToken.setToken(key);
 				stateChangeToken.setType(StateChangeTokenType.USER_PASSWORD_CHANGE);
 				stateChangeToken.setUser(user);
 				stateChangeToken.setValue(details.getPassword());
-				stateChangeToken.setIpAddress(request.getLocalAddr());//Check later if we need remote or local IP here
+				stateChangeToken.setNewValue(PasswordUtils.hashPassword(form.getPassword()));
+				stateChangeToken.setIpAddress(form.getRemoteIP());
 
-				userPasswordChangingService.save(stateChangeToken);
+				try {
+					userPasswordChangingService.save(stateChangeToken);
+				} catch (AwRankException e) {
+				
+					e.printStackTrace();
+					return getNegativeResponseMap(e.getLocalizedMessage());
+				}
 
 				//-------------- and send link via email -----------------------
 
 				Map<String, Object> params = new HashMap<String, Object>();
 
-				params.put("localAddr", request.getLocalAddr());
-				params.put("testactivation_password", testactivation_password);
-				params.put("testactivation_email", form.getEmail());
+				params.put("localAddr", form.getRemoteIP());
+				params.put("testactivation_password", PasswordUtils.hashPassword(form.getPassword()));
+				params.put("testactivation_email", user.getEmail());
 
-				userPasswordChangingService.send(params);
+				try {
+					userPasswordChangingService.send(params);
+				} catch (PasswordChangingEmailNotSetException e) {
+				
+					e.printStackTrace();
+					return getNegativeResponseMap(e.getLocalizedMessage());
+				}
 
-				return getPositiveResponseMap("password changing link sent to " + form.getEmail());
+				return getPositiveResponseMap("password changing link sent to " + user.getEmail());
 		
 	}
-	
 	public  Map updateProfileData(UserProfileDataFormPojo form, Principal principal){
 		
 		if(principal == null) return getNegativeResponseMap("ERROR_ACCESS");

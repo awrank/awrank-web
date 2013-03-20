@@ -42,7 +42,7 @@ public class EntryHistory extends AbstractUserRelatedEntityAuditable {
 	/**
 	 * browse or user agent
 	 */
-	@Column(name = "browse_name", nullable = false, length = 64)
+	@Column(name = "browse_name", nullable = false)
 	private String browseName;
 
 	/**

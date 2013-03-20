@@ -12,6 +12,7 @@ import com.awrank.web.model.domain.EntryHistory;
 import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
+import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserProfileDataFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 
@@ -41,6 +42,9 @@ public interface UserProfileService extends AbstractService {
 	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception;
 	
+	@SuppressWarnings("rawtypes")
+	public Map sendPasswordChangingLinkToEmail(UserNewPasswordFormPojo form,Principal principal);
+
 	@SuppressWarnings("rawtypes")
 	public  Map updateProfileData(UserProfileDataFormPojo form, Principal principal);
 	

@@ -4,6 +4,7 @@ import com.awrank.web.model.dao.StateChangeTokenDao;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import com.awrank.web.model.enums.StateChangeTokenType;
+import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.emailactivation.UserActivationEmailNotSetException;
 import com.awrank.web.model.exception.emailactivation.UserActivationWasNotVerifiedException;
 import com.awrank.web.model.service.DiaryService;
@@ -223,6 +224,7 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 				//---------- change user's email with new one ---------------------
 				
 				user.setEmail(stateChangeToken.getNewValue());
+				user.setAuthorizationFailsCount(0);//fresh start with new email :)
 				userService.save(user);
 				
 				//------------ expire current and create new entry point -----------
@@ -264,12 +266,29 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 		return null;
 	}
 
+	/**
+	 * Save new token if no of same type with same token found or update existing
+	 * @throws AwRankException 
+	 */
 	@Override
-	public void save(StateChangeToken stateChangeToken) {
+	public void save(StateChangeToken stateChangeToken) throws AwRankException {
+		
 		LocalDateTime creationDate = LocalDateTime.now();
 		LocalDateTime endedDate = creationDate.plusMillis(mail_verificationcode_lifetime_duration);
-		stateChangeToken.setEndedDate(endedDate);
-		stateChangeTokenDao.save(stateChangeToken);
+		
+		StateChangeToken found = findByCode(stateChangeToken.getToken());
+		if(found == null){
+			
+			stateChangeToken.setEndedDate(endedDate);
+			stateChangeTokenDao.save(stateChangeToken);
+		
+		}else if(found.getUser() == stateChangeToken.getUser()){//update for same user, not used  && found.getTokenUsedAtDate() == null
+			
+			found.setEndedDate(endedDate);
+			found.setTokenUsedAtDate(null);
+			stateChangeTokenDao.save(found);
+		}
+		else throw new AwRankException("Attempt to save StateChangeToken with existing code for different user in email activation");
 	}
 
 	@Override

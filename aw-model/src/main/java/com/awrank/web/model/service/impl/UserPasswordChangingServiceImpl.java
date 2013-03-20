@@ -3,10 +3,12 @@ package com.awrank.web.model.service.impl;
 import com.awrank.web.model.dao.StateChangeTokenDao;
 import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.StateChangeTokenType;
+import com.awrank.web.model.exception.AwRankException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangeWasNotVerifiedException;
 import com.awrank.web.model.exception.passwordchanging.PasswordChangingEmailNotSetException;
 import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
+import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.externalService.WIPmania;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +90,10 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 	@Autowired
 	@Qualifier("userRoleServiceImpl")
 	private UserRoleService userRoleService;
+	
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
 	@Autowired
 	//@Qualifier("diaryServiceImpl")
@@ -117,25 +123,42 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 			//---------------  find entry point ----------------
 
 			User user = stateChangeToken.getUser();
-			Set<EntryPoint> points = user.getEntryPoints();
-			EntryPoint thePoint = null;
-
-			for (EntryPoint point : points) {
-
-				if (point.getType() == EntryPointType.EMAIL) thePoint = point;
-			}
-
+			EntryPoint thePoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+			String builtKey;
+			
 			if (thePoint == null) return null;//not found proper entry point - can't change
+			
+			//------------ we have found point and activation record, building ethalon key to compare ----------
 
-
-			//------------ we have found point and activation record ----------
-
+			try {
+				builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + stateChangeToken.getNewValue() + "." + request.getRemoteAddr());
+			} catch (Exception e) {
+			
+				e.printStackTrace();
+				throw new PasswordChangeWasNotVerifiedException();
+			}
+			
+			if(builtKey.compareTo(key) != 0) return null;
+			
+			//-------------- everything is ok, changing ---------------
+			
+			user.setAuthorizationFailsCount(0);
+			userService.save(user);
+			
 			stateChangeToken.setTokenUsedAtDate(today);
 			stateChangeTokenDao.save(stateChangeToken);
 
 			thePoint.setEndedDate(today);//entry point is no longer active
 			entryPointService.save(thePoint);
-
+			
+			EntryPoint newPoint =  new EntryPoint();
+			newPoint.setPassword(stateChangeToken.getNewValue());
+			newPoint.setUser(user);
+			newPoint.setType(thePoint.getType());
+			newPoint.setVerifiedDate(today);
+			newPoint.setUid(user.getEmail());
+			entryPointService.save(newPoint);
+			
 			//---------- find/create EntryHistory ------------
 
 			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
@@ -148,7 +171,12 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 				entryHistory.setSessionId(request.getSession().getId());
 				entryHistory.setIpAddress(request.getRemoteAddr());
 				entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
-				entryHistory.setBrowseName(request.getHeader("user-agent"));
+				entryHistory.setEntryPoint(newPoint);
+				entryHistory.setSigninDate(today);
+				String brHeader = request.getHeader("user-agent");
+				if(brHeader.length() > 64) brHeader.substring(0, 63);
+				entryHistory.setSuccess(true);
+				entryHistory.setBrowseName(brHeader);
 				entryHistoryService.save(entryHistory);
 			} else entryHistory = entryHistoryList.get(0);
 			//------ here add record in Diary about password changing
@@ -156,21 +184,41 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 			Diary drec = new Diary();
 			drec.setEvent(DiaryEvent.CHANGE_PASSWORD);
 			drec.setUser(user);
+			drec.setCreatedBy(user);
 			drec.setEntryHistory(entryHistory);
+			drec.setOldValue(stateChangeToken.getValue());
+			drec.setNewValue(stateChangeToken.getNewValue());
 			diaryService.save(drec);
 
-			return thePoint;
+			return newPoint;
 		}
 
 		return null;
 	}
 
-	public void save(StateChangeToken act) {
-
+	/**
+	 * Save new token if no of same type with same token found or update existing
+	 * @throws AwRankException 
+	 */
+	public void save(StateChangeToken stateChangeToken) throws AwRankException{
+		
 		LocalDateTime creationDate = LocalDateTime.now();
 		LocalDateTime endedDate = creationDate.plusMillis(mail_passwordchangingcode_lifetime_duration);
-		act.setEndedDate(endedDate);
-		stateChangeTokenDao.save(act);
+		
+		StateChangeToken found = findByCode(stateChangeToken.getToken());
+		if(found == null){
+			
+			stateChangeToken.setEndedDate(endedDate);
+			stateChangeTokenDao.save(stateChangeToken);
+		
+		}else if(found.getUser() == stateChangeToken.getUser()){//update for same user, not used  && found.getTokenUsedAtDate() == null
+			
+			found.setEndedDate(endedDate);
+			found.setTokenUsedAtDate(null);
+			stateChangeTokenDao.save(found);
+		}
+		else throw new AwRankException("Attempt to save StateChangeToken with existing code for different user in password change");
+
 	}
 
 	public StateChangeToken findByCode(String code) {

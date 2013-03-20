@@ -47,6 +47,7 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 			entryHistory.setEntryPoint(entryPoint);
 			entryHistory.setIpAddress(userIpAddress);
 			entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+			if(browseName.length() > 64) browseName.substring(0, 63);
 			entryHistory.setBrowseName(browseName);
 			entryHistory.setSessionId(sessionId);
 			entryHistory.setSigninDate(LocalDateTime.now());

@@ -40,6 +40,8 @@ public class InitDictionary {
 		
 		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "Вы не можете сменить email до тех пор пока не верифицируете текущий"));
 		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "You cannot change your email before verify current one."));
+		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD.name(), "Вы не можете сменить пароль до тех пор пока не верифицируете текущий почтовый ящик"));
+		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD.name(), "You cannot change your password before verify current email."));
 		
 		list.add(new Dictionary(null, Language.RU, "AUTH_ERROR", "Ошибка аутентификации"));
 		list.add(new Dictionary(null, Language.EN, "AUTH_ERROR", "Authentication error"));
@@ -319,9 +321,13 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_FIRST_LAST_NAMES_TOO_SHORT.name(), "First and Last names shall be longer"));
 		list.add(new Dictionary(null, Language.RU, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Ваши данные обновлены успешно!"));
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_UPDATED_SUCCESSFULLY.name(), "Your profile data was updated successfully!"));
-		list.add(new Dictionary(null, Language.RU, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Почтовый ящик обновлён. На новый ящик выслан линк для верификации, до момента верификации нового ящика будет использоваться текущий."));
-		list.add(new Dictionary(null, Language.EN, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Your mail box data updated successfully. Verification link sent to new email- untill you will verify it current email is used."));
-
+		list.add(new Dictionary(null, Language.RU, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Почтовый ящик изменён. На новый ящик выслан линк для верификации, до момента верификации нового ящика будет использоваться текущий."));
+		list.add(new Dictionary(null, Language.EN, Message.PROFILE_EMAIL_UPDATED_SUCCESSFULLY.name(), "Your mail box data chaged successfully. Verification link sent to new email- untill you will verify it current email is used."));
+		list.add(new Dictionary(null, Language.RU, Message.PROFILE_PASSWORD_UPDATED_SUCCESSFULLY.name(), "Пароль обновлён. На Ваш почтовый ящик выслан линк для верификации, до момента верификации нового пароля будет использоваться текущий."));
+		list.add(new Dictionary(null, Language.EN, Message.PROFILE_PASSWORD_UPDATED_SUCCESSFULLY.name(), "Your password updated successfully. Verification link sent to you email box- untill you will verify it current password is used."));
+		list.add(new Dictionary(null, Language.RU, Message.PASSWORD_VERIFIED_SUCCESSFULLY.name(), "Новый пароль успешно подтверждён, старый более недействителен."));
+		list.add(new Dictionary(null, Language.EN, Message.PASSWORD_VERIFIED_SUCCESSFULLY.name(), "New password updated successfully. Old one is no longer valid"));
+		
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));
