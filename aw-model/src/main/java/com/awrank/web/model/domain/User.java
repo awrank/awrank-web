@@ -1,10 +1,13 @@
 package com.awrank.web.model.domain;
 
+import com.awrank.web.common.constants.AppConstants;
 import com.awrank.web.model.domain.support.DatedAbstractAuditable;
 import com.awrank.web.model.enums.SecretQuestion;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -260,7 +263,17 @@ public class User extends DatedAbstractAuditable {
 		values.add(getEmail());
 		values.add(getApiKey());
 		values.add(getSkype());
-		values.add(getCreatedDate());
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(AppConstants.DateFormat.DF_ddMMyyyy_slash);
+		if (getCreatedDate() != null) {
+			values.add(getCreatedDate().toString(formatter));
+		} else {
+			values.add("-");
+		}
+		if (getEndedDate() != null) {
+			values.add(getEndedDate().toString(formatter));
+		} else {
+			values.add("-");
+		}
 		return values.toArray();
 	}
 

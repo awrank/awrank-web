@@ -33,11 +33,11 @@ public class InitDictionary {
 //        ERROR
 		list.add(new Dictionary(null, Language.RU, Message.ERROR.name(), "Ошибка: "));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR.name(), "Error: "));
-		list.add(new Dictionary(null, Language.RU, Message.ERROR_ACCESS.name(), "У вас нет прав на выполнение операции"));
+		list.add(new Dictionary(null, Language.RU, Message.ERROR_ACCESS.name(), "Недостаточно прав для выполнения этой операции."));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_ACCESS.name(), "You're not permitted to do this action."));
-		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Соединение с сервером отсутствует попробуйте позже"));
+		list.add(new Dictionary(null, Language.RU, Message.ERROR_NETWORK.name(), "Соединение с сервером отсутствует, попробуйте позже."));
 		list.add(new Dictionary(null, Language.EN, Message.ERROR_NETWORK.name(), "No connection with the server, try later."));
-		
+
 		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "Вы не можете сменить email до тех пор пока не верифицируете текущий"));
 		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "You cannot change your email before verify current one."));
 		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD.name(), "Вы не можете сменить пароль до тех пор пока не верифицируете текущий почтовый ящик"));
@@ -53,22 +53,22 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "ERROR_CODE", "Error code: "));
 
 //
-		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта"));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_OBJECT_ID.name(), "Отсутствует идентификатор объекта."));
 		list.add(new Dictionary(null, Language.EN, Message.MISSING_OBJECT_ID.name(), "Missing object identifier."));
-		list.add(new Dictionary(null, Language.RU, Message.OBJECT_NOT_UNIQUE.name(), "Объект должен быть уникален"));
+		list.add(new Dictionary(null, Language.RU, Message.OBJECT_NOT_UNIQUE.name(), "Объект должен быть уникален."));
 		list.add(new Dictionary(null, Language.EN, Message.OBJECT_NOT_UNIQUE.name(), "The object must be unique."));
 
-		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык"));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Отсутствует язык."));
 		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_LANGUAGE.name(), "Missing language."));
-		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_CODE.name(), "Отсутствует код"));
-		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_CODE.name(), "Missing dictionary code"));
-		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения"));
-		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_TEXT.name(), "Missing dictionary text"));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_CODE.name(), "Отсутствует код."));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_CODE.name(), "Missing dictionary code."));
+		list.add(new Dictionary(null, Language.RU, Message.MISSING_DICTIONARY_TEXT.name(), "Отсутствует текст сообщения."));
+		list.add(new Dictionary(null, Language.EN, Message.MISSING_DICTIONARY_TEXT.name(), "Missing dictionary text."));
 
-		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "Указанный адрес электронной почты отсутствует"));
-		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "The email not found"));
-		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль"));
-		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password"));
+		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "Указанный адрес электронной почты отсутствует."));
+		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_BY_EMAIL_NOT_FOUND.name(), "The email not found."));
+		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль."));
+		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password."));
 
 		list.add(new Dictionary(null, Language.RU, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Ссылка для активации почтового ящика НЕ отправлена!"));
 		list.add(new Dictionary(null, Language.EN, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Email activation link NOT sent!"));
@@ -88,10 +88,10 @@ public class InitDictionary {
 
 		list.add(new Dictionary(null, Language.RU,
 				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
-				"К сожалению, социальная сеть, вернула негативный результат."));
+				"К сожалению, социальная сеть, вернула отрицательный результат."));
 		list.add(new Dictionary(null, Language.EN,
 				Message.SOCIAL_NEGATIVE_RESPONSE_RECEIVED.name(),
-				"Unfortunately, the social network returned a negative response."));
+				"Unfortunately, the social network has returned a negative response."));
 
 		list.add(new Dictionary(null, Language.RU,
 				Message.SOCIAL_INVALID_GOOGLE_STATE_PARAM_VALUE.name(),
@@ -108,12 +108,12 @@ public class InitDictionary {
 				"Parameter 'state' is not specified!"));
 
 		list.add(new Dictionary(null, Language.RU,
-				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(), "Ошибка получения access_token значения!"));
+				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(), "Ошибка получения кода доступа (access_token)!"));
 		list.add(new Dictionary(null, Language.EN,
 				Message.SOCIAL_REQUEST_ACCESS_TOKEN_FAILED.name(), "Request for getting access_token value has failed!"));
 
 		list.add(new Dictionary(null, Language.RU,
-				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(), "Ошибка получения user_profile данных!"));
+				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(), "Ошибка получения данных о профиле пользователя (user_profile) !"));
 		list.add(new Dictionary(null, Language.EN,
 				Message.SOCIAL_REQUEST_USER_PROFILE_FAILED.name(), "Request for getting user_profile has failed!"));
 
@@ -172,7 +172,7 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, "PASSWORD_CONFIRM", "Confirm password"));
 		list.add(new Dictionary(null, Language.RU, "PAYMENT", "Оплата"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT", "Payment"));
-		list.add(new Dictionary(null, Language.RU, "SITE", "САЙИ"));
+		list.add(new Dictionary(null, Language.RU, "SITE", "САЙТ"));
 		list.add(new Dictionary(null, Language.EN, "SITE", "SITE"));
 		list.add(new Dictionary(null, Language.RU, "UPDATE", "Обновить"));
 		list.add(new Dictionary(null, Language.EN, "UPDATE", "Update"));

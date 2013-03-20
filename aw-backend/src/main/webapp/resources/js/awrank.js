@@ -417,7 +417,9 @@ var CRouter = Backbone.Router.extend({
 	routes: {
 		"login": "login",
 		"register": "register",
+        "termsOfService": "termsOfService",
 		"forgot_password": "forgot_password",
+        "home": "home",
 		"order": "order",
 		"profile": "profile",
 		"application": "application",
@@ -433,24 +435,36 @@ var CRouter = Backbone.Router.extend({
 	login: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divRegister').addClass('hidden');
-		$('#divForgetPassword').addClass('hidden');
+		$('#divForgotPassword').addClass('hidden');
 		var div = fIndexLoad('body', 'divLogin');
 		div.removeClass('hidden');
 	},
 	register: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
-		$('#divForgetPassword').addClass('hidden');
+		$('#divForgotPassword').addClass('hidden');
+        $('#divTermsOfService').addClass('hidden');
 		var div = fIndexLoad('body', 'divRegister');
 		div.removeClass('hidden');
 	},
+    termsOfService: function () {
+        this.history.push(Backbone.history.fragment);
+        $('#divRegister').addClass('hidden');
+        var div = fIndexLoad('body', 'divTermsOfService');
+        div.removeClass('hidden');
+    },
 	forgot_password: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
 		$('#divRegister').addClass('hidden');
-		var div = fIndexLoad('body', 'divForgetPassword');
+		var div = fIndexLoad('body', 'divForgotPassword');
 		div.removeClass('hidden');
 	},
+    home: function () {
+        this.history.push(Backbone.history.fragment);
+        fIndexMenuActive('menuItemHome');
+        fIndexRightContentSelectDiv('divHome');
+    },
 	order: function () {
 		this.history.push(Backbone.history.fragment);
 		fIndexMenuActive('menuItemOrder');
@@ -504,6 +518,7 @@ var CRouter = Backbone.Router.extend({
 	defaultRoute: function () {
 		this.history.push(Backbone.history.fragment);
 		//awrankRouter.navigate('order', {trigger: true});
+        awrankRouter.navigate('home', {trigger: true});
 	}
 });
 

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class InitUser {
 
 	@Autowired
-	AuditorAwareImpl auditorAware;
+	/*todo: access modifier? */ AuditorAwareImpl auditorAware;
 
 	@Autowired
 	private UserDao userDao;
