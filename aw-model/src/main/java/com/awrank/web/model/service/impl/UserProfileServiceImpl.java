@@ -347,6 +347,8 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		if(form.getLastName() != null) user.setLastName(form.getLastName());
 		if(form.getLanguage() != null) user.setLanguage(form.getLanguage());
 		if(form.getBirthday() != null) user.setBirthday(form.getBirthday());
+		if(form.getSecretAnswer() != null) user.setSecretAnswer(form.getSecretAnswer());
+		if(form.getSecretQuestion() != null) user.setSecretQuestionDicCode(form.getSecretQuestion());
 		
 		this.userService.save(user);
 		 

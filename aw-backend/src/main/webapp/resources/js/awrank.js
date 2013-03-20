@@ -294,6 +294,7 @@ function send_user_new_password(dataform) {
 
 function send_user_logout() {
 	awrankGet('user/logout');
+	
 }
 
 
@@ -416,6 +417,7 @@ var CRouter = Backbone.Router.extend({
 	},
 	routes: {
 		"login": "login",
+		"logout": "logout",
 		"register": "register",
         "termsOfService": "termsOfService",
 		"forgot_password": "forgot_password",
@@ -435,14 +437,31 @@ var CRouter = Backbone.Router.extend({
 	login: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divRegister').addClass('hidden');
+		$('#divProfile').addClass('hidden');
 		$('#divForgotPassword').addClass('hidden');
 		var div = fIndexLoad('body', 'divLogin');
 		div.removeClass('hidden');
+	},
+	logout: function () {
+		this.history.push(Backbone.history.fragment);
+		$('#divRegister').addClass('hidden');
+		$('#divLogin').addClass('hidden');
+		$('#divForgotPassword').addClass('hidden');
+		$('#divProfile').addClass('hidden');
+		
+		 fIndexClearMessages("divLogin");
+		 fIndexClearMessages("divRegister");
+		 fIndexClearMessages("divForgotPassword");
+		 fIndexClearMessages("divProfile");
+		 
+		 fIndexMenuActive('menuItemHome');
+	     fIndexRightContentSelectDiv('divHome');
 	},
 	register: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
 		$('#divForgotPassword').addClass('hidden');
+		$('#divProfile').addClass('hidden');
         $('#divTermsOfService').addClass('hidden');
 		var div = fIndexLoad('body', 'divRegister');
 		div.removeClass('hidden');
