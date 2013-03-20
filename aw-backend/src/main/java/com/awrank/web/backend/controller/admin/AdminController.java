@@ -85,19 +85,38 @@ public class AdminController extends AbstractController {
 	@RequestMapping(value = "/userListDT", method = RequestMethod.GET, produces = "application/json")
 	public
 	@ResponseBody()
-	Map<String, Object> getAllUsers(ModelMap model) {
+	Map<String, Object> getAllUsers(HttpServletRequest request) {
 		Map<String, Object> response = new HashMap<String, Object>();
-		List<User> allUsers = userService.getAllUsers();
 		response.put("result", "ok");
-		response.put("sEcho", 1); // param from request?
-		response.put("iTotalRecords", allUsers.size());
-		response.put("iTotalDisplayRecords", 2);
+		response.put("sEcho", request.getParameter("sEcho"));
 
-		Object[][] aData = new Object[allUsers.size()][];
-		for (int i = 0; i < allUsers.size(); i++) {
-			aData[i] = allUsers.get(i).toArray();
+		int iDisplayStart = Integer.parseInt(request.getParameter("iDisplayStart"));
+		int iDisplayLength = Integer.parseInt(request.getParameter("iDisplayLength"));
+
+		//Sort sort = new Sort(Sort.Direction.ASC, "");
+		Pageable pageable = new PageRequest(iDisplayStart, iDisplayLength);
+
+		Page<User> page = null;
+		String token = (request.getParameter("sSearch"));
+		String criteria = request.getParameter("sSearchCriteria");
+
+		if (StringUtils.hasLength(token)) {
+			page = userService.pFindOneByEmail(token, pageable);
 		}
-		response.put("aaData", aData);
+		if (page == null) {
+			page = userService.pFindAllUsers(pageable);
+		}
+
+		response.put("iTotalRecords", page.getTotalElements());
+		response.put("iTotalDisplayRecords", page.getNumberOfElements());
+
+		Iterator<User> i = page.iterator();
+		List<Object[]> aaData = new ArrayList<Object[]>();
+		while(i.hasNext()) {
+			aaData.add(i.next().toArray());
+		}
+		response.put("aaData", aaData.toArray());
+
 		return response;
 	}
 

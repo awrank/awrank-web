@@ -320,6 +320,11 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	}
 
 	@Override
+	public Page<User> pFindAllUsers(Pageable pageable) {
+		return userDao.findAll(pageable);
+	}
+
+	@Override
 	public Page<User> getPage(Pageable pageable) {
 		return (Page<User>) userDao.findAll(pageable);
 	}
@@ -330,6 +335,11 @@ public class UserServiceImpl extends AbstractServiceImpl implements UserService 
 	@Override
 	public User findOneByEmail(String email) {
 		return userDao.findByEmail(email);
+	}
+
+	@Override
+	public Page<User> pFindOneByEmail(String email, Pageable pageable) {
+		return userDao.pFindByEmail(email, pageable);
 	}
 
 	@Override
