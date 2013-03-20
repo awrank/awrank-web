@@ -30,8 +30,7 @@
                     </div>
  					<div class="input-prepend">
                         <span class="add-on"><i class="icon-calendar"></i></span>
-                        <input type="text" id="prof_birthdayAsFormattedString" name="prof_birthdayAsFormattedString" class="span11" lngp="PROFILE_FIELD_BIRTHDAY" value="<%= birthdayAsFormattedString %>"/>
-						<!-- onfocus="pickDate(this);" -->                    
+                        <input type="text" id="prof_birthdayAsFormattedString" class="span11" lngp="PROFILE_FIELD_BIRTHDAY" value="<%= birthdayAsFormattedString %>"/>                
 					</div>
                      <div class="input-prepend">
                         <span class="add-on"><i class="icon-heart"></i></span>
@@ -49,7 +48,7 @@
                             </select>
                         </div>
                         <div class="span6">
-                            <input type="text" class="input-block-level" lngp="INPUT_ANSWER_HERE" id=prof_"secretAnswer" value="<%= secretAnswer %>" />
+                            <input type="text" class="input-block-level" lngp="INPUT_ANSWER_HERE" id="prof_secretAnswer" value="<%= secretAnswer %>" />
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -215,7 +214,7 @@
 		         var firstname = $('#prof_firstName').val();
 		         var lastname = $('#prof_lastName').val();
 		         var language = $('#prof_language').val();
-		         var answer = $('#sprof_ecretAnswer').val();
+		         var answer = $('#prof_secretAnswer').val();
 		         var birthdayAsFormattedString = $('#prof_birthdayAsFormattedString').val();
 		         var questionDicCode = jQuery("#prof_secretQuestion").prop("value");
 		         var localIP = $('#prof_localIP').val();
