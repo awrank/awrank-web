@@ -51,6 +51,8 @@
 	<li><a href="#tabAPI" data-toggle="tab">API</a></li>
 	<li><a href="#tabUserProfile" data-toggle="tab">User Profile</a></li>
 	<li><a href="#tabAdminSection" data-toggle="tab">Admin section</a></li>
+	<hr/>
+	<li><a href="#tabKnownIssues" data-toggle="tab" class="muted">Known issues</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane active" id="tabSession">
@@ -294,8 +296,19 @@
 			</fieldset>
 		</form>
 	</div>
-
 </div>
+
+<div class="tab-pane" id="tabKnownIssues">
+	<div class="well">
+		<ul>
+			<li>Values for columns <code>createBy</code> and <code>lastModifiedBy</code> are not stored.</li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+
 </div>
 </div>
 

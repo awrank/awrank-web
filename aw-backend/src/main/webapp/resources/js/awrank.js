@@ -518,7 +518,6 @@ var CRouter = Backbone.Router.extend({
 	defaultRoute: function () {
 		this.history.push(Backbone.history.fragment);
 		//awrankRouter.navigate('order', {trigger: true});
-        awrankRouter.navigate('home', {trigger: true});
 	}
 });
 
