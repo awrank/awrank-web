@@ -31,6 +31,26 @@ public class UserRegistrationFormPojo implements Serializable {
 
 	private String ip;
 
+	private String remoteIP;
+	
+	public String getRemoteIP() {
+		return remoteIP;
+	}
+
+	public void setRemoteIP(String remoteIP) {
+		this.remoteIP = remoteIP;
+	}
+
+	private String localIP;
+
+	public String getLocalIP() {
+		return localIP;
+	}
+
+	public void setLocalIP(String localIP) {
+		this.localIP = localIP;
+	}
+	
 	private String userLocalAddress;
 
 	private String userRemoteAddress;
@@ -160,6 +180,8 @@ public class UserRegistrationFormPojo implements Serializable {
 		this.setLanguage(Language.valueOf(in.get("language")));
 		this.setSecretQuestionCode(SecretQuestion.valueOf(in.get("questionDicCode")));
 		this.setSecretQuestionAnswer(in.get("answer"));
+		this.setLocalIP(in.get("localIP"));
+		this.setRemoteIP(in.get("remoteIP"));
 	}
 
 }

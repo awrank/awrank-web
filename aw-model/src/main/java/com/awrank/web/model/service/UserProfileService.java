@@ -35,7 +35,8 @@ public interface UserProfileService extends AbstractService {
 	 * @param principal
 	 * @throws UserActivationEmailNotSetException
 	 */
-	public void sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException;
+	@SuppressWarnings("rawtypes")
+	public Map sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException;
 	
 	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception;

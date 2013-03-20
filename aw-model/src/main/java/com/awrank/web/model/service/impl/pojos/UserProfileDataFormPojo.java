@@ -53,6 +53,26 @@ public class UserProfileDataFormPojo implements Serializable {
 	private String secretAnswer;
 
 	private SecretQuestion secretQuestion;
+	
+	private String remoteIP;
+	
+	public String getRemoteIP() {
+		return remoteIP;
+	}
+
+	public void setRemoteIP(String remoteIP) {
+		this.remoteIP = remoteIP;
+	}
+
+	private String localIP;
+
+	public String getLocalIP() {
+		return localIP;
+	}
+
+	public void setLocalIP(String localIP) {
+		this.localIP = localIP;
+	}
 
 	public void fillWithUserData(User user) {
 		this.setUserId(user.getId());
@@ -78,6 +98,8 @@ public class UserProfileDataFormPojo implements Serializable {
 		map.put("networkUID", networkUID);
 		map.put("secretAnswer", secretAnswer);
 		map.put("secretQuestion", secretQuestion);
+		map.put("remoteIP", remoteIP);
+		map.put("localIP", localIP);
 		//map.put("userId", userId);
 		return map;
 	}
@@ -90,6 +112,9 @@ public class UserProfileDataFormPojo implements Serializable {
 		this.setSecretQuestion(SecretQuestion.valueOf(in.get("questionDicCode")));
 		this.setSecretAnswer(in.get("answer"));
 		this.setBirthdayAsFormattedString(in.get("birthdayAsFormattedString"));
+		this.setLocalIP(in.get("localIP"));
+		this.setRemoteIP(in.get("remoteIP"));
+		
 	}
 	
 	public String getBirthdayAsFormattedString() {

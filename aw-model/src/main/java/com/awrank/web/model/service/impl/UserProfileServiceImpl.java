@@ -137,29 +137,31 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 	}
 	
 	
-	public void sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException{
+	public Map sendNewEmailVerificationLinkOnEmailManualChange(UserRegistrationFormPojo form, Principal principal) throws UserActivationEmailNotSetException{
 		
 		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
 //		---------------- sending verification email on new email--------------------
-		String principalIP = "";
+		String principalIP = form.getRemoteIP();
 		Object currentDetails = ((UsernamePasswordAuthenticationToken) principal).getDetails();
 		if (currentDetails instanceof WebAuthenticationDetails) {
 			WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) currentDetails;
 			principalIP = webAuthenticationDetails.getRemoteAddress();
 		}
+
 		String key;
 		
 		try {
-			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + details.getPassword() + "." + principalIP + "." + principalIP);
+			key = SMTPAuthenticator.getHashed256(form.getEmail() + "." + details.getPassword() + "." + form.getLocalIP() + "." + form.getRemoteIP());
 		} catch (Exception e1) {
-			e1.printStackTrace();
-			throw new UserActivationEmailNotSetException();
+			getLogger().error(e1.getMessage(), e1);
+			//throw new UserActivationEmailNotSetException();
+			return this.getNegativeResponseMap(UserActivationEmailNotSetException.USER_EMAIL_ACTIVATION_NOT_SENT);
 		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("localAddr", principalIP);
-		params.put("remoteAddr", principalIP);
+		params.put("localAddr", form.getLocalIP());
+		params.put("remoteAddr", form.getRemoteIP());
 		params.put("testactivation_email", form.getEmail());
 		params.put("testactivation_password", details.getPassword());
 
@@ -168,7 +170,8 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		} catch (AwRankException e) {
 
 			getLogger().error(e.getMessage(), e);
-			throw new UserActivationEmailNotSetException();
+			//throw new UserActivationEmailNotSetException();
+			return this.getNegativeResponseMap(UserActivationEmailNotSetException.USER_EMAIL_ACTIVATION_NOT_SENT);
 		}
 
 //		-------------- saving to db -----------------------------
@@ -189,6 +192,8 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 		User user = this.userService.findOne(details.getUserId());
 		token.setUser(user);
 		userEmailActivationService.save(token);
+		
+		return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
 	}
 	
 	@SuppressWarnings("rawtypes")

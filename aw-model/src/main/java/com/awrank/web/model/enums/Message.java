@@ -1,5 +1,6 @@
 package com.awrank.web.model.enums;
 
+
 /**
  * Constants which define messages keys.
  *
@@ -51,7 +52,7 @@ public enum Message {
 	REGISTRATION_PASSWORD_AND_CONFIRMATION_ARE_NOT_EQUAL,
 	REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TAC,
 	REGISTRATION_EMAIL_MALFORMED,
-	
+	USER_EMAIL_ACTIVATION_NOT_SENT,
 	EMAIL_VERIFIED_SUCCESSFULLY,
 	EMAIL_NOT_VERIFIED,
 	

@@ -11,6 +11,7 @@ import com.awrank.web.model.service.EntryHistoryService;
 import com.awrank.web.model.service.EntryPointService;
 import com.awrank.web.model.service.UserEmailActivationService;
 import com.awrank.web.model.service.UserRoleService;
+import com.awrank.web.model.service.UserService;
 import com.awrank.web.model.service.email.EmailSenderSendGridImpl;
 import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 
@@ -81,6 +82,10 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	@Autowired
 	EmailSenderSendGridImpl sendGridEmailSender;
 
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
+	
 	@Autowired
 	@Qualifier("entryPointServiceImpl")
 	private EntryPointService entryPointService;
@@ -215,12 +220,15 @@ public class UserEmailActivationServiceImpl extends UserEmailActivationService {
 	
 				if(key.compareTo(builtKey) != 0) throw new UserActivationWasNotVerifiedException();
 				
+				//---------- change user's email with new one ---------------------
 				
+				user.setEmail(stateChangeToken.getNewValue());
+				userService.save(user);
+				
+				//------------ expire current and create new entry point -----------
 				
 				oldPoint.setEndedDate(today);
 				entryPointService.save(oldPoint);
-				
-				//-------------- create new entry point -------------
 				
 				EntryPoint newPoint = new EntryPoint();
 				newPoint.setUser(user);

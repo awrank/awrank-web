@@ -68,6 +68,9 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.RU, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Неправильный текущий пароль"));
 		list.add(new Dictionary(null, Language.EN, Message.ENTRY_POINT_WRONG_CURRENT_PASSWORD.name(), "Wrong current password"));
 
+		list.add(new Dictionary(null, Language.RU, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Ссылка для активации почтового ящика НЕ отправлена!"));
+		list.add(new Dictionary(null, Language.EN, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Email activation link NOT sent!"));
+		
 		// social
 		list.add(new Dictionary(null, Language.RU,
 				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
@@ -269,6 +272,12 @@ public class InitDictionary {
 
 		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_BIRTHDAY", "Дата рождения (ГГГГ-ММ-ДД"));
 		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_BIRTHDAY", "Birthday (YYYY-MM-DD)"));
+		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_CURRENT_PASSWORD", "Текущий пароль"));
+		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_CURRENT_PASSWORD", "Current Password"));
+		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_NEW_PASSWORD", "Новый пароль"));
+		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_NEW_PASSWORD", "New Password"));
+		list.add(new Dictionary(null, Language.RU, "PROFILE_FIELD_NEW_PASSWORD_CONFIRM", "Новый пароль ещё раз"));
+		list.add(new Dictionary(null, Language.EN, "PROFILE_FIELD_NEW_PASSWORD_CONFIRM", "New Password Confirmation"));
 
 		list.add(new Dictionary(null, Language.RU, "REGISTER_DESCRIPTION", "или введите email:"));
 		list.add(new Dictionary(null, Language.EN, "REGISTER_DESCRIPTION", "or with email:"));

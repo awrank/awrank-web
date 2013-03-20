@@ -17,29 +17,31 @@
         </div>
     </div>
     
-    <script type="text/template" id="user-details">			
+    <script type="text/template" id="user-details">	
+ 					<input type="hidden" id="prof_localIP" class="span11"  value="<%= localIP %>"/>
+					<input type="hidden" id="prof_remoteIP" class="span11"  value="<%= remoteIP %>"/>		
 					<div class="input-prepend">
                         <span class="add-on"><i class="icon-user"></i></span>
-                        <input type="text" id="firstName" class="span11" lngp="FIRST_NAME" value="<%= firstName %>"/>
+                        <input type="text" id="prof_firstName" class="span11" lngp="FIRST_NAME" value="<%= firstName %>"/>
                     </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-user"></i></span>
-                        <input type="text" id="lastName" class="span11" lngp="LAST_NAME" value="<%= lastName %>"/>
+                        <input type="text" id="prof_lastName" class="span11" lngp="LAST_NAME" value="<%= lastName %>"/>
                     </div>
  					<div class="input-prepend">
                         <span class="add-on"><i class="icon-calendar"></i></span>
-                        <input type="text" id="birthdayAsFormattedString" class="span11" lngp="PROFILE_FIELD_BIRTHDAY" value="<%= birthdayAsFormattedString %>"/>
+                        <input type="text" id="prof_birthdayAsFormattedString" class="span11" lngp="PROFILE_FIELD_BIRTHDAY" value="<%= birthdayAsFormattedString %>"/>
                     </div>
                     
                      <div class="input-prepend">
                         <span class="add-on"><i class="icon-heart"></i></span>
-                        <input type="language" id="language" class="span11" lngp="REGISTER_FIELD_LANGUAGE" value="<%= language %>"/>
+                        <input type="language" id="prof_language" class="span11" lngp="REGISTER_FIELD_LANGUAGE" value="<%= language %>"/>
                     </div>
                     <br>
                     <label lngt="WE_RECOMMEND_SECRET_QUESTION"></label>
                     <div class="row-fluid">
                         <div class="span6">
-                            <select class="input-block-level" id="secretQuestion" value="<%= secretQuestion %>">
+                            <select class="input-block-level" id="prof_secretQuestion" value="<%= secretQuestion %>">
                                 <option lngt=SECRET_QUESTION_FIRST_PET value="SECRET_QUESTION_FIRST_PET"></option>
                                 <option lngt="SECRET_QUESTION_MOTHERS_MAIDEN_NAME" value="SECRET_QUESTION_MOTHERS_MAIDEN_NAME"></option>
                                 <option lngt="SECRET_QUESTION_FAVOURITE_DISH" value="SECRET_QUESTION_FAVOURITE_DISH"></option>
@@ -47,7 +49,7 @@
                             </select>
                         </div>
                         <div class="span6">
-                            <input type="text" class="input-block-level" lngp="INPUT_ANSWER_HERE" id="secretAnswer" value="<%= secretAnswer %>" />
+                            <input type="text" class="input-block-level" lngp="INPUT_ANSWER_HERE" id=prof_"secretAnswer" value="<%= secretAnswer %>" />
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -56,13 +58,12 @@
                                     lngt="UPDATE" onClick="fUpdateProfileSubmit();"></button>
                         </div>
   					</div>
-  					<br/>
 					<div class="input-prepend">
 						<hr/>
 					</div>
  					<div class="input-prepend">
                         <span class="add-on"><i class="icon-envelope"></i></span>
-                        <input type="text" id="email" class="span11" lngp="REGISTER_FIELD_EMAIL" value="<%= email %>"/>
+                        <input type="text" id="prof_email" class="span11" lngp="REGISTER_FIELD_EMAIL" value="<%= email %>"/>
                     </div>
  					 <div class="row-fluid"> 
                         <div class="span12">
@@ -70,10 +71,33 @@
                                     lngt="UPDATE" onClick="fChangeEmailSubmit();"></button>
                         </div>
  					</div>
+					<div class="input-prepend">
+						<hr/>
+					</div>
+ 					<div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i></span>
+                        <input type="text" id="prof_currpass" class="span11" lngp="PROFILE_FIELD_CURRENT_PASSWORD" />
+                    </div>
+					<div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i></span>
+                        <input type="text" id="prof_newpass" class="span11" lngp="PROFILE_FIELD_NEW_PASSWORD" />
+                    </div>
+					<div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i></span>
+                        <input type="text" id="prof_newpass_confirm" class="span11" lngp="PROFILE_FIELD_NEW_PASSWORD_CONFIRM" />
+                    </div>
+ 					 <div class="row-fluid"> 
+                        <div class="span12">
+                            	<button class="btn btn-large btn-primary pull-right"       
+                                    lngt="UPDATE" onClick="fChangePasswordSubmit();"></button>
+                        </div>
+ 					</div>
  </script>
  
     <script type="text/javascript" language="JavaScript">
 
+    //------------------------- data model -------------------------------
+    
 		window.UserProfile = Backbone.Model.extend({
 			url: 'rest/profile/userdata/get2/'
 		});
@@ -98,7 +122,9 @@
 			language : 'EN',
 			email : "test@example.com",
 			secretQuestion: "SECRET_QUESTION_FIRST_PET",
-			secretAnswer : "Vas'ka"
+			secretAnswer : "Vas'ka",
+			localIP: "",
+			remoteIP: "" 
 			
 		});
 		var meView = new UserProfileView({
@@ -117,34 +143,57 @@
 			}
 			
 		}});
-    	
+  
+		//------------------------ submit functions -------------------------  	
+ 		
+		function fChangePasswordSubmit() {
+			 
+			  var password = $('#prof_currpass').val();
+			  var newpassword = $('#prof_newpass').val();
+		      var newconfirmation = $('#prof_newpass_confirm').val();
+		      var localIP = $('#prof_localIP').val();
+			  var remoteIP = $('#prof_remoteIP').val();
+		         
+			 fIndexClearMessages("divProfile");
+			 
+			 var iserrors = false;
+			 
+			 if(newpassword.length < 3 || newconfirmation.length < 3 || newpassword != newconfirmation){
+	        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_PASSWORD_AND_CONFIRMATION_ARE_NOT_EQUAL'));
+	        	 iserrors = true;
+	         }
+			 
+ 		}
+		
 		 function fChangeEmailSubmit() {
 			 
 			 fIndexClearMessages("divProfile");
 			 
 			 var iserrors = false;
-			 var email = $('#email').val();
+			 var email = $('#prof_email').val();
+			 var localIP = $('#prof_localIP').val();
+			 var remoteIP = $('#prof_remoteIP').val();
 			 
 			 if(email.length < 3 || validateEmail(email) == false){
 	        	 alertError(getMessage('ERROR'), getMessage('REGISTRATION_EMAIL_MALFORMED'));
 	        	 iserrors = true;
 	         }
 			 
-			 if(iserrors == false) send_user_new_email({email: email});
-			 
+			 if(iserrors == false) send_user_new_email({email: email, localIP: localIP, remoteIP: remoteIP});
 		 }
 		 
 		 function fUpdateProfileSubmit() {
 		       
 		    	fIndexClearMessages("divProfile");
 		    	 
-		         var firstname = $('#firstName').val();
-		         var lastname = $('#lastName').val();
-		         var language = $('#language').val();
-		         var answer = $('#secretAnswer').val();
-		         var birthdayAsFormattedString = $('#birthdayAsFormattedString').val();
-		         var questionDicCode = jQuery("#secretQuestion").prop("value");
-		      
+		         var firstname = $('#prof_firstName').val();
+		         var lastname = $('#prof_lastName').val();
+		         var language = $('#prof_language').val();
+		         var answer = $('#sprof_ecretAnswer').val();
+		         var birthdayAsFormattedString = $('#prof_birthdayAsFormattedString').val();
+		         var questionDicCode = jQuery("#prof_secretQuestion").prop("value");
+		         var localIP = $('#prof_localIP').val();
+				 var remoteIP = $('#prof_remoteIP').val();
 		         var iserrors = false;
 		         
 		         if(firstname.length < 3 || firstname.length < 3){
@@ -152,7 +201,7 @@
 		        	 iserrors = true;
 		         }
 		         
-		    	if(iserrors == false) send_user_profile({firstName: firstname, lastName: lastname, language: language, answer: answer, questionDicCode: questionDicCode, birthdayAsFormattedString : birthdayAsFormattedString });
+		    	if(iserrors == false) send_user_profile({firstName: firstname, lastName: lastname, language: language, answer: answer, questionDicCode: questionDicCode, birthdayAsFormattedString : birthdayAsFormattedString, localIP: localIP, remoteIP: remoteIP });
 		    	
 		    }
 	</script>

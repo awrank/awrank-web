@@ -12,6 +12,8 @@ import com.awrank.web.model.exception.AwRankException;
  */
 @SuppressWarnings("serial")
 public class UserActivationEmailNotSetException extends AwRankException {
+	
+	public static String USER_EMAIL_ACTIVATION_NOT_SENT = "USER_EMAIL_ACTIVATION_NOT_SENT";
 
     public UserActivationEmailNotSetException() {
         super();
@@ -19,7 +21,7 @@ public class UserActivationEmailNotSetException extends AwRankException {
 
     @Override
     public String getMessage() {
-        return "User activation email was not sent";
+        return USER_EMAIL_ACTIVATION_NOT_SENT;
     }
 
 }

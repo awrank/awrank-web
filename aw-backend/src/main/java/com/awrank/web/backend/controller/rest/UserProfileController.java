@@ -159,11 +159,13 @@ public class UserProfileController extends AbstractController {
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
 	public
-	@ResponseBody Map getUserDataAsMap(Principal principal) throws Exception {
+	@ResponseBody Map getUserDataAsMap(HttpServletRequest request, Principal principal) throws Exception {
 
 		if (principal == null) return this.getNegativeResponseMap("ERROR_ACCESS");
 		
 		UserProfileDataFormPojo userdata =  userProfileService.getUserProfileDataForPrincipal(principal);
+		userdata.setLocalIP(request.getLocalAddr());
+		userdata.setRemoteIP(request.getRemoteAddr());
 		Map userdataMap = userdata.toMap();
 		userdataMap.put("result", "ok");
 		return userdataMap;
@@ -243,7 +245,7 @@ public class UserProfileController extends AbstractController {
 			produces = "application/json")
 	public
 	@ResponseBody()
-	Map setUserNewEmaildManual2(@RequestBody Map<String, String> in, Principal principal) throws UserActivationEmailNotSetException {
+	Map setUserNewEmaildManual2(@RequestBody Map<String, String> in, HttpServletRequest request, Principal principal) throws UserActivationEmailNotSetException {
 		
 		if (principal == null) return getNegativeResponseMap("ERROR_ACCESS");
 
@@ -256,10 +258,12 @@ public class UserProfileController extends AbstractController {
 		//-------------------------------
 		
 		UserRegistrationFormPojo form = new UserRegistrationFormPojo();
-		form.setEmail(in.get("email"));
-		this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, principal);
+		form.setEmail(in.get("email")); 
+		form.setLocalIP(in.get("localIP"));
+		form.setRemoteIP(in.get("remoteIP"));
+		return this.userProfileService.sendNewEmailVerificationLinkOnEmailManualChange(form, principal);
 
-		return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
+		//return getPositiveResponseMap("PROFILE_EMAIL_UPDATED_SUCCESSFULLY");
 	}
 
 	/**
