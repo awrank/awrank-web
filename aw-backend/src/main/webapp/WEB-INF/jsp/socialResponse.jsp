@@ -101,7 +101,7 @@
 					</li>
 					<li id="menuItemIndexJsp">
 						<a href="${context}">
-							<i class="icon-shopping-cart"></i><span>index.jsp</span>
+							<i class="icon-wrench"></i><span>Debug Area</span>
 						</a>
 					</li>
 
