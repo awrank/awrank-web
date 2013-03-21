@@ -133,7 +133,7 @@ $.fn.serializeObject = function()
          var iserrors = false;
          
        	 if(jQuery("#reg_tacCheckbox").prop("checked") == false){
-       		alertError(getMessage('ERROR'), getMessage('REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TAC'));
+       		alertError(getMessage('ERROR'), getMessage('REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TERMS'));
        		iserrors = true;
        	 }
          if(email.length < 3 || validateEmail(email) == false){
@@ -161,11 +161,19 @@ $.fn.serializeObject = function()
     }
 
     function fRegisterGoogleSubmit() {
-		window.location = "user/register/google";
+		if(jQuery("#reg_tacCheckbox").prop("checked") == false){
+			alertError(getMessage('ERROR'), getMessage('REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TERMS'));
+		} else {
+			window.location = "user/register/google";
+		}
     }
 
     function fRegisterFacebookSubmit() {
-		window.location = "user/register/facebook";
+		if(jQuery("#reg_tacCheckbox").prop("checked") == false){
+			alertError(getMessage('ERROR'), getMessage('REGISTRATION_YOU_HAVE_TO_AGREE_WITH_TERMS'));
+		} else {
+			window.location = "user/register/facebook";
+		}
     }
 
 </script>

@@ -64,6 +64,6 @@ public class LoginController extends AbstractController {
 		if (session != null) {
 			session.invalidate();
 		}
-		throw UnauthorizedException.getInstance();
+		//throw UnauthorizedException.getInstance();
 	}
 }

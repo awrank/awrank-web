@@ -96,12 +96,17 @@
 					<li class="nav-header" lngt="SITE">SITE</li>
 					<li id="menuItemHome">
 						<a href="${context}/index.html">
-							<i class="icon-home"></i><span lngt="HOME">Home</span>
+							<i class="icon-home"></i> <span lngt="HOME"></span>
+						</a>
+					</li>
+					<li id="menuItemLogin">
+						<a href="${context}/index.html#login">
+							<i class="icon-circle-arrow-right"></i> <span lngt="LOGIN"></span>
 						</a>
 					</li>
 					<li id="menuItemIndexJsp">
 						<a href="${context}">
-							<i class="icon-wrench"></i><span>Debug Area</span>
+							<i class="icon-wrench"></i> <span>Debug Area</span>
 						</a>
 					</li>
 
@@ -134,7 +139,7 @@
 						</p>
 					</h2>
 					<p class="text-info">
-						<a href="${context}/index.html">
+						<a href="${context}/index.html#home">
 							<span lngt="CONTINUE"></span>
 						</a>
 					</p>

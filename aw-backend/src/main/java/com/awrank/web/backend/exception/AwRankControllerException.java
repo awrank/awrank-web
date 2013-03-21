@@ -5,7 +5,7 @@ import com.awrank.web.model.exception.AwRankException;
 /**
  * Base exception to be used in controller AwRank Web project.
  *
- * @author Andrew Stoyaltsev
+ * @author Alex Polyakov
  */
 public class AwRankControllerException extends AwRankException {
 
