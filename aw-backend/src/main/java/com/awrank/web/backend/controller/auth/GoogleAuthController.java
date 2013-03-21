@@ -52,7 +52,8 @@ public class GoogleAuthController extends AbstractSocialAuthController {
 	private String clientSecret = "S56giFrR-y7kDNn2qPFV1hRY";
 
 	//@Value("${oauth.google.redirect.uri}")
-	private String redirectUri = "http://awrank.com:8080/awrank/googleOAuthCallback";
+	//private String redirectUri = "http://awrank.com:8080/awrank/googleOAuthCallback";
+	private String redirectUri = "http://tropicsrain.com:8080/awrank/googleOAuthCallback";
 
 	//@Value("${oauth.google.userinfo.url}")
 	private String socialUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";

@@ -52,7 +52,8 @@ public class FacebookAuthController extends AbstractSocialAuthController {
 	private String clientSecret = "270be44d06652edad696a58438dfbd5a";
 
 	//@Value("${oauth.facebook.redirect.uri}")
-	private String redirectUri = "http://awrank.com:8080/awrank/facebookOAuthCallback";
+	//private String redirectUri = "http://awrank.com:8080/awrank/facebookOAuthCallback";
+	private String redirectUri = "http://tropicsrain.com:8080/awrank/facebookOAuthCallback";
 
 	//@Value("${oauth.facebook.userinfo.url}")
 	private String socialUserInfoUrl = "https://graph.facebook.com/me?access_token=";

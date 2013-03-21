@@ -189,7 +189,7 @@
 	        	 iserrors = true;
 	         }
 			 
-			 if(iserrors == false) send_user_new_password({password: password, newpassword : newpassword, newconfirmation : newconfirmation, localIP: localIP, remoteIP: remoteIP});
+			 if(iserrors === false) send_user_new_password({password: password, newpassword : newpassword, newconfirmation : newconfirmation, localIP: localIP, remoteIP: remoteIP});
  		}
 		
 		 function fChangeEmailSubmit() {
@@ -206,7 +206,7 @@
 	        	 iserrors = true;
 	         }
 			 
-			 if(iserrors == false) send_user_new_email({email: email, localIP: localIP, remoteIP: remoteIP});
+			 if(iserrors === false) send_user_new_email({email: email, localIP: localIP, remoteIP: remoteIP});
 		 }
 		 
 		 function fUpdateProfileSubmit() {
@@ -228,7 +228,7 @@
 		        	 iserrors = true;
 		         }
 		         
-		    	if(iserrors == false) send_user_profile({firstName: firstname, lastName: lastname, language: language, answer: answer, questionDicCode: questionDicCode, birthdayAsFormattedString : birthdayAsFormattedString, localIP: localIP, remoteIP: remoteIP });
+		    	if(iserrors === false) send_user_profile({firstName: firstname, lastName: lastname, language: language, answer: answer, questionDicCode: questionDicCode, birthdayAsFormattedString : birthdayAsFormattedString, localIP: localIP, remoteIP: remoteIP });
 		    	
 		    }
 	</script>

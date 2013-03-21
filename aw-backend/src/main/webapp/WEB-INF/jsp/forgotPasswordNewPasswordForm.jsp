@@ -188,7 +188,7 @@
       	 	iserrors = true;
        }
 		 
-		 if(iserrors == false) send_user_new_password_forgot({entrypointid: entrypointid, newpassword : newpassword, newconfirmation : newconfirmation, localIP: localIP, remoteIP: remoteIP});
+		 if(iserrors === false) send_user_new_password_forgot({entrypointid: entrypointid, newpassword : newpassword, newconfirmation : newconfirmation, localIP: localIP, remoteIP: remoteIP});
 	}
 </script>
 
