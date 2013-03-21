@@ -19,6 +19,13 @@ import javax.persistence.*;
 public class UserLimit extends AbstractUserRelatedEntityAuditable {
 
 	/**
+	 * Order to which the limit is bound.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "order_id", nullable = false, updatable = false)
+	private Order order;
+
+	/**
 	 * A quantity of allowed request per day.
 	 */
 	@Column(name = "available_requests", nullable = false)
@@ -32,7 +39,27 @@ public class UserLimit extends AbstractUserRelatedEntityAuditable {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime startedDate;
 
+	@Column(name = "user_limit_type", nullable = false, updatable = false, length = 10)
+	@Enumerated(EnumType.STRING)
+	private UserLimitType userLimitType;
+
+	/**
+	 * For tariffs use limit count request per day and per month
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "user_limit_month_id", nullable = true, updatable = false)
+	private UserLimit limitMonth;
+
 	public UserLimit() {
+	}
+
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 	public Integer getAvailableRequests() {
@@ -51,4 +78,19 @@ public class UserLimit extends AbstractUserRelatedEntityAuditable {
 		this.startedDate = startedDate;
 	}
 
+	public UserLimitType getUserLimitType() {
+		return userLimitType;
+	}
+
+	public void setUserLimitType(UserLimitType userLimitType) {
+		this.userLimitType = userLimitType;
+	}
+
+	public UserLimit getLimitMonth() {
+		return limitMonth;
+	}
+
+	public void setLimitMonth(UserLimit limitMonth) {
+		this.limitMonth = limitMonth;
+	}
 }

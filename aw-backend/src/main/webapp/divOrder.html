@@ -174,9 +174,15 @@
 		},
 		payment: function (event) {
 			var product_id = $('#divPaymentProductInfo').attr("product_id");
-			var payment_system_id = $(event.target).closest('div').attr("payment_system_id");
-			// TODO new window
-			window.location = 'wm/order?payment_system_id=' + payment_system_id + '&product_id=' + product_id;
+			var d = $(event.target).closest('div');
+			var payment_system_id = d.attr("payment_system_id");
+			var type = d.attr("id");
+			if (type == 'divPaymentPaymentSystem2checkout') {
+				window.location = 'twocheckout/order?payment_system_id=' + payment_system_id + '&product_id=' + product_id;
+			} else if (type == 'divPaymentPaymentSystemWebmoney') {
+				// TODO new window
+				window.location = 'wm/order?payment_system_id=' + payment_system_id + '&product_id=' + product_id;
+			}
 		},
 		showHidePaymentSystem: function () {
 			for (i in this.hidePaymentSystem) {

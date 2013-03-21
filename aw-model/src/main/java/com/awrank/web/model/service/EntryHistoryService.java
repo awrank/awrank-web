@@ -19,35 +19,33 @@ import java.util.List;
 public interface EntryHistoryService extends AbstractService {
 
 	/**
-	 *
 	 * @param entryHistory
 	 * @throws EntryHistoryNotCreatedException
+	 *
 	 */
 	void add(EntryHistory entryHistory) throws EntryHistoryNotCreatedException;
 
 	/**
-	 *
 	 * @param entryHistory
 	 * @throws EntryHistoryNotDeletedException
+	 *
 	 */
 	void delete(EntryHistory entryHistory) throws EntryHistoryNotDeletedException;
 
 	/**
-	 *
 	 * @param entryHistory
 	 */
 	void save(EntryHistory entryHistory);
 
 	/**
-	 *
 	 * @param ipAddress
 	 * @return
 	 */
 	List<EntryHistory> findByIP(String ipAddress);
 
 	Page<EntryHistory> pFindByIP(String ipAddress, Pageable pageable);
+
 	/**
-	 *
 	 * @param sessionId
 	 * @return
 	 */
@@ -58,21 +56,18 @@ public interface EntryHistoryService extends AbstractService {
 	List<EntryHistory> findAll();
 
 	/**
-	 *
 	 * @param user
 	 * @return
 	 */
 	List<EntryHistory> findAllByUser(User user);
 
 	/**
-	 *
 	 * @param user
 	 * @return
 	 */
 	List<String> findAllIPByUser(User user);
 
 	/**
-	 *
 	 * @param userId
 	 * @param pageable
 	 * @return
@@ -80,7 +75,6 @@ public interface EntryHistoryService extends AbstractService {
 	Page<EntryHistory> getPageByUserId(Long userId, Pageable pageable);
 
 	/**
-	 *
 	 * @param user
 	 * @return
 	 */
@@ -94,7 +88,9 @@ public interface EntryHistoryService extends AbstractService {
 	 */
 	public List<SessionHistoryFormEntryHistoryPojo> getSessionHistoryLast100(Long userId);
 
+	public EntryHistory findOneById(Long id);
+
 	/*----- Pageable -----*/
 	Page<EntryHistory> pFindAll(Pageable pageable);
-	
+
 }

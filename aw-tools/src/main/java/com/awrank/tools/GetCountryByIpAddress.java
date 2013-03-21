@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * http://www.wipmania.com/ru/api/
+ *
  * @author Alex Polyakov
  */
 public class GetCountryByIpAddress {

@@ -1,7 +1,7 @@
 package com.awrank.web.model.utils.json;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,8 +16,8 @@ public class JsonUtils {
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
 		if (jsonNode.isLong())
-			return jsonNode.getLongValue();
-		String s = jsonNode.getValueAsText();
+			return jsonNode.longValue();
+		String s = jsonNode.asText();
 		int index = s.indexOf('.');
 		if (index >= 0) {
 			s = s.substring(0, index);
@@ -35,8 +35,8 @@ public class JsonUtils {
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
 		if (jsonNode.isLong())
-			return jsonNode.getIntValue();
-		String s = jsonNode.getValueAsText();
+			return jsonNode.intValue();
+		String s = jsonNode.asText();
 		int index = s.indexOf('.');
 		if (index >= 0) {
 			s = s.substring(0, index);
@@ -54,8 +54,8 @@ public class JsonUtils {
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
 		if (jsonNode.isBigDecimal())
-			return jsonNode.getDecimalValue();
-		String s = jsonNode.getValueAsText();
+			return jsonNode.decimalValue();
+		String s = jsonNode.asText();
 		s = s.replace(',', '.');
 		s = s.trim();
 		return (s.isEmpty()) ? null : new BigDecimal(s);
@@ -65,14 +65,14 @@ public class JsonUtils {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
-		return jsonNode.getValueAsText();
+		return jsonNode.asText();
 	}
 
 	public static boolean getBoolean(final ObjectNode jsonObject, final String key) {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())
 			return false;
-		return jsonNode.getBooleanValue();
+		return jsonNode.booleanValue();
 	}
 
 	//---- Thought project we changed Date to joda's LocalDateTime, put attention here!
@@ -81,14 +81,14 @@ public class JsonUtils {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
-		return new Date(jsonNode.getLongValue());
+		return new Date(jsonNode.longValue());
 	}
 
 	public static <T extends Enum<T>> T getEnum(final ObjectNode jsonObject, final String key, Class<T> enumClass) {
 		final JsonNode jsonNode = jsonObject.get(key);
 		if (jsonNode == null || jsonNode.isNull())
 			return null;
-		return Enum.valueOf(enumClass, jsonNode.getTextValue());
+		return Enum.valueOf(enumClass, jsonNode.asText());
 	}
 
 	public static void set(final ObjectNode jsonObject, final String key, final Boolean value) {

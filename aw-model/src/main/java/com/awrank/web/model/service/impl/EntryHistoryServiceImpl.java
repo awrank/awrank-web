@@ -27,7 +27,7 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 
 	@Autowired
 	private EntryHistoryDao entryHistoryDao;
-	
+
 	@Autowired
 	private EntryHistoryCustomDao entryHistoryCustomDao;
 
@@ -86,7 +86,7 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	}
 
 	@Override
-	public EntryHistory getLatestEntryForUser(User user){
+	public EntryHistory getLatestEntryForUser(User user) {
 		return (entryHistoryDao.findLatestEntryForUser(user)).get(0);
 	}
 
@@ -96,8 +96,13 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 		List<SessionHistoryFormEntryHistoryPojo> list = entryHistoryCustomDao.getSessionHistoryLast100(userId);
 		return list;
 	}
-	
-	
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public EntryHistory findOneById(Long id) {
+		EntryHistory entryHistory = entryHistoryDao.findOne(id);
+		return entryHistory;
+	}
 
 
 	/*----- Pageable -----*/

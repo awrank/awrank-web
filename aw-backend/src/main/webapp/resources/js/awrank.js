@@ -254,7 +254,7 @@ function send_user_profile(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			
+
 			alertSuccess(getMessage('PROFILE_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
 		}
 	})
@@ -269,7 +269,7 @@ function send_user_new_email(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			
+
 			alertSuccess(getMessage('PROFILE_EMAIL_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
 		}
 	})
@@ -284,7 +284,7 @@ function send_user_new_password(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			
+
 			alertSuccess(getMessage('PROFILE_PASSWORD_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
 		}
 	})
@@ -299,7 +299,7 @@ function send_user_new_password_forgot(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			
+
 			alertSuccess(getMessage('PROFILE_PASSWORD_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
 		}
 	})
@@ -315,7 +315,7 @@ function send_user_forgot_password(dataform) {
 			alertError(getMessage('ERROR'), getMessage(data.reason));
 		}
 		else if (data.result == "ok") {
-			
+
 			alertSuccess(getMessage('FORGOT_PASSWORD_LINK_SENT'), getMessage(data.reason));
 		}
 	})
@@ -324,7 +324,7 @@ function send_user_forgot_password(dataform) {
 
 function send_user_logout() {
 	awrankGet('user/logout');
-	
+
 }
 
 
@@ -449,9 +449,9 @@ var CRouter = Backbone.Router.extend({
 		"login": "login",
 		"logout": "logout",
 		"register": "register",
-        "termsOfService": "termsOfService",
+		"termsOfService": "termsOfService",
 		"forgot_password": "forgot_password",
-        "home": "home",
+		"home": "home",
 		"order": "order",
 		"profile": "profile",
 		"application": "application",
@@ -474,35 +474,35 @@ var CRouter = Backbone.Router.extend({
 	},
 	logout: function () {
 		//this.history.push(Backbone.history.fragment);
-		
-		 fIndexClearMessages("divLogin");
-		 fIndexClearMessages("divRegister");
-		 fIndexClearMessages("divForgotPassword");
-		 fIndexClearMessages("divProfile");
-		
-		 $('#divRegister').addClass('hidden');
-		 $('#divLogin').addClass('hidden');
-		 $('#divForgotPassword').addClass('hidden');
-		 $('#divProfile').addClass('hidden');
-			
-		 fIndexMenuActive('menuItemHome');
-	     fIndexRightContentSelectDiv('divHome');
+
+		fIndexClearMessages("divLogin");
+		fIndexClearMessages("divRegister");
+		fIndexClearMessages("divForgotPassword");
+		fIndexClearMessages("divProfile");
+
+		$('#divRegister').addClass('hidden');
+		$('#divLogin').addClass('hidden');
+		$('#divForgotPassword').addClass('hidden');
+		$('#divProfile').addClass('hidden');
+
+		fIndexMenuActive('menuItemHome');
+		fIndexRightContentSelectDiv('divHome');
 	},
 	register: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
 		$('#divForgotPassword').addClass('hidden');
 		$('#divProfile').addClass('hidden');
-        $('#divTermsOfService').addClass('hidden');
+		$('#divTermsOfService').addClass('hidden');
 		var div = fIndexLoad('body', 'divRegister');
 		div.removeClass('hidden');
 	},
-    termsOfService: function () {
-        this.history.push(Backbone.history.fragment);
-        $('#divRegister').addClass('hidden');
-        var div = fIndexLoad('body', 'divTermsOfService');
-        div.removeClass('hidden');
-    },
+	termsOfService: function () {
+		this.history.push(Backbone.history.fragment);
+		$('#divRegister').addClass('hidden');
+		var div = fIndexLoad('body', 'divTermsOfService');
+		div.removeClass('hidden');
+	},
 	forgot_password: function () {
 		this.history.push(Backbone.history.fragment);
 		$('#divLogin').addClass('hidden');
@@ -510,11 +510,11 @@ var CRouter = Backbone.Router.extend({
 		var div = fIndexLoad('body', 'divForgotPassword');
 		div.removeClass('hidden');
 	},
-    home: function () {
-        this.history.push(Backbone.history.fragment);
-        fIndexMenuActive('menuItemHome');
-        fIndexRightContentSelectDiv('divHome');
-    },
+	home: function () {
+		this.history.push(Backbone.history.fragment);
+		fIndexMenuActive('menuItemHome');
+		fIndexRightContentSelectDiv('divHome');
+	},
 	order: function () {
 		this.history.push(Backbone.history.fragment);
 		fIndexMenuActive('menuItemOrder');
@@ -542,7 +542,7 @@ var CRouter = Backbone.Router.extend({
 	},
 	payment_history: function () {
 		this.history.push(Backbone.history.fragment);
-		fIndexMenuActive('menuPaymentHistory');
+		fIndexMenuActive('menuItemPaymentHistory');
 		fIndexRightContentSelectDiv('divPaymentHistory');
 	},
 	dictionary: function () {

@@ -177,6 +177,12 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!--2CheckOut-->
+		<!--<dependency>-->
+		<!--<groupId>com.twocheckout</groupId>-->
+		<!--<artifactId>twocheckout-java</artifactId>-->
+		<!--</dependency>-->
+
 		<!-- Joda Time -->
 		<dependency>
 			<groupId>joda-time</groupId>

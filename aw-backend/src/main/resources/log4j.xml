@@ -34,8 +34,8 @@
 		</layout>
 	</appender>
 
-	<appender name="WEBMONEY" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="/temp/logs/awrankWebMoney.log"/>
+	<appender name="PAYMENT" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="/temp/logs/awrankPayment.log"/>
 		<param name="MaxBackupIndex" value="10"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %p %c %M %L %m%n"/>
@@ -54,7 +54,15 @@
 
 	<logger name="com.awrank.web.backend.controller.payment.WebMoneyController" additivity="true">
 		<level value="debug"/>
-		<appender-ref ref="WEBMONEY"/>
+		<appender-ref ref="PAYMENT"/>
+	</logger>
+	<logger name="com.awrank.web.backend.controller.payment.TwoCheckOutController" additivity="true">
+		<level value="debug"/>
+		<appender-ref ref="PAYMENT"/>
+	</logger>
+	<logger name="com.awrank.web.model.service.impl.OrderServiceImpl" additivity="true">
+		<level value="debug"/>
+		<appender-ref ref="PAYMENT"/>
 	</logger>
 
 	<root>

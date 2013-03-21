@@ -1,9 +1,6 @@
 package com.awrank.web.model.service.jopos;
 
-import com.awrank.web.model.domain.EntryPoint;
-import com.awrank.web.model.domain.EntryPointType;
-import com.awrank.web.model.domain.User;
-import com.awrank.web.model.domain.UserRole;
+import com.awrank.web.model.domain.*;
 import com.awrank.web.model.enums.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,27 +16,28 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class AWRankingUserDetails implements Serializable, UserDetails {
 
-	private final Long userId;
+	private final Long entryHistoryId;
 	private final String uid;
-	private final String userEmail;
+	private final String password;
 	private final EntryPointType entryPointType;
+	private final Long userId;
+	private final String userEmail;
 	private final boolean isAccountNonExpired;
 	private final boolean isAccountNonLocked;
 	private final boolean isCredentialsNonExpired;
 	private final boolean isEnabled;
-	//	private final User user;
-	private final String password;
 	private final List<Role> authorities = new ArrayList<Role>();
 
-	public AWRankingUserDetails(EntryPoint entryPoint) {
+	public AWRankingUserDetails(EntryHistory entryHistory) {
+		this.entryHistoryId = entryHistory.getId();
+		final EntryPoint entryPoint = entryHistory.getEntryPoint();
 		this.uid = entryPoint.getUid();
 		this.password = entryPoint.getPassword();
 		this.entryPointType = entryPoint.getType();
-
-		User user = entryPoint.getUser();
+		final User user = entryHistory.getUser();
 		this.userId = user.getId();
 		this.userEmail = user.getEmail();
-		for (UserRole userRole : user.getUserRoles()) {
+		for (final UserRole userRole : user.getUserRoles()) {
 			authorities.add(userRole.getRole());
 		}
 		// TODO
@@ -51,11 +49,10 @@ public class AWRankingUserDetails implements Serializable, UserDetails {
 		// TODO
 		this.isEnabled = user.getBanStartedDate() == null;
 	}
-//
-//	public User getUser() {
-//		return user;
-//	}
 
+	public Long getEntryHistoryId() {
+		return entryHistoryId;
+	}
 
 	public Long getUserId() {
 		return userId;
