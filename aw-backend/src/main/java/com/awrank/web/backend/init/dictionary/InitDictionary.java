@@ -6,6 +6,8 @@ import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.PaymentSystemType;
 import com.awrank.web.model.enums.Currency;
 import com.awrank.web.model.enums.Message;
+import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -327,6 +329,25 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.PROFILE_PASSWORD_UPDATED_SUCCESSFULLY.name(), "Your password updated successfully. Verification link sent to you email box- untill you will verify it current password is used."));
 		list.add(new Dictionary(null, Language.RU, Message.PASSWORD_VERIFIED_SUCCESSFULLY.name(), "Новый пароль успешно подтверждён, старый более недействителен."));
 		list.add(new Dictionary(null, Language.EN, Message.PASSWORD_VERIFIED_SUCCESSFULLY.name(), "New password updated successfully. Old one is no longer valid"));
+		list.add(new Dictionary(null, Language.RU, Message.ENTERED_WRONG_CURRENT_PASSWORD.name(), "Вы ввели неверный текущий пароль"));
+		list.add(new Dictionary(null, Language.EN, Message.ENTERED_WRONG_CURRENT_PASSWORD.name(), "You ebtered wrong current password"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_LINK_SENT.name(), "Ссылка для смены пароля отправлена на указанный почтовый ящик"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_LINK_SENT.name(), "Link for password reset sent to specified email"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_UID_NOT_FOUND.name(), "Указанный постовый ящик не зарегистрирован в системе"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_UID_NOT_FOUND.name(), "Email you set not registered in system"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_ATTEMPT_TO_CHANGE_WRONG_EMAIL.name(), "Вы залогинены сейчас не с тем почтовым ящиком который Вы ввели и у Вас недостаточно прав на смену чужих ящиков!"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_ATTEMPT_TO_CHANGE_WRONG_EMAIL.name(), "You're now logged in with different mailbox and you don't have enough rights to change someone else's box"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_NO_VALIDATED_EMAIL.name(), "Ваш почтовый ящик не верифицирован, вы не можете сбросить пароль - свяжитесь с службой поддержки!"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_NO_VALIDATED_EMAIL.name(), "Your mailbox is not verified, you can't reset password - please contact support!"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_BLOCKED_USER.name(), "Ваш аккаунт заблокирован - свяжитесь с службой поддержки!"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_BLOCKED_USER.name(), "Your account is blocked - please contact support!"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_LINK_NOT_VERIFIED.name(), "Ссылка для восстановления пароля не верифицированна, свяжитесь со службой поддержки!"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_LINK_NOT_VERIFIED.name(), "Password restore link is not verified, please contact the support!"));
+		list.add(new Dictionary(null, Language.RU, Message.FORGOT_PASSWORD_VERIFIED_SUCCESSFULLY.name(), "Ссылка для восстановления пароля проверенна, введите новый пароль в форме ниже"));
+		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_VERIFIED_SUCCESSFULLY.name(), "Password restore link verified successfully, please enter new password in a form below"));
+		list.add(new Dictionary(null, Language.RU, "FORGOT_FORM_INSTRUCTIONS", "Введите на этой форме новый пароль и его подтверждение. Вам на почту будет отправлен ещё один линк - только после того как вы перейдёте по нему новый пароль вступит в действие. Такая двуступенчатая проверка повышает безопастность, просим извинить если это неудобно Вам!"));
+		list.add(new Dictionary(null, Language.EN, "FORGOT_FORM_INSTRUCTIONS", "In this form please enter new password. You will get one more link on your email - only after you will use this link new password can be used. This two-step verification done for security reasons, sorry for inconvinience!"));
+		
 		
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));

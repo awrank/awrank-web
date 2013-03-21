@@ -290,6 +290,36 @@ function send_user_new_password(dataform) {
 	})
 }
 
+function send_user_new_password_forgot(dataform) {
+
+	awrankPost("rest/profile/changepasswordmanual2", dataform, function (data) {
+
+		if (data.result == "failure") {
+
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+		}
+		else if (data.result == "ok") {
+			
+			alertSuccess(getMessage('PROFILE_PASSWORD_UPDATED_SUCCESSFULLY'), getMessage(data.reason));
+		}
+	})
+}
+
+
+function send_user_forgot_password(dataform) {
+
+	awrankPost("rest/profile/resetpassword2", dataform, function (data) {
+
+		if (data.result == "failure") {
+
+			alertError(getMessage('ERROR'), getMessage(data.reason));
+		}
+		else if (data.result == "ok") {
+			
+			alertSuccess(getMessage('FORGOT_PASSWORD_LINK_SENT'), getMessage(data.reason));
+		}
+	})
+}
 
 
 function send_user_logout() {

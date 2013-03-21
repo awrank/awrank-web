@@ -34,6 +34,7 @@ import com.awrank.web.model.utils.emailauthentication.SMTPAuthenticator;
 import com.awrank.web.model.utils.user.PasswordUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,6 +61,9 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 	
 	@Autowired
 	private UserPasswordChangingService userPasswordChangingService;
+	
+	@Value("#{emailProps[forgot_password_xsmtp_header_category]}")
+	private String forgot_password_xsmtp_header_category;
 	
 	public Page<EntryHistory> getUserLoginHistory(Pageable pageable, Principal principal){
 		
@@ -331,6 +335,96 @@ public class UserProfileServiceImpl extends AbstractServiceImpl implements UserP
 				return getPositiveResponseMap("password changing link sent to " + user.getEmail());
 		
 	}
+	
+	/**
+	 * Called from "forgot password" form
+	 */
+	@SuppressWarnings("rawtypes")
+	public Map sendPasswordForgorLinkToEmail(String email, HttpServletRequest request, Principal principal){
+		
+		//---------- check if we are logged in user ----------
+		
+		
+				AWRankingUserDetails details = null;
+				if (principal != null) {
+					details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+					ArrayList<Role> list = (ArrayList<Role>) details.getAuthorities();
+
+					Boolean isAdmin = false;
+					Boolean isUserEmailVerified = false;
+
+					for (Role auth : list) {
+
+						if (auth == Role.ROLE_ADMIN) isAdmin = true;
+						if (auth == Role.ROLE_USER_VERIFIED) isUserEmailVerified = true;
+
+					}
+					
+					if (!isAdmin) {
+
+						if(details.getUserEmail().compareTo(email) != 0) return getNegativeResponseMap("FORGOT_PASSWORD_ATTEMPT_TO_CHANGE_WRONG_EMAIL");
+						
+						if (!isUserEmailVerified) {//if user is not an admin, enter not his email or email is his but not verified
+
+							return getNegativeResponseMap("FORGOT_PASSWORD_NO_VALIDATED_EMAIL");
+						}
+						
+					}
+				}
+
+				//-------- not logged in or an admin so send the link -------------------
+
+				User user = userService.findOneByEmail(email);
+				if(user.getBanStartedDate() != null) return getNegativeResponseMap("FORGOT_PASSWORD_BLOCKED_USER");
+
+				EntryPoint point = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, email);
+				if(point == null) return getNegativeResponseMap("FORGOT_PASSWORD_NO_VALIDATED_EMAIL");
+				
+				StateChangeToken stateChangeToken = new StateChangeToken();
+				String key;
+				
+				try {
+					key = SMTPAuthenticator.getHashed256(user.getEmail() + "." + point.getPassword() + "." + request.getRemoteAddr());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return getNegativeResponseMap(e.getLocalizedMessage());
+				}
+
+				stateChangeToken.setToken(key);
+				stateChangeToken.setType(StateChangeTokenType.USER_FORGOT_PASSWORD);
+				stateChangeToken.setUser(user);
+				stateChangeToken.setValue(point.getPassword());
+				stateChangeToken.setIpAddress(request.getRemoteAddr());
+
+				try {
+					userPasswordChangingService.save(stateChangeToken);
+				} catch (AwRankException e) {
+				
+					e.printStackTrace();
+					return getNegativeResponseMap(e.getLocalizedMessage());
+				}
+
+				//-------------- and send link via email -----------------------
+				
+				Map<String, Object> params = new HashMap<String, Object>();
+
+				params.put("category", forgot_password_xsmtp_header_category);
+				params.put("localAddr", request.getRemoteAddr());
+				params.put("testactivation_password",point.getPassword());
+				params.put("testactivation_email", user.getEmail());
+
+				try {
+					userPasswordChangingService.send(params);
+				} catch (PasswordChangingEmailNotSetException e) {
+				
+					e.printStackTrace();
+					return getNegativeResponseMap(e.getLocalizedMessage());
+				}
+
+				return getPositiveResponseMap("password reset link sent to " + user.getEmail());
+	}
+	
+	
 	public  Map updateProfileData(UserProfileDataFormPojo form, Principal principal){
 		
 		if(principal == null) return getNegativeResponseMap("ERROR_ACCESS");

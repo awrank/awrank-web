@@ -43,6 +43,9 @@ public interface UserProfileService extends AbstractService {
 	public Map sendPasswordChangingLinkToEmail(UserRegistrationFormPojo form, HttpServletRequest request, Principal principal) throws Exception;
 	
 	@SuppressWarnings("rawtypes")
+	public Map sendPasswordForgorLinkToEmail(String email, HttpServletRequest request, Principal principal) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
 	public Map sendPasswordChangingLinkToEmail(UserNewPasswordFormPojo form,Principal principal);
 
 	@SuppressWarnings("rawtypes")

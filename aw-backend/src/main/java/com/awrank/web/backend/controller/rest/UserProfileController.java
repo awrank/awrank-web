@@ -11,6 +11,8 @@ import com.awrank.web.model.service.impl.pojos.UserProfileDataFormPojo;
 import com.awrank.web.model.service.impl.pojos.UserRegistrationFormPojo;
 import com.awrank.web.model.service.jopos.AWRankingUserDetails;
 import com.awrank.web.model.utils.user.AuditorAwareImpl;
+import com.awrank.web.model.utils.user.PasswordUtils;
+
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -260,15 +262,13 @@ public class UserProfileController extends AbstractController {
 	}
 
 	/**
-	 * Handler for password changing - if token found redirect to passwrd changing form
+	 * Handler for password changing - if token found redirect to password changing form
 	 *
 	 * @param key
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	
-	
 	@RequestMapping(method = RequestMethod.GET, value = "/changepassword/{key}")
 	public ModelAndView verifyPasswordChangingFromEmailLink2(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
 		
@@ -290,6 +290,28 @@ public class UserProfileController extends AbstractController {
 		
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/forgotpassword/{key}")
+	public ModelAndView showForgotPasswordNewPasswordForm(@PathVariable("key") String key, HttpServletRequest request) throws Exception {
+		
+		ModelAndView mav = new ModelAndView("forgotPasswordNewPasswordForm");
+		
+		//---- if verified we have to relogin user - with new password ----
+		
+		EntryPoint entryPoint = userPasswordChangingService.verify(key, request);
+
+		if(entryPoint == null){
+			mav.addObject("responseMap", getNegativeResponseMap("FORGOT_PASSWORD_LINK_NOT_VERIFIED"));
+			return  mav;
+		}
+		
+		auditorAware.setCurrentAuditor(entryPoint);//TODO: investigate if we need to log user in
+		mav.addObject("entryPointId", entryPoint.getId());
+		mav.addObject("localIP", request.getLocalAddr());
+		mav.addObject("remoteIP", request.getRemoteAddr());
+		mav.addObject("responseMap", getPositiveResponseMap("FORGOT_PASSWORD_VERIFIED_SUCCESSFULLY"));
+		return mav;
+		
+	}
 	
 	/**
 	 * Old
@@ -348,7 +370,14 @@ public class UserProfileController extends AbstractController {
 		return result;
 	}
 
-	
+	/**
+	 * Called from divProfile - 3 fields form for manual password change below
+	 * @param in
+	 * @param request
+	 * @param principal
+	 * @return
+	 * @throws UserActivationEmailNotSetException
+	 */
 	@RequestMapping(value = "/changepasswordmanual2",
 			method = {RequestMethod.POST, RequestMethod.GET},
 			produces = "application/json")
@@ -362,19 +391,58 @@ public class UserProfileController extends AbstractController {
 		AWRankingUserDetails details = (AWRankingUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 		User user = userService.findOne(details.getUserId());
 		
-		EntryPoint currentPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-		if(currentPoint == null)  return getNegativeResponseMap("YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD");
-		//-------------------------------
+		if(in.get("password") != null){//manual reset
 		
-		UserNewPasswordFormPojo form = new UserNewPasswordFormPojo();
-		form.setCurrentPassword(in.get("password"));
-		form.setPassword(in.get("newpassword"));
-		form.setPasswordConfirm(in.get("newconfirmation"));
-		form.setLocalIP(in.get("localIP"));
-		form.setRemoteIP(in.get("remoteIP"));
-		return this.userProfileService.sendPasswordChangingLinkToEmail(form, principal);
-	
+			EntryPoint currentPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+			if(currentPoint == null)  return getNegativeResponseMap("YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD");
+			//-------------------------------
+			String typedPassword = PasswordUtils.hashPassword(in.get("password"));
+			if(details.getPassword().compareTo(typedPassword) != 0) return getNegativeResponseMap("ENTERED_WRONG_CURRENT_PASSWORD");
+			
+			UserNewPasswordFormPojo form = new UserNewPasswordFormPojo();
+			form.setCurrentPassword(in.get("password"));
+			form.setPassword(in.get("newpassword"));
+			form.setPasswordConfirm(in.get("newconfirmation"));
+			form.setLocalIP(in.get("localIP"));
+			form.setRemoteIP(in.get("remoteIP"));
+			return this.userProfileService.sendPasswordChangingLinkToEmail(form, principal);
+		}
+		else if(in.get("entrypointid") != null){//reset from "forgotPasswordNewPasswordForm" form after forgot password verification link verified
+			
+			EntryPoint currentPoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+			
+			if(currentPoint == null)  return getNegativeResponseMap("YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD");
+			
+			Long fromForm = new Long(in.get("entrypointid"));
+			Long fromPoint = currentPoint.getId();
+			if(fromForm.equals(fromPoint) == false) return getNegativeResponseMap("ERROR_ACCESS");
+			
+			//-------------------------------
+			
+			UserNewPasswordFormPojo form = new UserNewPasswordFormPojo();
+			form.setCurrentPassword(currentPoint.getPassword());
+			form.setPassword(in.get("newpassword"));
+			form.setPasswordConfirm(in.get("newconfirmation"));
+			form.setLocalIP(in.get("localIP"));
+			form.setRemoteIP(in.get("remoteIP"));
+			return this.userProfileService.sendPasswordChangingLinkToEmail(form, principal);
+			
+		}
+		
+		return getNegativeResponseMap("ERROR_ACCESS");
 	}
+	
+	@RequestMapping(value = "/resetpassword2",
+			method = {RequestMethod.POST, RequestMethod.GET},
+			produces = "application/json")
+	public
+	@ResponseBody()
+	Map sendUserResetPasswordLink2(@RequestBody Map<String, String> in, HttpServletRequest request, Principal principal) throws Exception {
+	
+		return this.userProfileService.sendPasswordForgorLinkToEmail(in.get("email"), request, principal);
+	}
+	
+	
 	/**
 	 * Request password change. Think about if we shall also see what is in Principal and if user logged in and has no
 	 * ROLE_ADMIN and specified another email reject this request?

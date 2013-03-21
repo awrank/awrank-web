@@ -31,6 +31,11 @@ public enum DiaryEvent {
      * When user changes password
      */
     CHANGE_PASSWORD,
+    
+    /**
+     * When user set forgot password and clicked on link in email
+     */
+    FORGOT_PASSWORD,
 
     /**
      * When user orders some product

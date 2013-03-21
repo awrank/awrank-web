@@ -17,8 +17,13 @@ public enum StateChangeTokenType {
     USER_EMAIL_CHANGE,
 
     /**
-     * password change
+     * password manual change from profile
      */
     USER_PASSWORD_CHANGE,
+    
+    /**
+     * user forgot password, token for new password can be entered from form
+     */
+    USER_FORGOT_PASSWORD
 
 }

@@ -55,8 +55,10 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 	private String xsmtp_header_var_value;
 
 	@Value("#{emailProps[password_xsmtp_header_category]}")
-	//@Value("${mail.from.email}")
 	private String password_xsmtp_header_category;
+	
+	@Value("#{emailProps[forgot_password_xsmtp_header_category]}")
+	private String forgot_password_xsmtp_header_category;
 
 //------------ other email settings -----------------
 
@@ -101,7 +103,8 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 
 	public void send(Map params) throws PasswordChangingEmailNotSetException {
 		try {
-			sendGridEmailSender.send(password_xsmtp_header_category, params);
+			if(params.containsKey("category")) sendGridEmailSender.send(params.get("category").toString(), params);
+			else sendGridEmailSender.send(password_xsmtp_header_category, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,87 +115,148 @@ public class UserPasswordChangingServiceImpl extends UserPasswordChangingService
 		//------------ first we have to find the user email and activate it, if ok we need to find corresponding entry point and activate it
 		StateChangeToken stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType.USER_PASSWORD_CHANGE);
 
-		if (stateChangeToken == null) return null;
+		if (stateChangeToken != null){
 
-		//-------------- we found and we activate -----------
-
-		LocalDateTime today = LocalDateTime.now();
-		LocalDateTime ended = stateChangeToken.getEndedDate();
-		if (ended.isAfter(today)) { //found and fresh
-
-			//---------------  find entry point ----------------
-
-			User user = stateChangeToken.getUser();
-			EntryPoint thePoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
-			String builtKey;
-			
-			if (thePoint == null) return null;//not found proper entry point - can't change
-			
-			//------------ we have found point and activation record, building ethalon key to compare ----------
-
-			try {
-				builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + stateChangeToken.getNewValue() + "." + request.getRemoteAddr());
-			} catch (Exception e) {
-			
-				e.printStackTrace();
-				throw new PasswordChangeWasNotVerifiedException();
+			//-------------- we found and we activate -----------
+	
+			LocalDateTime today = LocalDateTime.now();
+			LocalDateTime ended = stateChangeToken.getEndedDate();
+			if (ended.isAfter(today)) { //found and fresh
+	
+				//---------------  find entry point ----------------
+	
+				User user = stateChangeToken.getUser();
+				EntryPoint thePoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());
+				String builtKey;
+				
+				if (thePoint == null) return null;//not found proper entry point - can't change
+				
+				//------------ we have found point and activation record, building ethalon key to compare ----------
+	
+				try {
+					builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + stateChangeToken.getNewValue() + "." + request.getRemoteAddr());
+				} catch (Exception e) {
+				
+					e.printStackTrace();
+					throw new PasswordChangeWasNotVerifiedException();
+				}
+				
+				if(builtKey.compareTo(key) != 0) return null;
+				
+				//-------------- everything is ok, changing ---------------
+				
+				user.setAuthorizationFailsCount(0);
+				userService.save(user);
+				
+				stateChangeToken.setTokenUsedAtDate(today);
+				stateChangeTokenDao.save(stateChangeToken);
+	
+				thePoint.setEndedDate(today);//entry point is no longer active
+				entryPointService.save(thePoint);
+				
+				EntryPoint newPoint =  new EntryPoint();
+				newPoint.setPassword(stateChangeToken.getNewValue());
+				newPoint.setUser(user);
+				newPoint.setType(thePoint.getType());
+				newPoint.setVerifiedDate(today);
+				newPoint.setUid(user.getEmail());
+				entryPointService.save(newPoint);
+				
+				//---------- find/create EntryHistory ------------
+	
+				List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
+				EntryHistory entryHistory;
+	
+				if (entryHistoryList.size() == 0) {//create one if not found
+	
+					entryHistory = new EntryHistory();
+					entryHistory.setUser(user);
+					entryHistory.setSessionId(request.getSession().getId());
+					entryHistory.setIpAddress(request.getRemoteAddr());
+					entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+					entryHistory.setEntryPoint(newPoint);
+					entryHistory.setSigninDate(today);
+					String brHeader = request.getHeader("user-agent");
+					if(brHeader.length() > 64) brHeader.substring(0, 63);
+					entryHistory.setSuccess(true);
+					entryHistory.setBrowseName(brHeader);
+					entryHistoryService.save(entryHistory);
+				} else entryHistory = entryHistoryList.get(0);
+				//------ here add record in Diary about password changing
+	
+				Diary drec = new Diary();
+				drec.setEvent(DiaryEvent.CHANGE_PASSWORD);
+				drec.setUser(user);
+				drec.setCreatedBy(user);
+				drec.setEntryHistory(entryHistory);
+				drec.setOldValue(stateChangeToken.getValue());
+				drec.setNewValue(stateChangeToken.getNewValue());
+				diaryService.save(drec);
+	
+				return newPoint;
 			}
-			
-			if(builtKey.compareTo(key) != 0) return null;
-			
-			//-------------- everything is ok, changing ---------------
-			
-			user.setAuthorizationFailsCount(0);
-			userService.save(user);
-			
-			stateChangeToken.setTokenUsedAtDate(today);
-			stateChangeTokenDao.save(stateChangeToken);
-
-			thePoint.setEndedDate(today);//entry point is no longer active
-			entryPointService.save(thePoint);
-			
-			EntryPoint newPoint =  new EntryPoint();
-			newPoint.setPassword(stateChangeToken.getNewValue());
-			newPoint.setUser(user);
-			newPoint.setType(thePoint.getType());
-			newPoint.setVerifiedDate(today);
-			newPoint.setUid(user.getEmail());
-			entryPointService.save(newPoint);
-			
-			//---------- find/create EntryHistory ------------
-
-			List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
-			EntryHistory entryHistory;
-
-			if (entryHistoryList.size() == 0) {//create one if not found
-
-				entryHistory = new EntryHistory();
-				entryHistory.setUser(user);
-				entryHistory.setSessionId(request.getSession().getId());
-				entryHistory.setIpAddress(request.getRemoteAddr());
-				entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
-				entryHistory.setEntryPoint(newPoint);
-				entryHistory.setSigninDate(today);
-				String brHeader = request.getHeader("user-agent");
-				if(brHeader.length() > 64) brHeader.substring(0, 63);
-				entryHistory.setSuccess(true);
-				entryHistory.setBrowseName(brHeader);
-				entryHistoryService.save(entryHistory);
-			} else entryHistory = entryHistoryList.get(0);
-			//------ here add record in Diary about password changing
-
-			Diary drec = new Diary();
-			drec.setEvent(DiaryEvent.CHANGE_PASSWORD);
-			drec.setUser(user);
-			drec.setCreatedBy(user);
-			drec.setEntryHistory(entryHistory);
-			drec.setOldValue(stateChangeToken.getValue());
-			drec.setNewValue(stateChangeToken.getNewValue());
-			diaryService.save(drec);
-
-			return newPoint;
 		}
+		else{ 
+			
+			stateChangeToken = stateChangeTokenDao.select(key, StateChangeTokenType .USER_FORGOT_PASSWORD);
+			if (stateChangeToken == null) return null;
+			
+			//-------------- we found and we activate -----------
+			LocalDateTime today = LocalDateTime.now();
+			LocalDateTime ended = stateChangeToken.getEndedDate();
+			if (ended.isAfter(today)) { //found and fresh
+	
+				//------------ we have found point and activation record, building ethalon key to compare ----------
+				User user = stateChangeToken.getUser();
+				String builtKey;
+				try {
+					builtKey = SMTPAuthenticator.getHashed256(user.getEmail() + "." + stateChangeToken.getValue() + "." + request.getRemoteAddr());
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new PasswordChangeWasNotVerifiedException();
+				}
+				
+				if(builtKey.compareTo(key) != 0) return null;
+				
+				//---------------  find entry point ----------------
 
+				EntryPoint thePoint = entryPointService.findOneByEntryPointTypeAndUid(EntryPointType.EMAIL, user.getEmail());				
+				if (thePoint == null) return null;//not found proper entry point - can't change
+				
+				//---------- find/create EntryHistory ------------
+	
+				List<EntryHistory> entryHistoryList = entryHistoryService.findBySessionId(request.getSession().getId());
+				EntryHistory entryHistory;
+	
+				if (entryHistoryList.size() == 0) {//create one if not found
+	
+					entryHistory = new EntryHistory();
+					entryHistory.setUser(user);
+					entryHistory.setSessionId(request.getSession().getId());
+					entryHistory.setIpAddress(request.getRemoteAddr());
+					entryHistory.setCountryCode(WIPmania.getCountryCodeByIpAddress(entryHistory.getIpAddress()));
+					entryHistory.setEntryPoint(thePoint);
+					entryHistory.setSigninDate(today);
+					String brHeader = request.getHeader("user-agent");
+					if(brHeader.length() > 64) brHeader.substring(0, 63);
+					entryHistory.setSuccess(true);
+					entryHistory.setBrowseName(brHeader);
+					entryHistoryService.save(entryHistory);
+				} else entryHistory = entryHistoryList.get(0);
+				//------ here add record in Diary about password changing
+	
+				Diary drec = new Diary();
+				drec.setEvent(DiaryEvent.FORGOT_PASSWORD);
+				drec.setUser(user);
+				drec.setCreatedBy(user);
+				drec.setEntryHistory(entryHistory);
+				drec.setOldValue(stateChangeToken.getValue());
+				drec.setNewValue(stateChangeToken.getValue());
+				diaryService.save(drec);
+	
+				return thePoint;
+			}
+		}
 		return null;
 	}
 
