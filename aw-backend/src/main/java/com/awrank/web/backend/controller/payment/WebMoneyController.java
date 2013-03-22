@@ -8,16 +8,15 @@ import com.awrank.web.model.service.impl.pojos.PaymentWMFormPojo;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.math.BigDecimal;
 
 /**
@@ -29,10 +28,17 @@ public class WebMoneyController extends AbstractController {
 	@Autowired
 	OrderService orderService;
 
+	/**
+	 * create order
+	 *
+	 * @param model
+	 * @param paymentSystemId
+	 * @param productId
+	 * @return
+	 * @throws UnauthorizedException
+	 */
 	@RequestMapping(value = "/wm/order", method = RequestMethod.GET)
-	public
-	@ResponseBody
-	String wmOrder(@RequestParam("payment_system_id") Long paymentSystemId, @RequestParam("product_id") Long productId) throws UnauthorizedException {
+	public String wmOrder(ModelMap model, @RequestParam("payment_system_id") Long paymentSystemId, @RequestParam("product_id") Long productId) throws UnauthorizedException {
 		OrderCreateResultPojo orderCreateResult = orderService.create(getUserDetails().getUserId(), paymentSystemId, productId);
 		long orderId = orderCreateResult.getPaymentId();
 		String webMoneyUrl = orderCreateResult.getPaymentUrl();
@@ -47,38 +53,21 @@ public class WebMoneyController extends AbstractController {
 			e.printStackTrace();
 		}
 
-		StringBuilder res = new StringBuilder("<!DOCTYPE html>");
-		res.append("<html>");
-		res.append("<head>");
-		res.append("<title>Payment</title>");
-		res.append("<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\">");
-		res.append("</head>");
-		res.append("<body>");
-		res.append("<form method=\"POST\" action=\"");
-		res.append(webMoneyUrl);
-		res.append("\">");
-		res.append("<input type=\"hidden\" name=\"LMI_PAYMENT_AMOUNT\" value=\"");
-		res.append(amount);
-		res.append("\">");
-		res.append("<input type=\"hidden\" name=\"LMI_PAYMENT_DESC_BASE64\" value=\"");
-		res.append(paymentDesc);
-		res.append("\">");
-		res.append("<input type=\"hidden\" name=\"LMI_PAYMENT_NO\" value=\"");
-		res.append(orderId);
-		res.append("\">");
-		res.append("<input type=\"hidden\" name=\"LMI_PAYEE_PURSE\" value=\"");
-		res.append(purse);
-		res.append("\">");
-		if (testMode) {
-			res.append("<input type=\"hidden\" name=\"LMI_SIM_MODE\" value=\"0\">");
-		}
-		res.append("</form>");
-		res.append("<script type=\"text/javascript\">document.forms[0].submit();</script>");
-		res.append("</body>");
-		res.append("</html>");
-		return res.toString();
+		model.put("webMoneyUrl", webMoneyUrl);
+		model.put("LMI_PAYMENT_AMOUNT", amount);
+		model.put("LMI_PAYMENT_DESC_BASE64", paymentDesc);
+		model.put("LMI_PAYMENT_NO", orderId);
+		model.put("LMI_PAYEE_PURSE", purse);
+		model.put("testMode", testMode);
+		return "wm/order";
 	}
 
+	/**
+	 * payment complete
+	 *
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping(value = "/wm/result", method = RequestMethod.POST)
 	public void wmResult(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -98,31 +87,19 @@ public class WebMoneyController extends AbstractController {
 			conf.setLMI_SYS_TRANS_NO(request.getParameter("LMI_SYS_TRANS_NO"));
 			getLogger().debug("action \"/wm/result\" " + conf);
 
-			boolean paymentSuccess = orderService.paymentMW(conf);
-//			Writer writer = new BufferedWriter(response.getWriter());
-			if (paymentSuccess) {
-//				try {
-//					writer.append("YES");
-//				} finally {
-//					writer.flush();
-//					writer.close();
-//				}
-			} else {
-//				response.sendError(HttpServletResponse.SC_BAD_GATEWAY);
-				// TODO не работаеет отказ платежа с нашей стороны
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//				try {
-//					writer.append("NO");
-//				} finally {
-//					writer.flush();
-//					writer.close();
-//				}
-			}
+			orderService.paymentMW(conf);
 		} catch (Exception e) {
-			e.printStackTrace();
+			getLogger().error(e.getMessage(), e);
 		}
 	}
 
+	/**
+	 * page to success
+	 *
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/wm/success", method = RequestMethod.POST)
 	public void wmSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		PaymentWMFormPojo conf = new PaymentWMFormPojo();
@@ -136,6 +113,13 @@ public class WebMoneyController extends AbstractController {
 		response.sendRedirect("../index.html#payment_history");
 	}
 
+	/**
+	 * page to fail
+	 *
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/wm/fail")
 	public void wmFail(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		PaymentWMFormPojo conf = new PaymentWMFormPojo();
@@ -146,19 +130,6 @@ public class WebMoneyController extends AbstractController {
 		conf.setLMI_PAYMENT_NO(request.getParameter("LMI_PAYMENT_NO"));
 		getLogger().debug("action \"/wm/fail\"" + conf);
 
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html");
-		Writer writer = response.getWriter();
-		writer.append("<!DOCTYPE html>");
-		writer.append("<html>");
-		writer.append("<head>");
-		writer.append("<title>Payment</title>");
-		writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\">");
-		writer.append("</head>");
-		writer.append("<body>");
-		writer.append("<script type=\"text/javascript\">history.go(-4);</script>");
-		writer.append("</body>");
-		writer.append("</html>");
-		writer.close();
+		response.sendRedirect("../index.html#order");
 	}
 }

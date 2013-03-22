@@ -24,9 +24,21 @@ public interface OrderDao extends PagingAndSortingRepository<Order, Long> {
 	@Query("select o from Order o where o.user = :user")
 	Page<Order> findByUser(@Param("user") User user, Pageable pageable);
 
+	/**
+	 * find ended date last paid order by user
+	 *
+	 * @param userId
+	 * @return
+	 */
 	@Query("select max(o.endedDate) from Order o where o.user.id = :userId")
 	public LocalDateTime findLastEndedDateByUserId(@Param("userId") Long userId);
 
+	/**
+	 * find paid order which today is the limit on the number of requests per day
+	 *
+	 * @param userId
+	 * @return
+	 */
 	@Query("select o from Order o where o.user.id = :userId and o.status = 'PAID' and o.productProfile.product.countDailyRequest > 0 and now() <= o.endedDate order by o.createdDate desc limit 1")
 	public Order findOneStatusPaidAndLimitDayAndNow(@Param("userId") Long userId);
 }

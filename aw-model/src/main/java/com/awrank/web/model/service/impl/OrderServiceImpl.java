@@ -6,8 +6,7 @@ import com.awrank.web.model.service.*;
 import com.awrank.web.model.service.impl.pojos.OrderCreateResultPojo;
 import com.awrank.web.model.service.impl.pojos.PaymentWMFormPojo;
 import com.awrank.web.model.utils.user.PasswordUtils;
-import com.twocheckout.TwocheckoutNotification;
-import com.twocheckout.TwocheckoutReturn;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
@@ -18,8 +17,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class OrderServiceImpl extends AbstractServiceImpl implements OrderService {
@@ -141,17 +138,11 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public boolean paymentTwoCheckOut(String merchant_order_id, String sid, String total, String order_number, String key) {
-
 		Long paymentId = Long.parseLong(merchant_order_id);
 		Payment payment = paymentService.findOne(paymentId);
-		PaymentSystem paymentSystem = payment.getPaymentSystem();
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("sid", sid);
-		params.put("total", total);
-		params.put("order_number", order_number);
-		params.put("key", key);
-
-		Boolean result = TwocheckoutReturn.check(params, payment.getPaymentSystem().getSecretWord());
+		String hashString = payment.getPaymentSystem().getSecretWord() + sid + order_number + total;
+		String hash = DigestUtils.md5Hex(hashString).toUpperCase();
+		boolean result = key.equals(hash);
 		if (result) {
 			try {
 				// https://github.com/2Checkout/2checkout-java/wiki/Sale_Retrieve
@@ -167,42 +158,6 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 			}
 		}
 		return result;
-	}
-
-	// TODO
-	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void eventTwoCheckOut(Map<String, String> params) {
-		//TODO
-		String secret_word = "secretword";
-		Boolean result = TwocheckoutNotification.check(params, secret_word);
-
-		if (result) {
-			// request is not a fake
-			String message_type = params.get("message_type");
-			if (message_type.equals("ORDER_CREATED")) {
-
-			} else if (message_type.equals("FRAUD_STATUS_CHANGED")) {
-				String fraud_status = params.get("fraud_status");
-				if (fraud_status.equals("pass")) {
-
-				}
-			} else if (message_type.equals("INVOICE_STATUS_CHANGED")) {
-
-			} else if (message_type.equals("REFUND_ISSUED")) {
-
-			} else if (message_type.equals("RECURRING_INSTALLMENT_SUCCESS")) {
-
-			} else if (message_type.equals("RECURRING_INSTALLMENT_FAILED")) {
-
-			} else if (message_type.equals("RECURRING_STOPPED")) {
-
-			} else if (message_type.equals("RECURRING_COMPLETE")) {
-
-			} else if (message_type.equals("RECURRING_RESTARTED")) {
-
-			}
-		}
 	}
 
 	@Override
