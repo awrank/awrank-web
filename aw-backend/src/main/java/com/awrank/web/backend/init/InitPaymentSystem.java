@@ -22,14 +22,14 @@ public class InitPaymentSystem {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void init() {
 
-		if (paymentSystemDao.findAllByExternalId("R414332502816").isEmpty()) {
+		if (paymentSystemDao.findAllByExternalId("Z226057239329").isEmpty()) {
 			PaymentSystem paymentSystem = new PaymentSystem();
 			paymentSystem.setPaymentSystemType(PaymentSystemType.WEB_MONEY);
 			paymentSystem.setSystemUrl("https://merchant.webmoney.ru/lmi/payment.asp");
-			paymentSystem.setExternalId("R414332502816");
-			paymentSystem.setUsername("328301235126");
+			paymentSystem.setExternalId("Z226057239329");
+			paymentSystem.setUsername("228055417603");
 			paymentSystem.setPassword("");
-			paymentSystem.setSecretWord("19D2303F-0FF6-498F-B6D1-050E5258BFC5");
+			paymentSystem.setSecretWord("ldkfjbglkjsdbgkjsabdkfjnasdkfnjlaskdfn");
 			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
 			paymentSystemDao.save(paymentSystem);
