@@ -43,20 +43,20 @@ public class InitPaymentSystem {
 			paymentSystem.setUsername("APIuser1817037");
 			paymentSystem.setPassword("APIpass1817037");
 			paymentSystem.setSecretWord("tango");
-			paymentSystem.setEnable(true);
+			paymentSystem.setEnable(false);
 			paymentSystem.setTestMode(true);
 			paymentSystemDao.save(paymentSystem);
 		}
 
-		if (paymentSystemDao.findAllByExternalId("1976586").isEmpty()) {
+		if (paymentSystemDao.findAllByExternalId("1978002").isEmpty()) {
 			PaymentSystem paymentSystem = new PaymentSystem();
 			paymentSystem.setPaymentSystemType(PaymentSystemType.TWO_CHECKOUT);
 			paymentSystem.setSystemUrl("https://www.2checkout.com/checkout/spurchase");
-			paymentSystem.setExternalId("1976586");
-			paymentSystem.setUsername("user1976586");
-			paymentSystem.setPassword("FecUnRec5");
-			paymentSystem.setSecretWord("FecUnRec");
-			paymentSystem.setEnable(false);
+			paymentSystem.setExternalId("1978002");
+			paymentSystem.setUsername("APIuser1978002");
+			paymentSystem.setPassword("DrSqzXOA7");
+			paymentSystem.setSecretWord("QwZBs9V6yYgPUA");
+			paymentSystem.setEnable(true);
 			paymentSystem.setTestMode(true);
 			paymentSystemDao.save(paymentSystem);
 		}
