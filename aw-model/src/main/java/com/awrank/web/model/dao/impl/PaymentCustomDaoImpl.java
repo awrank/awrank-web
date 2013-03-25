@@ -16,7 +16,7 @@ public class PaymentCustomDaoImpl extends AbstractDaoImpl implements PaymentCust
 	@Override
 	public List<PaymentHistoryFormPaymentPojo> getPaymentHistory(Long userId) {
 		List<PaymentHistoryFormPaymentPojo> list = SelectUtils.getWrapperList(em, PaymentHistoryFormPaymentPojo.class,
-				"where o." + PaymentConst.H_ORDER__USER__ID + '=' + userId, 0, 0);
+				"where o." + PaymentConst.H_ORDER__USER__ID + '=' + userId + " order by o." + PaymentConst.H_CREATED_DATE + " desc", 0, 0);
 		return list;
 	}
 }

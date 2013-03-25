@@ -23,23 +23,24 @@
 <table id="divPaymentHistoryTable" class="table table-striped">
 	<thead>
 	<tr>
-		<th style="width: 30%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_TARIFF">Tariff</th>
-		<th style="width: 10%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PRICE">Price</th>
-		<th style="width: 5%"></th>
-		<th style="width: 25%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM">Payment system</th>
-		<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN">Begin</th>
-		<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_END">End</th>
+		<th style="width: 13%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_CREATED">Create</th>
+		<th style="width: 24%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_TARIFF">Tariff</th>
+		<th style="width: 15%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PRICE">Price</th>
+		<th style="width: 22%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM">Payment system</th>
+		<th style="width: 13%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN">Begin</th>
+		<th style="width: 13%" lngt="PAYMENT_HISTORY_TABLE_COLUMN_DATE_END">End</th>
 	</tr>
 	</thead>
 	<tbody>
 	<script type="text/template">
-		<tr payment_id="<%=id%>">
-			<td lngt="<%=productName%>"></td>
-			<td><%=amount%></td>
-			<td lngt="<%=currency%>"></td>
-			<td lngt="<%=paymentSystemType%>"></td>
-			<td><%=dateTimeToString(date_begin)%></td>
-			<td><%=dateTimeToString(date_end)%></td>
+		<tr payment_id="<%=id%>"
+		<%=(status=='PAID')?'':'class="error"'%>>
+		<td><%=dateTimeToString(date_created)%></td>
+		<td lngt="<%=productName%>"></td>
+		<td><%=amount%> <span lngt="<%=currency%>"></span></td>
+		<td lngt="<%=paymentSystemType%>"></td>
+		<td><%=dateTimeToString(date_begin)%></td>
+		<td><%=dateTimeToString(date_end)%></td>
 		</tr>
 	</script>
 	</tbody>

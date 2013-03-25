@@ -6,4 +6,6 @@ package com.awrank.web.model.domain.constant;
 public interface OrderConst extends AbstractUserRelatedEntityAuditableConst {
 	public static final String H_PRODUCT_PROFILE = "productProfile";
 	public static final String H_PRODUCT_PROFILE__PRODUCT__NAME = H_PRODUCT_PROFILE + '.' + ProductProfileConst.H_PRODUCT__NAME;
+
+	public static final String H_STATUS = "status";
 }

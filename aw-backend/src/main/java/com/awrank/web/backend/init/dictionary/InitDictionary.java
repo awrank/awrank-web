@@ -6,8 +6,6 @@ import com.awrank.web.model.domain.Language;
 import com.awrank.web.model.domain.PaymentSystemType;
 import com.awrank.web.model.enums.Currency;
 import com.awrank.web.model.enums.Message;
-import com.awrank.web.model.service.impl.pojos.UserNewPasswordFormPojo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -44,7 +42,7 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST.name(), "You cannot change your email before verify current one."));
 		list.add(new Dictionary(null, Language.RU, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD.name(), "Вы не можете сменить пароль до тех пор пока не верифицируете текущий почтовый ящик"));
 		list.add(new Dictionary(null, Language.EN, Message.YOU_HAVE_TO_VERIFY_YOUR_CURRENT_EMAIL_FIRST_PASSWORD.name(), "You cannot change your password before verify current email."));
-		
+
 		list.add(new Dictionary(null, Language.RU, "AUTH_ERROR", "Ошибка аутентификации"));
 		list.add(new Dictionary(null, Language.EN, "AUTH_ERROR", "Authentication error"));
 		list.add(new Dictionary(null, Language.RU, "MESSAGE", "Сообщение: "));
@@ -74,7 +72,7 @@ public class InitDictionary {
 
 		list.add(new Dictionary(null, Language.RU, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Ссылка для активации почтового ящика НЕ отправлена!"));
 		list.add(new Dictionary(null, Language.EN, Message.USER_EMAIL_ACTIVATION_NOT_SENT.name(), "Email activation link NOT sent!"));
-		
+
 		// social
 		list.add(new Dictionary(null, Language.RU,
 				Message.SOCIAL_NETWORK_EMAIL_NOT_PROVIDED.name(),
@@ -347,8 +345,8 @@ public class InitDictionary {
 		list.add(new Dictionary(null, Language.EN, Message.FORGOT_PASSWORD_VERIFIED_SUCCESSFULLY.name(), "Password restore link verified successfully, please enter new password in a form below"));
 		list.add(new Dictionary(null, Language.RU, "FORGOT_FORM_INSTRUCTIONS", "Введите на этой форме новый пароль и его подтверждение. Вам на почту будет отправлен ещё один линк - только после того как вы перейдёте по нему новый пароль вступит в действие. Такая двуступенчатая проверка повышает безопастность, просим извинить если это неудобно Вам!"));
 		list.add(new Dictionary(null, Language.EN, "FORGOT_FORM_INSTRUCTIONS", "In this form please enter new password. You will get one more link on your email - only after you will use this link new password can be used. This two-step verification done for security reasons, sorry for inconvinience!"));
-		
-		
+
+
 		list.add(new Dictionary(null, Language.RU, "LOGIN_TITLE", "Вход под своей учетной записью"));
 		list.add(new Dictionary(null, Language.EN, "LOGIN_TITLE", "Log in to your account"));
 		list.add(new Dictionary(null, Language.RU, "LOGIN_DESCRIPTION", "или введите свои данные:"));
@@ -417,16 +415,18 @@ public class InitDictionary {
 
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY", "История заказов"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY", "Payment history"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_CREATED", "Оформлен"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_CREATED", "Create"));
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_TARIFF", "Тариф"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_TARIFF", "Tariff"));
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_PRICE", "Цена"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_PRICE", "Price"));
 		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM", "Платежная система"));
 		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_PAYMENT_SYSTEM", "Payment system"));
-		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "С"));
-		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "Begin"));
-		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "По"));
-		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "End"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "Оплачен"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_BEGIN", "Date of payment"));
+		list.add(new Dictionary(null, Language.RU, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "Окончание тарифа"));
+		list.add(new Dictionary(null, Language.EN, "PAYMENT_HISTORY_TABLE_COLUMN_DATE_END", "End of tariff"));
 
 		// TODO check
 		list.addAll(Dictionary.createItems("I_AGREE_WITH_THE", "I agree with the", "Я согласен с"));

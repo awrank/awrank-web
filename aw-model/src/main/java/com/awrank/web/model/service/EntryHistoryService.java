@@ -90,6 +90,13 @@ public interface EntryHistoryService extends AbstractService {
 
 	public EntryHistory findOneById(Long id);
 
+	/**
+	 * logout user set ended EntryHistory
+	 *
+	 * @param entryHistoryId
+	 */
+	public void logoutUser(Long entryHistoryId);
+
 	/*----- Pageable -----*/
 	Page<EntryHistory> pFindAll(Pageable pageable);
 

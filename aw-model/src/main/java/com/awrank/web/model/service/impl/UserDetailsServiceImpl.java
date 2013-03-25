@@ -74,5 +74,4 @@ public class UserDetailsServiceImpl extends AbstractServiceImpl implements UserD
 		return detail;
 	}
 
-
 }

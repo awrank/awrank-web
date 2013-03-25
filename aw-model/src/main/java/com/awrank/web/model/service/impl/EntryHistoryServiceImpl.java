@@ -8,6 +8,7 @@ import com.awrank.web.model.domain.User;
 import com.awrank.web.model.exception.entryhistory.EntryHistoryNotCreatedException;
 import com.awrank.web.model.exception.entryhistory.EntryHistoryNotDeletedException;
 import com.awrank.web.model.service.EntryHistoryService;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -102,6 +103,18 @@ public class EntryHistoryServiceImpl extends AbstractServiceImpl implements Entr
 	public EntryHistory findOneById(Long id) {
 		EntryHistory entryHistory = entryHistoryDao.findOne(id);
 		return entryHistory;
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void logoutUser(Long entryHistoryId) {
+		EntryHistory entryHistory = entryHistoryDao.findOne(entryHistoryId);
+		if (entryHistory != null) {
+			LocalDateTime now = LocalDateTime.now();
+			entryHistory.setEndedDate(now);
+			entryHistory.setSignoutDate(now);
+			entryHistoryDao.save(entryHistory);
+		}
 	}
 
 
