@@ -2,8 +2,12 @@ package com.awrank.web.backend.controller.payment;
 
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.backend.exception.UnauthorizedException;
+import com.awrank.web.model.dao.pojos.PaymentCheckPojo;
 import com.awrank.web.model.service.OrderService;
+import com.awrank.web.model.service.PaymentService;
 import com.awrank.web.model.service.impl.pojos.OrderCreateResultPojo;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +27,10 @@ import java.math.BigDecimal;
 public class TwoCheckOutController extends AbstractController {
 
 	@Autowired
-	OrderService orderService;
+	private OrderService orderService;
+
+	@Autowired
+	private PaymentService paymentService;
 
 	/**
 	 * create order
@@ -46,7 +53,6 @@ public class TwoCheckOutController extends AbstractController {
 
 		model.put("sid", sid);
 		model.put("merchant_order_id", paymentId);
-//		model.put("x_Receipt_Link_URL", "http://localhost:8080/aw-backend/twocheckout/result");
 		model.put("testMode", testMode);
 		model.put("li_0_name", productNameLocalize);
 		model.put("li_0_price", amount);
@@ -67,10 +73,26 @@ public class TwoCheckOutController extends AbstractController {
 		String total = request.getParameter("total");
 		String order_number = request.getParameter("order_number");
 		String key = request.getParameter("key");
-		boolean paymentSuccess = orderService.paymentTwoCheckOut(merchant_order_id, sid, total, order_number, key);
+		getLogger().debug("action \"/twocheckout/result\" {merchant_order_id:" + merchant_order_id + ", sid:" + sid + ", total:" + total + ", order_number:" + order_number + ", key:" + key + "}");
+
+		Long paymentId = Long.parseLong(merchant_order_id);
+		PaymentCheckPojo checkPojo = paymentService.getPaymentCheckPojo(paymentId);
+		String hashString = checkPojo.getPaymentSystemSecretWord() + checkPojo.getPaymentSystemExternalId() + order_number + checkPojo.getPrice();
+		String hash = DigestUtils.md5Hex(hashString).toUpperCase();
+		boolean paymentSuccess = key.equals(hash);
 		if (paymentSuccess) {
+			getLogger().debug("2CO check passed. Payment [" + paymentId + "]. Internal String:" + hashString + "; Internal MD5:" + hash + " External MD5:" + key);
+			// https://github.com/2Checkout/2checkout-java/wiki/Sale_Retrieve
+			// TODO sale
+			// Sale sale = TwocheckoutSale.retrieve(order_number, paymentSystem.getUsername(), paymentSystem.getPassword());
+			// sale.getDatePlaced();
+			// sale.getCustomer().getCustomerId();
+			// transaction id
+			orderService.payment(paymentId, order_number, new LocalDateTime(), order_number, "unknown");
 			response.sendRedirect("../index.html#payment_history");
 		} else {
+			getLogger().error("2CO check not passed. Payment [" + paymentId + "]. Internal String:" + hashString + "; Internal MD5:" + hash + " External MD5:" + key);
+			orderService.errorPayment(paymentId);
 			response.sendRedirect("../index.html#order");
 		}
 	}

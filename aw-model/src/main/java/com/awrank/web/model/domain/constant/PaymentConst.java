@@ -12,6 +12,9 @@ public interface PaymentConst extends ExtendedAbstractAuditableConst {
 
 	public static final String H_PAYMENT_SYSTEM = "paymentSystem";
 	public static final String H_PAYMENT_SYSTEM__PAYMENT_SYSTEM_TYPE = H_PAYMENT_SYSTEM + '.' + PaymentSystemConst.H_PAYMENT_SYSTEM_TYPE;
+	public static final String H_PAYMENT_SYSTEM__EXTERNAL_ID = H_PAYMENT_SYSTEM + '.' + PaymentSystemConst.H_EXTERNAL_ID;
+	public static final String H_PAYMENT_SYSTEM__SECRET_WORD = H_PAYMENT_SYSTEM + '.' + PaymentSystemConst.H_SECRET_WORD;
+	public static final String H_PAYMENT_SYSTEM__TEST_MODE = H_PAYMENT_SYSTEM + '.' + PaymentSystemConst.H_TEST_MODE;
 
 	public static final String H_AMOUNT = "amount";
 

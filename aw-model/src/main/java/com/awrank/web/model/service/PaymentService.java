@@ -1,5 +1,6 @@
 package com.awrank.web.model.service;
 
+import com.awrank.web.model.dao.pojos.PaymentCheckPojo;
 import com.awrank.web.model.dao.pojos.PaymentHistoryFormPaymentPojo;
 import com.awrank.web.model.domain.Payment;
 
@@ -11,4 +12,6 @@ public interface PaymentService extends AbstractService {
 	public List<PaymentHistoryFormPaymentPojo> getPaymentHistory(Long userId);
 
 	public Payment save(Payment payment);
+
+	public PaymentCheckPojo getPaymentCheckPojo(Long paymentId);
 }

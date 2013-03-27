@@ -2,10 +2,19 @@ package com.awrank.web.backend.controller.payment;
 
 import com.awrank.web.backend.controller.AbstractController;
 import com.awrank.web.backend.exception.UnauthorizedException;
+import com.awrank.web.model.dao.pojos.PaymentCheckPojo;
+import com.awrank.web.model.domain.OrderStatus;
 import com.awrank.web.model.service.OrderService;
+import com.awrank.web.model.service.PaymentService;
+import com.awrank.web.model.service.PaymentSystemService;
+import com.awrank.web.model.service.ProductService;
 import com.awrank.web.model.service.impl.pojos.OrderCreateResultPojo;
 import com.awrank.web.model.service.impl.pojos.PaymentWMFormPojo;
+import com.awrank.web.model.utils.user.PasswordUtils;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +36,16 @@ public class WebMoneyController extends AbstractController {
 
 	@Autowired
 	OrderService orderService;
+
+	@Autowired
+	private PaymentService paymentService;
+
+	@Autowired
+	private PaymentSystemService paymentSystemService;
+
+	@Autowired
+	private ProductService productService;
+
 
 	/**
 	 * create order
@@ -87,7 +106,35 @@ public class WebMoneyController extends AbstractController {
 			conf.setLMI_SYS_TRANS_NO(request.getParameter("LMI_SYS_TRANS_NO"));
 			getLogger().debug("action \"/wm/result\" " + conf);
 
-			orderService.paymentMW(conf);
+			if (StringUtils.isNotBlank(conf.getLMI_PAYMENT_NO()) && StringUtils.isNotBlank(conf.getLMI_PAYMENT_AMOUNT())) {
+				Long paymentId = Long.parseLong(conf.getLMI_PAYMENT_NO());
+//				Payment payment = paymentService.findOne(paymentId);
+//				PaymentSystem paymentSystem = paymentSystemService.findOne(payment.getPaymentSystem().getId());
+//				Order order=orderService.findOne(payment.getOrder().getId());
+				PaymentCheckPojo checkPojo = paymentService.getPaymentCheckPojo(paymentId);
+				if ("1".equalsIgnoreCase(conf.getLMI_PREREQUEST())) {
+					if (checkPojo.getOrderStatus() == OrderStatus.UNPAID) {
+						getLogger().debug("Processing 'paymentWM' pre-request.");
+					}
+				} else {
+//					ProductProfile productProfile=productService.findProductProfile(order.getProductProfile().getId());
+					String preparedString = StringUtils.join(new String[]{
+							checkPojo.getPaymentSystemExternalId(), checkPojo.getPrice().toString(), conf.getLMI_PAYMENT_NO(),
+							checkPojo.isPaymentIsTestMode() ? "1" : "0", conf.getLMI_SYS_INVS_NO(), conf.getLMI_SYS_TRANS_NO(),
+							conf.getLMI_SYS_TRANS_DATE(), checkPojo.getPaymentSystemSecretWord(),
+							conf.getLMI_PAYER_PURSE(), conf.getLMI_PAYER_WM()
+					});
+					String MD5string = PasswordUtils.md5(preparedString);
+					boolean paymentSuccess = StringUtils.equalsIgnoreCase(conf.getLMI_HASH(), MD5string);
+					if (paymentSuccess) {
+						getLogger().debug("WM check passed. Payment [" + paymentId + "]. Internal String:" + preparedString + "; Internal MD5:" + MD5string + " External MD5:" + conf.getLMI_HASH());
+						orderService.payment(paymentId, conf.getLMI_SYS_TRANS_NO(), LocalDateTime.parse(conf.getLMI_SYS_TRANS_DATE(), DateTimeFormat.forPattern("yyyyMMdd HH:mm:ss")), conf.getLMI_SYS_INVS_NO(), conf.getLMI_PAYER_PURSE());
+					} else {
+						getLogger().debug("WM check not passed. Payment [" + paymentId + "]. Internal String:" + preparedString + "; Internal MD5:" + MD5string + " External MD5:" + conf.getLMI_HASH());
+						orderService.errorPayment(paymentId);
+					}
+				}
+			}
 		} catch (Exception e) {
 			getLogger().error(e.getMessage(), e);
 		}

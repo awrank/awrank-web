@@ -9,6 +9,8 @@ public interface PaymentSystemConst extends DatedAbstractAuditableConst {
 
 	public static final String H_EXTERNAL_ID = "externalId";
 
+	public static final String H_SECRET_WORD = "secretWord";
+
 	public static final String H_ENABLE = "enable";
 
 	public static final String H_TEST_MODE = "testMode";

@@ -2,6 +2,7 @@ package com.awrank.web.model.service.impl;
 
 import com.awrank.web.model.dao.PaymentCustomDao;
 import com.awrank.web.model.dao.PaymentDao;
+import com.awrank.web.model.dao.pojos.PaymentCheckPojo;
 import com.awrank.web.model.dao.pojos.PaymentHistoryFormPaymentPojo;
 import com.awrank.web.model.domain.Payment;
 import com.awrank.web.model.service.PaymentService;
@@ -36,5 +37,12 @@ public class PaymentServiceImpl extends AbstractServiceImpl implements PaymentSe
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public Payment save(Payment payment) {
 		return paymentDao.save(payment);
+	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public PaymentCheckPojo getPaymentCheckPojo(Long paymentId){
+		PaymentCheckPojo checkPojo=paymentCustomDao.getPaymentCheckPojo(paymentId);
+		return checkPojo;
 	}
 }

@@ -38,6 +38,12 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 	private UserLimitService userLimitService;
 
 	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public Order findOne(Long orderId) {
+		return orderDao.findOne(orderId);
+	}
+
+	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public OrderCreateResultPojo create(Long entryHistoryId, Long paymentSystemId, Long productProfileId) {
 		getLogger().debug("create begin entryHistoryId:" + entryHistoryId + ", paymentSystemId:" + paymentSystemId + ", productProfileId:" + productProfileId);
@@ -85,90 +91,17 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public boolean paymentMW(PaymentWMFormPojo confirmation) {
-		boolean result = true;
-		if (StringUtils.isNotBlank(confirmation.getLMI_PAYMENT_NO()) && StringUtils.isNotBlank(confirmation.getLMI_PAYMENT_AMOUNT())) {
-			result = false;
-			try {
-				Long paymentId = Long.parseLong(confirmation.getLMI_PAYMENT_NO());
-				Payment payment = paymentService.findOne(paymentId);
-				if ("1".equalsIgnoreCase(confirmation.getLMI_PREREQUEST())) {
-					if (payment.getOrder().isUnpaid()) {
-						getLogger().debug("Processing 'paymentWM' pre-request.");
-						result = true;
-					}
-				} else if (StringUtils.isNotBlank(confirmation.getLMI_HASH())) {
-					String preparedString = StringUtils.join(new String[]{
-							confirmation.getLMI_PAYEE_PURSE(), confirmation.getLMI_PAYMENT_AMOUNT(), confirmation.getLMI_PAYMENT_NO(),
-							confirmation.getLMI_MODE(), confirmation.getLMI_SYS_INVS_NO(), confirmation.getLMI_SYS_TRANS_NO(),
-							confirmation.getLMI_SYS_TRANS_DATE(), payment.getPaymentSystem().getSecretWord(),
-							confirmation.getLMI_PAYER_PURSE(), confirmation.getLMI_PAYER_WM()
-					});
-
-					BigDecimal amountWM = new BigDecimal(confirmation.getLMI_PAYMENT_AMOUNT());
-					String MD5string = PasswordUtils.md5(preparedString);
-
-					if (StringUtils.equalsIgnoreCase(confirmation.getLMI_HASH(), MD5string) &&
-							amountWM.compareTo(payment.getOrder().getProductProfile().getPrice()) == 0
-							&& StringUtils.equals(confirmation.getLMI_PAYEE_PURSE(), payment.getPaymentSystem().getExternalId())
-							&& StringUtils.equals(confirmation.getLMI_MODE(), payment.getPaymentSystem().isTestMode() ? "1" : "0")) {
-						result = true;
-						payment(payment, confirmation.getLMI_SYS_TRANS_NO(), LocalDateTime.parse(confirmation.getLMI_SYS_TRANS_DATE(), DateTimeFormat.forPattern("yyyyMMdd HH:mm:ss")), confirmation.getLMI_SYS_INVS_NO(), confirmation.getLMI_PAYER_PURSE());
-						getLogger().debug("WM check passed. Amount:" + amountWM + "; Internal String:" + preparedString + "; Internal MD5:" + MD5string
-								+ "; External MD5:" + confirmation.getLMI_HASH());
-					} else {
-						// TODO Diary
-//                        accountDiaryAccessor.createRecord(order.getOwner(), AccountDiaryEvent.WM_CHECK_FAILED,
-//                                "WM check not passed. Order [" + order.getId() + "]. Internal String:" + preparedString + "; Internal MD5:" + MD5string +
-//                                        " External MD5:" + confirmation.getLMI_HASH());
-//
-
-						getLogger().error("WM check not passed. Payment [" + payment.getId() + "]. Internal String:" + preparedString + "; Internal MD5:" + MD5string +
-								" External MD5:" + confirmation.getLMI_HASH());
-					}
-				}
-			} catch (Exception e) {
-				getLogger().error(e.getMessage(), e);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public boolean paymentTwoCheckOut(String merchant_order_id, String sid, String total, String order_number, String key) {
-		Long paymentId = Long.parseLong(merchant_order_id);
-		Payment payment = paymentService.findOne(paymentId);
-		String hashString = payment.getPaymentSystem().getSecretWord() + sid + order_number + total;
-		String hash = DigestUtils.md5Hex(hashString).toUpperCase();
-		boolean result = key.equals(hash);
-		if (result) {
-			try {
-				// https://github.com/2Checkout/2checkout-java/wiki/Sale_Retrieve
-//				Sale sale = TwocheckoutSale.retrieve(order_number, paymentSystem.getUsername(), paymentSystem.getPassword());
-				// TODO sale not field from json
-//				sale.getDatePlaced()
-//				sale.getCustomer().getCustomerId
-//				transaction id
-				// TODO
-				payment(payment, order_number, new LocalDateTime(), order_number, "unknown");
-			} catch (Exception e) {
-				getLogger().error(e.getMessage(), e);
-			}
-		}
-		return result;
-	}
-
-	@Override
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 	public Order findOneStatusPaidAndLimitDayAndNow(Long userId) {
 		Order order = orderDao.findOneStatusPaidAndLimitDayAndNow(userId);
 		return order;
 	}
 
-	private void payment(Payment payment, String transactionRef, LocalDateTime transactionDate, String paymentRef, String payerRef) {
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void payment(Long paymentId, String transactionRef, LocalDateTime transactionDate, String paymentRef, String payerRef) {
 		getLogger().debug("payment begin");
+		final Payment payment = paymentService.findOne(paymentId);
 		final Order order = payment.getOrder();
 		final User user = order.getUser();
 		final ProductProfile productProfile = order.getProductProfile();
@@ -210,7 +143,7 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 		} else {
 			// create limits on month
 			while (startDate.compareTo(endedDate) < 0) {
-				LocalDateTime currentEndedDate = startDate.plus(Period.days(30));
+				LocalDateTime currentEndedDate = startDate.plusDays(30);
 				if (currentEndedDate.compareTo(endedDate) > 0)
 					currentEndedDate = endedDate;
 				UserLimit userLimit = new UserLimit();
@@ -233,10 +166,32 @@ public class OrderServiceImpl extends AbstractServiceImpl implements OrderServic
 		diary.setUser(user);
 		diary.setEntryHistory(entryHistory);//cannot be null
 		diary.setOldValue(null);
-		diary.setNewValue("payment success tariff:" + productProfile.getProduct().getName() + " price:" + productProfile.getPrice());
+		diary.setNewValue("payment success paymentId:"+payment.getId()+" tariff:" + productProfile.getProduct().getName() + " price:" + productProfile.getPrice());
 		diary.setEvent(DiaryEvent.SUCCESSFULLY_PAID);
 		diaryService.save(diary);
 		getLogger().debug("create new diary id:" + diary.getId());
 		getLogger().debug("payment end");
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void errorPayment(Long paymentId) {
+		getLogger().debug("errorPayment begin");
+		Payment payment = paymentService.findOne(paymentId);
+		final Order order = payment.getOrder();
+		final User user = order.getUser();
+		final ProductProfile productProfile = order.getProductProfile();
+
+		// add history record
+		final EntryHistory entryHistory = entryHistoryService.getLatestEntryForUser(user);
+		Diary diary = new Diary();
+		diary.setUser(user);
+		diary.setEntryHistory(entryHistory);//cannot be null
+		diary.setOldValue(null);
+		diary.setNewValue("payment error paymentId:"+payment.getId()+" tariff:" + productProfile.getProduct().getName() + " price:" + productProfile.getPrice());
+		diary.setEvent(DiaryEvent.ERROR_PAID);
+		diaryService.save(diary);
+		getLogger().debug("create new diary id:" + diary.getId());
+		getLogger().debug("errorPayment end");
 	}
 }
